@@ -1,57 +1,44 @@
-@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap");
-
-/* Harbor Signal tokens: the retired palette (DESIGN.md at the repo root and
-   ai-life-os/hud.css replaced it). Only the kit page (kit/index.html) links it,
-   to show the old palette, and it stays at this URL for anything built against
-   it. Site pages link ai-life-os/hud.css instead.
-   Light by default; dark follows the system unless data-mode="light".
-   data-mode="dark" or "light" on any element forces that mode inside it.
-   Pop (signal yellow) marks only what needs the user. */
-:root, [data-mode="light"] {
-  color-scheme: light;
-  --bg: #F2F6F8; --surface: #FFFFFF; --ink: #0E2233; --mute: #4A5F70; --line: #D3DEE6;
-  --accent: #0B6670; --on-accent: #FFFFFF; --accent-text: #0B6670;
-  --pop: #FFC531; --on-pop: #0E2233; --ok: #1E6E46; --warn: #B0174F;
-}
-[data-mode="dark"] {
+/* Chart & Cards tokens, for pages built outside this site: the values of DESIGN.md (repo root),
+   the same as ai-life-os/hud.css. Change them together. Site pages link hud.css instead.
+   Skins: "hud" (warm accent, the default), "matrix" (green) and "calm" (the light reading
+   theme). data-skin on any element uses that skin inside it. The kit's older names
+   (--surface, --accent-text, --pop, --on-pop) point at the roles; the accent is the only one. */
+:root, [data-skin="hud"] {
   color-scheme: dark;
-  --bg: #0A1824; --surface: #112433; --ink: #E6F0F5; --mute: #9DB3C2; --line: #21394B;
-  --accent: #3CC6CF; --on-accent: #06222A; --accent-text: #5FD3DB;
-  --pop: #FFC531; --on-pop: #0E2233; --ok: #5BD08F; --warn: #FF7BA5;
+  --bg: #05060a; --panel: #0c0e11; --glass: rgba(12, 14, 17, .92); --ink: #e9e6e0; --mute: #8f8b84; --line: #23262b; --line-2: #3a3f46;
+  --accent: #ff7a1a; --on-accent: #05060a; --accent-dim: #3a2a1d; --ok: #5ec27a; --warn: #e0554a; --info: #5cd3ff;
+  --k-root: #ff7a1a; --k-skill: #ff9a3c; --k-routine: #ffb347; --k-off: #6c6a66; --k-cli: #5cd3ff; --k-project: #2ee6c5; --k-page: #ffd93d;
+  --r1: #b57bff; --r2: #ff4fd8; --r3: #4f8dff; --r4: #2ee6c5; --r5: #ffd93d; --r6: #ff8a3d; --r7: #5cd3ff;
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-mode="light"]) {
-    color-scheme: dark;
-    --bg: #0A1824; --surface: #112433; --ink: #E6F0F5; --mute: #9DB3C2; --line: #21394B;
-    --accent: #3CC6CF; --on-accent: #06222A; --accent-text: #5FD3DB;
-    --pop: #FFC531; --on-pop: #0E2233; --ok: #5BD08F; --warn: #FF7BA5;
-  }
+[data-skin="matrix"] {
+  color-scheme: dark;
+  --bg: #020503; --panel: #06100a; --glass: rgba(6, 16, 10, .92); --ink: #d6f5dc; --mute: #7fa088; --line: #16301d; --line-2: #24502f;
+  --accent: #00ff41; --on-accent: #020503; --accent-dim: #0a3a17; --ok: #7fdcff; --warn: #ff6b5a; --info: #c8ffd4;
+  --k-root: #00ff41; --k-skill: #7dff9b; --k-routine: #b6ffc8; --k-off: #2f5a3a; --k-cli: #7fdcff; --k-project: #3dd68c; --k-page: #e6ffe9;
+  --r1: #00ff41; --r2: #7dff9b; --r3: #3dd68c; --r4: #b6ffc8; --r5: #7fdcff; --r6: #4fe0b0; --r7: #c8ff5a;
+}
+[data-skin="calm"] {
+  color-scheme: light;
+  --bg: #faf7f2; --panel: #ffffff; --glass: #ffffff; --ink: #2b2620; --mute: #6b5f4a; --line: #e4dccb; --line-2: #cfc3ab;
+  --accent: #8a5a2b; --on-accent: #ffffff; --accent-dim: #efe3d2; --ok: #4d7a4d; --warn: #b0452f; --info: #3d6a8a;
+  --k-root: #8a5a2b; --k-skill: #a0522d; --k-routine: #8c7a55; --k-off: #b8ad97; --k-cli: #3d6a8a; --k-project: #4d7a4d; --k-page: #a8862b;
+  --r1: #7a5c8f; --r2: #a0526e; --r3: #3d6a8a; --r4: #4d7a4d; --r5: #a8862b; --r6: #b0452f; --r7: #5b7f95;
 }
 
+/* Type: mono for UI and headings, system sans for reading, no web fonts. Calm: Georgia headings. */
+:root, [data-skin] {
+  --surface: var(--panel); --accent-text: var(--accent); --pop: var(--accent); --on-pop: var(--on-accent);
+  --f-ui: ui-monospace, SFMono-Regular, Menlo, monospace; --f-read: system-ui, -apple-system, sans-serif; --f-head: ui-monospace, SFMono-Regular, Menlo, monospace;
+  --h-weight: 400;
+  --font-display: var(--f-head); --font-body: var(--f-read); --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+[data-skin="calm"] { --f-ui: system-ui, -apple-system, sans-serif; --f-head: Georgia, serif; --h-weight: 500; }
+
+/* Spacing (DESIGN.md), then the kit's layout steps, corners and game knobs (off). */
 :root {
-  --font-display: "Space Grotesk", system-ui, sans-serif;
-  --font-body: "Atkinson Hyperlegible", system-ui, sans-serif;
-  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  --radius: 10px; --radius-bubble: 16px;
+  --s-xs: 3px; --s-sm: 6px; --s-md: 12px; --s-lg: 16px; --s-xl: 24px;
+  --gutter: 16px; --card-max: 46rem; --panel-w: 340px; --sheet-max: 70vh;
   --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 24px; --space-6: 32px;
-  --measure: 65ch;
-
-  /* Game knobs (from the Game UI Bible), off by default. */
-  --bar-mask: none;     /* segmented meters, like a health bar */
-  --chip-cursor: "";    /* a ▶ cursor on the chosen chip */
-  --call-frame: none;   /* focus brackets around the card that needs you */
-}
-/* Turn all three on for one element and its children. */
-[data-knobs="game"] {
-  --bar-mask: repeating-linear-gradient(90deg, #000 0 9px, transparent 9px 12px);
-  --chip-cursor: "▶ ";
-  --call-frame:
-    linear-gradient(var(--pop), var(--pop)) top left / 14px 3px no-repeat,
-    linear-gradient(var(--pop), var(--pop)) top left / 3px 14px no-repeat,
-    linear-gradient(var(--pop), var(--pop)) top right / 14px 3px no-repeat,
-    linear-gradient(var(--pop), var(--pop)) top right / 3px 14px no-repeat,
-    linear-gradient(var(--pop), var(--pop)) bottom left / 14px 3px no-repeat,
-    linear-gradient(var(--pop), var(--pop)) bottom left / 3px 14px no-repeat,
-    linear-gradient(var(--pop), var(--pop)) bottom right / 14px 3px no-repeat,
-    linear-gradient(var(--pop), var(--pop)) bottom right / 3px 14px no-repeat;
+  --measure: 65ch; --radius: 10px; --radius-bubble: 16px;
+  --bar-mask: none; --chip-cursor: ""; --call-frame: none;
 }

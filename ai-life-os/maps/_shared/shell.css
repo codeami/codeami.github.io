@@ -1,11 +1,8 @@
-/* Shared skill-map page shell: site tokens + nav bar (same as /onboarding/) + header, toolbar, map area, order strip, footer. */
-:root{--bg:#ffffff;--bg2:#f6f8fa;--fg:#1f2328;--muted:#59636e;--border:#d1d9e0;--accent:#0969da;--green:#1a7f37;
- --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans",Helvetica,Arial,sans-serif;--mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
- --card:var(--bg);--line:var(--border);--hov:var(--bg2);--ok:#047857}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1117;--bg2:#151b23;--fg:#f0f6fc;--muted:#9198a1;--border:#3d444d;--accent:#4493f8;--green:#3fb950;--ok:#34d399}}
-:root[data-theme="dark"]{--bg:#0d1117;--bg2:#151b23;--fg:#f0f6fc;--muted:#9198a1;--border:#3d444d;--accent:#4493f8;--green:#3fb950;--ok:#34d399}
+/* Shared skill-map page shell: nav bar + header, toolbar, map area, order strip, footer.
+   Colours and type are the site's: ../hud.css (DESIGN.md roles; build.py links it first). These are the shell's names for them. */
+:root{--bg2:var(--panel);--fg:var(--ink);--muted:var(--mute);--border:var(--line);--green:var(--ok);--sans:var(--f-read);--mono:var(--f-ui)}
 *{box-sizing:border-box}
-html,body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 var(--sans);-webkit-text-size-adjust:100%}
+html,body{margin:0;background:var(--bg);color:var(--fg);font:13px/1.45 var(--mono);-webkit-text-size-adjust:100%}
 a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
 code{font:13px var(--mono)}
 .top{border-bottom:1px solid var(--border);background:var(--bg)}
@@ -14,25 +11,25 @@ code{font:13px var(--mono)}
 .logo{display:inline-flex;align-items:center;gap:8px;font-weight:700;color:var(--fg)!important;text-decoration:none!important}
 .logo svg{width:24px;height:24px;display:block}
 .top .sp{flex:1}
-.top .lk{font-size:14px;color:var(--fg);display:inline-flex;align-items:center;gap:6px;padding:6px 8px;border-radius:6px}.top .lk:hover{background:var(--bg2);text-decoration:none}.ni{width:16px;height:16px;flex:none;display:block}.top .btn{display:inline-flex;align-items:center;gap:6px}.top .lk[aria-current=page]{color:var(--accent);font-weight:600;text-decoration:underline;text-underline-offset:6px}
+.top .lk{font-size:13px;color:var(--fg);display:inline-flex;align-items:center;gap:6px;padding:6px 8px;border-radius:6px}.top .lk:hover{background:var(--bg2);text-decoration:none}.ni{width:16px;height:16px;flex:none;display:block}.top .btn{display:inline-flex;align-items:center;gap:6px}.top .lk[aria-current=page]{color:var(--accent);font-weight:600;text-decoration:underline;text-underline-offset:6px}
 .btn{background:var(--bg2);color:var(--fg);border:1px solid var(--border);border-radius:6px;padding:5px 12px;font:inherit;font-size:13px;cursor:pointer}
 .btn:hover:not(:disabled){border-color:var(--accent)}
 main.sm-main{max-width:1440px;margin:0 auto;padding:24px 16px 48px;overflow-x:clip}
-main.sm-main h1{font-size:28px;line-height:1.2;margin:0 0 6px}
+main.sm-main h1{font-size:28px;font-weight:400;line-height:1.2;margin:0 0 6px}
 .sm-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
 .vpill{font:600 11px var(--mono);border:1px solid var(--border);border-radius:999px;padding:1px 7px;color:var(--muted)}
-.sm-sub{color:var(--muted);margin:0 0 14px;max-width:90ch}
+.sm-sub{color:var(--muted);margin:0 0 14px;max-width:90ch;font:15px/1.5 var(--sans)}
 .sm-sub a{color:var(--accent)}
-main.sm-main h2{font-size:16px;margin:20px 0 8px}
+main.sm-main h2{font-size:16px;font-weight:400;margin:20px 0 8px}
 .sm-hero{position:relative;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px;background-image:radial-gradient(var(--border) 1px,transparent 1px);background-size:16px 16px}
 .sm-hero .tb{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 8px}
-.sm-hero .tb input[type=search]{flex:1 1 220px;min-width:0;min-height:40px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--fg);padding:0 12px;font:16px/1 var(--sans)}
+.sm-hero .tb input[type=search]{flex:1 1 220px;min-width:0;min-height:40px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--fg);padding:0 12px;font:16px/1 var(--mono)}
 .seg{display:flex;border:1px solid var(--border);border-radius:6px;overflow:hidden;background:var(--bg)}
 .seg button{min-height:38px;padding:0 12px;border:0;background:transparent;color:var(--muted);font:inherit;cursor:pointer;border-right:1px solid var(--border);display:flex;align-items:center;justify-content:center;gap:6px}
-.seg button:last-child{border-right:0}.seg button[aria-pressed=true]{background:var(--fg);color:var(--bg)}
+.seg button:last-child{border-right:0}.seg button[aria-pressed=true]{background:var(--accent);color:var(--on-accent)}
 .seg button svg{width:20px;height:20px;display:block}
 .tbb{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 14px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--fg);font:inherit;font-size:13px;cursor:pointer}
-.tbb svg{width:16px;height:16px}.tbb[aria-pressed=true]{background:var(--fg);color:var(--bg)}
+.tbb svg{width:16px;height:16px}.tbb[aria-pressed=true]{background:var(--accent);color:var(--on-accent)}
 .tb .sp2{flex:1}
 .sm-hero .scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
 .sm-hero svg.map{display:block;width:100%;height:auto}
@@ -47,7 +44,7 @@ html.lock,html.lock body{overflow:hidden}
 .sm-order .step i{font:700 22px var(--mono);font-style:normal;color:var(--c,var(--fg))}
 .sm-order .step b{font-size:13px;display:block}.sm-order .step small{display:block;color:var(--muted);font-size:11.5px}
 .sm-foot{color:var(--muted);font-size:13px;margin-top:20px}.sm-foot a{display:inline-block;padding:6px 0}
-:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
+:focus-visible{outline:1px solid var(--accent);outline-offset:2px}
 @media (max-width:700px){
  .top .hide-s{display:none}.top .nl{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}.top .lk,.top .btn{padding:7px 9px}.ni{width:20px;height:20px}.logo{white-space:nowrap}.top .in{gap:4px}.top .lk{font-size:13px}.top .lk,.top .btn{padding:6px}
  main.sm-main{padding:16px 12px 32px}main.sm-main h1{font-size:22px}
@@ -74,15 +71,15 @@ html.lock,html.lock body{overflow:hidden}
 @media (max-width:700px){.plogo{width:36px;height:36px;border-radius:10px}}
 .sm-head{align-items:center;gap:10px}
 .cmpb circle{fill:var(--c,var(--accent));stroke:var(--bg);stroke-width:1.5}.cmpb text{fill:var(--bg);font:800 11px var(--sans);pointer-events:none}
-.seg button[aria-pressed=true] svg{color:var(--bg)!important}
+.seg button[aria-pressed=true] svg{color:var(--on-accent)!important}
 .fpill{display:inline-flex;align-items:center;gap:4px;margin:0 0 8px;padding:5px 12px;border:1px solid var(--border);border-radius:999px;background:var(--bg2);font-size:13px}.fpill[hidden]{display:none}
 .fpill button{border:0;background:none;color:var(--accent);font:600 13px var(--sans);cursor:pointer;padding:0;text-decoration:underline}
-.pi{width:18px;height:18px;display:block;flex:none}.pi-claude-code{color:#d97757}.pi-cursor,.pi-codex{color:var(--fg)}
-.seg button svg.pi{width:20px;height:20px}.seg button[aria-pressed=true] svg.pi{color:var(--bg)!important}
+.pi{width:18px;height:18px;display:block;flex:none}.pi-claude-code{color:var(--accent)}.pi-cursor,.pi-codex{color:var(--fg)}
+.seg button svg.pi{width:20px;height:20px}.seg button[aria-pressed=true] svg.pi{color:var(--on-accent)!important}
 .sm .tag .pi{display:inline-block;width:13px;height:13px;vertical-align:-2px;margin-right:5px}
 @media (max-width:440px){.logo .lt{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}}
 /* Find a node: results under the search box (shell.js) */
-.qres{position:absolute;z-index:20;max-height:320px;overflow:auto;background:var(--card,var(--bg));border:1px solid var(--border);border-radius:8px;box-shadow:0 12px 32px rgba(0,0,0,.35);padding:4px}
+.qres{position:absolute;z-index:20;max-height:320px;overflow:auto;background:var(--card,var(--bg));border:1px solid var(--border);border-radius:8px;padding:4px}
 .qhit{display:block;width:100%;text-align:left;min-height:36px;padding:0 10px;border:0;border-radius:6px;background:none;color:var(--fg);font:13px var(--mono);cursor:pointer}
 .qhit:hover,.qhit:focus-visible{background:var(--bg2);outline:none}
 .qnone{margin:8px 10px;color:var(--muted);font-size:13px}
@@ -96,5 +93,7 @@ html.lock,html.lock body{overflow:hidden}
 /* Top bar: version tag and GitHub link (build.py) */
 .top .vtag{font:600 11px var(--mono);border:1px solid var(--border);border-radius:999px;padding:2px 8px;color:var(--muted);margin-left:8px;white-space:nowrap}
 .top .gh svg{width:16px;height:16px}
+/* hud.css styles a.gh for its own top bar; here GitHub is one of the links */
+html[data-skin] .top a.lk.gh{font:13px/1.45 var(--mono);letter-spacing:0;text-transform:none;color:var(--fg);margin:0}
 @media (max-width:640px){.top .vtag{display:none}.top .gh .tl{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}}
 .sm-key .kt{font:600 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-right:4px}
