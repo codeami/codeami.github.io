@@ -1,33 +1,12 @@
-/* Shared style for the showcase. Look follows the owner's portal: warm paper,
-   serif headings, mono labels, one rust accent. System fonts only, so the
-   folder can be hosted anywhere. Light and dark tokens; nav.js sets data-theme. */
+/* Layout for the nav.js pages (core logic, changelog, the tour): sidebar nav,
+   serif headings, mono labels. Link after hud.css, which holds every colour,
+   font and spacing token (DESIGN.md); only the page-type names live here. */
 *, *::before, *::after { box-sizing: border-box; }
 :root {
-  --bg: #F5F2EE; --side: #FBFAF8; --card: #FBFAF8; --sunk: #EDE9E3;
-  --ink: #1B1A18; --soft: #6F6A63; --line: #E2DDD6; --accent: #A8382B;
-  --ok: #3F6B45; --warn: #A8382B; --todo: #8A6418;
-  --l1: #A8382B; --l2: #3F6B45; --l3: #5B4B8A; --l4: #8A6418; --l5: #2F5E73; --l6: #6F6A63;
   --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
-  --sans: system-ui, -apple-system, "Segoe UI", sans-serif;
-  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --sans: var(--f-read);
+  --mono: var(--font-mono);
   --measure: 68ch;
-  color-scheme: light;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    color-scheme: dark;
-    --bg: #191816; --side: #1F1E1B; --card: #22201D; --sunk: #2A2825;
-    --ink: #ECE8E2; --soft: #A39D95; --line: #36332F; --accent: #E07B6A;
-    --ok: #8CC594; --warn: #E07B6A; --todo: #E2B85C;
-    --l1: #E07B6A; --l2: #8CC594; --l3: #B4A6E6; --l4: #E2B85C; --l5: #84BED6; --l6: #A39D95;
-  }
-}
-:root[data-theme="dark"] {
-  color-scheme: dark;
-  --bg: #191816; --side: #1F1E1B; --card: #22201D; --sunk: #2A2825;
-  --ink: #ECE8E2; --soft: #A39D95; --line: #36332F; --accent: #E07B6A;
-  --ok: #8CC594; --warn: #E07B6A; --todo: #E2B85C;
-  --l1: #E07B6A; --l2: #8CC594; --l3: #B4A6E6; --l4: #E2B85C; --l5: #84BED6; --l6: #A39D95;
 }
 html { -webkit-text-size-adjust: 100%; }
 body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 var(--sans); }

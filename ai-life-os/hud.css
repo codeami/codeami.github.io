@@ -1,45 +1,86 @@
-/* The Chart Room's HUD skin, after the AIO second-brain map: near-black, thin
-   lines, spaced uppercase labels, one accent. Two skins: "hud" (warm accent, the
-   default) and "matrix" (green). nav.js or article.js sets data-skin on <html>
-   in the head; hud.js draws the ring graph behind the page and runs the toggle.
-   It overrides both token sets (kit/tokens.css and style.css). html:root[...]
-   outranks their light/dark rules, so the old day/night choice no longer applies. */
-html:root[data-skin] { color-scheme: dark; --hud-panel-a: .88; }
-html:root[data-skin="hud"] {
-  --bg: #05060a; --surface: #0c0e11; --ink: #e9e6e0; --mute: #a29d95; --line: #2a2e34;
-  --accent: #ff7a1a; --on-accent: #05060a; --accent-text: #ff9a4d;
-  --pop: #ffc531; --on-pop: #05060a; --ok: #6fd08a; --warn: #ff7a70;
-  --side: #0c0e11; --card: #0c0e11; --sunk: #15181d; --soft: #a29d95; --todo: #e6b450;
+/* The site's one shared style file: the tokens of DESIGN.md (repo root) and the
+   Chart Room's HUD skin. Every page links it in the head. nav.js and article.js
+   add it only when a page does not, as pages built outside this repo may not.
+   Skins on <html data-skin>: "hud" (warm accent, the default, also with no
+   attribute), "matrix" (green) and "calm" (the reading theme; its tokens are
+   here, but no page switches to it yet). nav.js or article.js sets data-skin in
+   the head; hud.js draws the ring graph behind the page and runs the toggle.
+   html:root[data-skin] outranks the light/dark rules in kit/tokens.css (the
+   retired Harbor Signal palette, kept for the kit page), so pages that still
+   link it get these colours. */
+
+/* Colours by role (DESIGN.md "Colors"), the graph palette (--k-* node kinds,
+   --r1 to --r7 rooms), then older names that have no role, kept so pages that
+   predate DESIGN.md render the same. */
+:root, html:root[data-skin="hud"] {
+  color-scheme: dark;
+  --bg: #05060a; --panel: #0c0e11; --glass: rgba(12, 14, 17, .92); --ink: #e9e6e0; --mute: #8f8b84; --line: #23262b; --line-2: #3a3f46;
+  --accent: #ff7a1a; --on-accent: #05060a; --accent-dim: #3a2a1d; --ok: #5ec27a; --warn: #e0554a; --info: #5cd3ff;
+  --k-root: #ff7a1a; --k-skill: #ff9a3c; --k-routine: #ffb347; --k-off: #6c6a66; --k-cli: #5cd3ff; --k-project: #2ee6c5; --k-page: #ffd93d;
+  --r1: #b57bff; --r2: #ff4fd8; --r3: #4f8dff; --r4: #2ee6c5; --r5: #ffd93d; --r6: #ff8a3d; --r7: #5cd3ff;
+  --pop: #ffc531; --on-pop: #05060a; --sunk: #15181d; --todo: #e6b450;
   --l1: #ff9a4d; --l2: #6fd08a; --l3: #c49bff; --l4: #e6b450; --l5: #6cc8ff; --l6: #a29d95;
-  --panel: rgba(12, 14, 17, var(--hud-panel-a));
 }
 html:root[data-skin="matrix"] {
-  --bg: #020a04; --surface: #06120a; --ink: #d6ffe0; --mute: #86c999; --line: #173f24;
-  --accent: #39ff7a; --on-accent: #021006; --accent-text: #5dff92;
-  --pop: #e8ff5a; --on-pop: #021006; --ok: #5dff92; --warn: #ff8a80;
-  --side: #06120a; --card: #06120a; --sunk: #0b1d10; --soft: #86c999; --todo: #e8ff5a;
+  color-scheme: dark;
+  --bg: #020503; --panel: #06100a; --glass: rgba(6, 16, 10, .92); --ink: #d6f5dc; --mute: #7fa088; --line: #16301d; --line-2: #24502f;
+  --accent: #00ff41; --on-accent: #020503; --accent-dim: #0a3a17; --ok: #7fdcff; --warn: #ff6b5a; --info: #c8ffd4;
+  --k-root: #00ff41; --k-skill: #7dff9b; --k-routine: #b6ffc8; --k-off: #2f5a3a; --k-cli: #7fdcff; --k-project: #3dd68c; --k-page: #e6ffe9;
+  --r1: #00ff41; --r2: #7dff9b; --r3: #3dd68c; --r4: #b6ffc8; --r5: #7fdcff; --r6: #4fe0b0; --r7: #c8ff5a;
+  --pop: #e8ff5a; --on-pop: #021006; --sunk: #0b1d10; --todo: #e8ff5a;
   --l1: #5dff92; --l2: #b9ff5a; --l3: #8dffd0; --l4: #e8ff5a; --l5: #7fe0ff; --l6: #86c999;
-  --panel: rgba(6, 18, 10, var(--hud-panel-a));
+}
+html:root[data-skin="calm"] {
+  color-scheme: light;
+  --bg: #faf7f2; --panel: #ffffff; --glass: #ffffff; --ink: #2b2620; --mute: #6b5f4a; --line: #e4dccb; --line-2: #cfc3ab;
+  --accent: #8a5a2b; --on-accent: #ffffff; --accent-dim: #efe3d2; --ok: #4d7a4d; --warn: #b0452f; --info: #3d6a8a;
+  --k-root: #8a5a2b; --k-skill: #a0522d; --k-routine: #8c7a55; --k-off: #b8ad97; --k-cli: #3d6a8a; --k-project: #4d7a4d; --k-page: #a8862b;
+  --r1: #7a5c8f; --r2: #a0526e; --r3: #3d6a8a; --r4: #4d7a4d; --r5: #a8862b; --r6: #b0452f; --r7: #5b7f95;
+  --pop: #ffc531; --on-pop: #2b2620; --sunk: #ede9e3; --todo: #8a6418;
+  --l1: #a8382b; --l2: #3f6b45; --l3: #5b4b8a; --l4: #8a6418; --l5: #2f5e73; --l6: #6f6a63;
+}
+
+/* Type (DESIGN.md "Typography"; no web fonts), the role names under older
+   names, and the kit's font names. */
+:root, html:root[data-skin] {
+  --f-ui: ui-monospace, SFMono-Regular, Menlo, monospace; --f-read: system-ui, -apple-system, sans-serif; --f-head: ui-monospace, SFMono-Regular, Menlo, monospace;
+  --ui-size: 13px; --lab-size: 10px; --lab-track: .3em; --lab-case: uppercase; --lab-var: normal; --h-weight: 400; --h-track: .08em;
+  --surface: var(--panel); --side: var(--panel); --card: var(--panel); --soft: var(--mute); --accent-text: var(--accent);
+  --font-display: var(--f-read); --font-body: var(--f-read); --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+html:root[data-skin="calm"] {
+  --f-ui: system-ui, -apple-system, sans-serif; --f-head: Georgia, serif;
+  --ui-size: 14px; --lab-size: 11px; --lab-track: .12em; --lab-var: small-caps; --h-weight: 500; --h-track: 0;
+}
+
+/* Spacing (DESIGN.md "Spacing"), then the kit's layout steps, corners and game
+   knobs (off), which pages built on kit.css still read. */
+:root {
+  --s-xs: 3px; --s-sm: 6px; --s-md: 12px; --s-lg: 16px; --s-xl: 24px;
+  --gutter: 16px; --card-max: 46rem; --panel-w: 340px; --sheet-max: 70vh;
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 24px; --space-6: 32px;
+  --measure: 65ch; --radius: 10px; --radius-bubble: 16px;
+  --bar-mask: none; --chip-cursor: ""; --call-frame: none;
 }
 
 /* The graph: fixed behind everything, dimmed. A phone gets it dimmer still. */
 .hud-bg { position: fixed; inset: 0; z-index: -1; width: 100%; height: 100%; pointer-events: none; opacity: .7; }
-@media (max-width: 600px) { .hud-bg { opacity: .45; } html:root[data-skin] { --hud-panel-a: .9; } }
+@media (max-width: 600px) { .hud-bg { opacity: .45; } }
 
-/* Text sits on panels: thin lines, a near-solid backdrop. */
-html[data-skin] .k-nav, html[data-skin] .top { background: var(--panel); border-bottom: 1px solid var(--line); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+/* Text sits on panels: thin lines, a near-solid backdrop (--glass). */
+html[data-skin] .k-nav, html[data-skin] .top { background: var(--glass); border-bottom: 1px solid var(--line); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
 html[data-skin] main.page, html[data-skin] .col > main,
 html[data-skin] .k-foot, html[data-skin] .proof, html[data-skin] .foot {
-  background: var(--panel); border-left: 1px solid var(--line); border-right: 1px solid var(--line);
+  background: var(--glass); border-left: 1px solid var(--line); border-right: 1px solid var(--line);
 }
 /* The chat column has no backdrop: each bubble and chip carries its own. */
-html[data-skin] .k-chip, html[data-skin] .opt, html[data-skin] .composer { background: var(--panel); }
+html[data-skin] .k-chip, html[data-skin] .opt, html[data-skin] .composer { background: var(--glass); }
 html[data-skin] .composer { padding-left: var(--space-2, 8px); padding-right: var(--space-2, 8px); }
 /* Wide screens: the article panel sits right, and hud.js centres the graph in the free space on the left. */
 @media (min-width: 1100px) {
   html[data-skin] main.page, html[data-skin] main.page + .k-foot { margin-right: 40px; margin-left: auto; }
 }
-html[data-skin] .side { background: var(--panel); }
+html[data-skin] .side { background: var(--glass); }
 html[data-skin] .k-bubble, html[data-skin] .k-card, html[data-skin] .panel, html[data-skin] figure, html[data-skin] pre, html[data-skin] .box { border-radius: 2px; }
 
 /* Labels: mono, spaced, uppercase. Body text keeps its readable font. */
