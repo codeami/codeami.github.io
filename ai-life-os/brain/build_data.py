@@ -7,6 +7,7 @@ Reads only public files of this site:
   brain/src/site.json       the centre file, this site's pages, public projects, the reading order
   maps/src/skills/map.json  the skills (the inner ring)
   blog/index.html           the Field Notes posts
+  course/course.json        the AI introductory course's lessons
 Every url in the output is relative to brain/ or a public https link. Stdlib only."""
 import html, json, re
 from pathlib import Path
@@ -92,12 +93,23 @@ posts_room = {"id": "posts", "label": "Field Notes", "color": "#5cd3ff", "note":
               "links": links([["All Field Notes", "../blog/index.html"]]),
               "folders": [{"name": k, "count": len(v), "files": v} for k, v in posts.items()]}
 
+# Room 6: the AI introductory course, one dot per lesson; graph.js greys a lesson until it is done in this browser
+course = json.loads(rd("course/course.json"))
+lessons = course["lessons"]
+course_room = {"id": "course", "label": "Course", "color": "#7dff8a",
+               "note": course["title"] + ": %d short lessons in a fixed order, read with EA-bot. A lesson's dot lights up once you finish it in this browser." % len(lessons),
+               "links": links([["Open the course", "../course/index.html"]]),
+               "folders": [{"name": "lessons", "count": len(lessons), "files": [
+                   {"id": "course-" + l["id"], "n": "%d. %s" % (i, l["title"]), "line": "course · lesson %d of %d" % (i, len(lessons)),
+                    "body": [l["summary"]], "links": links([["Open this lesson", "../course/index.html#" + l["id"]]]), "rel": [], "lesson": l["id"]}
+                   for i, l in enumerate(lessons, 1)]}]}
+
 skills = [{"n": s["name"], "desc": plain(s.get("whatItIs")), "when": s.get("trigger", ""), "url": "../maps/skills.html#" + sid}
           for sid, s in skills_map["skills"].items()]
 
 out = {"meta": {"name": "AI-Life-OS public second brain", "invented": False,
                 "note": "Public data only: the approved wiki notes, this site's pages and posts, the skill map and the harness tier list. No private files, paths, routines or links."},
-       "root": site["root"], "rooms": [notes_room, fm_room, areas_room, tier_room, posts_room], "skills": skills, "routines": [],
+       "root": site["root"], "rooms": [notes_room, fm_room, areas_room, tier_room, posts_room, course_room], "skills": skills, "routines": [],
        "apps": [], "projects": [dict(p, kind="project") for p in site["projects"]], "pages": [dict(p, kind="page") for p in site["pages"]],
        "reading": site["reading"]}
 (HERE / "brain-data.json").write_text(json.dumps(out, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
