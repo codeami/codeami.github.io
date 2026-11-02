@@ -2,8 +2,8 @@
    is the base layer of every page, and content reads as cards and sheets over it; on a
    content page (hud.js) the page itself is that card. HUD and Matrix are its colour variants.
    Right-hand panel on wide screens, bottom sheet on phones. These rules are page-level;
-   the map's own look is graph.css, inside its shadow root. */
-html.brain, html.brain body { margin: 0; height: 100%; overflow: hidden; background: #05060a; }
+   the map's own look is graph.css, inside its shadow root. Colours are hud.css tokens. */
+html.brain, html.brain body { margin: 0; height: 100%; overflow: hidden; background: var(--bg); }
 body { --lw: 0px; --rw: 0px; --ob: 0px; --navh: 0px; }
 @media (min-width: 900px) { body.side { --lw: 260px; --rw: 300px; } }
 /* transform: the map's fixed parts sit inside this box, under the site header */
@@ -11,20 +11,20 @@ body { --lw: 0px; --rw: 0px; --ob: 0px; --navh: 0px; }
 body.framed .k-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 8; }
 body.framed #drawer { top: var(--navh); z-index: 7; }
 /* drawer.js and tour.js live outside the shadow root: give them the map's type */
-#drawer, #askBar, #tourCap { font: 12px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace; color: #e9e6e0; }
+#drawer, #askBar, #tourCap { font: 12px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--ink); }
 
 /* the page overlay */
 #pageov { position: fixed; z-index: 6; top: calc(var(--navh) + 10px); right: 10px; bottom: 10px; width: var(--ow);
-  display: flex; flex-direction: column; background: rgba(5, 6, 10, .95); border: 1px solid var(--line, #2a2e34);
-  border-top: 2px solid var(--accent, #ff7a1a); box-shadow: -12px 0 32px rgba(0, 0, 0, .5); transform: translateZ(0); }
+  display: flex; flex-direction: column; background: rgba(5, 6, 10, .95); border: 1px solid var(--line);
+  border-top: 2px solid var(--accent); box-shadow: -12px 0 32px rgba(0, 0, 0, .5); transform: translateZ(0); }
 body { --ow: clamp(420px, 48vw, 700px); }
 #pageov[hidden] { display: none; }
-#pageov .pov-bar { flex: none; display: flex; gap: 6px; align-items: center; padding: 6px 8px 6px 12px; border-bottom: 1px solid var(--line, #2a2e34); }
+#pageov .pov-bar { flex: none; display: flex; gap: 6px; align-items: center; padding: 6px 8px 6px 12px; border-bottom: 1px solid var(--line); }
 #pageov .pov-t { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-  font: 11px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .14em; text-transform: uppercase; color: var(--mute, #a29d95); }
-.pov-btn { min-height: 32px; padding: 0 10px; background: transparent; color: var(--ink, #e9e6e0); border: 1px solid var(--line, #2a2e34);
+  font: 11px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .14em; text-transform: uppercase; color: var(--mute); }
+.pov-btn { min-height: 32px; padding: 0 10px; background: transparent; color: var(--ink); border: 1px solid var(--line);
   font: 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .1em; text-transform: uppercase; cursor: pointer; }
-.pov-btn:hover, .pov-btn:focus-visible { border-color: var(--accent, #ff7a1a); color: var(--accent-text, #ff9a4d); outline: none; }
+.pov-btn:hover, .pov-btn:focus-visible { border-color: var(--accent); color: var(--accent-text); outline: none; }
 #pageov .pov-body { flex: 1; min-height: 0; overflow: auto; overscroll-behavior: contain; }
 #pageov.min { bottom: auto; }
 #pageov.min .pov-body { display: none; }

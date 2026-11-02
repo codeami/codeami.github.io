@@ -1,8 +1,9 @@
 /* Shared look for the kit article pages: Field Notes, the arena, safety and about.
-   Link after kit/tokens.css and kit/kit.css. Reads only kit token names. The posts'
-   figures use their drafts' colour names, so those are mapped onto the kit here. */
+   Link after hud.css and kit/kit.css. Reads only token names from hud.css. The posts'
+   figures use their drafts' colour names, so those are mapped onto the tokens here
+   (--panel is already a hud.css role). */
 :root {
-  --paper: var(--bg); --panel: var(--surface); --muted: var(--mute);
+  --paper: var(--bg); --muted: var(--mute);
   --accent-soft: color-mix(in srgb, var(--accent) 16%, var(--surface));
   --warn-soft: color-mix(in srgb, var(--warn) 14%, var(--surface));
   --ok-soft: color-mix(in srgb, var(--ok) 16%, var(--surface));

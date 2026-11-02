@@ -25,18 +25,21 @@ var SITE = "The Chart Room";
 
 /* Skin: the HUD look (warm accent) or Matrix green, as the reader last picked
    ("skin" in localStorage). This runs in the head, before the body is drawn, so
-   there is no flash. hud.css colours the page; hud.js draws the background graph
-   and turns the header's theme button into the skin toggle. Both sit next to
-   this file, as article.js loads them for the kit pages. */
+   there is no flash. hud.css colours the page (linked in the page's head, or
+   added here when it is not); hud.js draws the background graph and turns the
+   header's theme button into the skin toggle. Both sit next to this file, as
+   article.js loads them for the kit pages. */
 (function () {
   var root = document.documentElement;
   var base = document.currentScript ? document.currentScript.src.replace(/[^\/]*$/, "") : "";
   var s = null;
   try { s = localStorage.getItem("skin"); } catch (e) { /* storage blocked: use the default */ }
   root.setAttribute("data-skin", s === "matrix" ? "matrix" : "hud");
-  var css = document.createElement("link");
-  css.rel = "stylesheet"; css.href = base + "hud.css";
-  document.head.appendChild(css);
+  if (!document.querySelector('link[href$="hud.css"]')) {
+    var css = document.createElement("link");
+    css.rel = "stylesheet"; css.href = base + "hud.css";
+    document.head.appendChild(css);
+  }
   var js = document.createElement("script");
   js.src = base + "hud.js";
   document.head.appendChild(js);
