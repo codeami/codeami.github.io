@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>The Chart Room: chat with EA-bot</title>
+<meta name="description" content="The Chart Room: how one captain runs a crew of AI agents, safely. A plain chat with EA-bot, field notes on harness engineering and alignment, and the day's numbers.">
+<script src="article.js"></script>
+<link rel="icon" href="kit/bosun.svg" type="image/svg+xml">
+<link rel="stylesheet" href="kit/tokens.css">
+<link rel="stylesheet" href="kit/kit.css">
+<style>
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+.k-nav { position: sticky; top: 0; z-index: 2; }
+.k-nav nav { gap: 14px; align-items: center; }
+.theme { min-height: 44px; min-width: 44px; padding: 0 10px; font: 700 14px/1 var(--font-body); color: var(--ink); background: transparent; border: 1.5px solid var(--line); border-radius: var(--radius); cursor: pointer; }
+.shell { display: grid; gap: var(--space-5); max-width: 1120px; margin: 0 auto; padding: 0 var(--space-4); }
+@media (min-width: 900px) { .shell { grid-template-columns: minmax(0, 1fr) 320px; align-items: start; } }
+
+/* Chat column: the log grows down the page; the composer sticks to the bottom of it. */
+.chatcol { display: flex; flex-direction: column; min-height: calc(100vh - 60px); min-height: calc(100dvh - 60px); }
+.chatcol .k-chat { flex: 1; align-content: start; padding: var(--space-4) 0; }
+.chatcol .k-row, .chatcol .opts { scroll-margin: 76px 0 90px; }
+.k-bubble p { margin: 0; }
+.k-bubble .see { display: inline-block; margin-top: 6px; font-size: 14px; font-weight: 700; }
+.k-bubble .k-status { display: flex; margin-top: 6px; }
+/* An example brief: the owner's words on top, Firstmate's spec below. */
+.brief { margin-top: 8px; padding: 10px 12px; background: var(--bg); border: 1px solid var(--line); box-shadow: inset 3px 0 0 var(--accent); border-radius: var(--radius); }
+.brief h4 { margin: 0 0 4px; font: 700 13px/1.3 var(--font-body); color: var(--mute); text-transform: uppercase; letter-spacing: .04em; }
+.brief h4 + * { margin-bottom: 8px; }
+.brief ul { margin: 0; padding-left: 18px; }
+.brief .credit { font-size: 14px; }
+.typing { display: inline-flex; gap: 4px; padding: 14px 16px; }
+.typing i { width: 7px; height: 7px; border-radius: 50%; background: var(--mute); animation: dot 1s infinite ease-in-out; }
+.typing i:nth-child(2) { animation-delay: .15s; } .typing i:nth-child(3) { animation-delay: .3s; }
+@keyframes dot { 0%, 80%, 100% { opacity: .3; } 40% { opacity: 1; } }
+.new { animation: rise .3s ease-out; }
+@keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .typing i, .new { animation: none; } }
+
+/* An option: the chip opens it, the small flag beside it saves it for later. */
+.opts { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-2); padding-left: 42px; }
+.opt { display: inline-flex; align-items: stretch; max-width: 100%; border: 1.5px solid var(--accent-text); border-radius: 999px; overflow: hidden; }
+.opt .k-chip { border: 0; border-radius: 0; padding: 10px 14px; line-height: 1.25; text-align: left; }
+.opt .k-chip[aria-pressed="true"] { border: 0; }
+.opt .k-chip:disabled { cursor: default; }
+.opt .k-chip:disabled:not([aria-pressed="true"]) { color: var(--mute); }
+.save { display: inline-flex; align-items: center; gap: 4px; min-width: 44px; padding: 0 12px; font: 700 13px/1 var(--font-body); color: var(--mute); background: transparent; border: 0; border-left: 1.5px solid var(--line); cursor: pointer; }
+.save svg { width: 14px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; }
+.save[aria-pressed="true"] { color: var(--on-pop); background: var(--pop); }
+.save[aria-pressed="true"] svg { fill: currentColor; }
+.opts.old .opt { border-color: var(--line); }
+.opts.old .opt:has([aria-pressed="true"].k-chip) { border-color: var(--pop); }
+
+.composer { position: sticky; bottom: 0; display: flex; gap: var(--space-2); padding: var(--space-3) 0 var(--space-4); background: var(--bg); border-top: 1px solid var(--line); }
+.composer input { flex: 1; min-width: 0; min-height: 44px; padding: 0 14px; font: 15px var(--font-body); color: var(--mute); background: var(--surface); border: 1px solid var(--line); border-radius: 999px; }
+.composer .k-btn:disabled { opacity: .5; cursor: not-allowed; }
+.pill { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.pill b { min-width: 22px; padding: 2px 6px; text-align: center; color: var(--on-pop); background: var(--pop); border-radius: 999px; }
+@media (min-width: 900px) { .composer .pill { display: none; } }
+@media (max-width: 520px) { .composer .send { display: none; } }
+
+/* Side: the review-later checklist, in folders, and a map that grows. */
+.side { display: grid; gap: var(--space-4); padding-bottom: var(--space-5); scroll-margin-top: 70px; }
+@media (min-width: 900px) { .side { position: sticky; top: 76px; padding: var(--space-4) 0; max-height: calc(100vh - 76px); overflow: auto; } }
+.panel { padding: var(--space-3) var(--space-4); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+.panel h2 { margin: 4px 0 6px; font-size: 18px; }
+.hint { margin: 0 0 var(--space-2); font-size: 14px; color: var(--mute); }
+.folder summary { display: flex; align-items: center; gap: 8px; min-height: 36px; font-weight: 700; cursor: pointer; list-style: none; }
+.folder summary::-webkit-details-marker { display: none; }
+.folder summary svg { width: 18px; height: 15px; flex: none; fill: var(--accent); }
+.folder summary .n { margin-left: auto; font-size: 13px; color: var(--mute); }
+.folder ul { margin: 0 0 var(--space-2) 8px; padding: 0 0 0 10px; list-style: none; border-left: 2px solid var(--line); }
+.folder li { display: flex; align-items: center; gap: 6px; min-height: 40px; padding-left: 8px; }
+.folder input { width: 18px; height: 18px; flex: none; accent-color: var(--accent); }
+.folder .go { flex: 1; min-width: 0; padding: 6px 0; font: 15px/1.3 var(--font-body); text-align: left; color: var(--accent-text); background: none; border: 0; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.folder li.done .go { color: var(--mute); text-decoration: line-through; }
+.folder .rm { width: 32px; height: 32px; flex: none; font-size: 18px; color: var(--mute); background: none; border: 0; border-radius: 50%; cursor: pointer; }
+.graph svg { display: block; width: 100%; height: auto; }
+.graph .edge { stroke: var(--line); stroke-width: 1.5; }
+.graph .trail { stroke: var(--accent); stroke-width: 1.2; stroke-dasharray: 3 3; fill: none; opacity: .7; }
+.graph .hub { fill: var(--surface); stroke: var(--ink); stroke-width: 1.5; }
+.graph .hubl { font: 700 10px var(--font-body); fill: var(--mute); }
+.graph .t { cursor: pointer; }
+.graph .t circle { fill: var(--accent); stroke: var(--surface); stroke-width: 1.5; }
+.graph .t.saved circle { stroke: var(--pop); stroke-width: 3; }
+.graph .t.saved.unread circle { fill: var(--pop); stroke: var(--ink); stroke-width: 1.2; }
+.graph .t:focus-visible { outline: none; }
+.graph .t:focus-visible circle { stroke: var(--ink); stroke-width: 3; }
+.graph .pop { transform-box: fill-box; transform-origin: center; animation: grow .35s ease-out; }
+@keyframes grow { from { transform: scale(0); } to { transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) { .graph .pop { animation: none; } }
+.key { display: flex; flex-wrap: wrap; gap: 4px 12px; margin: 6px 0 0; font-size: 13px; color: var(--mute); }
+.key i { display: inline-block; width: 10px; height: 10px; margin-right: 4px; border-radius: 50%; vertical-align: -1px; }
+.restart { margin-top: var(--space-2); }
+
+.foot { max-width: 1120px; margin: 0 auto; padding: var(--space-4); font-size: 14px; color: var(--mute); border-top: 1px solid var(--line); }
+.foot p { margin: 0 0 6px; }
+.warnbox { padding: var(--space-3) var(--space-4); background: var(--surface); border: 1px solid var(--line); box-shadow: inset 4px 0 0 var(--warn); border-radius: var(--radius); }
+.warnbox p { margin: 0 0 6px; }
+.k-home { display: flex; align-items: center; gap: var(--space-3); min-width: 0; color: var(--ink); text-decoration: none; }
+.k-nav nav a { white-space: nowrap; }
+
+/* Proof strip: the day's true numbers under the chat. Each card links to the page that explains it. */
+.proof { max-width: 1120px; margin: 0 auto; padding: var(--space-5) var(--space-4); border-top: 1px solid var(--line); }
+.proof h2 { margin: 0 0 4px; font-size: 22px; }
+.proof .by { margin: 0 0 var(--space-4); color: var(--mute); }
+.proof .k-cards { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+.proof a.k-card { color: var(--ink); text-decoration: none; }
+.proof a.k-card:hover { border-color: var(--accent); }
+.proof .k-l { margin-bottom: 0; }
+@media (max-width: 600px) {
+  .k-logo small { display: none; }
+  .k-nav { gap: 10px; }
+  .k-nav nav { gap: 10px; font-size: 14px; }
+  .opts { padding-left: 0; }
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <!-- Bosun, from kit/bosun.svg, drawn inline so it takes the page's colours. -->
+  <symbol id="bosun" viewBox="0 0 100 100">
+    <line x1="50" y1="19" x2="50" y2="5" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/>
+    <path d="M50 5h17l-4.5 5 4.5 5H50z" fill="var(--pop)" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M25 33Q50 10 75 33Z" fill="var(--surface)" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
+    <rect x="18" y="31" width="64" height="47" rx="17" fill="var(--surface)" stroke="var(--ink)" stroke-width="3"/>
+    <rect x="21" y="28" width="58" height="9" rx="4.5" fill="var(--accent)" stroke="var(--ink)" stroke-width="2"/>
+    <circle cx="38" cy="54" r="6" fill="var(--ink)"/><circle cx="62" cy="54" r="6" fill="var(--ink)"/>
+    <circle cx="40" cy="52" r="2" fill="var(--surface)"/><circle cx="64" cy="52" r="2" fill="var(--surface)"/>
+    <path d="M41 66Q50 73 59 66" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/>
+    <rect x="32" y="80" width="36" height="16" rx="6" fill="var(--accent)" stroke="var(--ink)" stroke-width="3"/>
+    <circle cx="50" cy="88" r="3" fill="var(--pop)"/>
+  </symbol>
+</svg>
+
+<header class="k-nav">
+  <a class="k-home" href="index.html"><svg class="k-mark" role="img" aria-label="Bosun, the EA-bot mascot"><use href="#bosun"/></svg>
+  <span class="k-logo">The Chart Room<small>How one captain runs a crew of AI agents, safely.</small></span></a>
+  <nav aria-label="Site">
+    <a href="blog/index.html">Field Notes</a>
+    <a href="arena.html">Arena</a>
+    <a href="safety.html">Safety</a>
+    <button class="theme" id="theme" type="button"></button>
+  </nav>
+</header>
+
+<div class="shell">
+  <main class="chatcol" aria-label="Chat with EA-bot">
+    <div class="k-chat" id="log" role="log" aria-live="polite">
+      <noscript><p>This chat needs JavaScript. <a href="story.html">Read the story</a> instead.</p></noscript>
+    </div>
+    <form class="composer" onsubmit="return false">
+      <input type="text" name="message" disabled placeholder="Typing is coming soon. Pick an option." aria-label="Message (coming soon)">
+      <button class="k-btn primary send" type="submit" disabled>Send</button>
+      <a class="k-btn secondary pill" href="#later">Saved <b id="pillN">0</b></a>
+    </form>
+  </main>
+
+  <aside class="side" id="later" aria-label="Review later">
+    <section class="panel">
+      <h2>Review later</h2>
+      <p class="hint" id="hint">Tap the flag on an option to save it here. Saved topics sort into folders.</p>
+      <div id="folders"></div>
+    </section>
+    <section class="panel graph">
+      <h2>Your map</h2>
+      <p class="hint" id="gcap">It grows as you open topics.</p>
+      <svg id="graph" viewBox="0 0 320 250" role="group" aria-labelledby="gtitle"><title id="gtitle">Topics you opened or saved, linked to their folders</title></svg>
+      <p class="key"><span><i style="background:var(--accent)"></i>opened</span><span><i style="background:var(--pop)"></i>saved, not read</span></p>
+      <button class="k-btn quiet restart" id="restart" type="button">Start over</button>
+    </section>
+  </aside>
+</div>
+
+<section class="proof" aria-labelledby="proof-h">
+  <h2 id="proof-h">2 November, in numbers</h2>
+  <p class="by">by Ashish Raina – program manager turned AI-crew operator. Each number links to the page that explains it.</p>
+  <div class="k-cards">
+    <a class="k-card" href="blog/rules-from-chat-history.html"><div class="k-n">46</div><p class="k-l">chat corrections reviewed</p></a>
+    <a class="k-card" href="blog/rules-from-chat-history.html#s6"><div class="k-n">4</div><p class="k-l">new rules, approved by me</p></a>
+    <a class="k-card" href="blog/guides-and-sensors.html#s10"><div class="k-n">3</div><p class="k-l">automatic checks added: secret scan at commit, plain-language check on drafts, link check before replies</p></a>
+    <a class="k-card" href="safety.html#false-passes"><div class="k-n">9</div><p class="k-l">false passes logged: work that passed the checks, then I rejected</p></a>
+    <a class="k-card" href="changelog.html#d2026-11-02"><div class="k-n">6</div><p class="k-l">pull requests merged that day</p></a>
+  </div>
+</section>
+
+<footer class="foot">
+  <p id="pages">Prefer to read? <a href="blog/index.html">Field Notes</a> · <a href="story.html">The story</a> · <a href="tour/index.html">Guided tour</a> · <a href="arena.html">Harness arena</a> · <a href="safety.html">Safety by design</a> · <a href="safety.html#works-today">What works today</a> · <a href="core.html">Core logic</a> · <a href="maps/skills.html">Skill map</a> · <a href="maps/flow.html">Harness flow map</a> · <a href="brain/index.html">Second brain</a> · <a href="changelog.html">Changelog</a> · <a href="kit/index.html">Style kit</a> · <a href="about.html">About</a></p>
+  <p>The supervisor and most crew mechanics are upstream <a href="https://github.com/kunchenguid/firstmate">Firstmate</a>, MIT licence, by Kun Chen and contributors.</p>
+</footer>
+
+<script>
+(function () {
+  var KEY = "ea-chat:v1";
+  var NS = "http://www.w3.org/2000/svg";
+  var log = document.getElementById("log");
+  var C, I, byId = {}, S, busy = false;
+  var calm = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* Progress and the checklist live in localStorage. Blocked storage only means
+     they last for this visit. */
+  function load() {
+    try {
+      var s = JSON.parse(localStorage.getItem(KEY) || "null");
+      if (s && Array.isArray(s.log) && Array.isArray(s.saved) && Array.isArray(s.done)) return s;
+    } catch (e) { /* unreadable or blocked: start fresh */ }
+    return { log: [], saved: [], done: [] };
+  }
+  function store() {
+    try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* storage blocked */ }
+  }
+
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text) n.textContent = text;
+    return n;
+  }
+  function svg(tag, attrs) {
+    var n = document.createElementNS(NS, tag);
+    for (var k in attrs) n.setAttribute(k, attrs[k]);
+    return n;
+  }
+  function has(list, id) { return list.indexOf(id) >= 0; }
+  function avatar() {
+    var a = svg("svg", { "class": "k-avatar", "aria-hidden": "true" });
+    a.appendChild(svg("use", { href: "#bosun" }));
+    return a;
+  }
+
+  /* Three options: the first three in "next" not yet opened, then any unopened
+     topic, so every turn offers something new; opened ones only when all are. */
+  function options(node, opened) {
+    var out = [];
+    var pool = node.next.concat(C.nodes.map(function (n) { return n.id; }));
+    pool.forEach(function (id) {
+      if (out.length < 3 && id !== node.id && id !== C.root && !has(out, id) && !opened[id]) out.push(id);
+    });
+    node.next.forEach(function (id) { if (out.length < 3 && id !== node.id && !has(out, id)) out.push(id); });
+    return out;
+  }
+
+  function botRow(text) {
+    var row = el("div", "k-row");
+    row.appendChild(avatar());
+    var b = el("div", "k-bubble");
+    if (text) b.appendChild(el("p", "", text));
+    row.appendChild(b);
+    return row;
+  }
+  function factRow(node) {
+    var row = botRow(node.fact);
+    var b = row.lastChild;
+    if (node.status) b.appendChild(el("span", "k-status warn", node.status));
+    if (node.brief && I) b.appendChild(briefBox(I));
+    if (node.see) {
+      var a = el("a", "see", "See how: " + node.see.label + " →");
+      a.href = node.see.href;
+      b.appendChild(a);
+    }
+    return row;
+  }
+  function briefBox(it) {
+    var box = el("div", "brief"), ul = el("ul");
+    box.appendChild(el("h4", "", it.brief.intent.label));
+    box.appendChild(el("p", "", "“" + it.brief.intent.text + "”"));
+    box.appendChild(el("h4", "", it.brief.spec.label));
+    it.brief.spec.points.forEach(function (t) { ul.appendChild(el("li", "", t)); });
+    box.appendChild(ul);
+    var p = el("p", "credit", "The idea: "), a = el("a", "", it.credit.label);
+    a.href = it.credit.href; p.appendChild(a); box.appendChild(p);
+    return box;
+  }
+  function meRow(text) {
+    var row = el("div", "k-row");
+    row.appendChild(el("div", "k-bubble me", text));
+    return row;
+  }
+  var FLAG = '<svg viewBox="0 0 14 16" aria-hidden="true"><path d="M2 15V2h10l-3 4 3 4H2"/></svg>';
+  function optsRow(ids) {
+    var box = el("div", "opts");
+    ids.forEach(function (id) {
+      var n = byId[id], o = el("div", "opt");
+      var go = el("button", "k-chip", n.chip);
+      go.type = "button"; go.dataset.go = id; go.setAttribute("aria-pressed", "false");
+      var sv = el("button", "save");
+      sv.type = "button"; sv.dataset.save = id;
+      sv.innerHTML = FLAG + "<span>Later</span>";
+      setSave(sv, has(S.saved, id));
+      o.appendChild(go); o.appendChild(sv);
+      box.appendChild(o);
+    });
+    return box;
+  }
+  function setSave(btn, on) {
+    var n = byId[btn.dataset.save];
+    btn.setAttribute("aria-pressed", on ? "true" : "false");
+    btn.setAttribute("aria-label", (on ? "Saved for later: " : "Save for later: ") + n.chip);
+    btn.lastChild.textContent = on ? "Saved" : "Later";
+  }
+  /* Only the newest options open topics; older ones stay as a record of the path. */
+  function retire(chosen) {
+    var all = log.querySelectorAll(".opts:not(.old)");
+    Array.prototype.forEach.call(all, function (box) {
+      box.className += " old";
+      Array.prototype.forEach.call(box.querySelectorAll(".k-chip"), function (c) {
+        c.disabled = true;
+        if (c.dataset.go === chosen) c.setAttribute("aria-pressed", "true");
+      });
+    });
+  }
+
+  /* Draw the whole chat from the saved log, with no delays. */
+  function replay() {
+    log.textContent = "";
+    log.appendChild(botRow(C.hello));
+    var root = byId[C.root], opened = {};
+    opened[C.root] = true;
+    log.appendChild(factRow(root));
+    log.appendChild(optsRow(options(root, opened)));
+    S.log.forEach(function (id) {
+      var n = byId[id];
+      retire(id);
+      log.appendChild(meRow(n.chip));
+      opened[id] = true;
+      log.appendChild(factRow(n));
+      log.appendChild(optsRow(options(n, opened)));
+    });
+  }
+  function openedSet() {
+    var o = {};
+    o[C.root] = true;
+    S.log.forEach(function (id) { o[id] = true; });
+    return o;
+  }
+
+  function open(id) {
+    if (busy || !byId[id] || id === C.root) return;
+    busy = true;
+    var n = byId[id];
+    S.log.push(id);
+    if (S.log.length > 80) S.log = S.log.slice(-80);
+    if (has(S.saved, id) && !has(S.done, id)) S.done.push(id);
+    store();
+    retire(id);
+    var me = meRow(n.chip);
+    me.className += " new";
+    log.appendChild(me);
+    var wait = botRow("");
+    var dots = wait.lastChild;
+    dots.className += " typing";
+    dots.setAttribute("aria-label", "EA-bot is typing");
+    dots.innerHTML = "<i></i><i></i><i></i>";
+    log.appendChild(wait);
+    scrollTo(wait);
+    side();
+    setTimeout(function () {
+      log.removeChild(wait);
+      var f = factRow(n), o = optsRow(options(n, openedSet()));
+      f.className += " new"; o.className += " new";
+      log.appendChild(f);
+      log.appendChild(o);
+      scrollTo(o);
+      busy = false;
+    }, calm ? 150 : 650);
+  }
+  /* Bring the newest row above the sticky composer (scroll-margin-bottom). */
+  function scrollTo(node) {
+    if (node.getBoundingClientRect().bottom > window.innerHeight - 90) node.scrollIntoView({ block: "end" });
+  }
+
+  function toggleSave(id) {
+    var i = S.saved.indexOf(id);
+    if (i >= 0) { S.saved.splice(i, 1); var d = S.done.indexOf(id); if (d >= 0) S.done.splice(d, 1); }
+    else S.saved.push(id);
+    store();
+    Array.prototype.forEach.call(log.querySelectorAll('[data-save="' + id + '"]'), function (b) { setSave(b, i < 0); });
+    side();
+  }
+
+  log.addEventListener("click", function (ev) {
+    var b = ev.target.closest ? ev.target.closest("button") : null;
+    if (!b || b.disabled) return;
+    if (b.dataset.save) toggleSave(b.dataset.save);
+    else if (b.dataset.go) open(b.dataset.go);
+  });
+
+  /* The checklist: saved topics grouped into folders. */
+  var FOLDER = '<svg viewBox="0 0 18 15" aria-hidden="true"><path d="M0 2a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2z"/></svg>';
+  function folders() {
+    var box = document.getElementById("folders");
+    box.textContent = "";
+    C.folders.forEach(function (f) {
+      var items = S.saved.filter(function (id) { return byId[id].folder === f.id; });
+      if (!items.length) return;
+      var d = el("details", "folder");
+      d.open = true;
+      var s = el("summary");
+      s.innerHTML = FOLDER;
+      s.appendChild(el("span", "", f.title));
+      var left = items.filter(function (id) { return !has(S.done, id); }).length;
+      s.appendChild(el("span", "n", left ? left + " to read" : "all read"));
+      d.appendChild(s);
+      var ul = el("ul");
+      items.forEach(function (id) {
+        var n = byId[id], li = el("li", has(S.done, id) ? "done" : "");
+        var cb = el("input");
+        cb.type = "checkbox"; cb.checked = has(S.done, id); cb.dataset.done = id;
+        cb.setAttribute("aria-label", "Read: " + n.title);
+        var go = el("button", "go", n.title);
+        go.type = "button"; go.dataset.go = id;
+        var rm = el("button", "rm", "×");
+        rm.type = "button"; rm.dataset.rm = id;
+        rm.setAttribute("aria-label", "Remove " + n.title);
+        li.appendChild(cb); li.appendChild(go); li.appendChild(rm);
+        ul.appendChild(li);
+      });
+      d.appendChild(ul);
+      box.appendChild(d);
+    });
+    document.getElementById("hint").hidden = S.saved.length > 0;
+    document.getElementById("pillN").textContent = S.saved.length;
+  }
+  document.getElementById("folders").addEventListener("click", function (ev) {
+    var t = ev.target;
+    if (t.dataset.done) {
+      var i = S.done.indexOf(t.dataset.done);
+      if (t.checked && i < 0) S.done.push(t.dataset.done);
+      if (!t.checked && i >= 0) S.done.splice(i, 1);
+      store(); side();
+    } else if (t.dataset.rm) toggleSave(t.dataset.rm);
+    else if (t.dataset.go) open(t.dataset.go);
+  });
+
+  /* The map: EA-bot in the middle, a hub per folder, a dot per topic opened or saved. */
+  var CX = 160, CY = 125;
+  var HUBS = [[70, 62], [250, 62], [70, 190], [250, 190]];
+  var drawn = {};
+  function spot(id) {
+    var n = byId[id];
+    if (id === C.root) return [CX, CY];
+    var fi = C.folders.map(function (f) { return f.id; }).indexOf(n.folder);
+    var h = HUBS[fi];
+    var mates = C.nodes.filter(function (m) { return m.folder === n.folder; });
+    // Topics fan out on the outer side of the hub; its label sits on the inner side.
+    var k = mates.indexOf(n), up = h[1] < CY;
+    var a = (up ? 195 : 15) + (mates.length > 1 ? k / (mates.length - 1) : .5) * 150;
+    a = a * Math.PI / 180;
+    return [h[0] + 42 * Math.cos(a), h[1] + 40 * Math.sin(a)];
+  }
+  function graph() {
+    var g = document.getElementById("graph");
+    while (g.lastChild && g.lastChild.tagName !== "title") g.removeChild(g.lastChild);
+    var opened = openedSet(), here = S.log[S.log.length - 1] || C.root;
+    var ids = C.nodes.map(function (n) { return n.id; }).filter(function (id) {
+      return id !== C.root && (opened[id] || has(S.saved, id));
+    });
+    var lines = svg("g", {}), dots = svg("g", {});
+    g.appendChild(lines); g.appendChild(dots);
+    C.folders.forEach(function (f, i) {
+      if (!ids.some(function (id) { return byId[id].folder === f.id; })) return;
+      var h = HUBS[i];
+      lines.appendChild(svg("line", { "class": "edge", x1: CX, y1: CY, x2: h[0], y2: h[1] }));
+      ids.forEach(function (id) {
+        if (byId[id].folder !== f.id) return;
+        var p = spot(id);
+        lines.appendChild(svg("line", { "class": "edge", x1: h[0], y1: h[1], x2: p[0], y2: p[1] }));
+      });
+      var hub = svg("g", { "class": drawn["f:" + f.id] ? "" : "pop" });
+      hub.appendChild(svg("rect", { "class": "hub", x: h[0] - 8, y: h[1] - 6, width: 16, height: 12, rx: 3 }));
+      dots.appendChild(hub);
+      var lbl = svg("text", { "class": "hubl", x: h[0], y: h[1] < CY ? h[1] + 20 : h[1] - 13, "text-anchor": "middle" });
+      lbl.textContent = f.title;
+      dots.appendChild(lbl);
+      drawn["f:" + f.id] = true;
+    });
+    // The path you took, as a faint dashed trail.
+    var trail = [C.root].concat(S.log).map(spot).map(function (p) { return p[0].toFixed(1) + " " + p[1].toFixed(1); });
+    if (trail.length > 1) lines.appendChild(svg("path", { "class": "trail", d: "M" + trail.join(" L") }));
+    ids.forEach(function (id) {
+      var n = byId[id], p = spot(id);
+      var cls = "t" + (has(S.saved, id) ? " saved" : "") + (has(S.saved, id) && !opened[id] && !has(S.done, id) ? " unread" : "") + (id === here ? " here" : "") + (drawn[id] ? "" : " pop");
+      var t = svg("g", { "class": cls, tabindex: "0", role: "button", "data-go": id,
+        "aria-label": n.title + (opened[id] ? ", opened" : "") + (has(S.saved, id) ? ", saved" : "") });
+      t.appendChild(svg("circle", { cx: p[0], cy: p[1], r: id === here ? 8 : 6 }));
+      var tip = svg("title", {}); tip.textContent = n.title; t.appendChild(tip);
+      dots.appendChild(t);
+      drawn[id] = true;
+    });
+    var me = svg("g", {});
+    me.appendChild(svg("circle", { cx: CX, cy: CY, r: 17, fill: "var(--surface)", stroke: "var(--accent)", "stroke-width": 2 }));
+    me.appendChild(svg("use", { href: "#bosun", x: CX - 13, y: CY - 13, width: 26, height: 26 }));
+    dots.appendChild(me);
+    var nOpen = ids.filter(function (id) { return opened[id]; }).length;
+    document.getElementById("gcap").textContent = ids.length
+      ? nOpen + " opened · " + S.saved.length + " saved. Tap a dot to open it."
+      : "It grows as you open topics.";
+  }
+  var gEl = document.getElementById("graph");
+  gEl.addEventListener("click", function (ev) {
+    var t = ev.target.closest ? ev.target.closest("[data-go]") : null;
+    if (t) open(t.getAttribute("data-go"));
+  });
+  gEl.addEventListener("keydown", function (ev) {
+    if (ev.key !== "Enter" && ev.key !== " ") return;
+    var t = ev.target.closest ? ev.target.closest("[data-go]") : null;
+    if (t) { ev.preventDefault(); open(t.getAttribute("data-go")); }
+  });
+
+  function side() { folders(); graph(); }
+
+  document.getElementById("restart").addEventListener("click", function () {
+    if (busy) return;
+    S.log = [];
+    store();
+    replay(); side();
+    window.scrollTo(0, 0);
+  });
+
+  fetch("tour/tour.json").then(function (r) {
+    if (!r.ok) throw new Error(r.status);
+    return r.json();
+  }).then(function (T) {
+    C = T.chat; I = T.intent;
+    C.nodes.forEach(function (n) { byId[n.id] = n; });
+    S = load();
+    // Drop ids a newer script no longer has.
+    function known(id) { return !!byId[id] && id !== C.root; }
+    S.log = S.log.filter(known); S.saved = S.saved.filter(known); S.done = S.done.filter(known);
+    replay(); side();
+    if (S.log.length) log.lastChild.scrollIntoView({ block: "end" });
+  }).catch(function () {
+    var b = el("div", "warnbox");
+    b.appendChild(el("p", "", "The chat could not load its script, tour/tour.json. A browser blocks it from a local file."));
+    var p = el("p", "", "Serve the site folder, for example with python3 -m http.server, or ");
+    var a = el("a", "", "read the story"); a.href = "story.html";
+    p.appendChild(a); p.appendChild(document.createTextNode(" instead."));
+    b.appendChild(p);
+    log.appendChild(b);
+  });
+})();
+</script>
+</body>
+</html>

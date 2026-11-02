@@ -1,0 +1,54 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap");
+
+/* Harbor Signal tokens. The only file in the kit with colour values.
+   Light by default; dark follows the system unless data-mode="light".
+   data-mode="dark" or "light" on any element forces that mode inside it.
+   Pop (signal yellow) marks only what needs the user. */
+:root, [data-mode="light"] {
+  color-scheme: light;
+  --bg: #F2F6F8; --surface: #FFFFFF; --ink: #0E2233; --mute: #4A5F70; --line: #D3DEE6;
+  --accent: #0B6670; --on-accent: #FFFFFF; --accent-text: #0B6670;
+  --pop: #FFC531; --on-pop: #0E2233; --ok: #1E6E46; --warn: #B0174F;
+}
+[data-mode="dark"] {
+  color-scheme: dark;
+  --bg: #0A1824; --surface: #112433; --ink: #E6F0F5; --mute: #9DB3C2; --line: #21394B;
+  --accent: #3CC6CF; --on-accent: #06222A; --accent-text: #5FD3DB;
+  --pop: #FFC531; --on-pop: #0E2233; --ok: #5BD08F; --warn: #FF7BA5;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-mode="light"]) {
+    color-scheme: dark;
+    --bg: #0A1824; --surface: #112433; --ink: #E6F0F5; --mute: #9DB3C2; --line: #21394B;
+    --accent: #3CC6CF; --on-accent: #06222A; --accent-text: #5FD3DB;
+    --pop: #FFC531; --on-pop: #0E2233; --ok: #5BD08F; --warn: #FF7BA5;
+  }
+}
+
+:root {
+  --font-display: "Space Grotesk", system-ui, sans-serif;
+  --font-body: "Atkinson Hyperlegible", system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --radius: 10px; --radius-bubble: 16px;
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 24px; --space-6: 32px;
+  --measure: 65ch;
+
+  /* Game knobs (from the Game UI Bible), off by default. */
+  --bar-mask: none;     /* segmented meters, like a health bar */
+  --chip-cursor: "";    /* a ▶ cursor on the chosen chip */
+  --call-frame: none;   /* focus brackets around the card that needs you */
+}
+/* Turn all three on for one element and its children. */
+[data-knobs="game"] {
+  --bar-mask: repeating-linear-gradient(90deg, #000 0 9px, transparent 9px 12px);
+  --chip-cursor: "▶ ";
+  --call-frame:
+    linear-gradient(var(--pop), var(--pop)) top left / 14px 3px no-repeat,
+    linear-gradient(var(--pop), var(--pop)) top left / 3px 14px no-repeat,
+    linear-gradient(var(--pop), var(--pop)) top right / 14px 3px no-repeat,
+    linear-gradient(var(--pop), var(--pop)) top right / 3px 14px no-repeat,
+    linear-gradient(var(--pop), var(--pop)) bottom left / 14px 3px no-repeat,
+    linear-gradient(var(--pop), var(--pop)) bottom left / 3px 14px no-repeat,
+    linear-gradient(var(--pop), var(--pop)) bottom right / 14px 3px no-repeat,
+    linear-gradient(var(--pop), var(--pop)) bottom right / 3px 14px no-repeat;
+}

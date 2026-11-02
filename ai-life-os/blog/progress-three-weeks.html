@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Three weeks in: what I built, what I checked, what is still open · The Chart Room</title>
+<meta name="description" content="A dated progress report on running a crew of AI workers, as of 14 October, with the evidence next to each claim and a 2 November update">
+<script src="../article.js"></script>
+<link rel="icon" href="../kit/bosun.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../kit/tokens.css">
+<link rel="stylesheet" href="../kit/kit.css">
+<link rel="stylesheet" href="../article.css">
+<style>
+.test{font-size:.86rem;color:var(--muted)}
+.callout{background:var(--warn-soft);border-left:3px solid var(--warn);padding:10px 14px;border-radius:6px;margin:1.2em 0}
+</style>
+</head>
+<body>
+<header class="k-nav">
+  <a class="k-home" href="../index.html"><img class="k-mark" src="../kit/bosun.svg" alt=""><span class="k-logo">The Chart Room<small>How one captain runs a crew of AI agents, safely.</small></span></a>
+  <nav aria-label="Site"><a href="../blog/index.html" aria-current="page">Field Notes</a><a href="../arena.html">Arena</a><a href="../safety.html">Safety</a><button class="theme" id="theme" type="button">Night</button></nav>
+</header>
+<main class="page">
+<article class="k-article">
+<p class="k-kicker"><a href="index.html">Field Notes</a> · Progress report</p>
+<h1 class="k-title">Three weeks in: what I built, what I checked, what is still open</h1>
+<p class="k-dek">A dated progress report on running a crew of AI workers, as of 14 October, with the evidence next to each claim and a 2 November update</p>
+<p class="k-meta"><span>Ashish Raina</span><time datetime="2026-10-14">14 Oct 2026</time><span>5 min read</span></p>
+
+
+<p>This is a dated list of what I built in my first three weeks, with the proof next to each claim. Where a number could not be checked, I left it out.</p>
+
+<section id="s1">
+<h2>1. The idea, with a ship</h2>
+<p>A small boat has a captain and a first mate. The captain decides where to go. The mate hands out jobs to the crew, checks the work, and never lets the crew touch the charts without a say-so.</p>
+<p>My setup is the same shape. I am the captain. One AI, called FirstMate, is my only point of contact. It sends other AI workers to do the work. Each works in its own throwaway copy of the project. FirstMate brings the results back for me to approve.</p>
+<pre> me (captain)
+   |
+ FirstMate  --- keeps the queue, checks the work, asks me before anything permanent
+   |
+   +-- worker A (own copy)   +-- worker B (own copy)   +-- reviewer (reads only)</pre>
+<p class="test">Test: the <code>bin/fm-*</code> scripts in FirstMate carry the rules. The list of workers and their states comes from <code>bin/fm-crew-state.sh</code>, not from anyone's memory.</p>
+</section>
+
+<section id="s2">
+<h2>2. What got done (with proof)</h2>
+<table>
+<tr><th>What</th><th>Proof you can check</th></tr>
+<tr><td>A review gate before anything is pushed, on my own fork of FirstMate</td><td><code>no-mistakes</code> installed on 8 October; the fork is the project's origin</td></tr>
+<tr><td>Notes flow from Claude back to FirstMate, one approved item at a time</td><td><code>bin/fm-memory-review.sh</code> on the fork</td></tr>
+<tr><td>A stage-by-stage chain for building software (intent, spec, review, learn)</td><td>numbered stage folders in <code>areas/factory/</code> of my <a href="https://github.com/codeami/dotfiles">dotfiles</a>, with <code>chain-check</code></td></tr>
+<tr><td><code>taste-check</code>: a script that checks intent and results with no AI in the loop</td><td>commit <a href="https://github.com/codeami/dotfiles/commit/72ac943">72ac943</a> (9 October), with tests and a mutation runner</td></tr>
+<tr><td><code>plain-check</code>: a script that flags long, unclear sentences</td><td>commit <a href="https://github.com/codeami/dotfiles/commit/15c25ab">15c25ab</a> (9 October), with tests and a mutation runner</td></tr>
+<tr><td><code>/grill-with-docs</code>: a skill that interviews me until my intent is written down in my own words</td><td>commit <a href="https://github.com/codeami/dotfiles/commit/d58612a">d58612a</a> (9 October); tests in <code>tests/grill.sh</code></td></tr>
+<tr><td>Always-loaded skill text cut</td><td>151 skills audited, 60 moved aside (not deleted), backup verified first</td></tr>
+</table>
+</section>
+
+<section id="s3">
+<h2>3. A mistake I made, and how it was undone</h2>
+<p>When I set up the gate, the first run followed the "fork workflow" and opened a pull request on the original author's repository, not on my fork. It was caught the same day. The pull request was closed. The setting was pointed back at my fork. The work ran again there.</p>
+<p>The lesson I take from it is small and useful: check where a command will send things before you run it, not after.</p>
+<p class="test">Test: the closed pull request and the changed origin are both visible in the project's remote settings.</p>
+</section>
+
+<section id="s4">
+<h2>4. "It passes its own tests" is not the same as "it works"</h2>
+<p>For <code>taste-check</code> I used mutation testing: a runner makes small deliberate breaks in the code and counts how many the tests catch. A test that still passes when the code is broken is only guarding itself.</p>
+<p>Then I asked outside reviewers to read it cold. They found real bugs the tests had missed. Three of them:</p>
+<ul>
+<li>an evidence pointer could reach outside its folder</li>
+<li>a file link could reach outside the project folder</li>
+<li>a check matched part of a longer token, like "150" inside "1500"</li>
+</ul>
+<p>My reading: a perfect score on your own breaks only proves you thought of those breaks. Independent readers find the ones you did not. The fixes landed in two rounds, each with new tests and mutations.</p>
+<p class="test">Test: commits <a href="https://github.com/codeami/dotfiles/commit/d2cb270">d2cb270</a> (9 October: "pointers stay in the root", "whole-token" matching) and <a href="https://github.com/codeami/dotfiles/commit/aa14b1d">aa14b1d</a> (12 October: "hard links out of the root"). The mutation runner is <code>tests/mutate-taste.py</code>.</p>
+</section>
+
+<section id="s5">
+<h2>5. Cutting what loads before I say a word</h2>
+<p>Every AI session loads the short description of each skill I have installed, before my first message. Think of a toolbox where every tool shouts its name when you open the lid.</p>
+<p>I counted 151 skills. My first estimate of the cost was about 8,300 tokens. The real figure, counting everything loaded before the first message, is closer to 26,500. I moved 60 skills into a quarantine folder (a backup came first, and nothing was destroyed). The other cuts wait until I see which skills the new chain actually names.</p>
+<p class="test">Caveat: these are estimates from byte counts, not an exact tokenizer. Test: the audit report shows the method and the backup checksum.</p>
+</section>
+
+<section id="s6">
+<h2>6. What was not done, as of 14 October</h2>
+<ul>
+<li>The other direction of the note flow: my saved preferences loading into every Claude session. It needs one dialog tested by a person.</li>
+<li>Many commits in my public dotfiles repo existed only on my laptop. They needed a privacy read before anything was pushed.</li>
+<li>Ideas researched but not built: a chat-plus-folders web app, a feed board, a travel chat, a call-recording receptionist.</li>
+</ul>
+</section>
+
+<section id="update">
+<h2>Update, 2 November</h2>
+<ul>
+<li>Those dotfiles commits are now on GitHub. My copy is one commit ahead today.</li>
+<li>backpass runs daily. It proposes rule edits, and I approve each one.</li>
+<li>I reviewed a week of my own corrections, 46 of them, and approved 4 new rules: <a href="rules-from-chat-history.html">Your corrections are your next rules</a>.</li>
+<li>Three automatic checks are now in place: a secret scan at commit, a plain-language check on drafts, and a link check before replies. Why those three: <a href="guides-and-sensors.html#s10">Guides, sensors, and the rules I'm still begging for</a>.</li>
+<li>This site, with these Field Notes, is public.</li>
+</ul>
+</section>
+
+<section id="credits">
+<h2>Credits</h2>
+<p>The ordered-stages idea is Jake Van Clief's <a href="https://arxiv.org/abs/2603.16021">ICM</a>. The worker-fleet conventions come from Kun Chen's stack: <a href="https://github.com/kunchenguid/firstmate">FirstMate</a> and <a href="https://github.com/kunchenguid/no-mistakes">no-mistakes</a>. <code>/grill-with-docs</code> is adapted from Matt Pocock's <a href="https://github.com/mattpocock/skills">skills</a>. Mutation testing is an old idea in software testing. I borrowed it for a checker.</p>
+<p>Sources: the commits linked above, and the changelog and reports in my private FirstMate data folder.</p>
+</section>
+
+</article>
+<nav class="pager" aria-label="Previous and next"><a href="second-brain-page.html" rel="prev">← A map of my mind you can read without leaving it</a><span></span></nav>
+</main>
+<footer class="k-foot"><p>by Ashish Raina – program manager turned AI-crew operator</p><p><a href="../about.html">About</a> · <a href="../index.html">Chat with EA-bot</a> · <a href="../index.html#pages">All pages</a> · <a href="https://github.com/codeami">GitHub</a></p></footer>
+</body>
+</html>

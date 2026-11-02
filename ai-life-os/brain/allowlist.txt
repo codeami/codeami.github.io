@@ -1,0 +1,24 @@
+# Notes from the private wiki that may go public, one slug per line.
+# Only these are copied by build.py. Lines starting with # are ignored.
+first-mate
+worktree-pooling
+validate-dont-review
+kun-chen-agent-policy
+pocock-steers-with-skills-kun-builds-machinery
+popular-skills-are-not-good-skills
+progressive-disclosure
+dialogue-freezes-into-skills
+llmwiki-vs-rag
+second-brain-is-a-context-layer
+mini-brains-not-one-brain
+icm-routing-table-is-the-core-pattern
+icm-layer-ladder
+icm-storage-is-not-active-context
+structure-decides-what-matters
+right-size-the-model
+reproduce-bugs-end-to-end
+long-running-loops
+human-in-the-loop
+global-memory-is-minimal
+compaction-is-an-implementation-detail
+agent-ergonomics

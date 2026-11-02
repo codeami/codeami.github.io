@@ -1,0 +1,65 @@
+/* Harbor Signal kit: shared parts for every app. Reads only the names in
+   tokens.css, so it holds no colour values. Link tokens.css first. */
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.55 var(--font-body); -webkit-text-size-adjust: 100%; }
+h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; letter-spacing: -.02em; line-height: 1.15; }
+a { color: var(--accent-text); text-underline-offset: 3px; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* Header / nav: mascot mark, wordmark + product, at most 3 links. */
+.k-nav { display: flex; align-items: center; gap: var(--space-3); padding: 10px var(--space-4); background: var(--surface); border-bottom: 1px solid var(--line); }
+.k-nav .k-mark { width: 32px; height: 32px; flex: none; }
+.k-logo { font: 700 18px/1 var(--font-display); letter-spacing: -.02em; }
+.k-logo small { display: block; margin-top: 3px; font: 400 12px/1.2 var(--font-body); letter-spacing: 0; color: var(--mute); }
+.k-nav nav { margin-left: auto; display: flex; gap: var(--space-4); font-size: 15px; }
+.k-nav nav a { color: var(--mute); text-decoration: none; padding: 6px 0; }
+.k-nav nav a[aria-current] { color: var(--ink); font-weight: 700; box-shadow: inset 0 -2px 0 var(--accent); }
+
+/* Chat bubble: the bot on the left with an avatar, you on the right in the accent. */
+.k-chat { display: grid; gap: 10px; padding: var(--space-4); }
+.k-row { display: flex; gap: var(--space-2); align-items: flex-end; }
+.k-avatar { width: 34px; height: 34px; flex: none; padding: 2px; border-radius: 50%; background: var(--surface); border: 1px solid var(--line); }
+.k-bubble { max-width: 84%; padding: 9px 13px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-bubble) var(--radius-bubble) var(--radius-bubble) 4px; }
+.k-bubble.me { margin-left: auto; background: var(--accent); color: var(--on-accent); border-color: transparent; border-radius: var(--radius-bubble) var(--radius-bubble) 4px var(--radius-bubble); font-weight: 700; }
+.k-hey { display: block; margin-bottom: var(--space-1); font: 700 26px/1.1 var(--font-display); letter-spacing: -.02em; }
+
+/* Name-picker chips: answers under the bot's question. The chosen one is the user's, so it is pop. */
+.k-chips { display: flex; flex-wrap: wrap; gap: var(--space-2); padding-left: 42px; }
+.k-chip { min-height: 44px; padding: 0 14px; font: 700 15px/1 var(--font-body); color: var(--accent-text); background: transparent; border: 1.5px solid var(--accent-text); border-radius: 999px; cursor: pointer; }
+.k-chip[aria-pressed="true"] { background: var(--pop); border-color: var(--pop); color: var(--on-pop); }
+.k-chip[aria-pressed="true"]::before { content: var(--chip-cursor); }
+
+/* Button: three kinds only, 44px tall. */
+.k-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 var(--space-4); font: 700 15px/1 var(--font-body); text-decoration: none; border: 1.5px solid transparent; border-radius: var(--radius); cursor: pointer; }
+.k-btn.primary { background: var(--accent); color: var(--on-accent); }
+.k-btn.secondary { background: transparent; color: var(--ink); border-color: var(--mute); }
+.k-btn.quiet { background: transparent; color: var(--accent-text); padding: 0 6px; text-decoration: underline; text-underline-offset: 3px; }
+
+/* Card: surface, 1px line, token radius. A status is always a colour and a word. */
+.k-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); gap: var(--space-2); }
+.k-card { min-width: 0; padding: 12px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+.k-card .k-n { font: 700 30px/1 var(--font-display); }
+.k-card .k-l { margin: var(--space-1) 0 var(--space-2); font-size: 13px; line-height: 1.25; color: var(--mute); }
+.k-status { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 700; }
+.k-status::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+.k-status.ok { color: var(--ok); }
+.k-status.warn { color: var(--warn); }
+.k-status.call { color: var(--ink); }
+.k-status.call::before { background: var(--pop); box-shadow: 0 0 0 1.5px var(--ink); }
+
+/* Call card: the one card that needs the user. A pop edge; focus brackets when the game knob is on. */
+.k-card.k-call { background: var(--call-frame), var(--surface); box-shadow: inset 4px 0 0 var(--pop); }
+
+/* Meter: a thin bar in the accent; segmented when the game knob is on. */
+.k-meter { height: 6px; margin-bottom: var(--space-2); background: var(--line); border-radius: 3px; overflow: hidden; }
+.k-meter i { display: block; height: 100%; background: var(--accent); border-radius: inherit; -webkit-mask: var(--bar-mask); mask: var(--bar-mask); }
+
+/* Article layout: kicker, title, dek, meta line, then a body at most 65 characters wide. */
+.k-article { padding: 18px var(--space-4) 22px; }
+.k-kicker { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--accent-text); }
+.k-title { margin: 10px 0; font-size: 31px; line-height: 1.12; text-wrap: balance; }
+.k-dek { margin: 0 0 14px; font-size: 18px; line-height: 1.45; color: var(--mute); }
+.k-meta { display: flex; flex-wrap: wrap; gap: 4px var(--space-3); margin-bottom: 14px; padding-top: 10px; font-size: 13px; color: var(--mute); border-top: 1px solid var(--line); }
+.k-article > p { max-width: var(--measure); margin: 0 0 var(--space-3); }
+
+@media (max-width: 340px) { .k-chips { padding-left: 0; } }

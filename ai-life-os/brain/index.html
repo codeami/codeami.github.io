@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en" class="brain">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Second Brain · AI-Life-OS</title>
+<meta name="description" content="The AI-Life-OS second brain: a ring map of the public notes, FirstMate parts, skills, posts and pages, with a card for every node and a reading drawer.">
+<link rel="icon" href="../kit/bosun.svg" type="image/svg+xml">
+<!-- Chart & Cards with no page card: the chart alone. It is the AIO second-brain page (a private
+     prototype), fed only public data: brain-data.json, built by build_data.py. Every other kit page
+     mounts the same chart behind itself (hud.js). -->
+<link rel="stylesheet" href="frame.css">
+</head>
+<body>
+<noscript><p style="position:fixed;top:120px;left:16px;right:16px;color:#e9e6e0">This map needs JavaScript. The public notes are in <a href="https://github.com/codeami/codeami.github.io/tree/main/ai-life-os/brain/notes">brain/notes on GitHub</a>, and every page is listed on <a href="../index.html#pages">the AI-Life-OS home</a>.</p></noscript>
+<script src="drawer.js"></script>
+<script src="tour.js"></script>
+<script src="graph.js"></script>
+<script>AIOBrain({base: ""});</script>
+</body>
+</html>

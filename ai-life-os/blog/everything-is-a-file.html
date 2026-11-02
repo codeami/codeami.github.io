@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>In AI, everything is a file (or a folder) · The Chart Room</title>
+<meta name="description" content="Your goals, your context and your rules, written down once in plain folders and read by every AI tool you use">
+<script src="../article.js"></script>
+<link rel="icon" href="../kit/bosun.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../kit/tokens.css">
+<link rel="stylesheet" href="../kit/kit.css">
+<link rel="stylesheet" href="../article.css">
+<style>
+.test{font-size:.86rem;color:var(--muted)}
+.callout{background:var(--warn-soft);border-left:3px solid var(--warn);padding:10px 14px;border-radius:6px;margin:1.2em 0}
+</style>
+</head>
+<body>
+<header class="k-nav">
+  <a class="k-home" href="../index.html"><img class="k-mark" src="../kit/bosun.svg" alt=""><span class="k-logo">The Chart Room<small>How one captain runs a crew of AI agents, safely.</small></span></a>
+  <nav aria-label="Site"><a href="../blog/index.html" aria-current="page">Field Notes</a><a href="../arena.html">Arena</a><a href="../safety.html">Safety</a><button class="theme" id="theme" type="button">Night</button></nav>
+</header>
+<main class="page">
+<article class="k-article">
+<p class="k-kicker"><a href="index.html">Field Notes</a> · Context</p>
+<h1 class="k-title">In AI, everything is a file (or a folder)</h1>
+<p class="k-dek">Your goals, your context and your rules, written down once in plain folders and read by every AI tool you use</p>
+<p class="k-meta"><span>Ashish Raina</span><time datetime="2026-11-02">2 Nov 2026</time><span>12 min read</span></p>
+
+
+<p>Unix has an old idea: everything is a file. Your keyboard, your disk, even a running program show up as files you can read and write. It made a complicated machine simple to work with.</p>
+<p>Working with AI is heading the same way. Jake Van Clief calls his version the <a href="https://arxiv.org/abs/2603.16021">Interpretable Context Methodology</a> (ICM). Strip away the name and it says this: stop pasting the same explanations into chats. Write them down as plain files in folders, and let the AI read the ones it needs.</p>
+<p>This post walks through how I set that up. I built a small working version as I went, and each section ends with a test that checks it.</p>
+
+<section id="s1">
+<h2>1. Three levels of using AI</h2>
+<p>Think of cooking.</p>
+<ul>
+<li><strong>Level 1, the recipe card.</strong> You read a recipe off your phone, cook, and forget it. Next time you look it up again.</li>
+<li><strong>Level 2, your own recipe book.</strong> You've written down how <em>you</em> make it: less salt, a bit more garlic, the pan you like. It comes out right the first time.</li>
+<li><strong>Level 3, a kitchen.</strong> Ingredients sit where you expect them. Your recipe books are on the shelf. Anyone in your kitchen can cook your dishes.</li>
+</ul>
+<p>AI works the same way. The jump from level 1 to level 2 is simple: <strong>save what worked as a file</strong>. Level 3 is when you organise those files so the AI can find them on its own. That's where the payoff is:</p>
+<ul>
+<li><strong>It works without you in the room.</strong> A fresh AI session, or a different AI tool, reads the same files and works your way. No re-explaining.</li>
+<li><strong>Many cooks at once.</strong> In my setup FirstMate runs several coding agents side by side, and they all read the same base file.</li>
+<li><strong>Fix it once, fixed everywhere.</strong> Correct a rule in one file and every tool picks it up from the next session.</li>
+<li><strong>Cheaper.</strong> The AI reads only the files the task needs, instead of a giant prompt pasted every time.</li>
+<li><strong>It gets better.</strong> Session notes turn into better rules (section 2).</li>
+<li><strong>You can hand it over.</strong> Give someone, or another AI tool, the folder and they can work.</li>
+</ul>
+<p>The catch: a kitchen takes some setting up, and a messy kitchen is worse than a recipe card. That's why the next sections are about keeping it small and tidy.</p>
+<pre>level 1:  chat ──► answer ──► (forgotten)
+level 2:  chat + voice.md ──► better answer
+level 3:  folder (map + rooms + tools) ──► agent finds what it needs</pre>
+<p class="test">Test: <code>tests/run.sh</code> section S1 checks that every kind of work I do has a written process (<code>CONTEXT.md</code>), and that the blog room has its saved tone guide (<code>voice.md</code>) and template.</p>
+</section>
+
+<section id="s2">
+<h2>2. Map, rooms and tools</h2>
+<p>Walk into any office building and there's a floor plan by the lifts. It doesn't tell you how to do your job. It tells you which floor to go to.</p>
+<p>A good AI folder has three kinds of file:</p>
+<ul>
+<li><strong>The map</strong>: one short file at the top (<code>AGENTS.md</code>). Who I am, my house rules, and a table: <em>for this kind of task, go to this folder and read these files.</em></li>
+<li><strong>The rooms</strong>: one folder per kind of work, each with a <code>CONTEXT.md</code> that explains how that work is done.</li>
+<li><strong>The tools</strong>: skills and scripts the rooms can use.</li>
+</ul>
+<p>This is the shape of the folder I use. It lives in my public <a href="https://github.com/codeami/dotfiles">dotfiles repo</a>:</p>
+<pre>dotfiles/
+├── home/AGENTS.md        the map: who, rules, routing table
+├── context/              the shared agent context
+│   ├── areas/            one room per kind of work:
+│   │                     blog, factory, cert-prep, content, harness …
+│   ├── inbox/sessions/   what each AI session leaves behind
+│   └── tests/            run.sh · e2e-probe.sh
+└── home.nix              the list of links (see below)</pre>
+<p>And this is the kind of routing table inside the map:</p>
+<pre>| Task                      | Go to            | Read first            |
+|---------------------------|------------------|-----------------------|
+| Write or edit a blog post | areas/blog/      | CONTEXT.md, voice.md  |
+| Software factory work     | areas/factory/   | CONTEXT.md            |
+| Cert prep                 | areas/cert-prep/ | CONTEXT.md            |
+| Anything else             | ask which room   | —                     |</pre>
+<p>The routing table is the most important part. Without it, the AI either reads everything (slow and expensive) or guesses.</p>
+
+<h3 id="s2-links">The key trick: one file, linked into every tool</h3>
+<p>Every AI tool looks for its own instructions file in its own hidden folder in your home folder. Claude Code reads <code>.claude/CLAUDE.md</code>, Codex reads <code>.codex/AGENTS.md</code>, Gemini reads <code>.gemini/GEMINI.md</code>. Left alone, you end up with four copies that slowly disagree.</p>
+<p>Unix people solved this long ago with <strong>dotfiles</strong>. Keep all those hidden config files (the ones whose names start with a dot) in one git repo. Then put a <strong>symlink</strong> where each tool expects its file. A symlink is a signpost: the tool opens its own file and lands on the real one in your repo.</p>
+<pre>.claude/CLAUDE.md           ─┐
+.codex/AGENTS.md            ─┤
+.config/opencode/AGENTS.md  ─┼──►  dotfiles/home/AGENTS.md   (the one real file)
+.gemini/GEMINI.md           ─┤
+.agents/AGENTS.md           ─┘   (for backpass)</pre>
+<p>Change one file and every tool sees the change from its next session. New laptop? Clone the repo, run one script, and the signposts come back. I borrowed this setup from Kun Chen's <a href="https://github.com/kunchenguid/dotfiles">dotfiles</a>, which manage the links with Nix.</p>
+<p>There are two limits. Links only help tools that read files from your disk. Chat apps like Claude.ai can't, so there you paste the map into a project. And each machine needs its own copy of the repo.</p>
+
+<h3 id="s2-loop">Load it at the start, save at the end</h3>
+<p>Because every tool reads the same file when a session starts, it's also where the lessons from each session should end up. Think of a hospital shift change: the incoming nurse reads the patient's chart, the outgoing nurse writes down what happened. Same chart for every nurse, and nothing depends on anyone's memory.</p>
+<pre>start   → the tool loads the map (+ the room's CONTEXT.md)
+during  → you give feedback and constraints out loud
+end     → you say "end of session"; the AI writes notes to inbox/
+daily   → backpass reads the session logs and proposes rule changes
+review  → you approve or reject; only approved rules go into the map</pre>
+<p>Three habits make this work:</p>
+<ol>
+<li><strong>Say feedback as a rule.</strong> Not just "redo it", but "too formal, keep my conversational tone". The AI can only save what you actually said.</li>
+<li><strong>Declare the end.</strong> "End of session" tells the AI to write its notes: the goals, constraints and decisions, where it went its own way, and which files it read. Close the tab without it and the lesson is gone.</li>
+<li><strong>Never let a session edit the shared file.</strong> Notes go into <code>inbox/</code>, not into the map. Kun Chen's <a href="https://github.com/kunchenguid/backpass">backpass</a> reads the session logs and proposes a rule only when the same correction shows up in at least two sessions, with exact quotes as proof. I go through the proposals one at a time and approve what is right. The map only changes with my OK, so it stays a rulebook I agreed to.</li>
+</ol>
+<p class="test">Test: <code>tests/run.sh</code> section S2 checks that the map has a routing table with a fallback row, that every file the table names exists, and that <code>home.nix</code> links Claude, Codex, OpenCode and Gemini to the one map. Section S3 checks that the map says what to do on "end of session" and routes rule changes through backpass.</p>
+<p class="callout">An honest note: S2 also checks the map is short, at 120 lines or fewer. On 2 November my copy is 133 lines, so that check fails until I trim it. The map grows one reasonable rule at a time. The test is there to catch exactly that.</p>
+</section>
+
+<section id="s3">
+<h2>3. A file on disk is not something the AI knows</h2>
+<p>Think of a library and your desk. The library has thousands of books. You only know what's in the three books open on your desk right now.</p>
+<p>Your folders are the library. The AI's context window is the desk. A file sitting in a folder does nothing until the AI actually opens it. The name <code>CONTEXT.md</code> doesn't make it load by magic.</p>
+<pre>folder (library)          context window (desk)
+─────────────────         ─────────────────────
+AGENTS.md          ──►    AGENTS.md        ✓ loaded at start
+areas/blog/...     ──►    CONTEXT.md       ✓ read because the route said so
+areas/factory/...         (not read)       ✗ not needed for this task</pre>
+<p>So you need a way to check what the AI actually read. I use two:</p>
+<ol>
+<li><strong>A canary.</strong> My map contains a nonsense line, <code>ctx-canary: blue-teapot-42</code>. If I ask an AI for the canary and it answers correctly, I know the map really loaded. If it doesn't, it didn't, however sure the setup looks.</li>
+<li><strong>A "files read" list.</strong> One house rule: at the end of every task, list the files you actually read.</li>
+</ol>
+<p>There's a second half to this. What's on the desk isn't all equally trusted. My rules are instructions. A web page or document the AI opened is just material to work with, and it doesn't get to give orders.</p>
+<p class="test">Test: <code>tests/run.sh</code> section S3 checks the canary is in the map. <code>tests/e2e-probe.sh</code> is the real end-to-end test: from an empty folder it asks Claude Code, Codex, Gemini CLI and OpenCode for the canary. A tool passes only if the map actually reached it.</p>
+</section>
+
+<section id="s4">
+<h2>4. Every workflow starts as a conversation</h2>
+<p>A good tailor writes your fit notes on a card: <em>likes room in the shoulders, hates a tight waist.</em> The next suit fits first time. Most of us use AI like a tailor with no card. We go round and round in a chat until it's right, then close the tab and lose everything we just taught it.</p>
+<p>In Jake's video <a href="https://www.youtube.com/watch?v=956DPSPX4wg">"You're Automating The Wrong Layer"</a>, someone asks a model to tighten a paragraph. It takes four rounds:</p>
+<pre>"too wordy"                      → goal: shorter
+"weirdly formal now"             → keep my rhythm
+"think Vox, not the FT"          → general audience
+"more measured — like this one"  → measured, not casual + an example</pre>
+<p>Nobody set out to write a style guide, but by round four there is one, scattered across the chat.</p>
+<p>The same video shows Substrate, a research tool by Kay Kumar (not public yet). It reads a chat and draws two maps side by side: what the person meant, and what the model decided. Then it circles the gaps, like the model switching to a formal tone nobody asked for, or quietly changing what a sentence meant.</p>
+<p>The fix is to keep the card. Save the decisions as a file (<code>areas/blog/voice.md</code> in my folder), and next time "tighten this paragraph" is right in one go:</p>
+<pre>long chat (4 rounds) ──► pull out the decisions ──► voice.md
+         ▲                                              │
+         └──── a new mistake shows up ◄── next request ◄┘</pre>
+<p>I don't have Substrate, so I use the end-of-session notes from section 2. Their <em>where the AI went its own way</em> heading is my version of the red circles. A week of those, read back, is how I found the corrections in <a href="rules-from-chat-history.html">Your corrections are your next rules</a>.</p>
+<p class="test">Test: the real check is whether the same correction stops showing up week after week.</p>
+</section>
+
+<section id="s5">
+<h2>5. Separate the model from the system</h2>
+<p>A restaurant isn't its chef. Most of what makes it work is ordinary: the fridge, the stove, the order tickets, the person who checks each plate before it goes out. Swap the chef and a well-run kitchen still serves the same menu.</p>
+<p>AI tools work the same way. The model is one step in the middle. Around it sit plain code, written rules and checks.</p>
+<pre>request → routing → tools → model → check → result
+           code      code    (swap)  person + code</pre>
+<p>The useful question is: if I changed the model tomorrow, what would still work?</p>
+<p>In my setup the answer is almost everything. FirstMate and Kun Chen's tools are the kitchen: separate worktrees, watchers, and a pre-push gate that runs review, tests and lint. The map in <code>AGENTS.md</code> is the written rules. Claude, Codex or Pi is whichever chef is on shift.</p>
+<p>The smallest version of this is this post. It sits in my blog room (<code>areas/blog/</code>). The room already knows how I want it to sound (<code>voice.md</code>), how a post is laid out (<code>template.md</code>) and where drafts go. From there, "write the next section" is enough of a prompt, whichever tool I use.</p>
+<p class="test">Test: <code>tests/e2e-probe.sh</code> asks four different AI tools the same question. If all four return the canary, the context doesn't depend on which model is on shift.</p>
+</section>
+
+<section id="s6">
+<h2>6. Fix one thing, then rerun</h2>
+<p>Tuning a guitar: pluck one string, adjust, pluck again. Turn all six pegs at once and you'll never know which one put it out of tune.</p>
+<p>Fix these files the same way. When an answer comes back wrong:</p>
+<pre>read → draft → check against the source → find the one cause → change one line → rerun the same task</pre>
+<p>Keep the change if it helped. Drop it if it didn't.</p>
+<p class="test">Test: the tests follow the same rule. Delete <code>voice.md</code> and rerun <code>tests/run.sh</code>: the checks that need it fail and the rest still pass. One change, one visible effect.</p>
+</section>
+
+<section id="s7">
+<h2>7. How I wired it up</h2>
+<p>Everything lives in one git repo, my dotfiles:</p>
+<pre>dotfiles/
+├── home.nix          the list of links
+├── home/AGENTS.md    the map (every tool reads it)
+└── context/          rooms, inbox, tests</pre>
+<p>Setting up a machine takes three steps: clone the repo, run the rebuild script (it creates every link), run the tests. A normal day looks like this:</p>
+<pre>start a session    any tool reads the map → routes to a room
+work               say feedback as rules
+"end of session"   notes land in the inbox's sessions/ folder
+daily              backpass proposes rule changes, writes nothing
+review             I approve the changes I agree with</pre>
+<p>FirstMate runs several agents at once. Each picks up the same map through its own tool's link, so there's nothing extra to sync. Each project repo adds its own short <code>AGENTS.md</code> for its build and test rules.</p>
+<p>What's still missing: chat apps can't follow links on my disk. These include Claude.ai, Claude Desktop's chat and Gemini on the web. For now I paste the map into a project there. One idea I haven't built: a small MCP server with two tools, "load context" and "save context", so chat apps could read the map and write to the inbox too.</p>
+<p>If you take one thing from this post, take this. Write down what you keep explaining. Put it where every tool can find it. Change it only on purpose.</p>
+<p>The next post, <a href="how-it-fits-together.html">One captain, many crews, one chart room</a>, covers the other half: how the work gets done when several agents run at once.</p>
+</section>
+
+<section id="credits">
+<h2>Credits and further reading</h2>
+<ul>
+<li><strong>Jake Van Clief</strong>: the Interpretable Context Methodology (ICM), the map-rooms-and-routing idea this post follows. Read <a href="https://arxiv.org/abs/2603.16021">the paper</a>, then watch <a href="https://www.youtube.com/watch?v=956DPSPX4wg">"You're Automating The Wrong Layer"</a>, the source of the tighten-a-paragraph example. More on <a href="https://www.youtube.com/@JEVanClief">his YouTube channel</a> and in his <a href="https://www.skool.com/cliefnotes">Clief Notes community on Skool</a>. This post does not reproduce his course material.</li>
+<li><strong>Kay Kumar</strong>: Substrate, the research tool in Jake's video that maps what a user meant against what a model decided (not public yet).</li>
+<li><strong>Kun Chen</strong>: <a href="https://github.com/kunchenguid/firstmate">FirstMate</a>, <a href="https://github.com/kunchenguid/backpass">backpass</a>, <a href="https://github.com/kunchenguid/no-mistakes">no-mistakes</a>, the <a href="https://axi.md">AXI</a> principles, and the <a href="https://github.com/kunchenguid/dotfiles">dotfiles</a> my setup is forked from.</li>
+<li><strong>Andrej Karpathy</strong>: the <a href="https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f">LLM Wiki idea file</a> and the push for <a href="https://x.com/karpathy/status/1937902205765607626">"context engineering" over "prompt engineering"</a>.</li>
+<li><strong>The <a href="https://agents.md">AGENTS.md</a> convention</strong>: one instructions file that many coding agents read.</li>
+</ul>
+</section>
+
+</article>
+<nav class="pager" aria-label="Previous and next"><a href="how-it-fits-together.html" rel="prev">← One captain, many crews, one chart room</a><a href="second-brain-page.html" rel="next">A map of my mind you can read without leaving it →</a></nav>
+</main>
+<footer class="k-foot"><p>by Ashish Raina – program manager turned AI-crew operator</p><p><a href="../about.html">About</a> · <a href="../index.html">Chat with EA-bot</a> · <a href="../index.html#pages">All pages</a> · <a href="https://github.com/codeami">GitHub</a></p></footer>
+</body>
+</html>

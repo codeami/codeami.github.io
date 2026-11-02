@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>How it works, from the very beginning · The Chart Room</title>
+<meta name="description" content="A short chat with EA-bot for someone new to AI: what an AI assistant is, what a harness is, why a crew of helpers, and what the captain still decides.">
+<script src="article.js"></script>
+<link rel="icon" href="kit/bosun.svg" type="image/svg+xml">
+<link rel="stylesheet" href="kit/tokens.css">
+<link rel="stylesheet" href="kit/kit.css">
+<link rel="stylesheet" href="article.css">
+<style>
+/* The story: EA-bot bubbles, one idea each, in short steps. Each step ends with
+   reply chips; picking one shows your reply and the next step. Without JS, every
+   step shows and the chips are hidden. */
+.story .k-chat { padding: 0; }
+.step { display: grid; gap: 10px; scroll-margin-top: 76px; }
+.k-bubble p { margin: 0; }
+.k-bubble p + p { margin-top: 6px; }
+.k-chips { display: none; margin-top: 2px; }
+.js .k-chips { display: flex; }
+.js .step[hidden] { display: none; }
+.js .step.new { animation: rise .3s ease-out; }
+@keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .js .step.new { animation: none; } }
+.k-chip:disabled { cursor: default; }
+.k-chip:disabled:not([aria-pressed="true"]) { color: var(--mute); border-color: var(--line); }
+.ctl { display: none; gap: var(--space-3); align-items: center; margin: var(--space-4) 0; }
+.js .ctl { display: flex; }
+.ctl .count { font-size: 13px; color: var(--mute); }
+.end { margin-top: var(--space-5); }
+@media (max-width: 600px) { .k-chips { padding-left: 0; } }
+</style>
+</head>
+<body>
+<header class="k-nav">
+  <a class="k-home" href="index.html"><img class="k-mark" src="kit/bosun.svg" alt=""><span class="k-logo">The Chart Room<small>How one captain runs a crew of AI agents, safely.</small></span></a>
+  <nav aria-label="Site"><a href="blog/index.html">Field Notes</a><a href="arena.html">Arena</a><a href="safety.html">Safety</a><button class="theme" id="theme" type="button">Night</button></nav>
+</header>
+<main class="page">
+<article class="k-article story">
+<p class="k-kicker">The story</p>
+<h1 class="k-title">How it works, from the very beginning</h1>
+<p class="k-dek">No AI knowledge needed. EA-bot explains one idea at a time. Pick a reply to go on.</p>
+
+<div class="k-chat" id="story" aria-live="polite">
+
+<section class="step" id="st-1" aria-label="Hello">
+  <div class="k-row"><img class="k-avatar" src="kit/bosun.svg" alt="EA-bot"><div class="k-bubble"><span class="k-hey">Hi!</span><p>I'm EA-bot. Let's start at the very beginning. No jargon, I promise.</p></div></div>
+  <div class="k-chips"><button class="k-chip" type="button">Okay. What is an AI assistant?</button></div>
+</section>
+
+<section class="step" id="st-2" aria-label="What an AI assistant is">
+  <div class="k-row"><img class="k-avatar" src="kit/bosun.svg" alt="EA-bot"><div class="k-bubble"><p>You may have chatted with an AI like ChatGPT or Claude. You type a message, and it writes back.</p></div></div>
+  <div class="k-row"><img class="k-avatar" src="kit/bosun.svg" alt="EA-bot"><div class="k-bubble"><p>Underneath is a <strong>model</strong>: a program that has read a huge amount of text and is very good at writing what comes next.</p></div></div>
+  <div class="k-row"><img class="k-avatar" src="kit/bosun.svg" alt="EA-bot"><div class="k-bubble"><p>On its own, a model only talks. It can't open your files, check its own work, or remember yesterday.</p></div></div>
+  <div class="k-chips"><button class="k-chip" type="button">So how does it do real work?</button><button class="k-chip" type="button">Are you a model?</button></div>
+</section>
+
+<section class="step" id="st-3" aria-label="What a harness is">
+  <div class="k-row"><img class="k-avatar" src="kit/bosun.svg" alt="EA-bot"><div class="k-bubble"><p>It needs a <strong>harness</strong>.</p></div></div>
+  <div class="k-row"><img class="k-avatar" src="kit/bosun.svg" alt="EA-bot"><div class="k-bubble"><p>Think of a horse. The horse does the pulling. The harness makes the pulling go where you want.</p></div></div>
+  <div class="k-row"><img class="k-avatar" src="kit/bosun.svg" alt="EA-bot"><div class="k-bubble"><p>For AI, the harness is everything around the model: the rules it reads, the tools it may use, the checks on its work, and the notes it keeps.</p></div></div>
+  <div class="k-row"><img class="k-avatar" src="kit/bosun.svg" alt="EA-bot"><div class="k-bubble"><p>And that's me. I'm not the model. I'm the harness around it.</p></div></div>
+  <div class="k-chips"><button class="k-chip" type="button">Why a whole crew of helpers?</button></div>
+</section>
+
+<section class="step" id="st-4" aria-label="Why a crew">
+  <div class="k-row"><img class="k-avatar" src="kit/bosun.svg" alt="EA-bot"><div class="k-bubble"><p>One helper doing everything is like one person running a whole office. It gets slow, and things get mixed up.</p></div></div>
+  <div class="k-row"><img class="k-avatar" src="kit/bosun.svg" alt="EA-bot"><div class="k-bubble"><p>So the work is split. You talk only to me. I turn your ask into jobs and hand each job to a worker.</p></div></div>
+  <div class="k-row"><img class="k-avatar" src="kit/bosun.svg" alt="EA-bot"><div class="k-bubble"><p>Each worker gets a written brief: one task, and what "done" looks like.</p></div></div>
+  <div class="k-row"><img class="k-avatar" src="kit/bosun.svg" alt="EA-bot"><div class="k-bubble"><p>Each worker also gets its own copy of the work. Nobody trips over anybody, and your main copy stays safe.</p></div></div>
+  <div class="k-row"><img class="k-avatar" src="kit/bosun.svg" alt="EA-bot"><div class="k-bubble"><p>Some workers find things out and write a report. Others change code and send it back as a pull request: a proposed change that waits for review.</p></div></div>
+  <div class="k-chips"><button class="k-chip" type="button">How do you know their work is right?</button></div>
+</section>
+
+<section class="step" id="st-5" aria-label="Checks">
+  <div class="k-row"><img class="k-avatar" src="kit/bosun.svg" alt="EA-bot"><div class="k-bubble"><p>First, each worker checks its own work. It runs the tests, and it backs each claim with proof.</p></div></div>
+  <div class="k-row"><img class="k-avatar" src="kit/bosun.svg" alt="EA-bot"><div class="k-bubble"><p>Then automatic checks run before work leaves the machine: a review, tests, and a scan for secrets like passwords.</p></div></div>
+  <div class="k-row"><img class="k-avatar" src="kit/bosun.svg" alt="EA-bot"><div class="k-bubble"><p>To be honest: some limits are scripts that can't be skipped, and some are still only written rules. <a href="safety.html">Safety by design</a> says which is which.</p></div></div>
+  <div class="k-chips"><button class="k-chip" type="button">So what do I still decide?</button></div>
+</section>
+
+<section class="step" id="st-6" aria-label="What the captain decides">
+  <div class="k-row"><img class="k-avatar" src="kit/bosun.svg" alt="EA-bot"><div class="k-bubble"><p>You're the captain. The crew does the work. You make the calls.</p></div></div>
+  <div class="k-row"><img class="k-avatar" src="kit/bosun.svg" alt="EA-bot"><div class="k-bubble"><p>Only you can accept a change into the main copy, publish, send, delete, or spend money.</p></div></div>
+  <div class="k-row"><img class="k-avatar" src="kit/bosun.svg" alt="EA-bot"><div class="k-bubble"><p>The crew can even suggest better rules for itself. It proposes. You approve each one. It never rewrites its own rules.</p></div></div>
+  <div class="k-chips"><button class="k-chip" type="button">Do you remember anything?</button></div>
+</section>
+
+<section class="step" id="st-7" aria-label="Memory">
+  <div class="k-row"><img class="k-avatar" src="kit/bosun.svg" alt="EA-bot"><div class="k-bubble"><p>Not in my head. In files.</p></div></div>
+  <div class="k-row"><img class="k-avatar" src="kit/bosun.svg" alt="EA-bot"><div class="k-bubble"><p>One short rules file, the map, is read first by every helper. Notes from each session are saved, and the next session starts from them.</p></div></div>
+  <div class="k-row"><img class="k-avatar" src="kit/bosun.svg" alt="EA-bot"><div class="k-bubble"><p>Because it's all files, you can read exactly what each helper was told.</p></div></div>
+  <div class="k-chips"><button class="k-chip" type="button">Is this real, or a design?</button></div>
+</section>
+
+<section class="step" id="st-8" aria-label="It runs today">
+  <div class="k-row"><img class="k-avatar" src="kit/bosun.svg" alt="EA-bot"><div class="k-bubble"><p>It's real. It's in daily use on the owner's machine. One of my workers built these pages.</p></div></div>
+  <div class="k-row"><img class="k-avatar" src="kit/bosun.svg" alt="EA-bot"><div class="k-bubble"><p>On one day, four workers ran side by side, and three delivered a reviewed pull request: <a href="https://github.com/codeami/firstmate-showcase/pull/1">this site</a>, <a href="https://github.com/codeami/reels4mphotos/pull/23">reels4mphotos</a> and <a href="https://github.com/codeami/swarm-referee/pull/9">swarm-referee</a>.</p></div></div>
+  <div class="k-row"><img class="k-avatar" src="kit/bosun.svg" alt="EA-bot"><div class="k-bubble"><p>Not everything works yet, and this site says so. <a href="safety.html#works-today">What works today</a> lists both.</p></div></div>
+  <div class="k-chips"><button class="k-chip" type="button">How should I think about all this?</button></div>
+</section>
+
+<section class="step" id="st-9" aria-label="The vendor idea">
+  <div class="k-row"><img class="k-avatar" src="kit/bosun.svg" alt="EA-bot"><div class="k-bubble"><p>The owner puts it this way: "managing a complex AI agentic bot system is sort of like managing a contract with different vendors."</p></div></div>
+  <div class="k-row"><img class="k-avatar" src="kit/bosun.svg" alt="EA-bot"><div class="k-bubble"><p>You scope the work. You say who may do what. You accept work only on evidence.</p></div></div>
+  <div class="k-row"><img class="k-avatar" src="kit/bosun.svg" alt="EA-bot"><div class="k-bubble"><p>That's the whole idea. Want more? Try <a href="index.html">chatting with me</a>, read the <a href="blog/index.html">Field Notes</a>, or see the <a href="maps/flow.html">harness flow map</a> in more detail.</p></div></div>
+</section>
+
+</div>
+
+<div class="ctl"><button class="k-btn quiet" id="all" type="button">Show the whole story</button><span class="count" id="count"></span></div>
+
+<p class="end">The supervisor and most crew mechanics are upstream <a href="https://github.com/kunchenguid/firstmate">Firstmate</a>, MIT licence, by Kun Chen and contributors. The owner built the rules, hooks, work index and review flow.</p>
+</article>
+</main>
+<footer class="k-foot"><p>by Ashish Raina – program manager turned AI-crew operator</p><p><a href="about.html">About</a> · <a href="index.html">Chat with EA-bot</a> · <a href="index.html#pages">All pages</a> · <a href="https://github.com/codeami">GitHub</a></p></footer>
+<script>
+(function () {
+  var steps = Array.prototype.slice.call(document.querySelectorAll("#story > .step"));
+  var count = document.getElementById("count");
+  var all = document.getElementById("all");
+  var shown = 1;
+  document.documentElement.className += " js";
+  steps.forEach(function (s, i) { if (i) s.hidden = true; });
+  function tally() {
+    count.textContent = shown + " of " + steps.length;
+    if (shown === steps.length) all.hidden = true;
+  }
+  // Your reply: a bubble on the right with the chip's words, then the next step.
+  function reply(step, chip) {
+    var row = document.createElement("div");
+    row.className = "k-row";
+    var b = document.createElement("div");
+    b.className = "k-bubble me";
+    b.textContent = chip.textContent;
+    row.appendChild(b);
+    step.insertBefore(row, chip.parentNode.nextSibling);
+  }
+  function open(i, chip) {
+    var step = steps[i];
+    step.querySelectorAll(".k-chip").forEach(function (c) {
+      c.disabled = true;
+      if (c === chip) c.setAttribute("aria-pressed", "true");
+    });
+    if (chip) reply(step, chip);
+    var next = steps[i + 1];
+    if (!next) return;
+    next.hidden = false;
+    next.className += " new";
+    shown = Math.max(shown, i + 2);
+    tally();
+    if (chip && next.scrollIntoView) next.scrollIntoView({ block: "start", behavior: "smooth" });
+  }
+  steps.forEach(function (s, i) {
+    s.querySelectorAll(".k-chip").forEach(function (c) {
+      c.addEventListener("click", function () { open(i, c); });
+    });
+  });
+  all.addEventListener("click", function () {
+    for (var i = 0; i < steps.length - 1; i++) if (steps[i + 1].hidden) open(i, null);
+  });
+  tally();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1902 @@
+{
+ "meta": {
+  "name": "AI-Life-OS public second brain",
+  "invented": false,
+  "note": "Public data only: the approved wiki notes, this site's pages and posts, the skill map and the harness tier list. No private files, paths, routines or links."
+ },
+ "root": {
+  "label": "AGENTS.md",
+  "also": "CLAUDE.md",
+  "note": "The base map. Every agent tool loads this one rules file first; each room of work adds its own CONTEXT.md on top.",
+  "links": [
+   [
+    "Post: one rules file for every tool",
+    "../blog/everything-is-a-file.html"
+   ],
+   [
+    "Core logic: always-loaded context",
+    "../core.html#part-context"
+   ]
+  ]
+ },
+ "rooms": [
+  {
+   "id": "notes",
+   "label": "Wiki notes",
+   "color": "#b57bff",
+   "note": "A public slice of the owner's private notes wiki: only notes on an approved list are copied, and a build step drops any line with a private term, a local path, an email or a user name.",
+   "links": [
+    {
+     "label": "Approved list",
+     "href": "allowlist.txt"
+    },
+    {
+     "label": "Build script",
+     "href": "build.py"
+    }
+   ],
+   "folders": [
+    {
+     "name": "agentic-stack",
+     "count": 3,
+     "files": [
+      {
+       "id": "pocock-steers-with-skills-kun-builds-machinery",
+       "n": "Pocock steers with skills and prompts; Kun builds deterministic machinery",
+       "line": "wiki note · agentic-stack, skills, workflow",
+       "body": [
+        "Pocock's repo steers the agent with small skills and grilling prompts, while Kun Chen's repos put the exact steps in scripts and gates the agent cannot skip.",
+        "Evidence: - \"My agent skills that I use every day to do real engineering - not vibe coding.\" [Matt Pocock]\n- \"These skills are designed to be small, easy to adapt, and composable.\" [Matt Pocock]\n- \"Approaches like GSD, BMAD, and Spec-Kit try to help by owning the process. But while doing so, they take away your control and make bugs in the process hard to resolve.\" [Matt Pocock]\n- \"getting the agent to ask you detailed questions about what you're building\" [Matt Pocock]\n- \"Logic that can be exact lives in deterministic scripts; work that requires understanding lives in an agent; the two never mix.\" [Kun Chen]\n- \"A denied name is removed from the model's schema entirely.\" [Kun Chen]\n- \"This is removal, not interception, and it is strictly stronger than any hook.\" [Kun Chen]\n- \"The initial change reaches the configured push target only after every local gate is green.\" [Kun Chen]\n- \"He prefers deterministic harnesses for repeated long-running loops instead of asking one context window to remember everything.\" [Kun Chen]",
+        "Source: Matt Pocock, skills repo README (https://github.com/mattpocock/skills (README.md), retrieved 2026-10-17); Kun Chen, firstmate VISION.md (https://github.com/kunchenguid/firstmate/blob/main/VISION.md, retrieved 2026-10-17); Kun Chen, firstmate docs/subagent-guard.md (https://github.com/kunchenguid/firstmate/blob/main/docs/subagent-guard.md, retrieved 2026-10-17); Kun Chen, no-mistakes README (https://github.com/kunchenguid/no-mistakes (README.md), retrieved 2026-10-17); Kun Chen, kun repo OPINIONS.md (a map of his views inferred from public posts and talks, not his own first-person text) (https://github.com/kunchenguid/kun/blob/main/OPINIONS.md, retrieved 2026-10-17)"
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/pocock-steers-with-skills-kun-builds-machinery.md"
+        }
+       ],
+       "rel": [
+        "popular-skills-are-not-good-skills",
+        "kun-chen-agent-policy",
+        "validate-dont-review",
+        "progressive-disclosure"
+       ]
+      },
+      {
+       "id": "icm-layer-ladder",
+       "n": "ICM layer ladder",
+       "line": "wiki note · agentic-stack, context",
+       "body": [
+        "Agent context is best delivered in five numbered layers, each read only when needed — prevention, not compression.",
+        "Evidence: \"Agents read down five layers and stop when they have what they need.\" (ICM README)",
+        "Source: RinDig/Interpretable-Context-Methodology (arXiv:2603.16021)"
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/icm-layer-ladder.md"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "agent-ergonomics",
+       "n": "Agent ergonomics (AXI)",
+       "line": "wiki note · agentic-stack",
+       "body": [
+        "The ergonomics of the tools you hand an agent dominate its cost and quality; AXI's ten principles (TOON output, minimal schemas, truncation, aggregates) beat MCP on tokens and latency.",
+        "Evidence: \"GitHub MCP server will cost you to spend three times more on token cost, and more than double the latency compared to using the CLI... axi... lowest cost but highest success rate.\"",
+        "Source: Kun Chen, \"Agent Engineering Workflow\" (the importance of agent ergonomics)"
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/agent-ergonomics.md"
+        }
+       ],
+       "rel": [
+        "popular-skills-are-not-good-skills"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "context-layer",
+     "count": 1,
+     "files": [
+      {
+       "id": "second-brain-is-a-context-layer",
+       "n": "A second brain is a context layer",
+       "line": "wiki note · context-layer",
+       "body": [
+        "A second brain is not a notes pile; it is a context layer — organized information built to feed context to an AI.",
+        "Evidence: \"The whole idea anytime you hear a second brain at its core is just a layer to feed context to your AI. My method is a way of organizing that context layer.\"",
+        "Source: Jake Van Clief, \"Second Brain\" talk (04:35)"
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/second-brain-is-a-context-layer.md"
+        }
+       ],
+       "rel": [
+        "icm-layer-ladder"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "decision",
+     "count": 1,
+     "files": [
+      {
+       "id": "llmwiki-vs-rag",
+       "n": "LLMwiki (plain files) before RAG",
+       "line": "wiki note · decision",
+       "body": [
+        "Plain-file notes (an LLMwiki) stay the default memory until roughly a hundred\nsources; move to RAG only when search and scale demand it, never by default.",
+        "Evidence: \"It says plain files work up to about a hundred sources, which gives your\nnon-technical friends a real number.\" The second brain (62 notes) is the working\ninstance; nothing here needs a database yet.",
+        "Source: Captain, Troupe session 2026-10-22 (\"Folders to RAG\" in the Knowledge Universe)"
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/llmwiki-vs-rag.md"
+        }
+       ],
+       "rel": [
+        "global-memory-is-minimal",
+        "mini-brains-not-one-brain"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "icm",
+     "count": 2,
+     "files": [
+      {
+       "id": "icm-routing-table-is-the-core-pattern",
+       "n": "ICM: the routing table is the core pattern",
+       "line": "wiki note · icm, context, agentic-stack",
+       "body": [
+        "The most important thing in the entry file is a short explicit table — for this task, go to this workspace, read these files, maybe use these skills — and a rule that the agent reports which files it actually used, because a file's existence or name never guarantees it was read.",
+        "Evidence: \"This is the most important pattern in the whole system… a simple table that tells the AI: for this task, read these files, skip those files, you might need these skills.\" Mistake 2 in 3.3: \"The routing is implicit.\" 4.4: \"A file called CONTEXT.md needs an instruction to read it; the filename alone is not a promise of automatic loading.\" Every Module 4 prompt ends with \"tell me which source you used.\"",
+        "Source: Clief Notes Foundation 0.2, 3.3 (mistake 2), 4.4, 4.5"
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/icm-routing-table-is-the-core-pattern.md"
+        }
+       ],
+       "rel": [
+        "icm-storage-is-not-active-context"
+       ]
+      },
+      {
+       "id": "icm-storage-is-not-active-context",
+       "n": "ICM: storage is not active context, and context is not authority",
+       "line": "wiki note · icm, context, memory, security",
+       "body": [
+        "A file on disk, a saved chat or a project folder is storage; only what is read or supplied for this request is context. Inside the context, instructions and source material sit side by side but do not carry equal authority — which is exactly why prompt injection exists and why a document must be treated as evidence, not permission.",
+        "Evidence: \"Saved history and current context are different: material on disk or in a previous chat is not necessarily included in this request.\" \"Their presence in context does not give them the same authority or turn every sentence into executable code.\" Memory hierarchy analogy: weights (fixed in inference), context window (RAM), system instructions, retrieved context (disk→RAM on demand), persistent memory (across sessions).",
+        "Source: Clief Notes Foundation 2.3 \"How a 1953 Word Game Explains AI Memory\""
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/icm-storage-is-not-active-context.md"
+        }
+       ],
+       "rel": [
+        "icm-routing-table-is-the-core-pattern"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "memory",
+     "count": 1,
+     "files": [
+      {
+       "id": "global-memory-is-minimal",
+       "n": "Global memory is minimal",
+       "line": "wiki note · memory",
+       "body": [
+        "The always-loaded global memory file must stay tiny because it is loaded into every session's system prompt and silently burns tokens.",
+        "Evidence: \"There is only 27 lines. Because everything in this file gets loaded into the system prompt of every single agent session across all our projects.\"",
+        "Source: Kun Chen, \"Agent Engineering Workflow\" (global memory file)"
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/global-memory-is-minimal.md"
+        }
+       ],
+       "rel": []
+      }
+     ]
+    },
+    {
+     "name": "method",
+     "count": 5,
+     "files": [
+      {
+       "id": "mini-brains-not-one-brain",
+       "n": "Mini brains, not one brain of everything",
+       "line": "wiki note · method",
+       "body": [
+        "Build many small, per-workflow brains, each bespoke to one high-value operation, instead of one brain of everything.",
+        "Evidence: \"I actually make multiple second brains based on workflows, not based on everything I'm doing.\"",
+        "Source: Jake Van Clief, \"Second Brain\" talk (27:02, 11:10)"
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/mini-brains-not-one-brain.md"
+        }
+       ],
+       "rel": [
+        "second-brain-is-a-context-layer"
+       ]
+      },
+      {
+       "id": "structure-decides-what-matters",
+       "n": "Structure decides what matters",
+       "line": "wiki note · method",
+       "body": [
+        "Do not let the model decide what is important; encode importance in the folder structure, which the model then follows.",
+        "Evidence: \"The structure forces what is important... letting the AI decide what is important is what you shouldn't be doing.\"",
+        "Source: Jake Van Clief, \"Second Brain\" talk (31:09)"
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/structure-decides-what-matters.md"
+        }
+       ],
+       "rel": [
+        "second-brain-is-a-context-layer"
+       ]
+      },
+      {
+       "id": "right-size-the-model",
+       "n": "Right-size the model",
+       "line": "wiki note · method",
+       "body": [
+        "You don't need the best model for everything; efficient models do most work, and the strongest is reserved for the hard parts.",
+        "Evidence: \"a lot of the time we try to use the best model possible for everything... you actually can get a lot out of these more efficient models.\"",
+        "Source: Kun Chen, \"Full Stack App\" video (intro)"
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/right-size-the-model.md"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "reproduce-bugs-end-to-end",
+       "n": "Reproduce bugs end-to-end",
+       "line": "wiki note · method",
+       "body": [
+        "Start bug fixes by reproducing the bug end-to-end as the user experiences it, not with unit tests.",
+        "Evidence: \"always starts with reproducing the bug in an end to end setting... AI models today by default like to write unit tests, which are often not sufficient and not really covering the product behaviors we want to guard.\"",
+        "Source: Kun Chen, \"Agent Engineering Workflow\" (global memory rule)"
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/reproduce-bugs-end-to-end.md"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "human-in-the-loop",
+       "n": "Build with a human in the loop",
+       "line": "wiki note · method",
+       "body": [
+        "Design systems assuming a human is in the loop; the human's abstraction is the efficient part, so amplify it rather than replace it.",
+        "Evidence: \"You want to build your systems with the understanding that a human is in the loop... The human is very good at abstracting.\"",
+        "Source: Jake Van Clief, \"Second Brain\" talk (27:13)"
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/human-in-the-loop.md"
+        }
+       ],
+       "rel": [
+        "structure-decides-what-matters"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "people",
+     "count": 1,
+     "files": [
+      {
+       "id": "kun-chen-agent-policy",
+       "n": "Kun Chen's agent policy (a distilled self)",
+       "line": "wiki note · people",
+       "body": [
+        "Kun's shared AGENTS.md is a concrete distilled operating policy — six rules that let any agent act with his judgment.",
+        "Evidence: \"Verify before claiming... Prefer the smallest change... Do not silently revert a deliberate decision... Ask before anything destructive... Never commit secrets... Report what changed, what was verified, and what is still open.\"",
+        "Source: kunchenguid/dotfiles, home/AGENTS.md (this repo)"
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/kun-chen-agent-policy.md"
+        }
+       ],
+       "rel": []
+      }
+     ]
+    },
+    {
+     "name": "skills",
+     "count": 3,
+     "files": [
+      {
+       "id": "popular-skills-are-not-good-skills",
+       "n": "Popular skills are not good skills",
+       "line": "wiki note · skills",
+       "body": [
+        "Skill popularity is not quality; some widely-shared skills make agents slower and worse, so only install skills with rigorous published evaluations.",
+        "Evidence: \"the agent will use 5% more tokens while making the results worse... being popular is not the same as actually being good.\"",
+        "Source: Kun Chen, \"Agent Engineering Workflow\" (how skills may hurt)"
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/popular-skills-are-not-good-skills.md"
+        }
+       ],
+       "rel": [
+        "agent-ergonomics"
+       ]
+      },
+      {
+       "id": "progressive-disclosure",
+       "n": "Progressive disclosure",
+       "line": "wiki note · skills",
+       "body": [
+        "Skills load only a tiny description into the system prompt; the full body is read only when the agent decides it needs the skill.",
+        "Evidence: \"when your agent starts, it only loads this tiny description field from your skills into the system prompt... only when it actually decides that it needs to use a certain skill, it will then reads the rest of this file.\"",
+        "Source: Kun Chen, \"Agent Engineering Workflow\" (using skills)"
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/progressive-disclosure.md"
+        }
+       ],
+       "rel": [
+        "icm-layer-ladder",
+        "global-memory-is-minimal"
+       ]
+      },
+      {
+       "id": "dialogue-freezes-into-skills",
+       "n": "Dialogue freezes into skills",
+       "line": "wiki note · skills",
+       "body": [
+        "A skill and an ICM are both frozen conversations — real dialogue crystallized into a file that can be replayed.",
+        "Evidence: \"A skill is technically a frozen conversation, a frozen workflow. An ICM is a frozen conversation.\"",
+        "Source: Jake Van Clief, \"Second Brain\" talk (14:40)"
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/dialogue-freezes-into-skills.md"
+        }
+       ],
+       "rel": [
+        "icm-layer-ladder"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "talk-modes",
+     "count": 3,
+     "files": [
+      {
+       "id": "adhd-mode",
+       "n": "ADHD mode",
+       "line": "wiki note · talk-modes",
+       "body": [
+        "ADHD mode puts the key point first, in bold, then gives one idea per line, short lists and one clear next step.",
+        "Evidence: The rules are a reading layout for people who scan: the answer is in the first line, nothing important hides in a long paragraph, and the reply ends with what to do now.",
+        "Source: EA-bot talk modes, written for this site"
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/adhd-mode.md"
+        }
+       ],
+       "rel": [
+        "caveman-mode",
+        "ste100-mode",
+        "progressive-disclosure"
+       ]
+      },
+      {
+       "id": "caveman-mode",
+       "n": "Caveman mode",
+       "line": "wiki note · talk-modes",
+       "body": [
+        "Caveman mode answers in as few words as possible, with no filler, no greetings and no repeats of the question.",
+        "Evidence: The rule is to keep only the words that carry meaning. Fewer words also means fewer tokens to read and pay for.",
+        "Source: EA-bot talk modes, written for this site"
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/caveman-mode.md"
+        }
+       ],
+       "rel": [
+        "adhd-mode",
+        "ste100-mode",
+        "progressive-disclosure"
+       ]
+      },
+      {
+       "id": "ste100-mode",
+       "n": "STE100 mode",
+       "line": "wiki note · talk-modes",
+       "body": [
+        "STE100 mode writes in Simplified Technical English: short sentences, active voice, and one meaning for each word.",
+        "Evidence: ASD-STE100 is a controlled language first written for aircraft maintenance texts. It limits sentence length, asks for one instruction per sentence, and uses a dictionary where each approved word has one meaning.",
+        "Source: EA-bot talk modes, after ASD-STE100 Simplified Technical English"
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/ste100-mode.md"
+        }
+       ],
+       "rel": [
+        "adhd-mode",
+        "caveman-mode",
+        "progressive-disclosure"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "workflow",
+     "count": 5,
+     "files": [
+      {
+       "id": "first-mate",
+       "n": "First mate",
+       "line": "wiki note · workflow",
+       "body": [
+        "The endgame is a first mate — one agent you talk to that dispatches, supervises, and validates a crew across worktrees, so you focus on direction.",
+        "Evidence: \"I needed a first mate, someone I can talk to as a captain that will carry out all my directions and manage all the crewmates.\"",
+        "Source: Kun Chen, \"Agent Engineering Workflow\" (first mate)"
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/first-mate.md"
+        }
+       ],
+       "rel": [
+        "worktree-pooling",
+        "validate-dont-review"
+       ]
+      },
+      {
+       "id": "worktree-pooling",
+       "n": "Worktree pooling",
+       "line": "wiki note · workflow",
+       "body": [
+        "Manual git worktrees become unmanaged debt; a pool that reuses idle worktrees frees you from tracking them.",
+        "Evidence: \"So this work tree basically becomes a debt... Treehouse... will try to reuse one of the idle work trees instead of creating a brand new one.\"",
+        "Source: Kun Chen, \"Agent Engineering Workflow\" (parallel worktrees)"
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/worktree-pooling.md"
+        }
+       ],
+       "rel": [
+        "first-mate"
+       ]
+      },
+      {
+       "id": "validate-dont-review",
+       "n": "Validate, don't review",
+       "line": "wiki note · workflow",
+       "body": [
+        "Do not review diffs by hand (you become the bottleneck); run changes through an automated pipeline and apply judgment only at the PR, sized by risk.",
+        "Evidence: \"in order to really scale ourselves with AI, we have to think of ourselves more as an engineering manager... I sense the change into a pipeline I built called No Mistakes.\"",
+        "Source: Kun Chen, \"Agent Engineering Workflow\" (validating code changes)"
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/validate-dont-review.md"
+        }
+       ],
+       "rel": [
+        "long-running-loops",
+        "worktree-pooling"
+       ]
+      },
+      {
+       "id": "long-running-loops",
+       "n": "Long-running loops need caps",
+       "line": "wiki note · workflow",
+       "body": [
+        "Autonomous overnight loops are safe when given precise caps and a verifiable objective; otherwise they can burn the weekly quota.",
+        "Evidence: \"give it an objective and it will keep going until it meets some stop condition... I can set a token cap or iteration cap or stop condition more precisely.\"",
+        "Source: Kun Chen, \"Agent Engineering Workflow\" (long running tasks)"
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/long-running-loops.md"
+        }
+       ],
+       "rel": [
+        "validate-dont-review"
+       ]
+      },
+      {
+       "id": "compaction-is-an-implementation-detail",
+       "n": "Compaction is an implementation detail",
+       "line": "wiki note · workflow",
+       "body": [
+        "Context compaction is now an implementation detail; rely on server-side compaction and let the agent keep going across long sessions.",
+        "Evidence: \"compaction... is really becoming an implementation detail that most people should not worry about anymore. Just let the agent run, let the agent compact when needed and it will just keep going.\"",
+        "Source: Kun Chen, \"Full Stack App\" video (compaction)"
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/compaction-is-an-implementation-detail.md"
+        }
+       ],
+       "rel": [
+        "first-mate"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "fm",
+   "label": "FirstMate in detail",
+   "color": "#ff4fd8",
+   "note": "The twelve parts of the harness, the tricks this setup uses on top, and what it borrowed from others. Each part links to its place on the Core logic page.",
+   "links": [
+    {
+     "label": "Core logic",
+     "href": "../core.html#tree"
+    },
+    {
+     "label": "Upstream Firstmate (Kun Chen)",
+     "href": "https://github.com/kunchenguid/firstmate"
+    }
+   ],
+   "folders": [
+    {
+     "name": "the 12 parts",
+     "count": 12,
+     "files": [
+      {
+       "id": "part-context",
+       "n": "Always-loaded context",
+       "line": "harness part · gap",
+       "body": [
+        "Every tool reads one short map first, about 1.5k tokens. The supervisor also reads its rules file each session.",
+        "Gap: The supervisor's rules file is about 11k tokens, loaded before any work.",
+        "From the Core logic page. The comparison there comes from two scout reports dated 2026-10-27 that read public docs, repos and papers; they did not test the tools."
+       ],
+       "links": [
+        {
+         "label": "Open this part on Core logic",
+         "href": "../core.html#part-context"
+        }
+       ],
+       "rel": [
+        "global-memory-is-minimal",
+        "icm-layer-ladder"
+       ]
+      },
+      {
+       "id": "part-rules",
+       "n": "Rules",
+       "line": "harness part",
+       "body": [
+        "One rules file, plus a written brief for each task. A routing table says which folder to read for which job.",
+        "From the Core logic page. The comparison there comes from two scout reports dated 2026-10-27 that read public docs, repos and papers; they did not test the tools."
+       ],
+       "links": [
+        {
+         "label": "Open this part on Core logic",
+         "href": "../core.html#part-rules"
+        }
+       ],
+       "rel": [
+        "icm-routing-table-is-the-core-pattern",
+        "kun-chen-agent-policy"
+       ]
+      },
+      {
+       "id": "part-skills",
+       "n": "Skills",
+       "line": "harness part",
+       "body": [
+        "Each skill's name and description load every turn. The body loads only when the trigger fits.",
+        "From the Core logic page. The comparison there comes from two scout reports dated 2026-10-27 that read public docs, repos and papers; they did not test the tools."
+       ],
+       "links": [
+        {
+         "label": "Open this part on Core logic",
+         "href": "../core.html#part-skills"
+        }
+       ],
+       "rel": [
+        "progressive-disclosure",
+        "popular-skills-are-not-good-skills"
+       ]
+      },
+      {
+       "id": "part-memory",
+       "n": "Memory and decay",
+       "line": "harness part",
+       "body": [
+        "At the end of a session, a \"stow\" step files lessons with decay tiers. Agent memory reaches the curated facts only after review.",
+        "From the Core logic page. The comparison there comes from two scout reports dated 2026-10-27 that read public docs, repos and papers; they did not test the tools."
+       ],
+       "links": [
+        {
+         "label": "Open this part on Core logic",
+         "href": "../core.html#part-memory"
+        }
+       ],
+       "rel": [
+        "llmwiki-vs-rag",
+        "compaction-is-an-implementation-detail"
+       ]
+      },
+      {
+       "id": "part-hooks",
+       "n": "Hooks",
+       "line": "harness part",
+       "body": [
+        "Scripts the tool must run. They block file writes through the shell, warn on text shaped like a key, and remind the agent to write a session note.",
+        "From the Core logic page. The comparison there comes from two scout reports dated 2026-10-27 that read public docs, repos and papers; they did not test the tools."
+       ],
+       "links": [
+        {
+         "label": "Open this part on Core logic",
+         "href": "../core.html#part-hooks"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "part-isolation",
+       "n": "Isolation",
+       "line": "harness part · gap",
+       "body": [
+        "Each worker gets its own disposable git worktree. Each second mate gets its own home folder.",
+        "Gap: A worktree isolates files only. It does not fence the network or credentials.",
+        "From the Core logic page. The comparison there comes from two scout reports dated 2026-10-27 that read public docs, repos and papers; they did not test the tools."
+       ],
+       "links": [
+        {
+         "label": "Open this part on Core logic",
+         "href": "../core.html#part-isolation"
+        }
+       ],
+       "rel": [
+        "worktree-pooling"
+       ]
+      },
+      {
+       "id": "part-orchestrator",
+       "n": "Orchestrator",
+       "line": "harness part",
+       "body": [
+        "The owner talks to one supervisor. Workers are full agent sessions in visible windows. A watcher that uses no tokens wakes the supervisor when needed.",
+        "From the Core logic page. The comparison there comes from two scout reports dated 2026-10-27 that read public docs, repos and papers; they did not test the tools."
+       ],
+       "links": [
+        {
+         "label": "Open this part on Core logic",
+         "href": "../core.html#part-orchestrator"
+        }
+       ],
+       "rel": [
+        "first-mate",
+        "long-running-loops"
+       ]
+      },
+      {
+       "id": "part-gate",
+       "n": "Review gate",
+       "line": "harness part · advantage",
+       "body": [
+        "A local gate runs review, tests, docs and lint before the branch leaves the machine. Shell tests check the rule files.",
+        "On the Core logic page, Claude Code, OpenCode and Pi lack a gate like this; Omnigent and ICM do the job another way.",
+        "From the Core logic page. The comparison there comes from two scout reports dated 2026-10-27 that read public docs, repos and papers; they did not test the tools."
+       ],
+       "links": [
+        {
+         "label": "Open this part on Core logic",
+         "href": "../core.html#part-gate"
+        }
+       ],
+       "rel": [
+        "validate-dont-review",
+        "reproduce-bugs-end-to-end"
+       ]
+      },
+      {
+       "id": "part-approval",
+       "n": "Human approval points",
+       "line": "harness part · gap",
+       "body": [
+        "Only the owner merges, publishes, sends or spends. A decision is a task held for the owner. Reviews happen on HTML pages.",
+        "Gap: The approval and spend rules are prose. The model may not follow them. Omnigent writes the same ideas as enforced policy.",
+        "From the Core logic page. The comparison there comes from two scout reports dated 2026-10-27 that read public docs, repos and papers; they did not test the tools."
+       ],
+       "links": [
+        {
+         "label": "Open this part on Core logic",
+         "href": "../core.html#part-approval"
+        }
+       ],
+       "rel": [
+        "human-in-the-loop"
+       ]
+      },
+      {
+       "id": "part-improve",
+       "n": "Self-improvement",
+       "line": "harness part · advantage, gap",
+       "body": [
+        "A tool called backpass reads past transcripts and proposes rule edits. The owner applies each one by hand.",
+        "On the Core logic page, Claude Code, OpenCode, Pi and Omnigent lack this. Harness-squared has it with no human step; Meta-Harness searches harness code instead.",
+        "Gap: A proposed edit is argued from past evidence. It is never tested by replaying a task.",
+        "From the Core logic page. The comparison there comes from two scout reports dated 2026-10-27 that read public docs, repos and papers; they did not test the tools."
+       ],
+       "links": [
+        {
+         "label": "Open this part on Core logic",
+         "href": "../core.html#part-improve"
+        }
+       ],
+       "rel": [
+        "dialogue-freezes-into-skills"
+       ]
+      },
+      {
+       "id": "part-sync",
+       "n": "Sync across machines",
+       "line": "harness part · gap",
+       "body": [
+        "Links put the one map where five tools look for it. The supervisor's rules reach running sessions through git.",
+        "Gap: Agent memory does not sync between machines. (Guess: not checked.)",
+        "From the Core logic page. The comparison there comes from two scout reports dated 2026-10-27 that read public docs, repos and papers; they did not test the tools."
+       ],
+       "links": [
+        {
+         "label": "Open this part on Core logic",
+         "href": "../core.html#part-sync"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "part-goals",
+       "n": "Vision and goals",
+       "line": "harness part · advantage",
+       "body": [
+        "A private owner's layer holds current priorities and preferences, on top of the shared base.",
+        "On the Core logic page, ICM, Claude Code, OpenCode, Pi, Warp, Omnigent and Harness-squared lack a goals layer.",
+        "From the Core logic page. The comparison there comes from two scout reports dated 2026-10-27 that read public docs, repos and papers; they did not test the tools."
+       ],
+       "links": [
+        {
+         "label": "Open this part on Core logic",
+         "href": "../core.html#part-goals"
+        }
+       ],
+       "rel": []
+      }
+     ]
+    },
+    {
+     "name": "tricks",
+     "count": 5,
+     "files": [
+      {
+       "id": "trick-routing",
+       "n": "Routing per task",
+       "line": "trick · trick",
+       "body": [
+        "The map holds house rules, a \"who does what\" list, and a routing table. The routing table says: for this kind of task, go to this folder and read these files first."
+       ],
+       "links": [
+        {
+         "label": "Post: everything is a file",
+         "href": "../blog/everything-is-a-file.html"
+        }
+       ],
+       "rel": [
+        "part-rules",
+        "icm-routing-table-is-the-core-pattern"
+       ]
+      },
+      {
+       "id": "trick-plain",
+       "n": "Plain-English check",
+       "line": "trick · trick",
+       "body": [
+        "Scouts run a plain-English checker on their report before they say \"done\". It flags long sentences and vague words. It is one of the owner's two additions on top of upstream Firstmate."
+       ],
+       "links": [
+        {
+         "label": "All pages",
+         "href": "../index.html#pages"
+        },
+        {
+         "label": "Harness flow map",
+         "href": "../maps/flow.html"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "trick-decay",
+       "n": "Decay tiers",
+       "line": "trick · trick",
+       "body": [
+        "/stow (upstream Firstmate) files durable facts into a curated learnings file, with decay tiers. Status on the Memory page: designed, not proven."
+       ],
+       "links": [
+        {
+         "label": "Core logic: memory",
+         "href": "../core.html#part-memory"
+        }
+       ],
+       "rel": [
+        "part-memory"
+       ]
+      },
+      {
+       "id": "trick-merge",
+       "n": "Live merge checks",
+       "line": "trick · trick",
+       "body": [
+        "A guard. A script registers the pull request and its head commit, and arms a merge poll. The state comes from the forge. It does not come from the worker's message. A draft pull request is refused."
+       ],
+       "links": [
+        {
+         "label": "Skill map",
+         "href": "../maps/skills.html"
+        }
+       ],
+       "rel": [
+        "part-gate",
+        "part-approval"
+       ]
+      },
+      {
+       "id": "trick-never",
+       "n": "Never-send list",
+       "line": "trick · trick",
+       "body": [
+        "A short list of terms that must never leave the owner's machine. The build step for this page drops any note line that holds one of them, and also any line with a local path, an email or a user name."
+       ],
+       "links": [
+        {
+         "label": "Build script",
+         "href": "build.py"
+        }
+       ],
+       "rel": [
+        "part-approval",
+        "brain"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "borrowed",
+     "count": 4,
+     "files": [
+      {
+       "id": "b-grill",
+       "n": "grill-with-docs",
+       "line": "borrowed idea · borrowed from mattpocock/skills",
+       "body": [
+        "A skill that interviews the owner until the intent is written down in their own words. The idea is from Matt Pocock's skills, which get the agent to ask detailed questions about what you are building."
+       ],
+       "links": [
+        {
+         "label": "mattpocock/skills",
+         "href": "https://github.com/mattpocock/skills"
+        },
+        {
+         "label": "About: influences",
+         "href": "../about.html#influences"
+        }
+       ],
+       "rel": [
+        "pocock-steers-with-skills-kun-builds-machinery"
+       ]
+      },
+      {
+       "id": "b-shell",
+       "n": "Map shell",
+       "line": "borrowed idea · borrowed from EricTechPro/super-board",
+       "body": [
+        "The interactive Skill map and Harness flow map use the map shell from super-board by EricTechPro (MIT)."
+       ],
+       "links": [
+        {
+         "label": "super-board",
+         "href": "https://github.com/EricTechPro/super-board"
+        },
+        {
+         "label": "Skill map",
+         "href": "../maps/skills.html"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "b-arms",
+       "n": "ARMS framework",
+       "line": "borrowed idea · borrowed from RoboNuggets",
+       "body": [
+        "A framework from Jay E (RoboNuggets) that splits an agent workspace into four layers: Applications, Routines, Memory, Skills."
+       ],
+       "links": [],
+       "rel": []
+      },
+      {
+       "id": "b-pi",
+       "n": "Pi ideas",
+       "line": "borrowed idea · borrowed from the Pi ecosystem",
+       "body": [
+        "Ideas from the Pi coding agent and its packages. The compaction note cites a Pi extension for server-side compaction."
+       ],
+       "links": [
+        {
+         "label": "Pi",
+         "href": "https://github.com/earendil-works/pi"
+        }
+       ],
+       "rel": [
+        "compaction-is-an-implementation-detail",
+        "tier-pi"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "areas",
+   "label": "Areas of interest",
+   "color": "#2ee6c5",
+   "note": "The topics the owner writes about. Each links to the pages of this site that cover it, and to the wiki notes that sit under it.",
+   "links": [],
+   "folders": [
+    {
+     "name": "areas",
+     "count": 5,
+     "files": [
+      {
+       "id": "area-harness",
+       "n": "Agent harnesses",
+       "line": "area",
+       "body": [
+        "A harness is everything around the model: what it reads, what it may do, and who checks it."
+       ],
+       "links": [
+        {
+         "label": "Core logic",
+         "href": "../core.html"
+        },
+        {
+         "label": "Harness flow map",
+         "href": "../maps/flow.html"
+        },
+        {
+         "label": "All pages",
+         "href": "../index.html#pages"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "area-icm",
+       "n": "Context engineering (ICM)",
+       "line": "area",
+       "body": [
+        "One rules file, linked into every agent tool, plus layers and rooms. The routing table says: for this kind of task, go to this folder and read these files first."
+       ],
+       "links": [
+        {
+         "label": "Post: everything is a file",
+         "href": "../blog/everything-is-a-file.html"
+        },
+        {
+         "label": "Core logic: memory",
+         "href": "../core.html#part-memory"
+        },
+        {
+         "label": "How skills work",
+         "href": "../maps/skills.html"
+        },
+        {
+         "label": "ICM (Van Clief)",
+         "href": "https://github.com/RinDig/Interpretable-Context-Methodology"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "area-safety",
+       "n": "AI safety",
+       "line": "area",
+       "body": [
+        "Who may do what: seats, the A0 to A3 ladder and the permission matrix. Short hook scripts turn the most important rules into checks.",
+        "swarm-referee is a public repo for the Apart Research AI Collusion Sprint 2026. One worker delivered a reviewed pull request to it."
+       ],
+       "links": [
+        {
+         "label": "Core logic: roles",
+         "href": "../core.html#roles"
+        },
+        {
+         "label": "Core logic: hooks",
+         "href": "../core.html#part-hooks"
+        },
+        {
+         "label": "swarm-referee",
+         "href": "https://github.com/codeami/swarm-referee"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "area-learning",
+       "n": "Learning",
+       "line": "area",
+       "body": [
+        "Where the ideas come from: ICM, Kun Chen's agent stack and Matt Pocock's skills. And two checks that found the setup wrong, and what the owner did about each."
+       ],
+       "links": [
+        {
+         "label": "About: influences",
+         "href": "../about.html#influences"
+        },
+        {
+         "label": "Safety: checks that proved it wrong",
+         "href": "../safety.html#proved-wrong"
+        },
+        {
+         "label": "Safety: what works today",
+         "href": "../safety.html#works-today"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "area-content",
+       "n": "Content",
+       "line": "area",
+       "body": [
+        "The owner reviews every report and draft as an HTML page, not in a terminal."
+       ],
+       "links": [
+        {
+         "label": "Core logic: approval",
+         "href": "../core.html#part-approval"
+        },
+        {
+         "label": "The story",
+         "href": "../story.html"
+        },
+        {
+         "label": "Changelog",
+         "href": "../changelog.html"
+        }
+       ],
+       "rel": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "tier",
+   "label": "Harness tier list",
+   "color": "#ffd93d",
+   "note": "Eleven setups marked on the same twelve harness parts. Has it, does it differently, lacks it, or a guess the scout could not confirm. The counts treat all twelve parts as equal. They show coverage, not quality. From a scout report dated 2026-10-27 that read public docs, repos and papers; the tools were not tested.",
+   "links": [],
+   "folders": [
+    {
+     "name": "scored setups",
+     "count": 11,
+     "files": [
+      {
+       "id": "tier-composite",
+       "n": "Our composite",
+       "line": "harness setup · 10 of 12 parts",
+       "body": [
+        "Has 10 · Different 2 · Lacks 0 · Guess 0, out of the same twelve parts.",
+        "Name and score only on this page."
+       ],
+       "links": [
+        {
+         "label": "The harness arena",
+         "href": "../arena.html"
+        }
+       ],
+       "rel": [
+        "g-fm"
+       ]
+      },
+      {
+       "id": "tier-kun",
+       "n": "Kun Chen stack",
+       "line": "harness setup · 8 of 12 parts",
+       "body": [
+        "Has 8 · Different 4 · Lacks 0 · Guess 0, out of the same twelve parts."
+       ],
+       "links": [
+        {
+         "label": "The harness arena",
+         "href": "../arena.html"
+        },
+        {
+         "label": "Primary source",
+         "href": "https://github.com/kunchenguid/firstmate"
+        }
+       ],
+       "rel": [
+        "first-mate"
+       ]
+      },
+      {
+       "id": "tier-troupe",
+       "n": "Troupe design",
+       "line": "harness setup · 7 of 12 parts",
+       "body": [
+        "Has 7 · Different 2 · Lacks 3 · Guess 0, out of the same twelve parts.",
+        "Name and score only on this page."
+       ],
+       "links": [
+        {
+         "label": "The harness arena",
+         "href": "../arena.html"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "tier-cc",
+       "n": "Claude Code",
+       "line": "harness setup · 7 of 12 parts",
+       "body": [
+        "Has 7 · Different 2 · Lacks 3 · Guess 0, out of the same twelve parts."
+       ],
+       "links": [
+        {
+         "label": "The harness arena",
+         "href": "../arena.html"
+        },
+        {
+         "label": "Primary source",
+         "href": "https://code.claude.com/docs/en/memory.md"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "tier-warp",
+       "n": "Warp",
+       "line": "harness setup · 5 of 12 parts",
+       "body": [
+        "Has 5 · Different 1 · Lacks 5 · Guess 1, out of the same twelve parts."
+       ],
+       "links": [
+        {
+         "label": "The harness arena",
+         "href": "../arena.html"
+        },
+        {
+         "label": "Primary source",
+         "href": "https://docs.warp.dev/platform/harnesses/warp-agent.md"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "tier-omni",
+       "n": "Databricks Omnigent",
+       "line": "harness setup · 4 of 12 parts",
+       "body": [
+        "Has 4 · Different 5 · Lacks 2 · Guess 1, out of the same twelve parts."
+       ],
+       "links": [
+        {
+         "label": "The harness arena",
+         "href": "../arena.html"
+        },
+        {
+         "label": "Primary source",
+         "href": "https://github.com/omnigent-ai/omnigent"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "tier-opencode",
+       "n": "OpenCode",
+       "line": "harness setup · 4 of 12 parts",
+       "body": [
+        "Has 4 · Different 3 · Lacks 4 · Guess 1, out of the same twelve parts."
+       ],
+       "links": [
+        {
+         "label": "The harness arena",
+         "href": "../arena.html"
+        },
+        {
+         "label": "Primary source",
+         "href": "https://opencode.ai/docs/rules/"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "tier-icm",
+       "n": "ICM (Van Clief)",
+       "line": "harness setup · 3 of 12 parts",
+       "body": [
+        "Has 3 · Different 5 · Lacks 3 · Guess 1, out of the same twelve parts."
+       ],
+       "links": [
+        {
+         "label": "The harness arena",
+         "href": "../arena.html"
+        },
+        {
+         "label": "Primary source",
+         "href": "https://arxiv.org/abs/2603.16021"
+        }
+       ],
+       "rel": [
+        "icm-layer-ladder"
+       ]
+      },
+      {
+       "id": "tier-h2",
+       "n": "Google Harness-squared",
+       "line": "harness setup · 3 of 12 parts",
+       "body": [
+        "Has 3 · Different 4 · Lacks 5 · Guess 0, out of the same twelve parts."
+       ],
+       "links": [
+        {
+         "label": "The harness arena",
+         "href": "../arena.html"
+        },
+        {
+         "label": "Primary source",
+         "href": "https://github.com/google-research/harness2"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "tier-pi",
+       "n": "Pi",
+       "line": "harness setup · 3 of 12 parts",
+       "body": [
+        "Has 3 · Different 3 · Lacks 6 · Guess 0, out of the same twelve parts."
+       ],
+       "links": [
+        {
+         "label": "The harness arena",
+         "href": "../arena.html"
+        },
+        {
+         "label": "Primary source",
+         "href": "https://github.com/earendil-works/pi"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "tier-meta",
+       "n": "Stanford Meta-Harness",
+       "line": "harness setup · 1 of 12 parts",
+       "body": [
+        "Has 1 · Different 6 · Lacks 4 · Guess 1, out of the same twelve parts."
+       ],
+       "links": [
+        {
+         "label": "The harness arena",
+         "href": "../arena.html"
+        },
+        {
+         "label": "Primary source",
+         "href": "https://github.com/stanford-iris-lab/meta-harness"
+        }
+       ],
+       "rel": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "posts",
+   "label": "Field Notes",
+   "color": "#5cd3ff",
+   "note": "Published posts on harness engineering and alignment.",
+   "links": [
+    {
+     "label": "All Field Notes",
+     "href": "../blog/index.html"
+    }
+   ],
+   "folders": [
+    {
+     "name": "Harness engineering",
+     "count": 1,
+     "files": [
+      {
+       "id": "guides-and-sensors",
+       "n": "Guides, sensors, and the rules I'm still begging for",
+       "line": "post · 2 Nov 2026",
+       "body": [
+        "Mapping my agent setup onto the harness engineering frame, honestly, and picking the next three sensors"
+       ],
+       "url": "../blog/guides-and-sensors.html",
+       "links": [
+        {
+         "label": "Read the post",
+         "href": "../blog/guides-and-sensors.html"
+        }
+       ],
+       "rel": []
+      }
+     ]
+    },
+    {
+     "name": "Alignment",
+     "count": 2,
+     "files": [
+      {
+       "id": "rules-from-chat-history",
+       "n": "Your corrections are your next rules",
+       "line": "post · 2 Nov 2026",
+       "body": [
+        "How I turn a week of \"no, not like that\" into rules my agents read, without letting them edit their own rules"
+       ],
+       "url": "../blog/rules-from-chat-history.html",
+       "links": [
+        {
+         "label": "Read the post",
+         "href": "../blog/rules-from-chat-history.html"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "how-it-fits-together",
+       "n": "One captain, many crews, one chart room",
+       "line": "post · 7 Oct 2026",
+       "body": [
+        "How I fit Kun Chen's agent factory together with plain-file context, and how I keep the agents doing what I actually meant"
+       ],
+       "url": "../blog/how-it-fits-together.html",
+       "links": [
+        {
+         "label": "Read the post",
+         "href": "../blog/how-it-fits-together.html"
+        }
+       ],
+       "rel": []
+      }
+     ]
+    },
+    {
+     "name": "Context",
+     "count": 1,
+     "files": [
+      {
+       "id": "everything-is-a-file",
+       "n": "In AI, everything is a file (or a folder)",
+       "line": "post · 2 Nov 2026",
+       "body": [
+        "Your goals, your context and your rules, written down once in plain folders and read by every AI tool you use"
+       ],
+       "url": "../blog/everything-is-a-file.html",
+       "links": [
+        {
+         "label": "Read the post",
+         "href": "../blog/everything-is-a-file.html"
+        }
+       ],
+       "rel": []
+      }
+     ]
+    },
+    {
+     "name": "Setup",
+     "count": 1,
+     "files": [
+      {
+       "id": "second-brain-page",
+       "n": "A map of my mind you can read without leaving it",
+       "line": "post · 2 Nov 2026",
+       "body": [
+        "One page that shows my whole agent setup as rings around one file, and a rule I won't break: read in place, never navigate away"
+       ],
+       "url": "../blog/second-brain-page.html",
+       "links": [
+        {
+         "label": "Read the post",
+         "href": "../blog/second-brain-page.html"
+        }
+       ],
+       "rel": []
+      }
+     ]
+    },
+    {
+     "name": "Progress report",
+     "count": 1,
+     "files": [
+      {
+       "id": "progress-three-weeks",
+       "n": "Three weeks in: what I built, what I checked, what is still open",
+       "line": "post · 14 Oct 2026",
+       "body": [
+        "A dated progress report on running a crew of AI workers, as of 14 October, with the evidence next to each claim and a 2 November update"
+       ],
+       "url": "../blog/progress-three-weeks.html",
+       "links": [
+        {
+         "label": "Read the post",
+         "href": "../blog/progress-three-weeks.html"
+        }
+       ],
+       "rel": []
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "skills": [
+  {
+   "n": "session-start-recovery",
+   "desc": "An upstream skill. It tells a new session how to read the start-up digest and recover.",
+   "when": "digest shows an open check",
+   "url": "../maps/skills.html#session-start-recovery"
+  },
+  {
+   "n": "bootstrap-diagnostics",
+   "desc": "An upstream skill. It explains each diagnostic line the start-up check can print.",
+   "when": "set-up line prints a fault",
+   "url": "../maps/skills.html#bootstrap-diagnostics"
+  },
+  {
+   "n": "project-management",
+   "desc": "An upstream skill. It holds the steps for project intake, so the supervisor does not guess them.",
+   "when": "add or remove a project",
+   "url": "../maps/skills.html#project-management"
+  },
+  {
+   "n": "diagnostic-reasoning",
+   "desc": "An upstream skill. It sets how the supervisor reasons about a fault before it starts work.",
+   "when": "scope a reported bug",
+   "url": "../maps/skills.html#diagnostic-reasoning"
+  },
+  {
+   "n": "bearings",
+   "desc": "An upstream skill. It builds a digest of the supervisor's own state: what waits on the owner, what runs, what is next.\n\nStatus: not proven. It was not run for this site.",
+   "when": "where did I leave off",
+   "url": "../maps/skills.html#bearings"
+  },
+  {
+   "n": "ahoy",
+   "desc": "An upstream skill. It recaps visible session events and guides the owner through decisions nobody has answered yet.",
+   "when": "recap, then open questions",
+   "url": "../maps/skills.html#ahoy"
+  },
+  {
+   "n": "quota-array-dispatch",
+   "desc": "An upstream skill. It decides which agent profile takes the task when a rule names several.",
+   "when": "more than one profile fits",
+   "url": "../maps/skills.html#quota-array-dispatch"
+  },
+  {
+   "n": "task-brief",
+   "desc": "Every task starts as a written brief: the intent, the spec, the rules and a definition of done. A worker does one task and nothing outside the brief.",
+   "when": "write the instructions",
+   "url": "../maps/skills.html#task-brief"
+  },
+  {
+   "n": "harness-adapters",
+   "desc": "An upstream skill. It holds what differs between agent tools when a worker is started, resumed or stopped.",
+   "when": "start or recover a worker",
+   "url": "../maps/skills.html#harness-adapters"
+  },
+  {
+   "n": "isolated-copy",
+   "desc": "A guard. Each worker gets its own git worktree and its own status file. It works in that copy, not in the owner's main one.\n\nUpstream runs each worker as a normal agent session in a visible terminal window. It does not use a tool's built-in sub-agents.\n\nEvidence: this site was built by one such worker.",
+   "when": "one git copy per worker",
+   "url": "../maps/skills.html#isolated-copy"
+  },
+  {
+   "n": "scout",
+   "desc": "A lane, not a skill. A scout finds facts. Its output is a written report. It pushes nothing. Its worktree is thrown away after.",
+   "when": "find facts, write a report",
+   "url": "../maps/skills.html#scout"
+  },
+  {
+   "n": "ship",
+   "desc": "A lane, not a skill. A ship changes code. Its output is a pull request or a local merge. The owner says when it merges.",
+   "when": "change code, open a PR",
+   "url": "../maps/skills.html#ship"
+  },
+  {
+   "n": "second-mate",
+   "desc": "A lane, not a skill. Upstream describes an optional second mate: an ordinary direct report that runs from its own isolated home, on this machine or on another host.\n\nStatus: not proven. This site reports no run of one.",
+   "when": "persistent helper, own home",
+   "url": "../maps/skills.html#second-mate"
+  },
+  {
+   "n": "secondmate-provisioning",
+   "desc": "An upstream skill. It holds the steps for a second mate's home, from seeding to retirement.",
+   "when": "set up or retire a mate's home",
+   "url": "../maps/skills.html#secondmate-provisioning"
+  },
+  {
+   "n": "stuck-crewmate-recovery",
+   "desc": "An upstream skill. It tells the supervisor how to find out why a worker stopped and how to steer it.",
+   "when": "worker dead or looping",
+   "url": "../maps/skills.html#stuck-crewmate-recovery"
+  },
+  {
+   "n": "process-event-sources",
+   "desc": "An upstream skill. It covers sources that raise a wake when a set condition becomes true.",
+   "when": "arm a long-polling watch",
+   "url": "../maps/skills.html#process-event-sources"
+  },
+  {
+   "n": "afk",
+   "desc": "An upstream skill. The supervisor takes an away posture and shows a return brief when the owner is back.",
+   "when": "owner is away",
+   "url": "../maps/skills.html#afk"
+  },
+  {
+   "n": "quiet",
+   "desc": "An upstream skill. It cuts routine wake turns while the owner is present. Unlike /afk, ordinary chat does not end it. Only /quiet off does.",
+   "when": "fewer routine wakes",
+   "url": "../maps/skills.html#quiet"
+  },
+  {
+   "n": "safety-hooks",
+   "desc": "A guard. A hook is a script the tool must run. Three parts:\n\n1. Directory change. Upstream's cd-guard stops a command that changes directory in an unsafe way (docs/cd-guard.md). Designed upstream.\n2. Shell file writes. The owner's hook blocks heredoc-to-file, tee and sed -i. It blocked commands in a worker's own session. Working.\n3. Secret prints. The owner's hook blocks a command that would print a secret. Installed. Not triggered in a recorded test.",
+   "when": "block a command before it runs",
+   "url": "../maps/skills.html#safety-hooks"
+  },
+  {
+   "n": "scout-completion",
+   "desc": "An upstream skill. It sets what the supervisor does before it treats a scout's work as finished.",
+   "when": "scout says it is done",
+   "url": "../maps/skills.html#scout-completion"
+  },
+  {
+   "n": "hold-lifecycle",
+   "desc": "An upstream skill (see docs/captain-hold-lifecycle.md). An owner decision is a task that waits for the owner. A worker does not close a task while such a question is open.",
+   "when": "an owner question is open",
+   "url": "../maps/skills.html#hold-lifecycle"
+  },
+  {
+   "n": "plain-english-check",
+   "desc": "A guard, and the owner's own addition to a private fork. It is not upstream.\n\nA small program checks the scout's report for Simplified Technical English (STE100-style) rules. It flags long sentences and vague words. The scout does not grade itself.\n\nEvidence: commit f33019a6 (2026-10-28). It makes one test fail on purpose (T6). See Testing in public.",
+   "when": "checker runs on the report",
+   "url": "../maps/skills.html#plain-english-check"
+  },
+  {
+   "n": "validation-supervision",
+   "desc": "An upstream skill. A pre-push gate (no-mistakes) validates the change before it goes out. The supervisor watches that run.\n\nStatus: designed, not proven. The full ship path with the gate was not run for this site.",
+   "when": "pre-push gate is running",
+   "url": "../maps/skills.html#validation-supervision"
+  },
+  {
+   "n": "ask-user-authority",
+   "desc": "An upstream skill. It is the single owner of the policy for findings that ask the user.",
+   "when": "a finding asks the owner",
+   "url": "../maps/skills.html#ask-user-authority"
+  },
+  {
+   "n": "ship-landing",
+   "desc": "An upstream skill. It runs the landing of a ship's work. A worker's ready signal must name a head that is pushed, not one that exists only in its disposable copy. The supervisor then registers the pull request and tells the owner the full URL.",
+   "when": "a PR is ready",
+   "url": "../maps/skills.html#ship-landing"
+  },
+  {
+   "n": "live-merge-check",
+   "desc": "A guard. A script registers the pull request and its head commit, and arms a merge poll. The state comes from the forge. It does not come from the worker's message. A draft pull request is refused. A ready signal whose commit is not pushed is blocked.",
+   "when": "ask the forge, not the worker",
+   "url": "../maps/skills.html#live-merge-check"
+  },
+  {
+   "n": "owners-word",
+   "desc": "A guard. The owner decides here. Only the owner holds the level that merges. The worker opens the pull request and stops. Upstream says an owner instruction to merge is explicit authority.",
+   "when": "owner says merge",
+   "url": "../maps/skills.html#owners-word"
+  },
+  {
+   "n": "landed-work-check",
+   "desc": "A guard. The supervisor tears down a ship's copy only after landing is confirmed. If the teardown refuses because of uncommitted or unlanded work, that is a stop-and-look result. Nobody forces it without the owner's say.",
+   "when": "before clean-up",
+   "url": "../maps/skills.html#landed-work-check"
+  },
+  {
+   "n": "session-notes",
+   "desc": "A hook reminds the agent to write a short session note: goals, decisions, and where the agent went its own way. Installed. It works in one tool only, on the exact words.",
+   "when": "end-of-session note",
+   "url": "../maps/skills.html#session-notes"
+  },
+  {
+   "n": "rule-proposals",
+   "desc": "A tool (backpass) reads the notes and proposes edits to the instruction files. It never writes them.\n\nStatus: runs daily; proposes rule edits; the owner approves (as of 2026-11-02).",
+   "when": "nightly proposal job",
+   "url": "../maps/skills.html#rule-proposals"
+  },
+  {
+   "n": "owner-review",
+   "desc": "The owner decides here. The owner reads each proposal and applies it or not. Facts enter long-term memory only after review.",
+   "when": "owner applies or rejects",
+   "url": "../maps/skills.html#owner-review"
+  },
+  {
+   "n": "instruction-files",
+   "desc": "One plain-text rules file that every agent reads, plus per-project files. A reviewed rule lands here. This closes the loop: the next task's Intake starts from these files.",
+   "when": "what the next session reads",
+   "url": "../maps/skills.html#instruction-files"
+  },
+  {
+   "n": "stow",
+   "desc": "An upstream skill. It sweeps the session for durable knowledge and files it.\n\nStatus: designed, not proven. Nothing starts it before auto-compaction. It was not exercised recently.",
+   "when": "save what was learned",
+   "url": "../maps/skills.html#stow"
+  },
+  {
+   "n": "updatefirstmate",
+   "desc": "An upstream skill. It updates a running Firstmate and its second mates to the latest source.",
+   "when": "update the supervisor",
+   "url": "../maps/skills.html#updatefirstmate"
+  },
+  {
+   "n": "agent-skill-trigger-index",
+   "desc": "An upstream skill that is only a table: each agent-only skill and the exact event that must load it.",
+   "when": "table of triggers",
+   "url": "../maps/skills.html#agent-skill-trigger-index"
+  },
+  {
+   "n": "operational-home-layout",
+   "desc": "An upstream skill. It says where Firstmate keeps its home, config, data, state and project folders.",
+   "when": "find a config or state path",
+   "url": "../maps/skills.html#operational-home-layout"
+  },
+  {
+   "n": "comms",
+   "desc": "Planned lane. Not built. Nothing here is proven. It would handle text and calls. Each message or call goes out only with the owner's word.",
+   "when": "planned: text and calls",
+   "url": "../maps/skills.html#comms"
+  },
+  {
+   "n": "mail-and-calendar",
+   "desc": "Planned lane. Not built. Nothing here is proven. It would plan the day from mail and calendar, voice first. It proposes. The owner decides.",
+   "when": "planned: plan the day",
+   "url": "../maps/skills.html#mail-and-calendar"
+  },
+  {
+   "n": "home",
+   "desc": "Planned lane. Not built. Nothing here is proven. It would help with groceries, house help and stock. Nothing is ordered or booked without the owner's word.",
+   "when": "planned: groceries, help",
+   "url": "../maps/skills.html#home"
+  },
+  {
+   "n": "content",
+   "desc": "Planned lane. Not built. Nothing here is proven. It would run a pipeline for short video and writing. It drafts. Nothing is published without the owner's word.",
+   "when": "planned: video and writing",
+   "url": "../maps/skills.html#content"
+  },
+  {
+   "n": "markets",
+   "desc": "Planned lane. Not built. Nothing here is proven. It would score trade setups for a human, who places every trade.",
+   "when": "planned: score setups",
+   "url": "../maps/skills.html#markets"
+  }
+ ],
+ "routines": [],
+ "apps": [],
+ "projects": [
+  {
+   "n": "Firstmate (upstream)",
+   "state": "Kun Chen, MIT",
+   "url": "https://github.com/kunchenguid/firstmate",
+   "kind": "project"
+  },
+  {
+   "n": "codeami.github.io",
+   "state": "this site",
+   "url": "https://github.com/codeami/codeami.github.io",
+   "kind": "project"
+  },
+  {
+   "n": "reels4mphotos",
+   "state": "live",
+   "url": "https://codeami.github.io/reels4mphotos/",
+   "kind": "project"
+  },
+  {
+   "n": "swarm-referee",
+   "state": "public repo",
+   "url": "https://github.com/codeami/swarm-referee",
+   "kind": "project"
+  }
+ ],
+ "pages": [
+  {
+   "n": "whoami",
+   "state": "home",
+   "url": "../../index.html",
+   "kind": "page"
+  },
+  {
+   "n": "Chat with EA-bot",
+   "state": "start here",
+   "url": "../index.html",
+   "kind": "page"
+  },
+  {
+   "n": "The story",
+   "state": "for beginners",
+   "url": "../story.html",
+   "kind": "page"
+  },
+  {
+   "n": "Field Notes",
+   "state": "6 posts",
+   "url": "../blog/index.html",
+   "kind": "page"
+  },
+  {
+   "n": "Harness arena",
+   "state": "11 setups scored",
+   "url": "../arena.html",
+   "kind": "page"
+  },
+  {
+   "n": "Safety by design",
+   "state": "limits, honestly",
+   "url": "../safety.html",
+   "kind": "page"
+  },
+  {
+   "n": "Guided tour",
+   "state": "step by step",
+   "url": "../tour/index.html",
+   "kind": "page"
+  },
+  {
+   "n": "Changelog",
+   "state": "dated",
+   "url": "../changelog.html",
+   "kind": "page"
+  },
+  {
+   "n": "About",
+   "state": "who and why",
+   "url": "../about.html",
+   "kind": "page"
+  },
+  {
+   "n": "Core logic",
+   "state": "12 parts",
+   "url": "../core.html",
+   "group": "firstmate",
+   "kind": "page"
+  },
+  {
+   "n": "Skill map",
+   "state": "41 skills",
+   "url": "../maps/skills.html",
+   "group": "firstmate",
+   "kind": "page"
+  },
+  {
+   "n": "Harness flow map",
+   "state": "one task",
+   "url": "../maps/flow.html",
+   "group": "firstmate",
+   "kind": "page"
+  }
+ ],
+ "reading": [
+  {
+   "title": "The story",
+   "url": "../story.html",
+   "line": "Start · how it works, from the very beginning"
+  },
+  {
+   "title": "In AI, everything is a file",
+   "url": "../blog/everything-is-a-file.html",
+   "line": "Context · Field Notes"
+  },
+  {
+   "title": "One captain, many crews",
+   "url": "../blog/how-it-fits-together.html",
+   "line": "Alignment · Field Notes"
+  },
+  {
+   "title": "Core logic",
+   "url": "../core.html",
+   "line": "The harness · 12 parts"
+  },
+  {
+   "title": "Guides and sensors",
+   "url": "../blog/guides-and-sensors.html",
+   "line": "Harness engineering · Field Notes"
+  },
+  {
+   "title": "Your corrections are your next rules",
+   "url": "../blog/rules-from-chat-history.html",
+   "line": "Alignment · Field Notes"
+  },
+  {
+   "title": "Safety by design",
+   "url": "../safety.html",
+   "line": "Limits · what waits for the owner"
+  },
+  {
+   "title": "A map of my mind",
+   "url": "../blog/second-brain-page.html",
+   "line": "Setup · Field Notes"
+  },
+  {
+   "title": "Three weeks in",
+   "url": "../blog/progress-three-weeks.html",
+   "line": "Progress report · Field Notes"
+  },
+  {
+   "title": "About",
+   "url": "../about.html",
+   "line": "Who and why"
+  }
+ ]
+}

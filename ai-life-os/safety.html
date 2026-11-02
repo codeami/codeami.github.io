@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Safety by design · The Chart Room</title>
+<meta name="description" content="What EA-bot and its crew may do alone, what waits for the owner, and what they never do. Honest about which limits are scripts and which are only rules.">
+<script src="article.js"></script>
+<link rel="icon" href="kit/bosun.svg" type="image/svg+xml">
+<link rel="stylesheet" href="kit/tokens.css">
+<link rel="stylesheet" href="kit/kit.css">
+<link rel="stylesheet" href="article.css">
+<style>
+.kind { font-size: 13px; font-weight: 700; white-space: nowrap; }
+.kind.script { color: var(--ok); }
+.kind.rule { color: var(--warn); }
+</style>
+</head>
+<body>
+<header class="k-nav">
+  <a class="k-home" href="index.html"><img class="k-mark" src="kit/bosun.svg" alt=""><span class="k-logo">The Chart Room<small>How one captain runs a crew of AI agents, safely.</small></span></a>
+  <nav aria-label="Site"><a href="blog/index.html">Field Notes</a><a href="arena.html">Arena</a><a href="safety.html" aria-current="page">Safety</a><button class="theme" id="theme" type="button">Night</button></nav>
+</header>
+<main class="page">
+<article class="k-article">
+<p class="k-kicker">Safety</p>
+<h1 class="k-title">Safety by design</h1>
+<p class="k-dek">What EA-bot and its crew may do on their own, what waits for me, and what they never do. In plain words, and honest about which limits are scripts and which are only rules.</p>
+<p class="k-meta"><span>Ashish Raina</span><time datetime="2026-11-02">2 Nov 2026</time></p>
+
+<p>A good contractor can use the tools on site without asking. They ask before they knock down a wall. And some things they never do, whoever asks. My agents work the same way.</p>
+
+<h2 id="alone">What the crew does on its own</h2>
+<ul>
+<li>Reads files and writes code, but only in a throwaway copy of the repo, one copy per task. My own copy is never touched.</li>
+<li>Runs tests, linters and a browser to check its own work.</li>
+<li>Researches, and writes reports and drafts for me to read.</li>
+<li>Pushes its own branch and opens a pull request for review.</li>
+</ul>
+
+<h2 id="owner">What waits for me</h2>
+<ul>
+<li><strong>Merge.</strong> A pull request goes into the main branch only when the merge authority says so. Workers never merge.</li>
+<li><strong>Push to main.</strong> Workers push only their own branch.</li>
+<li><strong>Delete.</strong> Deleting data, rewriting history, force-pushing, uninstalling. A vague reply is not approval.</li>
+<li><strong>Money.</strong> Anything that spends money or changes an account.</li>
+<li><strong>Anything that leaves the machine.</strong> A post, an email, a message. Agents write drafts; I send.</li>
+<li><strong>New rules for the agents.</strong> They propose rule changes with evidence. I approve each one (see <a href="blog/rules-from-chat-history.html">Your corrections are your next rules</a>).</li>
+</ul>
+
+<h2 id="never">What it never does</h2>
+<ul>
+<li>Put secrets (keys, tokens, passwords) in files, commits, logs or prompts.</li>
+<li>Send, post or publish without my OK.</li>
+<li>Edit its own rules.</li>
+<li>Hand work to hidden helper agents from the orchestrator, where no one can see or supervise it.</li>
+</ul>
+
+<h2 id="how">Which limits are scripts, and which are only words</h2>
+<p>A rule in a text file is a request. A script is a lock. I call a rule with no script behind it "begging" (from the talk in <a href="blog/guides-and-sensors.html">Guides and sensors</a>). Here is which is which.</p>
+<table>
+<tr><th>Limit</th><th>How it holds</th><th>Kind</th></tr>
+<tr><td>Work happens in a separate copy</td><td>FirstMate's spawn script puts each task in its own worktree; the worker checks where it landed and stops if it is in my copy</td><td><span class="kind script">script</span></td></tr>
+<tr><td>No merge of red or unproved work</td><td>FirstMate's merge script refuses a red pull request or a merge it cannot prove</td><td><span class="kind script">script</span></td></tr>
+<tr><td>Checks before a push</td><td>the no-mistakes gate: a review agent, plus tests and lint</td><td><span class="kind script">script</span> + model</td></tr>
+<tr><td>No hidden helper agents in the orchestrator</td><td>a hook that runs before every tool call and blocks delegation tools</td><td><span class="kind script">script</span></td></tr>
+<tr><td>No secrets in commits</td><td>a secret scan at commit, added on 2 November</td><td><span class="kind script">script</span></td></tr>
+<tr><td>Workers never merge or push to main</td><td>the rules in every worker's brief</td><td><span class="kind rule">rule only</span></td></tr>
+<tr><td>Drafts, not sends</td><td>a written rule every agent loads</td><td><span class="kind rule">rule only</span></td></tr>
+<tr><td>Ask before anything destructive</td><td>a written rule every agent loads</td><td><span class="kind rule">rule only</span></td></tr>
+<tr><td>No spending without my OK</td><td>a written rule every agent loads</td><td><span class="kind rule">rule only</span></td></tr>
+</table>
+<p>The "rule only" rows mostly hold. But a rule is not a lock, and I say so here rather than pretend. Moving rules into scripts is the work in <a href="blog/guides-and-sensors.html#s10">Guides and sensors, section 10</a>.</p>
+
+<h2 id="false-passes">False passes</h2>
+<p>A false pass is work that passed every check, and that I still rejected. On 2 November I logged 9 of them.</p>
+<p>I log them on purpose. Each one is a gap between what my checks test and what I meant. The work met the letter of the checks, not the intent. That is the alignment problem in small. When the same kind of false pass comes back, the fix is a new guide or a new sensor, not more trust.</p>
+
+<h2 id="works-today">What works today, and what does not</h2>
+<p>A scout checked each row on 31 October with a command or a file read. Where there is no evidence, the row says so.</p>
+<table>
+<tr><th>Part</th><th>Evidence</th><th>State</th></tr>
+<tr><td>One rules file loads into Claude Code, Codex, Gemini, OpenCode and backpass</td><td>shell tests: 58 pass, 0 fail</td><td><span class="kind script">works</span></td></tr>
+<tr><td>The supervisor starts scouts in throwaway worktrees</td><td>more than 100 scout reports on disk</td><td><span class="kind script">works</span></td></tr>
+<tr><td>Hook: no file writes through the shell</td><td>it blocked commands in the scout's own session</td><td><span class="kind script">works</span></td></tr>
+<tr><td>Harness health checker</td><td>its test: 14 pass, 0 fail</td><td><span class="kind script">works</span></td></tr>
+<tr><td>Review pages in Lavish</td><td>this site was reviewed there before it went up</td><td><span class="kind script">works</span></td></tr>
+<tr><td>backpass, nightly rule proposals</td><td>runs daily and proposes rule edits; I approve each one (as of 2 November)</td><td><span class="kind script">works</span></td></tr>
+<tr><td>Workers skip permission checks by default</td><td>all 10 running worker sessions carried the skip flag</td><td><span class="kind rule">as designed</span></td></tr>
+<tr><td>Hooks that block secret prints and warn on key-shaped prompts</td><td>installed; not triggered in a recorded test</td><td><span class="kind rule">not proven</span></td></tr>
+<tr><td>The model-reviewed permission mode</td><td>a one-line switch, not switched on</td><td><span class="kind rule">not proven</span></td></tr>
+<tr><td>The full ship path on a real product, start to finish</td><td>not run end to end</td><td><span class="kind rule">not proven</span></td></tr>
+<tr><td>Save facts before the chat is compacted</td><td>no hook starts the save step; auto-compaction gives the model no turn first</td><td><span class="kind rule">not working</span></td></tr>
+<tr><td>Any token-cost saving</td><td>nobody measured one</td><td><span class="kind rule">not measured</span></td></tr>
+</table>
+<p>In short: the rules layer, the crews and the review loop work. Workers skip permission checks by default, and the safer mode is not switched on.</p>
+
+<h2 id="proved-wrong">Checks that proved me wrong</h2>
+<p>A claim is worth only the check behind it. Two checks found my setup wrong, and both stay on the site on purpose.</p>
+<ul>
+<li><strong>A plain-English rule broke a test.</strong> Scouts now run a plain-English checker before they say "done". That checker lives in my context system, and a test says the supervisor must never point back at it. The test now fails, 36 pass and 1 fail. I keep the failing test, because it reports a real trade-off.</li>
+<li><strong>"Scouts run with permission checks on" was false.</strong> An earlier manual said so. A check counted the flags on the running workers: all 10 skipped the checks. Skipping is the standing default, and the manual now says so.</li>
+</ul>
+<p>The pattern: write the claim down, name the check that would prove it, run it, and keep the result even when it is bad. Until a check passes, the claim is "in trial", never a feature.</p>
+
+<h2 id="limits">What this page does not claim</h2>
+<ul>
+<li>This is one person's setup, not a product. The agents run on my own machines with my own accounts.</li>
+<li>A bug in a script, or a rule an agent misses, can still get through. This page lists the limits that exist. It is not a security audit.</li>
+<li>Most of the machinery is Kun Chen's open-source <a href="https://github.com/kunchenguid/firstmate">FirstMate</a> and <a href="https://github.com/kunchenguid/no-mistakes">no-mistakes</a>. The rules and the choices are mine.</li>
+</ul>
+</article>
+</main>
+<footer class="k-foot"><p>by Ashish Raina – program manager turned AI-crew operator</p><p><a href="about.html">About</a> · <a href="index.html">Chat with EA-bot</a> · <a href="index.html#pages">All pages</a> · <a href="https://github.com/codeami">GitHub</a></p></footer>
+</body>
+</html>

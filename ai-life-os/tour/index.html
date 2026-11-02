@@ -1,0 +1,596 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Guided Tour</title>
+<meta name="description" content="A guided tour with a small helper bot: name it, read its charter, pick a path, and copy prompts to try.">
+<meta name="date" content="2026-11-02">
+<meta name="site-root" content="../">
+<link rel="stylesheet" href="../style.css">
+<style>
+/* The tour is drawn from tour.json. Bubbles come from style.css; here the bot sits left and you sit right. */
+.chat { display: flex; flex-direction: column; gap: .55rem; margin: 1rem 0; }
+.chat .b.fm { align-self: flex-start; border-radius: 16px 16px 16px 4px; }
+.chat .b.v { align-self: flex-end; border-radius: 16px 16px 4px 16px; }
+.chat .b.big { align-self: stretch; }
+.b { animation: pop .3s ease-out; }
+@keyframes pop { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.b.big h3 { font-size: 1.15rem; }
+.b .lbl { margin-bottom: .3rem; }
+.b .st { margin-left: .3rem; vertical-align: middle; }
+.who { display: flex; align-items: center; gap: .35rem; }
+.hello { font: 600 1.15rem/1.35 var(--serif); }
+.charter ol { font: 500 1.05rem/1.45 var(--serif); }
+.charter .third { font: 600 1.05rem/1.45 var(--serif); margin-top: .6rem; }
+
+/* The automaton: a small robot head. The eyes blink unless motion is reduced. */
+.ava { flex: none; color: var(--ink); }
+.ava .face { fill: var(--card); stroke: currentColor; stroke-width: 2.2; }
+.ava .ant { stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; }
+.ava .bulb { fill: var(--accent); }
+.ava .eye { fill: currentColor; transform-box: fill-box; transform-origin: center; animation: blink 5s infinite; }
+.ava .smile { fill: none; stroke: var(--accent); stroke-width: 2.2; stroke-linecap: round; }
+@keyframes blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
+.greet { display: flex; gap: .8rem; align-items: center; }
+.greet p { margin: 0; }
+.dots { display: inline-flex; gap: .25rem; padding: .3rem 0; }
+.dots i { width: .45rem; height: .45rem; border-radius: 50%; background: var(--soft); animation: dot 1s infinite; }
+.dots i:nth-child(2) { animation-delay: .15s; } .dots i:nth-child(3) { animation-delay: .3s; }
+@keyframes dot { 0%, 100% { opacity: .3; transform: none; } 50% { opacity: 1; transform: translateY(-2px); } }
+@media (prefers-reduced-motion: reduce) { .b, .ava .eye, .dots i { animation: none; } }
+
+.acts { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .7rem; }
+.act, .copy, .play { font: .74rem var(--mono); text-transform: uppercase; letter-spacing: .05em; padding: .55rem .9rem;
+  border: 2px solid var(--accent); background: var(--card); color: var(--ink); border-radius: 999px; min-height: 44px; }
+.act:hover:not(:disabled), .act:focus-visible, .copy:hover, .copy:focus-visible { background: var(--accent); color: var(--bg); }
+.act.quiet { border-color: var(--line); color: var(--soft); }
+.act:disabled { opacity: .45; cursor: default; }
+.act[aria-pressed="true"] { opacity: 1; background: var(--accent); color: var(--bg); }
+.act small { text-transform: none; letter-spacing: 0; opacity: .75; }
+.own { display: flex; gap: .4rem; margin-top: .6rem; max-width: 22rem; }
+.own input { flex: 1; min-width: 0; font: .95rem var(--sans); padding: .5rem .8rem; border: 1px solid var(--line);
+  background: var(--card); color: var(--ink); border-radius: 999px; min-height: 44px; }
+
+.claims { margin: .5rem 0 0; padding-left: 1.1rem; }
+.claims li { margin: .35rem 0; max-width: none; }
+.small { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem .9rem; margin-top: .8rem; padding-top: .6rem; border-top: 1px solid var(--line); }
+.small a { font: .74rem var(--mono); text-transform: uppercase; letter-spacing: .06em; }
+
+.choices { display: grid; gap: .7rem; margin-top: .7rem; }
+@media (min-width: 720px) { .choices { grid-template-columns: repeat(3, minmax(0, 1fr)); } .choices.two { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.choice { background: var(--card); border: 1px solid var(--line); padding: .8rem .9rem; display: flex; flex-direction: column; }
+.choices.two .choice { border-color: var(--accent); }
+.choice h4 { margin: 0 0 .25rem; font: 600 1.05rem/1.3 var(--serif); }
+.choices.two .choice h4 { font-size: 1.2rem; }
+.choice p { color: var(--soft); font-size: .92rem; flex: 1; }
+.choice .acts { margin-top: .5rem; }
+.b .more { margin-top: 1rem; }
+
+.tech { margin-top: .6rem; border-top: 1px solid var(--line); padding-top: .4rem; }
+.tech summary { cursor: pointer; font: .72rem/2 var(--mono); text-transform: uppercase; letter-spacing: .06em; color: var(--accent); }
+.tech p { margin-top: .2rem; font-size: .93rem; }
+.try { margin-top: .7rem; background: var(--sunk); border-left: 3px solid var(--accent); padding: .6rem .7rem; }
+.try .head { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
+.try pre { margin: .4rem 0 0; padding: 0; background: none; white-space: pre-wrap; overflow-wrap: anywhere; font-size: .84rem; }
+.copy { padding: .35rem .75rem; min-height: 36px; }
+.see { margin-top: .6rem; font-size: .92rem; }
+.check { list-style: none; padding: 0; margin: .6rem 0 0; }
+.check li { display: grid; grid-template-columns: 1.6rem minmax(0, 1fr); gap: .3rem; padding: .35rem 0; border-bottom: 1px solid var(--line); }
+.check input { width: 1.1rem; height: 1.1rem; margin-top: .2rem; accent-color: var(--accent); }
+
+.modes { padding-left: 1.1rem; margin: .5rem 0; }
+.modes li { margin: .3rem 0; max-width: none; }
+.switch { display: flex; flex-wrap: wrap; gap: .4rem; margin: .3rem 0 .6rem; }
+.mode { font: .72rem var(--mono); text-transform: uppercase; letter-spacing: .05em; padding: .45rem .8rem;
+  border: 1px solid var(--line); background: var(--card); color: var(--soft); border-radius: 999px; min-height: 40px; }
+.mode[aria-pressed="true"] { border-color: var(--accent); color: var(--ink); box-shadow: inset 0 0 0 1px var(--accent); }
+.demo { background: var(--sunk); padding: .6rem .75rem; }
+.demo .q { color: var(--soft); font-size: .9rem; margin-bottom: .4rem; }
+.ans { border-left: 3px solid var(--accent); padding-left: .7rem; }
+.ans .lead { font-weight: 700; }
+.ans ul { margin: .3rem 0 0; padding-left: 1.1rem; }
+.ans li { margin: .15rem 0; }
+
+.replay { margin-top: .7rem; }
+.replay .note { color: var(--soft); font-size: .88rem; }
+.wins { display: grid; gap: .7rem; margin-top: .5rem; }
+@media (min-width: 720px) { .wins { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.win { background: var(--bg); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; cursor: pointer; display: flex; flex-direction: column; }
+.win .bar { display: flex; align-items: center; gap: .5rem; padding: .45rem .7rem; background: var(--sunk); border-bottom: 1px solid var(--line); }
+.win .dot { width: .55rem; height: .55rem; border-radius: 50%; background: var(--l5); flex: none; }
+.win.done .dot { background: var(--ok); }
+.win .name { font: 600 .8rem var(--mono); flex: 1; }
+.win .state { font: .66rem var(--mono); text-transform: uppercase; letter-spacing: .05em; color: var(--soft); }
+.win .log { display: flex; flex-direction: column; gap: .45rem; padding: .7rem; flex: 1; }
+.win .brief { font-size: .85rem; color: var(--soft); }
+.think { font: .8rem/1.45 var(--mono); color: var(--soft); border-left: 2px dashed var(--l3); padding-left: .55rem; }
+.think b { color: var(--l3); font-weight: 600; }
+.does { font: .8rem/1.45 var(--mono); padding-left: .55rem; border-left: 2px solid var(--l5); }
+.does b { color: var(--l5); font-weight: 600; }
+.win .b { max-width: 100%; font-size: .9rem; }
+.win .end { font: .72rem var(--mono); text-transform: uppercase; letter-spacing: .05em; color: var(--ok); }
+.play { margin: 0 .7rem .7rem; border-radius: 8px; }
+.play:disabled { opacity: .45; }
+
+.composer { display: flex; gap: .5rem; margin: 1.2rem 0 0; }
+.composer input { flex: 1; min-width: 0; font: 1rem var(--sans); padding: .6rem .8rem; border: 1px solid var(--line);
+  background: var(--card); color: var(--ink); border-radius: 999px; min-height: 44px; }
+.composer input:focus, .own input:focus { outline: none; border-color: var(--accent); }
+.composer button { font: .74rem var(--mono); text-transform: uppercase; letter-spacing: .05em; padding: 0 1.1rem;
+  border: 2px solid var(--accent); background: var(--accent); color: var(--bg); border-radius: 999px; min-height: 44px; }
+
+.trust h3 { scroll-margin-top: 64px; }
+.trust ul { padding-left: 1.1rem; }
+.trust li { margin: .35rem 0; }
+.trust h3:target { color: var(--accent); }
+.intent { scroll-margin-top: 64px; }
+.intent .box h3 { font: .7rem/1.5 var(--mono); text-transform: uppercase; letter-spacing: .08em; color: var(--soft); margin: .8rem 0 .2rem; }
+.intent .box h3:first-child { margin-top: 0; }
+.intent .box ul { padding-left: 1.1rem; margin: 0; }
+</style>
+<script src="../nav.js"></script>
+</head>
+<body>
+<main>
+<p class="kicker">Guided tour · a chat with a helper bot</p>
+<h1>Guided tour</h1>
+<p class="lede">Meet a small helper bot. Give it a name, read its charter, and pick a path. Every step has a plain answer, a tech answer and a prompt you can copy.</p>
+<p class="lbl">This is a scripted demo, not a live bot. Bot windows are replays. Bills and shopping are pretend.</p>
+
+<div class="chat" id="chat" aria-live="polite"></div>
+<noscript><div class="box warn"><p>The tour needs JavaScript. The script it reads is <a href="tour.json">tour.json</a>.</p></div></noscript>
+
+<form class="composer" id="composer" autocomplete="off">
+  <input id="say" name="say" aria-label="Message" placeholder="Type tour to start" enterkeyhint="send">
+  <button type="submit">Send</button>
+</form>
+
+<section class="intent" id="intent"></section>
+<section class="trust" id="trust"></section>
+</main>
+<script>
+(function () {
+  var chat = document.getElementById("chat");
+  var form = document.getElementById("composer");
+  var input = document.getElementById("say");
+  var ROOT = "../";
+  var T = null, seq = 0, name = "", you = "";
+  var calm = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text) n.textContent = text;
+    return n;
+  }
+  // Bot lines may say {name} (the bot) and {you} (the visitor).
+  function fill(s) { return (s || "").replace(/\{name\}/g, name).replace(/\{you\}/g, you); }
+  function href(h) { return /^(https?:|#)/.test(h) ? h : ROOT + h; }
+  function scroll(node) {
+    var r = node.getBoundingClientRect();
+    if (r.bottom > window.innerHeight || r.top < 0) node.scrollIntoView({ block: "start", behavior: "smooth" });
+  }
+
+  var FACE = '<line class="ant" x1="20" y1="9" x2="20" y2="4"/><circle class="bulb" cx="20" cy="4" r="3"/>' +
+    '<rect class="face" x="2.5" y="17" width="4" height="9" rx="2"/><rect class="face" x="33.5" y="17" width="4" height="9" rx="2"/>' +
+    '<rect class="face" x="6" y="9" width="28" height="26" rx="9"/>' +
+    '<circle class="eye" cx="14.5" cy="20" r="2.8"/><circle class="eye" cx="25.5" cy="20" r="2.8"/>' +
+    '<path class="smile" d="M14 27 Q20 31.5 26 27"/>';
+  function avatar(size) {
+    var s = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    s.setAttribute("viewBox", "0 0 40 40"); s.setAttribute("width", size); s.setAttribute("height", size);
+    s.setAttribute("class", "ava"); s.setAttribute("aria-hidden", "true");
+    s.innerHTML = FACE;
+    return s;
+  }
+
+  // A bubble from the bot ("fm") or the visitor ("v"). Wide ones stretch.
+  function bubble(kind, wide) {
+    var b = el("div", "b " + kind + (wide ? " big" : ""));
+    var who = el("span", "who");
+    if (kind === "fm") who.appendChild(avatar(18));
+    who.appendChild(document.createTextNode(kind === "fm" ? name || T.persona.bot : "You"));
+    b.appendChild(who);
+    chat.appendChild(b);
+    return b;
+  }
+  function yours(text) { bubble("v").appendChild(el("p", "", text)); }
+  function say(text, wide) { var b = bubble("fm", wide); b.appendChild(el("p", "", fill(text))); scroll(b); return b; }
+
+  // The bot "types" before each reply. A restart drops replies still queued from the last run.
+  var run = 0, queue = Promise.resolve();
+  function later(fn) {
+    var mine = run;
+    queue = queue.then(function () {
+      if (mine !== run) return;
+      if (calm) { fn(); return; }
+      var dots = bubble("fm"), d = el("span", "dots");
+      d.setAttribute("aria-label", "typing");
+      d.appendChild(el("i")); d.appendChild(el("i")); d.appendChild(el("i"));
+      dots.appendChild(d); scroll(dots);
+      return new Promise(function (res) {
+        setTimeout(function () { if (dots.parentNode) dots.parentNode.removeChild(dots); if (mine === run) fn(); res(); }, 450);
+      });
+    });
+  }
+
+  // Action buttons. Taking one greys out the earlier ones, so the chat reads in order.
+  function act(into, label, fn, quiet) {
+    var btn = el("button", "act" + (quiet ? " quiet" : ""), label);
+    btn.type = "button";
+    btn.addEventListener("click", function () {
+      Array.prototype.forEach.call(chat.querySelectorAll(".act, .own input"), function (a) { a.disabled = true; });
+      btn.setAttribute("aria-pressed", "true");
+      fn();
+    });
+    into.appendChild(btn);
+    return btn;
+  }
+  function acts(into) { var d = el("div", "acts"); into.appendChild(d); return d; }
+  function chip(into, status) { if (status) into.appendChild(el("span", "st st-dn", status)); }
+
+  function copyText(text, btn) {
+    function flash(msg) { btn.textContent = msg; setTimeout(function () { btn.textContent = "Copy"; }, 1600); }
+    function fallback() {
+      var ta = el("textarea"); ta.value = text; ta.setAttribute("readonly", "");
+      ta.style.position = "fixed"; ta.style.opacity = "0"; document.body.appendChild(ta); ta.select();
+      var ok = false; try { ok = document.execCommand("copy"); } catch (e) { /* select by hand */ }
+      document.body.removeChild(ta); flash(ok ? "Copied" : "Select it");
+    }
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(function () { flash("Copied"); }, fallback);
+    else fallback();
+  }
+  function tryBox(into, label, text) {
+    var box = el("div", "try"), head = el("div", "head");
+    head.appendChild(el("span", "lbl", label));
+    var btn = el("button", "copy", "Copy"); btn.type = "button";
+    btn.setAttribute("aria-label", "Copy this prompt");
+    btn.addEventListener("click", function () { copyText(text, btn); });
+    head.appendChild(btn); box.appendChild(head);
+    box.appendChild(el("pre", "", text));
+    into.appendChild(box);
+  }
+  function seeLink(into, see, lead) {
+    if (!see) return;
+    var p = el("p", "see", lead || "See how it works: ");
+    var a = el("a", "", see.label); a.href = href(see.href);
+    p.appendChild(a); into.appendChild(p);
+  }
+
+  function greet() {
+    var b = bubble("fm"), g = el("div", "greet");
+    g.appendChild(avatar(56));
+    g.appendChild(el("p", "", T.start.greeting));
+    b.appendChild(g);
+    act(acts(b), T.start.button, function () { begin("tour"); });
+  }
+
+  function begin(text) {
+    run++; queue = Promise.resolve(); chat.textContent = ""; name = ""; you = "";
+    yours(text);
+    later(askName);
+  }
+
+  // Name the bot: a few names to pick, or the visitor's own.
+  function askName() {
+    var P = T.persona, b = bubble("fm", true);
+    b.appendChild(el("p", "", P.ask_name));
+    var a = acts(b);
+    P.names.forEach(function (n) { act(a, n, function () { named(n); }, n !== P.names[0]); });
+    var own = el("form", "own"), box = el("input"), ok = el("button", "act quiet", "OK");
+    box.placeholder = P.own; box.maxLength = 24; box.setAttribute("aria-label", P.own);
+    ok.type = "submit";
+    own.appendChild(box); own.appendChild(ok); b.appendChild(own);
+    own.addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      var n = box.value.trim().slice(0, 24);
+      if (!n) { box.focus(); return; }
+      Array.prototype.forEach.call(chat.querySelectorAll(".act, .own input"), function (x) { x.disabled = true; });
+      named(n);
+    });
+    scroll(b);
+  }
+
+  function named(n) {
+    yours("Your name is " + n + ".");
+    name = n;
+    later(function () {
+      var P = T.persona, b = bubble("fm");
+      b.appendChild(el("p", "", fill(P.named)));
+      b.appendChild(el("p", "", P.ask_you));
+      var a = acts(b);
+      P.yous.forEach(function (y) {
+        var btn = act(a, y.label, function () { addressed(y); }, !y.default);
+        if (y.default) btn.appendChild(el("small", "", " (default)"));
+      });
+      scroll(b);
+    });
+  }
+
+  function addressed(y) {
+    yours("Call me " + y.value + ".");
+    you = y.value;
+    later(function () {
+      var b = bubble("fm");
+      b.appendChild(el("p", "hello", fill(T.intro.hello)));
+      b.appendChild(el("p", "", T.persona.friday));
+      scroll(b);
+    });
+    later(intro);
+    later(charter);
+    later(modes);
+    later(menu);
+  }
+
+  // The in-character intro, then the small print links that jump to the trust section below the chat.
+  function intro() {
+    var I = T.intro, b = bubble("fm", true), ul = el("ul", "claims");
+    I.lines.forEach(function (l) { var li = el("li", "", fill(l.text)); chip(li, l.status); ul.appendChild(li); });
+    b.appendChild(ul);
+    var small = el("p", "small");
+    small.appendChild(el("span", "lbl", I.links_label));
+    I.links.forEach(function (l) { var a = el("a", "", l.label); a.href = href(l.href); small.appendChild(a); });
+    b.appendChild(small);
+    scroll(b);
+  }
+
+  function charter() {
+    var c = T.charter, b = bubble("fm", true);
+    b.className += " charter";
+    b.appendChild(el("p", "", fill(T.intro.charter_lead)));
+    b.appendChild(el("h3", "", c.title));
+    c.lines.forEach(function (l) { b.appendChild(el("p", "", l)); });
+    var ol = el("ol");
+    c.tasks.forEach(function (t) { ol.appendChild(el("li", "", t)); });
+    b.appendChild(ol);
+    b.appendChild(el("p", "third", c.third));
+    scroll(b);
+  }
+
+  // Three talk modes, each with a "more" link and one sample answer.
+  function modes() {
+    var m = T.talk, b = bubble("fm", true);
+    b.appendChild(el("p", "", fill(m.text)));
+    var ul = el("ul", "modes");
+    m.modes.forEach(function (md) {
+      var li = el("li");
+      li.appendChild(el("strong", "", md.name + ". "));
+      li.appendChild(document.createTextNode(md.line + " "));
+      var a = el("a", "", md.more.label); a.href = href(md.more.href);
+      li.appendChild(a); ul.appendChild(li);
+    });
+    b.appendChild(ul);
+    b.appendChild(el("p", "lbl", m.switch));
+    var sw = el("div", "switch"); sw.setAttribute("role", "group"); sw.setAttribute("aria-label", "Talk mode");
+    b.appendChild(sw);
+    var demo = el("div", "demo");
+    demo.appendChild(el("p", "q", "You: " + m.question));
+    var ans = el("div", "ans"); ans.setAttribute("aria-live", "polite");
+    demo.appendChild(ans); b.appendChild(demo);
+    function show(md) {
+      Array.prototype.forEach.call(sw.children, function (x) { x.setAttribute("aria-pressed", x.dataset.id === md.id ? "true" : "false"); });
+      ans.textContent = "";
+      ans.appendChild(el("span", "who", name + " · " + md.name));
+      var s = md.sample;
+      if (s.lead) ans.appendChild(el("p", "lead", s.lead));
+      if (s.list) { var l = el("ul"); s.list.forEach(function (t) { l.appendChild(el("li", "", t)); }); ans.appendChild(l); }
+      (s.lines || []).forEach(function (t) { ans.appendChild(el("p", "", t)); });
+    }
+    m.modes.forEach(function (md) {
+      var btn = el("button", "mode", md.name); btn.type = "button"; btn.dataset.id = md.id;
+      btn.addEventListener("click", function () { show(md); });
+      sw.appendChild(btn);
+    });
+    show(m.modes[0]);
+    scroll(b);
+  }
+
+  function choiceGrid(b, items, open, cls) {
+    var grid = el("div", "choices" + (cls ? " " + cls : ""));
+    items.forEach(function (it) {
+      var card = el("div", "choice"), h = el("h4", "", it.title);
+      chip(h, it.badge);
+      card.appendChild(h);
+      card.appendChild(el("p", "", it.summary));
+      var a = acts(card);
+      act(a, "See how it works", function () { yours("Show me: " + it.title); open(it); });
+      act(a, "Just use it", function () { yours("Just use it: " + it.title); useIt(it, open); }, true);
+      grid.appendChild(card);
+    });
+    b.appendChild(grid);
+  }
+
+  // Two headline paths first, then the other ways in.
+  function menu() {
+    var M = T.menu, b = bubble("fm", true);
+    b.appendChild(el("p", "", fill(M.text)));
+    var head = T.paths.filter(function (p) { return M.headline.indexOf(p.id) >= 0; });
+    var rest = T.paths.filter(function (p) { return M.headline.indexOf(p.id) < 0; });
+    choiceGrid(b, head, openPath, "two");
+    b.appendChild(el("p", "lbl more", M.more));
+    choiceGrid(b, rest, openPath);
+    scroll(b);
+  }
+
+  function useIt(item, open) {
+    later(function () {
+      var b = bubble("fm", true);
+      b.appendChild(el("p", "", fill("Easy, {you}. Send this prompt to me, or to any chat you use.")));
+      tryBox(b, "Try this prompt", item.use_prompt);
+      var a = acts(b);
+      act(a, "See how it works", function () { yours("Show me: " + item.title); open(item); });
+      act(a, "Other paths", back, true);
+      scroll(b);
+    });
+  }
+  function back() { yours("Other paths"); later(menu); }
+
+  function openPath(p) {
+    if (p.tracks) {
+      later(function () {
+        var b = bubble("fm", true);
+        b.appendChild(el("p", "", fill(p.intro)));
+        choiceGrid(b, p.tracks, function (t) { walk(t, 0, p); });
+        scroll(b);
+      });
+    } else {
+      later(function () { say(p.intro); });
+      walk(p, 0, null);
+    }
+  }
+
+  // One step of a track: plain answer, tech answer, a prompt to try, and an optional replay.
+  function walk(track, i, parent) {
+    later(function () {
+      var s = track.steps[i], b = bubble("fm", true);
+      var lbl = el("p", "lbl", track.title + " · step " + (i + 1) + " of " + track.steps.length);
+      chip(lbl, track.badge);
+      b.appendChild(lbl);
+      var h = el("h3", "", s.title); chip(h, s.status); b.appendChild(h);
+      b.appendChild(el("p", "", fill(s.plain)));
+      if (s.checklist) checklist(b, s.checklist);
+      var d = el("details", "tech");
+      d.appendChild(el("summary", "", "tech:"));
+      d.appendChild(el("p", "", s.tech));
+      b.appendChild(d);
+      if (s.replay) replay(b, T.replays[s.replay]);
+      tryBox(b, "Try this prompt", s.prompt);
+      seeLink(b, s.see);
+      var a = acts(b);
+      if (i + 1 < track.steps.length) act(a, "Next step", function () { walk(track, i + 1, parent); });
+      else act(a, "Finish", function () { finish(track, parent); });
+      act(a, "Other paths", back, true);
+      scroll(b);
+    });
+  }
+
+  function finish(track, parent) {
+    later(function () {
+      var b = bubble("fm", true);
+      b.appendChild(el("p", "", fill(T.end.track_done)));
+      tryBox(b, "Teach it back", track.teach_back);
+      b.appendChild(el("p", "see", fill(T.end.more)));
+      var a = acts(b);
+      if (parent) act(a, "Other tracks", function () { yours("Other tracks"); openPath(parent); });
+      act(a, "Other paths", back, !!parent);
+      scroll(b);
+    });
+  }
+
+  function checklist(into, items) {
+    var ul = el("ul", "check");
+    items.forEach(function (it, n) {
+      var li = el("li"), id = "ck" + (++seq);
+      var box = el("input"); box.type = "checkbox"; box.id = id;
+      var lab = el("label"); lab.htmlFor = id;
+      lab.appendChild(el("strong", "", (n + 1) + ". " + it.name + ". "));
+      lab.appendChild(document.createTextNode(it.text));
+      li.appendChild(box); li.appendChild(lab); ul.appendChild(li);
+    });
+    into.appendChild(ul);
+  }
+
+  // Replay windows: click a window to reveal its next scripted step.
+  function replay(into, r) {
+    var box = el("div", "replay");
+    box.appendChild(el("p", "lbl", r.title));
+    box.appendChild(el("p", "note", r.note));
+    var wins = el("div", "wins");
+    r.windows.forEach(function (w) {
+      var win = el("div", "win"), bar = el("div", "bar"), log = el("div", "log");
+      bar.appendChild(el("span", "dot"));
+      bar.appendChild(el("span", "name", w.name));
+      var state = el("span", "state", "replay · 0/" + w.steps.length);
+      bar.appendChild(state);
+      log.appendChild(el("p", "brief", "Brief: " + w.brief));
+      var play = el("button", "play", "Show step 1"); play.type = "button";
+      var n = 0;
+      function next() {
+        if (n >= w.steps.length) return;
+        var s = w.steps[n++];
+        if (s.think) { var t = el("p", "think"); t.appendChild(el("b", "", "thinks ")); t.appendChild(document.createTextNode(s.think)); log.appendChild(t); }
+        if (s.do) { var d = el("p", "does"); d.appendChild(el("b", "", "does ")); d.appendChild(document.createTextNode(s.do)); log.appendChild(d); }
+        if (s.say) { var sb = el("div", "b v"); sb.appendChild(el("span", "who", w.role + " says")); sb.appendChild(el("p", "", s.say)); log.appendChild(sb); }
+        state.textContent = "replay · " + n + "/" + w.steps.length;
+        if (n < w.steps.length) play.textContent = "Show step " + (n + 1);
+        else {
+          log.appendChild(el("p", "end", w.end));
+          win.className += " done"; play.disabled = true; play.textContent = "Done";
+          if (wins.querySelectorAll(".win.done").length === r.windows.length) box.appendChild(el("p", "see", r.after));
+        }
+      }
+      play.addEventListener("click", function (ev) { ev.stopPropagation(); next(); });
+      win.addEventListener("click", next);
+      win.appendChild(bar); win.appendChild(log); win.appendChild(play);
+      wins.appendChild(win);
+    });
+    box.appendChild(wins);
+    into.appendChild(box);
+  }
+
+  // How to ask: one example brief, the owner's words above Firstmate's spec.
+  function intent() {
+    var R = T.intent, sec = document.getElementById("intent");
+    sec.appendChild(el("h2", "", R.title));
+    sec.appendChild(el("p", "", R.line));
+    sec.appendChild(el("p", "", R.lead));
+    var box = el("div", "box key"), ul = el("ul");
+    box.appendChild(el("h3", "", R.brief.intent.label));
+    box.appendChild(el("p", "", "“" + R.brief.intent.text + "”"));
+    box.appendChild(el("h3", "", R.brief.spec.label));
+    R.brief.spec.points.forEach(function (t) { ul.appendChild(el("li", "", t)); });
+    box.appendChild(ul);
+    sec.appendChild(box);
+    seeLink(sec, R.credit, "The idea: ");
+  }
+
+  // Capability, security and performance: a plain section under the chat, so the intro's small links have a target.
+  function trust() {
+    var R = T.trust, sec = document.getElementById("trust");
+    sec.appendChild(el("h2", "", R.title));
+    sec.appendChild(el("p", "", R.lead));
+    R.sections.forEach(function (s) {
+      var h = el("h3", "", s.title); h.id = s.id; sec.appendChild(h);
+      var ul = el("ul");
+      s.points.forEach(function (p) { var li = el("li", "", p.text); chip(li, p.status); ul.appendChild(li); });
+      sec.appendChild(ul);
+      if (s.daily) {
+        var box = el("div", "box key");
+        box.appendChild(el("p", "", s.daily.label + ". " + s.daily.line));
+        tryBox(box, "Send this", s.daily.prompt);
+        sec.appendChild(box);
+      }
+      seeLink(sec, s.see, "More: ");
+    });
+  }
+
+  form.addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var text = input.value.trim();
+    if (!text || !T) return;
+    input.value = "";
+    if (T.start.commands.indexOf(text.toLowerCase()) >= 0) begin(text);
+    else { yours(text); later(function () { say(T.start.unknown); }); }
+  });
+
+  fetch("tour.json").then(function (r) {
+    if (!r.ok) throw new Error(r.status);
+    return r.json();
+  }).then(function (data) {
+    T = data;
+    intent();
+    trust();
+    greet();
+    if (location.hash) { var t = document.getElementById(location.hash.slice(1)); if (t) t.scrollIntoView(); }
+  }).catch(function () {
+    var b = el("div", "box warn");
+    b.appendChild(el("p", "", "The tour could not load its script, tour.json. A browser blocks it from a local file."));
+    b.appendChild(el("p", "", "Serve the site folder instead, for example with python3 -m http.server, then open /tour/ on that address."));
+    chat.appendChild(b);
+  });
+})();
+</script>
+</body>
+</html>

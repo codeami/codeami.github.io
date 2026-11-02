@@ -1,0 +1,32 @@
+Map shell
+=========
+
+The page shell, dialog, canvas (pan, zoom, drag) and the "sdlc" layout in this
+folder come from super-board by EricTechPro (MIT licence):
+
+  https://github.com/EricTechPro/super-board
+  commit d0b7d5a6850614ca809477c1af43d5d7da408726
+  files:  diagrams/_shared/ shell.css shell.html shell.js skillmap.css
+          skillmap.js canvas.js layout_sdlc.py layout_sdlc.js README.md
+  licence: LICENSE in this folder (copied from the super-board repo root)
+
+These nine files are copied unchanged. The licence text is in LICENSE.
+
+Written for this site (not from super-board)
+--------------------------------------------
+
+  build.py      A short build script. It follows super-board's
+                build_skillmap.py, but takes one map.json and writes one
+                HTML file. It swaps the super-board site nav for a link bar
+                for this site, reads the site's day/night choice
+                (localStorage key "theme"), and adds status badges and a key.
+  platforms.py  A stub. layout_sdlc.py imports it for tool logos. This site
+                shows no tool logos, so the stub returns nothing.
+
+Build
+-----
+
+  python3 -I maps/_shared/build.py maps/src/skills/map.json maps/skills.html
+  python3 -I maps/_shared/build.py maps/src/flow/map.json   maps/flow.html
+
+The built pages are single files. They load no library and no outside file.

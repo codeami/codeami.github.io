@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Core Logic</title>
+<meta name="description" content="The pipeline in plain words, who may do what, and the twelve parts of the harness, with the live rule text behind each one.">
+<meta name="date" content="2026-11-01">
+<link rel="stylesheet" href="style.css">
+<script src="nav.js"></script>
+</head>
+<body>
+<main>
+<p class="kicker">Core logic</p>
+<h1>The core logic, in one page</h1>
+<p class="lede">Most of the logic is not code. It is one rules file that every agent reads, plus the owner's own preferences on top. This page shows the flow, the roles, and the twelve parts of the harness. Open any part to read the live rule text behind it.</p>
+
+<h2 id="pipeline">1. The pipeline, simply</h2>
+<p>The owner asks in plain words. The supervisor checks the facts itself first. If it needs more, two scouts look in parallel: one at the market, one at the tech. The owner decides. Then ship workers build, the checks run, and the owner gives the word. Only then does the work land. What was learned is kept.</p>
+<figure>
+<svg viewBox="0 0 340 452" role="img" aria-labelledby="tp dp">
+  <title id="tp">The pipeline</title>
+  <desc id="dp">Ask, then the supervisor checks directly. A market scout and a tech scout run in parallel. The owner decides. Ship workers build. Checks run. The owner gives the word. The work lands. Lessons are kept.</desc>
+  <defs>
+    <marker id="ap" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" style="fill: var(--soft)"/>
+    </marker>
+  </defs>
+  <g font-size="13" text-anchor="middle">
+    <rect x="110" y="6" width="120" height="32" rx="16" class="card"/>
+    <text x="170" y="27" font-weight="700">Ask</text>
+    <path d="M170 38 V 52" class="wire" marker-end="url(#ap)"/>
+    <rect x="70" y="54" width="200" height="34" rx="6" class="card" style="stroke: var(--l2); stroke-width: 2"/>
+    <text x="170" y="76">Supervisor checks directly</text>
+    <path d="M140 88 L 92 110" class="wire" marker-end="url(#ap)"/>
+    <path d="M200 88 L 248 110" class="wire" marker-end="url(#ap)"/>
+    <text x="170" y="106" font-size="11" class="soft">in parallel</text>
+    <rect x="16" y="112" width="148" height="34" rx="6" class="card"/>
+    <text x="90" y="127">Market scout</text>
+    <text x="90" y="141" font-size="10" class="soft">reports only</text>
+    <rect x="176" y="112" width="148" height="34" rx="6" class="card"/>
+    <text x="250" y="127">Tech scout</text>
+    <text x="250" y="141" font-size="10" class="soft">reports only</text>
+    <path d="M90 146 L 140 178" class="wire" marker-end="url(#ap)"/>
+    <path d="M250 146 L 200 178" class="wire" marker-end="url(#ap)"/>
+    <rect x="70" y="180" width="200" height="34" rx="6" class="card" style="stroke: var(--accent); stroke-width: 2.5"/>
+    <text x="170" y="202" font-weight="700">Owner decides</text>
+    <path d="M170 214 V 228" class="wire" marker-end="url(#ap)"/>
+    <rect x="70" y="230" width="200" height="34" rx="6" class="card"/>
+    <text x="170" y="252">Ship workers build</text>
+    <path d="M170 264 V 278" class="wire" marker-end="url(#ap)"/>
+    <rect x="70" y="280" width="200" height="34" rx="6" class="card" style="stroke: var(--l2); stroke-width: 2"/>
+    <text x="170" y="302">Checks: tests, review gate</text>
+    <path d="M170 314 V 328" class="wire" marker-end="url(#ap)"/>
+    <rect x="70" y="330" width="200" height="34" rx="6" class="card" style="stroke: var(--accent); stroke-width: 2.5"/>
+    <text x="170" y="352" font-weight="700">Owner's word</text>
+    <path d="M170 364 V 378" class="wire" marker-end="url(#ap)"/>
+    <rect x="70" y="380" width="200" height="30" rx="6" class="card"/>
+    <text x="170" y="400">Land</text>
+    <path d="M170 410 V 418" class="wire" marker-end="url(#ap)"/>
+    <rect x="110" y="420" width="120" height="28" rx="14" class="card"/>
+    <text x="170" y="439">Learn</text>
+  </g>
+</svg>
+<figcaption>A heavy rust outline means the owner decides. A green outline means a check of real state.</figcaption>
+</figure>
+
+<h2 id="roles">2. Roles and permissions</h2>
+<p>Each role is a permission, not a model. Any agent tool can fill any role. The list stays open: a new role is a new line in the rules.</p>
+<div class="cards">
+  <div class="box"><h3>Owner (captain)</h3><p>Decides. Approves every merge.</p></div>
+  <div class="box"><h3>Supervisor (first mate)</h3><p>Orchestrates. Never writes to a project itself.</p></div>
+  <div class="box"><h3>Scouts</h3><p>Find facts and report. Nothing is pushed.</p></div>
+  <div class="box"><h3>Ship workers</h3><p>One task each, in an isolated copy of the code.</p></div>
+  <div class="box"><h3>Second mates</h3><p>Each owns one domain, with its own queue.</p></div>
+</div>
+<h3>The hard rules</h3>
+<ul>
+  <li>Only the owner merges, publishes, sends or spends.</li>
+  <li>The supervisor delegates project work. It does not do it.</li>
+  <li>One worker, one task, one disposable copy.</li>
+  <li>A worker may not close a task while a question for the owner is open.</li>
+  <li>Ask before anything destructive or hard to undo.</li>
+  <li>Secrets never go in files, commits, logs or prompts.</li>
+</ul>
+
+<h2 id="tree">3. The twelve parts of the harness</h2>
+<p>A harness is everything around the model: what it reads, what it may do, and who checks it. Open a part to see how this setup does it, how other systems compare, the honest gaps, and the matching rule text.</p>
+<p class="lbl">Has · Different (does the job another way) · Lacks</p>
+<p>The comparison comes from two scout reports dated 2026-10-27. They read public docs, repos and papers. They did not test the tools. "Guess" marks a cell the scouts could not confirm.</p>
+
+<div class="tree" id="parts">
+<details id="part-context" data-sec="3,12">
+  <summary>Always-loaded context</summary>
+  <p><strong>Here:</strong> every tool reads one short map first, about 1.5k tokens. The supervisor also reads its rules file each session.</p>
+  <ul class="cmp">
+    <li><span class="st st-ok">has</span> ICM: three thin layers, about 1.3k to 1.6k tokens; a stage gets 2k to 8k.</li>
+    <li><span class="st st-ok">has</span> Claude Code: CLAUDE.md each session; its docs advise under 200 lines.</li>
+    <li><span class="st st-ok">has</span> OpenCode, Pi: an instruction file plus skill descriptions. Size not stated.</li>
+    <li><span class="st st-no">lacks</span> Harness-squared, Meta-Harness: they edit or search the harness instead.</li>
+  </ul>
+  <p class="gap"><strong>Gap:</strong> the supervisor's rules file is about 11k tokens, loaded before any work.</p>
+  <div class="rule"></div>
+</details>
+<details id="part-rules" data-sec="1,11">
+  <summary>Rules</summary>
+  <p><strong>Here:</strong> one rules file, plus a written brief for each task. A routing table says which folder to read for which job.</p>
+  <ul class="cmp">
+    <li><span class="st st-ok">has</span> Claude Code, OpenCode, Pi: an instruction file; Claude Code adds path-scoped rules.</li>
+    <li><span class="st st-ok">has</span> ICM: a one-page contract per stage: inputs, process, outputs.</li>
+    <li><span class="st st-dn">different</span> Omnigent: agents and policies in YAML, stacked server, agent, session.</li>
+    <li><span class="st st-dn">different</span> Harness-squared: the system prompt is one of eight parts an editor changes.</li>
+  </ul>
+  <div class="rule"></div>
+</details>
+<details id="part-skills" data-sec="13">
+  <summary>Skills</summary>
+  <p><strong>Here:</strong> each skill's name and description load every turn. The body loads only when the trigger fits.</p>
+  <ul class="cmp">
+    <li><span class="st st-ok">has</span> Claude Code: each description capped at 1,536 characters; body on use.</li>
+    <li><span class="st st-ok">has</span> OpenCode, Pi, Warp: skill folders, loaded on demand.</li>
+    <li><span class="st st-dn">different</span> ICM: no skill loader; the folder layout does the job.</li>
+    <li><span class="st st-no">lacks</span> Meta-Harness: none built in.</li>
+  </ul>
+  <div class="rule"></div>
+</details>
+<details id="part-memory" data-sec="6">
+  <summary>Memory and decay</summary>
+  <p><strong>Here:</strong> at the end of a session, a "stow" step files lessons with decay tiers. Agent memory reaches the curated facts only after review.</p>
+  <ul class="cmp">
+    <li><span class="st st-ok">has</span> Claude Code: auto memory per repo. No decay rule stated.</li>
+    <li><span class="st st-ok">has</span> Harness-squared: lessons kept per domain. No decay stated.</li>
+    <li><span class="st st-dn">different</span> Pi, OpenCode: sessions with compaction; no memory across sessions.</li>
+    <li><span class="st st-dn">different</span> ICM: state is files on disk; no memory layer.</li>
+  </ul>
+  <div class="rule"></div>
+</details>
+<details id="part-hooks" data-sec="3,8">
+  <summary>Hooks</summary>
+  <p><strong>Here:</strong> scripts the tool must run. They block file writes through the shell, warn on text shaped like a key, and remind the agent to write a session note.</p>
+  <ul class="cmp">
+    <li><span class="st st-ok">has</span> Claude Code: hooks at lifecycle events.</li>
+    <li><span class="st st-ok">has</span> OpenCode: plugin events before and after each tool.</li>
+    <li><span class="st st-dn">different</span> Pi: extensions register event handlers. Omnigent: policies check every action.</li>
+    <li><span class="st st-no">lacks</span> Warp: none found in its docs. ICM: none.</li>
+  </ul>
+  <div class="rule"></div>
+</details>
+<details id="part-isolation" data-sec="2,7">
+  <summary>Isolation</summary>
+  <p><strong>Here:</strong> each worker gets its own disposable git worktree. Each second mate gets its own home folder.</p>
+  <ul class="cmp">
+    <li><span class="st st-ok">has</span> Omnigent: nine sandbox providers, plus OS sandboxes.</li>
+    <li><span class="st st-ok">has</span> Claude Code: worktrees, and a shell sandbox that is off by default.</li>
+    <li><span class="st st-dn">different</span> Warp: cloud agents are sandboxed; local agents are not.</li>
+    <li><span class="st st-no">lacks</span> Pi: "containerise it yourself". Harness-squared: network open, sandbox off.</li>
+  </ul>
+  <p class="gap"><strong>Gap:</strong> a worktree isolates files only. It does not fence the network or credentials.</p>
+  <div class="rule"></div>
+</details>
+<details id="part-orchestrator" data-sec="4,8">
+  <summary>Orchestrator</summary>
+  <p><strong>Here:</strong> the owner talks to one supervisor. Workers are full agent sessions in visible windows. A watcher that uses no tokens wakes the supervisor when needed.</p>
+  <ul class="cmp">
+    <li><span class="st st-ok">has</span> Omnigent: mixes Claude Code, Codex, OpenCode, Pi and others.</li>
+    <li><span class="st st-ok">has</span> Warp: an orchestration host with other agents as children.</li>
+    <li><span class="st st-dn">different</span> Claude Code: subagents and agent teams, all Claude sessions. ICM: folder order is the orchestrator.</li>
+    <li><span class="st st-no">lacks</span> Pi: skips sub-agents by design.</li>
+  </ul>
+  <div class="rule"></div>
+</details>
+<details id="part-gate" data-sec="7">
+  <summary>Review gate</summary>
+  <p><strong>Here:</strong> a local gate runs review, tests, docs and lint before the branch leaves the machine. Shell tests check the rule files.</p>
+  <ul class="cmp">
+    <li><span class="st st-dn">different</span> Omnigent: a policy can require approval to push. No test gate.</li>
+    <li><span class="st st-dn">different</span> ICM: every step ends at a check. No push gate.</li>
+    <li><span class="st st-no">lacks</span> Claude Code: no pre-push gate; PR review comes after the PR exists.</li>
+    <li><span class="st st-no">lacks</span> OpenCode, Pi: none built in.</li>
+  </ul>
+  <div class="rule"></div>
+</details>
+<details id="part-approval" data-sec="9,10">
+  <summary>Human approval points</summary>
+  <p><strong>Here:</strong> only the owner merges, publishes, sends or spends. A decision is a task held for the owner. Reviews happen on HTML pages.</p>
+  <ul class="cmp">
+    <li><span class="st st-ok">has</span> Claude Code: permission modes, and hooks that block whatever the model says.</li>
+    <li><span class="st st-ok">has</span> OpenCode: allow, ask or deny, per agent. Omnigent: ask before shell writes; a hard spend cap.</li>
+    <li><span class="st st-ok">has</span> ICM: the owner reviews at every stage boundary.</li>
+    <li><span class="st st-no">lacks</span> Pi: no permission prompts. Harness-squared: none documented.</li>
+  </ul>
+  <p class="gap"><strong>Gap:</strong> the approval and spend rules are prose. The model may not follow them. Omnigent writes the same ideas as enforced policy.</p>
+  <div class="rule"></div>
+</details>
+<details id="part-improve" data-sec="6,12">
+  <summary>Self-improvement</summary>
+  <p><strong>Here:</strong> a tool called backpass reads past transcripts and proposes rule edits. The owner applies each one by hand.</p>
+  <ul class="cmp">
+    <li><span class="st st-ok">has</span> Harness-squared: propose, test and combine edits within each task. No human step.</li>
+    <li><span class="st st-ok">has</span> Meta-Harness: searches harness code using full run traces.</li>
+    <li><span class="st st-no">lacks</span> Claude Code: auto memory only. OpenCode, Pi: none built in.</li>
+    <li><span class="st st-no">lacks</span> Omnigent: on its roadmap, not shipped.</li>
+  </ul>
+  <p class="gap"><strong>Gap:</strong> a proposed edit is argued from past evidence. It is never tested by replaying a task.</p>
+  <div class="rule"></div>
+</details>
+<details id="part-sync" data-sec="12">
+  <summary>Sync across machines</summary>
+  <p><strong>Here:</strong> links put the one map where five tools look for it. The supervisor's rules reach running sessions through git.</p>
+  <ul class="cmp">
+    <li><span class="st st-ok">has</span> Omnigent: live sessions shared by URL; phone, web and desktop.</li>
+    <li><span class="st st-ok">has</span> Warp: skills, rules and memory shared across a team (vendor claim).</li>
+    <li><span class="st st-dn">different</span> Pi: packages through npm or git. OpenCode: reads Claude Code's file as a fallback.</li>
+    <li><span class="st st-no">lacks</span> Harness-squared, Meta-Harness: none.</li>
+  </ul>
+  <p class="gap"><strong>Gap:</strong> agent memory does not sync between machines. (Guess: not checked.)</p>
+  <div class="rule"></div>
+</details>
+<details id="part-goals" data-sec="6,9">
+  <summary>Vision and goals</summary>
+  <p><strong>Here:</strong> a private owner's layer holds current priorities and preferences, on top of the shared base.</p>
+  <ul class="cmp">
+    <li><span class="st st-dn">different</span> Meta-Harness: one written objective per domain.</li>
+    <li><span class="st st-no">lacks</span> ICM: its paper defines no goals layer.</li>
+    <li><span class="st st-no">lacks</span> Claude Code, OpenCode, Pi, Warp, Omnigent, Harness-squared: none.</li>
+  </ul>
+  <div class="box key owner" id="owner">
+    <h3>The owner's layer</h3>
+    <p>Personal rules on top of the base; private. Only the section names are shown:</p>
+    <ul>
+      <li>Provider routing</li>
+      <li>Working style</li>
+      <li>Domains</li>
+      <li>Hardware</li>
+    </ul>
+  </div>
+  <div class="rule"></div>
+</details>
+</div>
+
+<h2 id="live">4. Live rule text</h2>
+<p>When you open a part above, the page fetches the supervisor's rules file once, from upstream on GitHub. It keeps the file in memory and shows the matching numbered sections. Nothing loads until you open a part.</p>
+<p>The rules file is <a href="https://github.com/kunchenguid/firstmate/blob/main/AGENTS.md">AGENTS.md in upstream Firstmate</a>, by Kun Chen and contributors, MIT licence. If the fetch fails, each part shows that link instead.</p>
+
+<h2 id="more">Go deeper</h2>
+<p><a href="maps/skills.html">Skill map</a> · <a href="maps/flow.html">Harness flow map</a> · <a href="brain/index.html">Second brain</a> · <a href="about.html#vendors">Agents as vendors</a> · <a href="index.html">The story</a>.</p>
+<p>Next: <a href="maps/skills.html">Skills</a>.</p>
+</main>
+<script>
+/* Lazy rule text: fetch upstream AGENTS.md on the first open, keep it in memory,
+   and show each "## N." section a part names in data-sec. textContent escapes it. */
+var RULES_RAW = "https://raw.githubusercontent.com/kunchenguid/firstmate/main/AGENTS.md";
+var RULES_WEB = "https://github.com/kunchenguid/firstmate/blob/main/AGENTS.md";
+var rulesText = null;
+function loadRules() {
+  if (!rulesText) {
+    rulesText = fetch(RULES_RAW).then(function (r) {
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return r.text();
+    });
+    rulesText.catch(function () { rulesText = null; }); // let a later open try again
+  }
+  return rulesText;
+}
+function section(text, n) {
+  var parts = text.split(/^(?=## )/m);
+  for (var i = 0; i < parts.length; i++) {
+    if (parts[i].indexOf("## " + n + ". ") === 0) return parts[i].trim();
+  }
+  return null;
+}
+function fallback(box) {
+  box.textContent = "";
+  var p = document.createElement("p");
+  p.appendChild(document.createTextNode("Could not load the live text. Read it on GitHub: "));
+  var a = document.createElement("a");
+  a.href = RULES_WEB; a.textContent = "AGENTS.md";
+  p.appendChild(a);
+  box.appendChild(p);
+}
+function fill(det) {
+  var box = det.querySelector(".rule");
+  if (!box || box.dataset.state) return;
+  box.dataset.state = "loading";
+  box.textContent = "Loading the live rule text…";
+  loadRules().then(function (text) {
+    box.textContent = "";
+    det.dataset.sec.split(",").forEach(function (n) {
+      var s = section(text, n);
+      if (!s) return;
+      var pre = document.createElement("pre");
+      pre.textContent = s;
+      box.appendChild(pre);
+    });
+    if (!box.firstChild) fallback(box);
+    var src = document.createElement("p");
+    src.className = "lbl";
+    src.textContent = "Live from upstream Firstmate AGENTS.md · Kun Chen and contributors · MIT";
+    box.appendChild(src);
+    box.dataset.state = "done";
+  }, function () {
+    fallback(box);
+    delete box.dataset.state;
+  });
+}
+document.querySelectorAll(".tree details").forEach(function (det) {
+  det.addEventListener("toggle", function () { if (det.open) fill(det); });
+});
+/* A link to one part, such as core.html#part-hooks from the second brain, opens that part. */
+function openFromHash() {
+  var t = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+  if (t && t.tagName === "DETAILS") t.open = true;
+}
+openFromHash();
+window.addEventListener("hashchange", openFromHash);
+</script>
+</body>
+</html>

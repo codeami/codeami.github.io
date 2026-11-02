@@ -1,0 +1,671 @@
+{
+ "core_note": "From the Core logic page. The comparison there comes from two scout reports dated 2026-10-27 that read public docs, repos and papers; they did not test the tools.",
+ "extra": [
+  {
+   "id": "brain",
+   "group": "hub",
+   "hub": true,
+   "label": "Second brain",
+   "text": [
+    "A public slice of the owner's private notes wiki, drawn as a map. Only notes on an approved list are copied, and a build step drops any line that names a private term, a local path, an email or a user name.",
+    "Planned, not built: daily news items and job notes, added as drafts that go live only on the owner's weekly OK."
+   ],
+   "links": [
+    [
+     "Approved list",
+     "allowlist.txt"
+    ],
+    [
+     "Build script",
+     "build.py"
+    ]
+   ],
+   "edges": [
+    "g-area",
+    "g-fm",
+    "g-tier"
+   ]
+  },
+  {
+   "id": "g-area",
+   "group": "area",
+   "hub": true,
+   "label": "Areas of interest",
+   "text": [
+    "The topics the owner writes about. Each links to the pages of this site that cover it, and to the wiki notes that sit under it."
+   ],
+   "edges": [
+    "area-harness",
+    "area-icm",
+    "area-safety",
+    "area-learning",
+    "area-content"
+   ]
+  },
+  {
+   "id": "area-harness",
+   "group": "area",
+   "label": "Agent harnesses",
+   "text": [
+    "A harness is everything around the model: what it reads, what it may do, and who checks it."
+   ],
+   "links": [
+    [
+     "Core logic",
+     "../core.html"
+    ],
+    [
+     "Harness flow map",
+     "../maps/flow.html"
+    ],
+    [
+     "All pages",
+     "../index.html#pages"
+    ]
+   ]
+  },
+  {
+   "id": "area-icm",
+   "group": "area",
+   "label": "Context engineering (ICM)",
+   "text": [
+    "One rules file, linked into every agent tool, plus layers and rooms. The routing table says: for this kind of task, go to this folder and read these files first."
+   ],
+   "links": [
+    [
+     "Post: everything is a file",
+     "../blog/everything-is-a-file.html"
+    ],
+    [
+     "Core logic: memory",
+     "../core.html#part-memory"
+    ],
+    [
+     "How skills work",
+     "../maps/skills.html"
+    ],
+    [
+     "ICM (Van Clief)",
+     "https://github.com/RinDig/Interpretable-Context-Methodology"
+    ]
+   ]
+  },
+  {
+   "id": "area-safety",
+   "group": "area",
+   "label": "AI safety",
+   "text": [
+    "Who may do what: seats, the A0 to A3 ladder and the permission matrix. Short hook scripts turn the most important rules into checks.",
+    "swarm-referee is a public repo for the Apart Research AI Collusion Sprint 2026. One worker delivered a reviewed pull request to it."
+   ],
+   "links": [
+    [
+     "Core logic: roles",
+     "../core.html#roles"
+    ],
+    [
+     "Core logic: hooks",
+     "../core.html#part-hooks"
+    ],
+    [
+     "swarm-referee",
+     "https://github.com/codeami/swarm-referee"
+    ]
+   ]
+  },
+  {
+   "id": "area-learning",
+   "group": "area",
+   "label": "Learning",
+   "text": [
+    "Where the ideas come from: ICM, Kun Chen's agent stack and Matt Pocock's skills. And two checks that found the setup wrong, and what the owner did about each."
+   ],
+   "links": [
+    [
+     "About: influences",
+     "../about.html#influences"
+    ],
+    [
+     "Safety: checks that proved it wrong",
+     "../safety.html#proved-wrong"
+    ],
+    [
+     "Safety: what works today",
+     "../safety.html#works-today"
+    ]
+   ]
+  },
+  {
+   "id": "area-content",
+   "group": "area",
+   "label": "Content",
+   "text": [
+    "The owner reviews every report and draft as an HTML page, not in a terminal."
+   ],
+   "links": [
+    [
+     "Core logic: approval",
+     "../core.html#part-approval"
+    ],
+    [
+     "The story",
+     "../story.html"
+    ],
+    [
+     "Changelog",
+     "../changelog.html"
+    ]
+   ]
+  },
+  {
+   "id": "g-fm",
+   "group": "fm",
+   "hub": true,
+   "label": "FirstMate in detail",
+   "text": [
+    "The twelve parts of the harness, the tricks this setup uses on top, and what it borrowed from others. Each part links to its place on the Core logic page."
+   ],
+   "links": [
+    [
+     "Core logic",
+     "../core.html#tree"
+    ],
+    [
+     "Upstream Firstmate (Kun Chen)",
+     "https://github.com/kunchenguid/firstmate"
+    ]
+   ],
+   "edges": [
+    "part-context",
+    "part-rules",
+    "part-skills",
+    "part-memory",
+    "part-hooks",
+    "part-isolation",
+    "part-orchestrator",
+    "part-gate",
+    "part-approval",
+    "part-improve",
+    "part-sync",
+    "part-goals"
+   ]
+  },
+  {
+   "id": "part-context",
+   "group": "fm",
+   "label": "Always-loaded context",
+   "tags": [
+    "gap"
+   ],
+   "text": [
+    "Every tool reads one short map first, about 1.5k tokens. The supervisor also reads its rules file each session."
+   ],
+   "gap": "The supervisor's rules file is about 11k tokens, loaded before any work.",
+   "edges": [
+    "global-memory-is-minimal",
+    "icm-layer-ladder"
+   ]
+  },
+  {
+   "id": "part-rules",
+   "group": "fm",
+   "label": "Rules",
+   "text": [
+    "One rules file, plus a written brief for each task. A routing table says which folder to read for which job."
+   ],
+   "edges": [
+    "icm-routing-table-is-the-core-pattern",
+    "kun-chen-agent-policy"
+   ]
+  },
+  {
+   "id": "part-skills",
+   "group": "fm",
+   "label": "Skills",
+   "text": [
+    "Each skill's name and description load every turn. The body loads only when the trigger fits."
+   ],
+   "edges": [
+    "progressive-disclosure",
+    "popular-skills-are-not-good-skills"
+   ]
+  },
+  {
+   "id": "part-memory",
+   "group": "fm",
+   "label": "Memory and decay",
+   "text": [
+    "At the end of a session, a \"stow\" step files lessons with decay tiers. Agent memory reaches the curated facts only after review."
+   ],
+   "edges": [
+    "llmwiki-vs-rag",
+    "compaction-is-an-implementation-detail"
+   ]
+  },
+  {
+   "id": "part-hooks",
+   "group": "fm",
+   "label": "Hooks",
+   "text": [
+    "Scripts the tool must run. They block file writes through the shell, warn on text shaped like a key, and remind the agent to write a session note."
+   ]
+  },
+  {
+   "id": "part-isolation",
+   "group": "fm",
+   "label": "Isolation",
+   "tags": [
+    "gap"
+   ],
+   "text": [
+    "Each worker gets its own disposable git worktree. Each second mate gets its own home folder."
+   ],
+   "gap": "A worktree isolates files only. It does not fence the network or credentials.",
+   "edges": [
+    "worktree-pooling"
+   ]
+  },
+  {
+   "id": "part-orchestrator",
+   "group": "fm",
+   "label": "Orchestrator",
+   "text": [
+    "The owner talks to one supervisor. Workers are full agent sessions in visible windows. A watcher that uses no tokens wakes the supervisor when needed."
+   ],
+   "edges": [
+    "first-mate",
+    "long-running-loops"
+   ]
+  },
+  {
+   "id": "part-gate",
+   "group": "fm",
+   "label": "Review gate",
+   "tags": [
+    "advantage"
+   ],
+   "text": [
+    "A local gate runs review, tests, docs and lint before the branch leaves the machine. Shell tests check the rule files.",
+    "On the Core logic page, Claude Code, OpenCode and Pi lack a gate like this; Omnigent and ICM do the job another way."
+   ],
+   "edges": [
+    "validate-dont-review",
+    "reproduce-bugs-end-to-end"
+   ]
+  },
+  {
+   "id": "part-approval",
+   "group": "fm",
+   "label": "Human approval points",
+   "tags": [
+    "gap"
+   ],
+   "text": [
+    "Only the owner merges, publishes, sends or spends. A decision is a task held for the owner. Reviews happen on HTML pages."
+   ],
+   "gap": "The approval and spend rules are prose. The model may not follow them. Omnigent writes the same ideas as enforced policy.",
+   "edges": [
+    "human-in-the-loop"
+   ]
+  },
+  {
+   "id": "part-improve",
+   "group": "fm",
+   "label": "Self-improvement",
+   "tags": [
+    "advantage",
+    "gap"
+   ],
+   "text": [
+    "A tool called backpass reads past transcripts and proposes rule edits. The owner applies each one by hand.",
+    "On the Core logic page, Claude Code, OpenCode, Pi and Omnigent lack this. Harness-squared has it with no human step; Meta-Harness searches harness code instead."
+   ],
+   "gap": "A proposed edit is argued from past evidence. It is never tested by replaying a task.",
+   "edges": [
+    "dialogue-freezes-into-skills"
+   ]
+  },
+  {
+   "id": "part-sync",
+   "group": "fm",
+   "label": "Sync across machines",
+   "tags": [
+    "gap"
+   ],
+   "text": [
+    "Links put the one map where five tools look for it. The supervisor's rules reach running sessions through git."
+   ],
+   "gap": "Agent memory does not sync between machines. (Guess: not checked.)"
+  },
+  {
+   "id": "part-goals",
+   "group": "fm",
+   "label": "Vision and goals",
+   "tags": [
+    "advantage"
+   ],
+   "text": [
+    "A private owner's layer holds current priorities and preferences, on top of the shared base.",
+    "On the Core logic page, ICM, Claude Code, OpenCode, Pi, Warp, Omnigent and Harness-squared lack a goals layer."
+   ]
+  },
+  {
+   "id": "trick-routing",
+   "group": "fm",
+   "label": "Routing per task",
+   "tags": [
+    "trick"
+   ],
+   "text": [
+    "The map holds house rules, a \"who does what\" list, and a routing table. The routing table says: for this kind of task, go to this folder and read these files first."
+   ],
+   "links": [
+    [
+     "Post: everything is a file",
+     "../blog/everything-is-a-file.html"
+    ]
+   ],
+   "edges": [
+    "part-rules",
+    "icm-routing-table-is-the-core-pattern"
+   ]
+  },
+  {
+   "id": "trick-plain",
+   "group": "fm",
+   "label": "Plain-English check",
+   "tags": [
+    "trick"
+   ],
+   "text": [
+    "Scouts run a plain-English checker on their report before they say \"done\". It flags long sentences and vague words. It is one of the owner's two additions on top of upstream Firstmate."
+   ],
+   "links": [
+    [
+     "All pages",
+     "../index.html#pages"
+    ],
+    [
+     "Harness flow map",
+     "../maps/flow.html"
+    ]
+   ],
+   "edges": [
+    "g-fm"
+   ]
+  },
+  {
+   "id": "trick-decay",
+   "group": "fm",
+   "label": "Decay tiers",
+   "tags": [
+    "trick"
+   ],
+   "text": [
+    "/stow (upstream Firstmate) files durable facts into a curated learnings file, with decay tiers. Status on the Memory page: designed, not proven."
+   ],
+   "links": [
+    [
+     "Core logic: memory",
+     "../core.html#part-memory"
+    ]
+   ],
+   "edges": [
+    "part-memory"
+   ]
+  },
+  {
+   "id": "trick-merge",
+   "group": "fm",
+   "label": "Live merge checks",
+   "tags": [
+    "trick"
+   ],
+   "text": [
+    "A guard. A script registers the pull request and its head commit, and arms a merge poll. The state comes from the forge. It does not come from the worker's message. A draft pull request is refused."
+   ],
+   "links": [
+    [
+     "Skill map",
+     "../maps/skills.html"
+    ]
+   ],
+   "edges": [
+    "part-gate",
+    "part-approval"
+   ]
+  },
+  {
+   "id": "trick-never",
+   "group": "fm",
+   "label": "Never-send list",
+   "tags": [
+    "trick"
+   ],
+   "text": [
+    "A short list of terms that must never leave the owner's machine. The build step for this page drops any note line that holds one of them, and also any line with a local path, an email or a user name."
+   ],
+   "links": [
+    [
+     "Build script",
+     "build.py"
+    ]
+   ],
+   "edges": [
+    "part-approval",
+    "brain"
+   ]
+  },
+  {
+   "id": "b-grill",
+   "group": "fm",
+   "label": "grill-with-docs",
+   "tags": [
+    "borrowed-from"
+   ],
+   "from": "mattpocock/skills",
+   "text": [
+    "A skill that interviews the owner until the intent is written down in their own words. The idea is from Matt Pocock's skills, which get the agent to ask detailed questions about what you are building."
+   ],
+   "links": [
+    [
+     "mattpocock/skills",
+     "https://github.com/mattpocock/skills"
+    ],
+    [
+     "About: influences",
+     "../about.html#influences"
+    ]
+   ],
+   "edges": [
+    "pocock-steers-with-skills-kun-builds-machinery",
+    "g-fm"
+   ]
+  },
+  {
+   "id": "b-shell",
+   "group": "fm",
+   "label": "Map shell",
+   "tags": [
+    "borrowed-from"
+   ],
+   "from": "EricTechPro/super-board",
+   "text": [
+    "The interactive Skill map and Harness flow map use the map shell from super-board by EricTechPro (MIT)."
+   ],
+   "links": [
+    [
+     "super-board",
+     "https://github.com/EricTechPro/super-board"
+    ],
+    [
+     "Skill map",
+     "../maps/skills.html"
+    ]
+   ],
+   "edges": [
+    "g-fm"
+   ]
+  },
+  {
+   "id": "b-arms",
+   "group": "fm",
+   "label": "ARMS framework",
+   "tags": [
+    "borrowed-from"
+   ],
+   "from": "RoboNuggets",
+   "text": [
+    "A framework from Jay E (RoboNuggets) that splits an agent workspace into four layers: Applications, Routines, Memory, Skills."
+   ],
+   "edges": [
+    "g-fm"
+   ]
+  },
+  {
+   "id": "b-pi",
+   "group": "fm",
+   "label": "Pi ideas",
+   "tags": [
+    "borrowed-from"
+   ],
+   "from": "the Pi ecosystem",
+   "text": [
+    "Ideas from the Pi coding agent and its packages. The compaction note cites a Pi extension for server-side compaction."
+   ],
+   "links": [
+    [
+     "Pi",
+     "https://github.com/earendil-works/pi"
+    ]
+   ],
+   "edges": [
+    "compaction-is-an-implementation-detail",
+    "g-fm",
+    "tier-pi"
+   ]
+  },
+  {
+   "id": "g-tier",
+   "group": "tier",
+   "hub": true,
+   "label": "Harness tier list",
+   "text": [
+    "Eleven setups marked on the same twelve harness parts. Has it, does it differently, lacks it, or a guess the scout could not confirm.",
+    "The counts treat all twelve parts as equal. They show coverage, not quality. From a scout report dated 2026-10-27 that read public docs, repos and papers; the tools were not tested."
+   ]
+  }
+ ],
+ "tier": [
+  [
+   "tier-composite",
+   "Our composite",
+   10,
+   2,
+   0,
+   0,
+   null
+  ],
+  [
+   "tier-kun",
+   "Kun Chen stack",
+   8,
+   4,
+   0,
+   0,
+   "https://github.com/kunchenguid/firstmate"
+  ],
+  [
+   "tier-troupe",
+   "Troupe design",
+   7,
+   2,
+   3,
+   0,
+   null
+  ],
+  [
+   "tier-cc",
+   "Claude Code",
+   7,
+   2,
+   3,
+   0,
+   "https://code.claude.com/docs/en/memory.md"
+  ],
+  [
+   "tier-warp",
+   "Warp",
+   5,
+   1,
+   5,
+   1,
+   "https://docs.warp.dev/platform/harnesses/warp-agent.md"
+  ],
+  [
+   "tier-omni",
+   "Databricks Omnigent",
+   4,
+   5,
+   2,
+   1,
+   "https://github.com/omnigent-ai/omnigent"
+  ],
+  [
+   "tier-opencode",
+   "OpenCode",
+   4,
+   3,
+   4,
+   1,
+   "https://opencode.ai/docs/rules/"
+  ],
+  [
+   "tier-icm",
+   "ICM (Van Clief)",
+   3,
+   5,
+   3,
+   1,
+   "https://arxiv.org/abs/2603.16021"
+  ],
+  [
+   "tier-h2",
+   "Google Harness-squared",
+   3,
+   4,
+   5,
+   0,
+   "https://github.com/google-research/harness2"
+  ],
+  [
+   "tier-pi",
+   "Pi",
+   3,
+   3,
+   6,
+   0,
+   "https://github.com/earendil-works/pi"
+  ],
+  [
+   "tier-meta",
+   "Stanford Meta-Harness",
+   1,
+   6,
+   4,
+   1,
+   "https://github.com/stanford-iris-lab/meta-harness"
+  ]
+ ],
+ "tier_edges": {
+  "tier-composite": [
+   "g-fm"
+  ],
+  "tier-kun": [
+   "first-mate"
+  ],
+  "tier-icm": [
+   "icm-layer-ladder"
+  ]
+ }
+}

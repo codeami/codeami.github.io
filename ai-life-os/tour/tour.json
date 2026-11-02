@@ -1,0 +1,597 @@
+{
+  "version": 2,
+  "about": "The guided tour script. One source: tour/index.html renders it, and the home page chat (index.html) reads its chat block. Links are relative to the site root; links starting with # point inside the tour page. {name} is the name the visitor picks for the bot and {you} is what the bot calls the visitor. Every capability claim must be true today; plans carry a 'coming' status. Bot windows are scripted replays, never real logs. Bills and shopping are pretend.",
+  "start": {
+    "commands": ["tour", "start"],
+    "greeting": "Hey out there! I'm EA-bot, an automaton: a small helper bot with a big notebook. Type tour, or press the button, and I'll show you around.",
+    "button": "Start the tour",
+    "unknown": "Ha, I'd love to chat freely, but on this page I'm a script, not a live bot. Type tour to start again, or pick a button."
+  },
+  "chat": {
+    "about": "The home page chat. Each node is one bot turn: one true fact, a see-how link, and the next topics. A node with brief true also shows the intent block's example brief. The page shows three options, the first three in next not yet opened. Folders group the review-later checklist and the map.",
+    "hello": "Hey out there! I'm EA-bot, a small helper bot with a big notebook. No typing needed: pick one of three, or save one for later.",
+    "folders": [
+      { "id": "work", "title": "How I work" },
+      { "id": "safety", "title": "Checks and safety" },
+      { "id": "memory", "title": "Memory" },
+      { "id": "us", "title": "You and me" }
+    ],
+    "root": "root",
+    "nodes": [
+      {
+        "id": "root", "title": "EA-bot",
+        "fact": "First surprise: I'm not the model. I'm the harness around it: the rules, tools, checks and notes that make a model useful.",
+        "see": { "label": "Core logic", "href": "core.html" },
+        "next": ["work", "safety", "memory"]
+      },
+      {
+        "id": "work", "folder": "work", "title": "Jobs side by side", "chip": "How do you get work done?",
+        "fact": "Give me ten to-dos at once and I split them into jobs and run them side by side. Ten workers at once has been done on the owner's machine.",
+        "see": { "label": "Harness flow map", "href": "maps/flow.html" },
+        "next": ["intent", "worktree", "pipeline", "models", "running"]
+      },
+      {
+        "id": "intent", "folder": "work", "title": "Intent, not steps", "chip": "How do I ask for something?",
+        "fact": "You describe what done looks like, and the crew picks how. Here is an example brief.",
+        "brief": true,
+        "see": { "label": "Tour: intent engineering", "href": "tour/index.html#intent" },
+        "next": ["pipeline", "worktree", "buttons"]
+      },
+      {
+        "id": "worktree", "folder": "work", "title": "A copy each", "chip": "Why don't workers collide?",
+        "fact": "Each worker gets its own git worktree: a separate copy of the code. A worker cannot break the main copy, and nobody trips over anybody.",
+        "see": { "label": "Core logic: isolation", "href": "core.html#part-isolation" },
+        "next": ["pipeline", "buttons", "scripts", "running"]
+      },
+      {
+        "id": "pipeline", "folder": "work", "title": "One brief, one task", "chip": "What does a worker get?",
+        "fact": "Every job becomes a written brief with one task and a check for done. The board has six phases, and a task leaves a phase only when that phase's exit check is true.",
+        "see": { "label": "Core logic: the pipeline", "href": "core.html#pipeline" },
+        "next": ["intent", "worktree", "models", "scripts", "running"]
+      },
+      {
+        "id": "models", "folder": "work", "title": "Not tied to one model", "chip": "Which AI model are you?",
+        "fact": "More than one. A short rules file, called the map, is linked into Claude Code, Codex, OpenCode, Gemini CLI and backpass. Change it once and all five see it next session.",
+        "see": { "label": "Post: one rules file for every tool", "href": "blog/everything-is-a-file.html" },
+        "next": ["pipeline", "skills", "vendor", "scripts"]
+      },
+      {
+        "id": "running", "folder": "work", "title": "It runs today", "chip": "Is this real or a design?",
+        "fact": "It runs, in daily use on the owner's machine. One of my workers built these pages. On one day four workers ran in parallel, and three delivered a reviewed pull request.",
+        "see": { "label": "Safety: what works today", "href": "safety.html#works-today" },
+        "next": ["honest", "vendor", "scripts"]
+      },
+      {
+        "id": "scripts", "folder": "work", "title": "Scripts, not guesses", "chip": "How do you stay fast?",
+        "fact": "Work that must go the same way every time moves out of the model and into scripts: hooks, checks and builders. They are faster, cheaper and never guess.",
+        "see": { "label": "Tour: performance", "href": "tour/index.html#performance" },
+        "next": ["index", "hooks", "running"]
+      },
+      {
+        "id": "safety", "folder": "safety", "title": "Checked three times", "chip": "How do I know it's right?",
+        "fact": "Nothing lands until it is checked three times. The worker backs each claim with a command or a file read, the gates check again, and then you decide.",
+        "see": { "label": "Core logic: the gate", "href": "core.html#part-gate" },
+        "next": ["hooks", "buttons", "honest", "review"]
+      },
+      {
+        "id": "hooks", "folder": "safety", "title": "Hooks", "chip": "What stops a bad command?",
+        "fact": "Hooks: scripts the tool must run before an action. One blocks file writes through the shell and says to use the editor tools. It has blocked commands in a scout's own session.",
+        "see": { "label": "Safety: scripts and rules", "href": "safety.html#how" },
+        "next": ["buttons", "honest", "scripts"]
+      },
+      {
+        "id": "buttons", "folder": "safety", "title": "You hold the big buttons", "chip": "Who presses the big buttons?",
+        "fact": "You do. Only you merge, push to the main branch, delete, publish, send or spend. I stop at a draft and ask.",
+        "see": { "label": "Core logic: human approval", "href": "core.html#part-approval" },
+        "next": ["hooks", "review", "vendor"]
+      },
+      {
+        "id": "honest", "folder": "safety", "title": "Honest gaps", "chip": "Any weak spots?",
+        "fact": "Yes, and they stay on the site. A manual once said workers run with permission checks on. A check counted: all 10 running workers had them off. The manual was fixed. A safer mode is a one-line switch, not switched on yet.",
+        "see": { "label": "Safety: checks that proved it wrong", "href": "safety.html#proved-wrong" },
+        "next": ["hooks", "running", "review"]
+      },
+      {
+        "id": "review", "folder": "safety", "title": "Pages, not a terminal", "chip": "How do you show your work?",
+        "fact": "Every report, plan or draft for you becomes a page you can mark up. Your notes go back to the agent that wrote it, which fixes the page and asks again.",
+        "see": { "label": "Core logic: approval", "href": "core.html#part-approval" },
+        "next": ["buttons", "teachback", "brain"]
+      },
+      {
+        "id": "memory", "folder": "memory", "title": "Memory in files", "chip": "Do you remember me?",
+        "fact": "Not in my head. In files: the rules, the chat, a store of reports and notes, and an index that says where things are.",
+        "see": { "label": "Core logic: memory", "href": "core.html#part-memory" },
+        "next": ["index", "skills", "learn", "brain"]
+      },
+      {
+        "id": "index", "folder": "memory", "title": "The work index", "chip": "How do you find old work?",
+        "fact": "A script rebuilds an index of every work folder at the start of each session: no model, no network. It exists because an agent once searched the web for work that was already on disk.",
+        "see": { "label": "Core logic: memory", "href": "core.html#part-memory" },
+        "next": ["skills", "brain", "scripts"]
+      },
+      {
+        "id": "skills", "folder": "memory", "title": "Skills as recipe cards", "chip": "How do you learn new tricks?",
+        "fact": "Skills are recipe cards. I see a one-line description of each, and load the full card only when a task needs it.",
+        "see": { "label": "Skill map", "href": "maps/skills.html" },
+        "next": ["learn", "models", "index"]
+      },
+      {
+        "id": "learn", "folder": "memory", "title": "Rules that improve", "chip": "Do you get better over time?",
+        "fact": "A tool called backpass reads my old sessions every day and proposes edits to my own rules. It never writes them. You approve each one.",
+        "see": { "label": "Core logic: self-improvement", "href": "core.html#part-improve" },
+        "next": ["teachback", "skills", "honest"]
+      },
+      {
+        "id": "brain", "folder": "memory", "title": "The second brain", "chip": "Where does what we learn go?",
+        "fact": "Into a second brain. A note lands in an inbox the same day, is boiled down to one idea, then linked to its neighbours. No note is born alone.",
+        "see": { "label": "Second brain map", "href": "brain/index.html" },
+        "next": ["index", "teachback", "modes"]
+      },
+      {
+        "id": "modes", "folder": "us", "title": "Three talk modes", "chip": "Can you talk my way?",
+        "fact": "I can talk in three modes. ADHD mode puts the key point first. Caveman mode is very short. STE100 mode uses Simplified Technical English.",
+        "see": { "label": "Second brain: ADHD mode", "href": "brain/index.html#adhd-mode" },
+        "next": ["charter", "teachback", "brain"]
+      },
+      {
+        "id": "charter", "folder": "us", "title": "The charter", "chip": "What's our deal?",
+        "fact": "A chatbot sets no contract. We do. We both organize life and build knowledge. The third task matters most: teach it to each other, and check the other has learned it.",
+        "see": { "label": "Guided tour", "href": "tour/index.html" },
+        "next": ["teachback", "modes", "vendor"]
+      },
+      {
+        "id": "teachback", "folder": "us", "title": "Teach it back", "chip": "How do you check I learned it?",
+        "fact": "At the end of a tour track I ask you to teach it back in your own words. A teach-back shows the gaps a re-read hides.",
+        "see": { "label": "Guided tour", "href": "tour/index.html" },
+        "next": ["charter", "brain", "modes"]
+      },
+      {
+        "id": "vendor", "folder": "us", "title": "Agents as vendors", "chip": "How should I think about you?",
+        "fact": "Like a contract with vendors. You scope the work, write down who may do what, ask for status, and accept work only on evidence.",
+        "see": { "label": "About: agents as vendors", "href": "about.html#vendors" },
+        "next": ["buttons", "charter", "running"]
+      }
+    ]
+  },
+  "persona": {
+    "bot": "EA-bot",
+    "ask_name": "First things first. I don't have a name yet. What should I be called?",
+    "names": ["Huey", "Dewey", "Louie", "My Man Friday", "Chotu", "Jeeves"],
+    "own": "Or type your own",
+    "named": "{name}. I like it. Fits me like a fresh coat of paint.",
+    "ask_you": "And what should I call you?",
+    "yous": [
+      { "label": "Boss", "value": "boss", "default": true },
+      { "label": "Trooper", "value": "trooper" },
+      { "label": "Operator", "value": "operator" }
+    ],
+    "friday": "A good way to think about me: like a Man Friday, a Chotu or a Jeeves. The trusted helper you call to solve any problem."
+  },
+  "intro": {
+    "hello": "Hey there, {you}!",
+    "lines": [
+      { "text": "This is EA-bot, and you can call me {name}. I'm a smart harness agent built on top of an LLM. I'm not the model itself. I'm the harness around it: the rules, tools, checks and notes that make a model useful." },
+      { "text": "I'm not tied to one model. The same rules load into Claude Code, Codex, OpenCode and Gemini CLI, so I can work across them." },
+      { "text": "Give me ten to-dos at once and I'll split them into jobs and run them side by side. Ten workers at once has been done on the owner's machine." },
+      { "text": "I double-check. Each worker backs every claim with a command or a file it read, and the gates check again before you see it." },
+      { "text": "Missing a skill? I'll go find it and install it through a set workflow, and you approve it first.", "status": "coming" },
+      { "text": "It's a bit like magic, except every trick is written down. Anything marked coming is a plan, not a feature yet." }
+    ],
+    "links_label": "Before we go on, the small print:",
+    "links": [
+      { "label": "Capability", "href": "#capability" },
+      { "label": "Security", "href": "#security" },
+      { "label": "Performance", "href": "#performance" },
+      { "label": "How to ask", "href": "#intent" }
+    ],
+    "charter_lead": "Now our deal. I call it the charter."
+  },
+  "charter": {
+    "title": "The charter",
+    "lines": [
+      "Whenever you use a chatbot, you are not setting a contract. Here we are.",
+      "The human and the AI both have two tasks:"
+    ],
+    "tasks": [
+      "Define how to organize life.",
+      "Build knowledge about the world at large."
+    ],
+    "third": "And the third, most critical: teach this to each other, and make sure the other has learned it."
+  },
+  "talk": {
+    "text": "One more thing, {you}. EA-bot comes with a brain capability for how I talk. With it, I can talk in three modes.",
+    "modes": [
+      {
+        "id": "adhd",
+        "name": "ADHD mode",
+        "line": "Key point first and bold. One idea per line, short lists, a clear next step.",
+        "more": { "label": "More on ADHD mode", "href": "brain/index.html#adhd-mode" },
+        "sample": {
+          "lead": "Start with one inbox folder, today.",
+          "list": [
+            "Make three parts: inbox, notes, index.",
+            "Write one idea per note.",
+            "Link each new note to one old note.",
+            "Next step: write your first note now."
+          ]
+        }
+      },
+      {
+        "id": "caveman",
+        "name": "Caveman mode",
+        "line": "Very short. No filler.",
+        "more": { "label": "More on caveman mode", "href": "brain/index.html#caveman-mode" },
+        "sample": {
+          "lines": ["Make folder. Inbox, notes, index.", "One idea, one note. Link notes.", "Review weekly."]
+        }
+      },
+      {
+        "id": "ste100",
+        "name": "STE100 mode",
+        "line": "Simplified Technical English. Short sentences, one meaning per word.",
+        "more": { "label": "More on STE100 mode", "href": "brain/index.html#ste100-mode" },
+        "sample": {
+          "lines": [
+            "Make a folder.",
+            "In the folder, make an inbox, a notes folder and an index.",
+            "Write one idea in each note.",
+            "Connect each new note to one note that you have.",
+            "Examine the inbox one time each week."
+          ]
+        }
+      }
+    ],
+    "question": "How do I start a second brain?",
+    "switch": "Pick a mode to see the same answer three ways."
+  },
+  "menu": {
+    "text": "Right, {you}. Two things I'm best at. Pick one: see how it works step by step, or just use it with one prompt.",
+    "headline": ["organize", "knowledge"],
+    "more": "More ways in"
+  },
+  "intent": {
+    "id": "intent",
+    "title": "How to ask: intent, not steps",
+    "line": "You describe what done looks like, and the crew picks how.",
+    "lead": "Every job starts as a brief with two parts. The top is the owner's own words, kept as they said them. The bottom is how Firstmate turns that into a worker's task. This one is an example written for this page.",
+    "brief": {
+      "intent": { "label": "Captain's intent", "text": "Make the hub links open on my phone. Half of them do nothing when I tap them." },
+      "spec": {
+        "label": "Firstmate spec",
+        "points": [
+          "Open the hub page at phone width (375px) and tap every link.",
+          "Fix the links that do nothing so each opens its page.",
+          "Done when: every link opens at 375px, with a screenshot as proof.",
+          "Must not: change where a working link goes. One pull request; the owner decides the merge."
+        ]
+      }
+    },
+    "credit": { "label": "Daniel Miessler: From Prompt Engineering to Intent Engineering", "href": "https://danielmiessler.com/blog/intent-engineering" }
+  },
+  "trust": {
+    "title": "Capability, security and performance",
+    "lead": "The small print, in plain words. It describes the owner's own setup today.",
+    "sections": [
+      {
+        "id": "capability",
+        "title": "Capability: what I can do, and how I learn new tricks",
+        "points": [
+          { "text": "I work in a terminal and an agent window manager, with full automation access on the owner's machine. I can run commands, edit files and start other agents." },
+          { "text": "I split work into jobs and run them side by side. Ten workers at once has been done." },
+          { "text": "My rules load into Claude Code, Codex, OpenCode and Gemini CLI, so I am not tied to one model." },
+          { "text": "Skills are recipe cards. I see a one-line description of each, and load the full card only when a task needs it." },
+          { "text": "When a skill is missing, I find it and install it through a set workflow, with your approval.", "status": "coming" }
+        ],
+        "see": { "label": "Skill map", "href": "maps/skills.html" }
+      },
+      {
+        "id": "security",
+        "title": "Security: what I can touch, who approves, and secrets",
+        "points": [
+          { "text": "Each worker gets its own copy of the code (a git worktree), so a worker cannot break the main copy." },
+          { "text": "Every worker runs in its own window that you can open and watch, and its tool calls are logged." },
+          { "text": "Control mode today: workers skip permission checks by default. That is the standing setting, and the owner knows it." },
+          { "text": "A safer, model-reviewed permission mode is a one-line switch. It is not switched on yet.", "status": "coming" },
+          { "text": "You hold the big buttons. Only you merge, push to the main branch, delete, publish, send or spend. I stop and ask." },
+          { "text": "Secrets never go in files, commits, logs or prompts. That rule is in the rules file every agent reads at the start." },
+          { "text": "A hook blocks commands that would print a secret, and another warns on text shaped like a key.", "status": "installed, not yet proven in a test" }
+        ],
+        "see": { "label": "Core logic: roles", "href": "core.html#roles" },
+        "daily": {
+          "label": "Daily safety check",
+          "line": "Once a day, send me this:",
+          "prompt": "Safety check: what did you change since yesterday, what is waiting for my OK, and did any secret touch a file?"
+        }
+      },
+      {
+        "id": "performance",
+        "title": "Performance: speed and reliability from scripts",
+        "points": [
+          { "text": "Work that must go the same way every time moves out of the model and into deterministic harness scripts: hooks, checks and builders. They are faster, cheaper and never guess." },
+          { "text": "Example: the work index is rebuilt by a script at the start of each session. No model, no network." },
+          { "text": "More harness research is on the way.", "status": "coming" }
+        ],
+        "see": { "label": "Harness flow map", "href": "maps/flow.html" }
+      }
+    ]
+  },
+  "paths": [
+    {
+      "id": "organize",
+      "title": "Help you organize",
+      "summary": "Hand me the whole to-do pile. I sort it, run it side by side, and check it.",
+      "intro": "Let's get you organized, {you}. Three steps.",
+      "use_prompt": "Here is everything on my plate. Sort it into jobs: start now, needs me, can wait. Run the ones that can run in parallel, check each result, and stop before anything that sends, pays, merges or deletes: <your list>",
+      "steps": [
+        {
+          "title": "Dump the list",
+          "plain": "Tell me everything on your plate. Messy is fine. I sort it into jobs: what I can start now, what needs you, what can wait.",
+          "tech": "Each job becomes a written brief with one task and a check for done. The board has six phases, and a task leaves a phase only when that phase's exit check is true.",
+          "prompt": "Here is everything on my plate. Sort it into jobs: start now, needs me, can wait. Give each job one line saying what done looks like: <your list>",
+          "see": { "label": "Core logic: the pipeline", "href": "core.html#pipeline" }
+        },
+        {
+          "title": "Run them side by side",
+          "plain": "I hand the jobs to workers and run them at once. Each worker has its own copy of the work, so nobody trips over anybody.",
+          "tech": "One git worktree and one brief per worker. Workers report status lines back to me. Each claim is backed by a command or a file read.",
+          "prompt": "Run these jobs in parallel where they do not depend on each other. Tell me which ones must wait for another, and why: <jobs>",
+          "see": { "label": "Harness flow map", "href": "maps/flow.html" }
+        },
+        {
+          "title": "Check, then you decide",
+          "plain": "When work comes back, I check it, the gates check it, and then it's your call. I never merge, send or pay on my own.",
+          "tech": "Hooks block unsafe commands before they run. Only the owner holds merge, publish, send and spend.",
+          "prompt": "Before you show me any result, tell me how you checked it. Then stop and wait for my OK on anything that sends, pays, merges or deletes.",
+          "see": { "label": "Core logic: human approval", "href": "core.html#part-approval" }
+        }
+      ],
+      "teach_back": "Explain back to me how my to-do list turns into checked work, and which steps need my yes. Then ask me one question to check I understood."
+    },
+    {
+      "id": "knowledge",
+      "title": "Manage your knowledge (and keep mine up to date)",
+      "summary": "What we learn goes into a second brain, sorted and linked. My own rules get updated too, with your approval.",
+      "intro": "Knowledge time, {you}. Yours first, then mine.",
+      "use_prompt": "At the end of this chat, write a short note on what we decided and learned. Find the closest notes I already have, then tell me whether to merge, link or keep it separate. File nothing until I approve.",
+      "steps": [
+        {
+          "title": "Catch it the same day",
+          "plain": "At the end of a session I write a short note: what we decided, what we learned, what is still open. It goes to an inbox first, not straight into the brain.",
+          "tech": "Session notes are dated files in an inbox folder. Raw capture is not knowledge yet; it waits for the sort step.",
+          "prompt": "Write a capture note for this chat: goals, decisions, what we learned, open questions. Under 150 words. Do not file it yet.",
+          "see": { "label": "Second brain map", "href": "brain/index.html" }
+        },
+        {
+          "title": "Sort it and link it",
+          "plain": "Each note is boiled down to one idea and checked against what is already there: merge it, link it, or make a new note. No note is born alone.",
+          "tech": "An index lists every note and is rebuilt at the start of a session. Search local notes first, then the web.",
+          "prompt": "Here is a new note. Find the closest notes I already have. Tell me: merge into one, link to it, or keep it separate, and why: <note>",
+          "see": { "label": "Core logic: memory", "href": "core.html#part-memory" }
+        },
+        {
+          "title": "Keep mine up to date too",
+          "plain": "I learn as well. At night, a tool reads my old sessions and proposes changes to my own rules. It never writes them. You approve each one.",
+          "tech": "backpass reads tool logs and proposes rule edits backed by quotes from two or more sessions. It runs daily; it proposes rule edits; the owner approves.",
+          "prompt": "Look back at our chats this week. List each time I corrected you. For each, say whether the fix belongs in your rules, a skill, or nowhere, and write the exact wording. Change nothing until I approve.",
+          "see": { "label": "Core logic: self-improvement", "href": "core.html#part-improve" }
+        }
+      ],
+      "teach_back": "Explain back to me how a new topic reaches my second brain, and how your own rules get updated. Then ask me one question to check I understood."
+    },
+    {
+      "id": "ours",
+      "title": "Use ours",
+      "summary": "An opinionated way to store notes and cross-reference them. Three tracks.",
+      "intro": "Use our method, {you}. Fair warning: it's opinionated. One idea per note, every note linked to its neighbours, and nothing filed without a review. Pick a track.",
+      "use_prompt": "From now on, keep my notes this way: one idea per note, a one-line description on each, and a link from every new note to at least one existing note. Nothing is filed until I approve it. Start with this: <what is on your mind>",
+      "tracks": [
+        {
+          "id": "firstmate",
+          "title": "How First Mate works",
+          "summary": "Six parts of an agent harness, in four steps.",
+          "badge": "draft, owner to edit",
+          "use_prompt": "Explain how you work in six parts: pipeline, roles, memory, skills, tools and safety. One line each. Mark anything that is designed but not proven.",
+          "steps": [
+            {
+              "title": "Pipeline and roles",
+              "plain": "You ask once. First Mate splits the ask into small jobs and hands each one to a worker. Scouts find facts. Builders change code. You decide at the start and at the end.",
+              "tech": "One orchestrator session writes a brief per task and starts each worker in its own git worktree. Each role has written permissions: a scout reports, a builder opens a pull request, and only the owner merges.",
+              "prompt": "Split this goal into small jobs. For each job, say who should do it (a scout to find facts, or a builder to make a change) and what proof of done looks like: <your goal>",
+              "see": { "label": "Core logic: the pipeline", "href": "core.html#pipeline" }
+            },
+            {
+              "title": "Memory and skills",
+              "plain": "The agent does not remember in its head. It writes things down: rules, reports, session notes, and an index of where things are. Skills are recipe cards it opens only when a task needs one.",
+              "tech": "Four kinds of memory: rules (always loaded), the chat (squeezed into a summary at compaction), the work store (reports, briefs, notes) and a generated index rebuilt at session start. Skills load by progressive disclosure: a one-line description is always visible, the full text loads on demand.",
+              "prompt": "Before you answer, list what you already know about this topic from our earlier notes, and say where each fact came from. If there are no notes, say so: <topic>",
+              "see": { "label": "Core logic: memory", "href": "core.html#part-memory" }
+            },
+            {
+              "title": "Tools and safety",
+              "plain": "Workers use tools: a browser, GitHub, a terminal. Safety means drafts, not sends. Nothing is merged, published, sent or paid until you say yes.",
+              "tech": "Hooks run before tool calls and block unsafe actions. Each worker has an isolated copy of the code. A gate checks work before push. The owner alone holds merge, publish, send and spend.",
+              "prompt": "For this task, list every step that is hard to undo (send, pay, delete, publish). Stop before each one and ask me: <task>",
+              "see": { "label": "Core logic: approval", "href": "core.html#part-approval" }
+            },
+            {
+              "title": "See it in action",
+              "plain": "Here a scout and a helper do one pretend job. Click a window to step through what each one thinks and does.",
+              "tech": "A replay is a scripted sample written for this page. It shows the shape of a run: a brief, evidence, a draft, and a stop for approval.",
+              "prompt": "Show your work as short numbered steps: what you checked, what you found, what you will do next, and where you will stop for my OK.",
+              "replay": "weekly-chores"
+            }
+          ],
+          "teach_back": "In your own words, how does a job move from my ask to done? Name the six parts as you go. Then ask me one question to check I understood."
+        },
+        {
+          "id": "brain",
+          "title": "The second brain",
+          "summary": "How a new topic gets in, gets sorted, and stays useful.",
+          "use_prompt": "Run the intake checklist on this topic: capture, distill, connect, retrieve, review. Show me the result of each step before you file anything: <topic>",
+          "steps": [
+            {
+              "title": "Capture: how soon a topic gets in",
+              "plain": "A new topic gets in the same day. At the end of a session, the agent writes a short note: what was decided, what was learned, what is still open. It lands in an inbox, not straight in the brain.",
+              "tech": "Session summaries are dated files in an inbox folder. Nothing in the inbox counts as knowledge yet. It is raw capture, waiting for the distill step.",
+              "prompt": "Write a capture note for this chat: goals, decisions, what we learned, open questions. Under 150 words. Do not file it yet."
+            },
+            {
+              "title": "Distill and connect: sorting against what is there",
+              "plain": "Each capture is boiled down to one idea per note. Before a new note is made, the agent looks for a note on the same idea. If one exists, the new point is merged in. If not, a new note is made and linked to its neighbours.",
+              "tech": "Atomic notes, each with a one-line description. Search the index for overlap first, then merge, link or create. Every new note links to at least one existing note, and the index gets one row.",
+              "prompt": "Here is a new note. Find the closest notes I already have. Tell me: merge into one, link to it, or keep it separate, and why: <note>",
+              "see": { "label": "Second brain map", "href": "brain/index.html" }
+            },
+            {
+              "title": "Retrieve and review",
+              "plain": "When a task starts, the agent reads the index first and opens only the notes it needs. On a set rhythm, a review asks of each note: still true? still used? Notes are updated, merged or retired.",
+              "tech": "Retrieval is index first, local files before the web. Review looks for decay: stale dates, notes with no links in or out, duplicates. Nothing reaches the curated notes until a human approves it.",
+              "prompt": "Review these notes for decay. For each one say keep, update, merge or retire, with one reason: <notes>"
+            },
+            {
+              "title": "The intake-and-review checklist",
+              "plain": "Use this list each time a new topic comes up. Tick each step before you move on.",
+              "tech": "The same five-step loop runs for every source: a chat, a lesson, an article. The order matters: connect before you file, so no note is born alone.",
+              "checklist": [
+                { "name": "Capture", "text": "Write the raw note the same day. Inbox only." },
+                { "name": "Distill", "text": "One idea per note, with a one-line description." },
+                { "name": "Connect", "text": "Find the nearest notes. Merge, link or create. Add an index row." },
+                { "name": "Retrieve", "text": "Start each task from the index, local notes before the web." },
+                { "name": "Review", "text": "On a rhythm: keep, update, merge or retire. A human approves." }
+              ],
+              "prompt": "Run the intake checklist on this topic: capture, distill, connect, retrieve, review. Show me the result of each step: <topic>",
+              "see": { "label": "Core logic: memory", "href": "core.html#part-memory" }
+            }
+          ],
+          "teach_back": "Explain back to me how a new topic enters my second brain and how it is checked against the notes I already have. Then point out one step I skipped."
+        },
+        {
+          "id": "life",
+          "title": "The life organizer",
+          "summary": "Pretend bills and shopping, run by small bots.",
+          "badge": "pretend examples",
+          "use_prompt": "Here are my bills and shopping needs for this week. Split them into small jobs, one per helper, and give each job a stop rule: report or draft, never pay or order. <your list>",
+          "steps": [
+            {
+              "title": "One ask, small bots",
+              "plain": "You say: sort out this week's bills and shopping. First Mate splits it. A scout reads the bills. A helper drafts the shopping order. Each bot does one small job.",
+              "tech": "The orchestrator writes two briefs. Each bot gets only what it needs and a stop rule: report or draft, never pay.",
+              "prompt": "Here are my bills and shopping needs for the week. Split them into small jobs, one per helper, and give each job a stop rule: <your list>"
+            },
+            {
+              "title": "Watch the bots",
+              "plain": "Click a window to see each bot think, one step at a time. The bills, the shop and the money are all pretend.",
+              "tech": "Scripted replay, not a live log. Note the helper reads the scout's report before it adds up the week. Bots share results through reports, not chat.",
+              "prompt": "Show your work as short numbered steps: what you checked, what you found, what you will do next, and where you will stop for my OK.",
+              "replay": "weekly-chores"
+            },
+            {
+              "title": "You give the word",
+              "plain": "The bots come back with drafts: a bill ready to pay and a cart ready to order. Nothing is paid or ordered until you say yes.",
+              "tech": "Spend is an owner-only action. The helper stops at a draft. Approval is a separate, explicit step that the bot cannot take.",
+              "prompt": "Draft the payment and the order, but do not send either. Show me one line for each and wait for my yes.",
+              "see": { "label": "Core logic: roles", "href": "core.html#roles" }
+            }
+          ],
+          "teach_back": "Tell me which steps in this week's chores you may do on your own, and which ones need my yes. Then ask me one question to check we agree."
+        }
+      ]
+    },
+    {
+      "id": "build",
+      "title": "Build your own second brain",
+      "summary": "Start from scratch with plain files. Three steps.",
+      "intro": "Build your own, from scratch. Plain text files are enough. Here are three steps.",
+      "use_prompt": "Help me set up a second brain in plain markdown files: an inbox, a notes folder and an index. Give me the folder layout and a template for one note.",
+      "steps": [
+        {
+          "title": "Start with three parts",
+          "plain": "Make one folder with three parts: an inbox for raw notes, a notes folder for finished ideas, and one index page that lists them.",
+          "tech": "inbox/, notes/ and INDEX.md. Plain markdown, one idea per file, a short kebab-case file name. The index has one line per note: a link and a one-line hook.",
+          "prompt": "Help me set up a second brain in plain markdown files: an inbox, a notes folder and an index. Give me the folder layout and a template for one note.",
+          "see": { "label": "Post: everything is a file", "href": "blog/everything-is-a-file.html" }
+        },
+        {
+          "title": "Write your first linked notes",
+          "plain": "Take one thing you learned this week. Write it as one short note. Then write a second note and link the two.",
+          "tech": "Each note has a title, a one-line description, the idea, and links written as [[note-name]]. A link to a note that does not exist yet is fine. It marks a note worth writing.",
+          "prompt": "Turn this into one note: a title, a one-line description, the idea in under 100 words, and two [[links]] to notes I should write next: <what I learned>",
+          "see": { "label": "Second brain map", "href": "brain/index.html" }
+        },
+        {
+          "title": "Set a review rhythm",
+          "plain": "Once a week, empty the inbox and look at a few old notes. Keep, update, merge or retire each one.",
+          "tech": "Inbox to zero: each item becomes a note, a merge, or is dropped. Then sample older notes for decay.",
+          "prompt": "It is review day. Go through my inbox one item at a time: make it a note, merge it into one I have, or drop it. Ask me only when unsure."
+        }
+      ],
+      "teach_back": "Explain back to me the three parts of my second brain and what happens on review day. Then ask me one question to check I understood."
+    },
+    {
+      "id": "learn",
+      "title": "Learn deeply",
+      "summary": "The LearnHarness route: guided lessons with teach-back. Three steps.",
+      "intro": "Learn one hard topic deeply. This route uses LearnHarness, an open-source app where AI agents teach a topic and build a knowledge graph as you go.",
+      "use_prompt": "I want to learn <topic> deeply. Ask me three questions to find what I already know, then propose a plan of five short lessons.",
+      "steps": [
+        {
+          "title": "Pick one hard topic",
+          "plain": "Choose one topic you want to really know. The teacher first asks what you know, then plans short lessons.",
+          "tech": "LearnHarness describes itself as an agent harness for learning difficult things. It is open source (AGPL-3.0) and runs on your own machine.",
+          "prompt": "I want to learn <topic> deeply. Ask me three questions to find what I already know, then propose a plan of five short lessons.",
+          "see": { "label": "LearnHarness on GitHub", "href": "https://github.com/amosblomqvist/learnharness" }
+        },
+        {
+          "title": "Learn by teaching back",
+          "plain": "After each lesson, explain it back in your own words. The teacher checks your answer and points to the gaps.",
+          "tech": "This is the charter's third task: make sure the other has learned it. A teach-back shows the gaps a re-read hides.",
+          "prompt": "Here is my explanation of <concept>. Grade it: what is right, what is missing, what is wrong. Then ask me one question about the gap."
+        },
+        {
+          "title": "File what you learned",
+          "plain": "Each lesson ends with one note in your second brain, linked to what you already know.",
+          "tech": "The lesson note goes through the same intake checklist as any other topic: capture, distill, connect, retrieve, review.",
+          "prompt": "Write one note from today's lesson: the idea, one example, and links to two notes I already have."
+        }
+      ],
+      "teach_back": "Pick the hardest idea from this lesson and ask me to teach it back to you. Grade my answer and tell me what to review."
+    }
+  ],
+  "replays": {
+    "weekly-chores": {
+      "title": "Replay: this week's bills and shopping",
+      "note": "A scripted sample, not a live log. The bills, the shop and the money are pretend.",
+      "windows": [
+        {
+          "role": "scout",
+          "name": "Scout · bills",
+          "brief": "Read this week's bills. Report what is due. Pay nothing.",
+          "steps": [
+            { "think": "The brief says read and report. Paying is not my job. First, find the bills.", "do": "Opened the pretend bills folder. Three bills." },
+            { "think": "Which are due this week? Water is due Friday. Phone and power are due later in the month.", "do": "Water: 42.10, due Friday." },
+            { "think": "Is that amount normal? Last month was 39.80. Up about 6 percent. Small, but worth one line.", "do": "Checked last month's water bill." },
+            { "say": "One bill due this week: water, 42.10 by Friday, about 6% up on last month. Two bills due later. Nothing paid." }
+          ],
+          "end": "Report filed. Stopped: paying needs the owner."
+        },
+        {
+          "role": "helper",
+          "name": "Helper · shopping",
+          "brief": "Draft this week's shopping order from the pantry list. Order nothing.",
+          "steps": [
+            { "think": "Draft only. First, what is running low?", "do": "Read the pretend pantry list: coffee, rice and soap are low." },
+            { "think": "Price them at the pretend shop: 9 + 6 + 4.", "do": "Cart total: 19." },
+            { "think": "The weekly budget note says 60 for bills and shopping. The scout's report says water is 42.10. 19 + 42.10 = 61.10, so 1.10 over. Flag it. Do not decide for the owner.", "do": "Read the scout's report and the budget note." },
+            { "say": "Draft cart ready: coffee, rice, soap, 19. With the water bill the week is 61.10, 1.10 over the budget of 60. Option: drop the soap. Nothing ordered." }
+          ],
+          "end": "Draft ready. Waiting for your OK."
+        }
+      ],
+      "after": "Both bots stopped at a draft. You decide what is paid and ordered."
+    }
+  },
+  "end": {
+    "track_done": "Nice work, {you}. That's the track. Now the charter's favourite part: teach it back. Send me this and I'll check we both got it.",
+    "more": "Pick another path, or type tour to start over. I don't get tired."
+  }
+}
