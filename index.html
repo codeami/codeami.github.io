@@ -24,15 +24,27 @@
 .demo .go { color: var(--accent-text, var(--accent)); font-weight: 700; }
 .demo ul { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 6px; }
 .demo li { font-size: 12px; border: 1px solid var(--line); border-radius: 999px; padding: 3px 9px; color: var(--mute); }
+/* How we expect you to use AI: the owner's quote, on top. */
+.law { margin: 0 0 var(--space-4, 24px); padding: 16px 18px; background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--pop); border-radius: 2px; }
+.law .k-kicker { margin: 0 0 6px; }
+.law blockquote { margin: 0 0 10px; padding: 0; border: 0; font-size: 1.05rem; font-style: italic; }
+.law p { margin: 0 0 6px; }
+.law .src { font-size: 13px; color: var(--mute); }
 </style>
 </head>
 <body>
 <header class="k-nav">
   <a class="k-home" href="index.html"><img class="k-mark" src="ai-life-os/kit/bosun.svg" alt=""><span class="k-logo">Ashish Raina<small>whoami</small></span></a>
-  <nav aria-label="Site"><a href="ai-life-os/blog/index.html">Field Notes</a><a href="ai-life-os/index.html">AI-Life-OS</a><a href="ai-life-os/brain/index.html">Second Brain</a><a href="ai-life-os/about.html">About</a><button class="theme" id="theme" type="button">Matrix</button></nav>
+  <nav aria-label="Site"><a href="ai-life-os/blog/index.html">Field Notes</a><a href="ai-life-os/index.html">AI-Life-OS</a><a href="ai-life-os/course/index.html">Course</a><a href="ai-life-os/brain/index.html">Second Brain</a><a href="ai-life-os/about.html">About</a><button class="theme" id="theme" type="button">Matrix</button></nav>
 </header>
 <main class="page">
 <article class="k-article">
+<aside class="law" aria-label="How we expect you to use AI">
+<p class="k-kicker">How we expect you to use AI</p>
+<blockquote>“While Parkinson's Law states that work expands to fill the time available for its completion, its inverse - Horstman's Law, the Law of Forced Efficiency - states that work contracts to fit the time allocated for its completion.”</blockquote>
+<p>This is how we expect you to use AI: give the work a short, fixed time box and let the AI crew help it contract to fit.</p>
+<p class="src">Parkinson's Law: C. Northcote Parkinson, <a href="https://en.wikipedia.org/wiki/Parkinson%27s_law">The Economist, 1955</a>. Horstman's Law: listed as “Horstman's Corollary to Parkinson's Law” among the <a href="https://en.wikipedia.org/wiki/Manager_Tools_Podcast">Manager Tools podcast's principles</a> (Mark Horstman).</p>
+</aside>
 <p class="k-kicker">whoami</p>
 <h1 class="k-title">Ashish Raina</h1>
 <p class="k-dek who">Program manager turned AI-crew operator. I run a crew of AI coding agents from one chat, and I write down how I steer them, check their work and keep them doing what I meant.</p>
@@ -52,6 +64,13 @@
   <p>How it all connects, as one ring map: the public notes, FirstMate's twelve parts, the skills, the posts and the pages. Click any dot for its card; posts open in a reading drawer beside the map.</p>
   <ul><li>Ring graph</li><li>Node cards</li><li>Reading drawer</li><li>Guided tour</li></ul>
   <p class="go">Open the Second Brain →</p>
+</a>
+<a class="demo" href="ai-life-os/course/index.html">
+  <p class="k-kicker">Start here</p>
+  <h2>Ashish's AI introductory course</h2>
+  <p>Seven short lessons with EA-bot, in a fixed order: wants and needs, Maslow, intent, and how people and AI pass it on. One reading and one question each.</p>
+  <ul><li>7 lessons</li><li>One read each</li><li>Lights up the map</li></ul>
+  <p class="go">Start the course →</p>
 </a>
 </div>
 

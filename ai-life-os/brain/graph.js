@@ -13,7 +13,7 @@ var host=document.createElement("div");host.id="brainHost";if(FRAMED)host.classN
 var shadow=host.attachShadow({mode:"open"});
 var NAV=FRAMED?"":'<nav class="nav" aria-label="Site"><span class="vtag">v1.0</span>'+
   '<a class="btn" href="../../index.html">whoami</a><a class="btn" href="../index.html">AI-Life-OS</a>'+
-  '<a class="btn" href="../blog/index.html">Field Notes</a><a class="btn" href="index.html" aria-current="page">Second Brain</a>'+
+  '<a class="btn" href="../blog/index.html">Field Notes</a><a class="btn" href="../course/index.html">Course</a><a class="btn" href="index.html" aria-current="page">Second Brain</a>'+
   '<a class="btn" href="https://github.com/codeami/codeami.github.io">GitHub</a></nav>';
 shadow.innerHTML='<link rel="stylesheet" href="'+BASE+'graph.css">'+
   '<div id="stage"><canvas id="cv" role="img" aria-label="Second brain map: a centre rules file linked to rooms of public notes, harness parts and posts, with a ring of skills and a ring of pages and projects. The side lists hold the same items as buttons."></canvas></div>'+
@@ -50,6 +50,10 @@ function savedMotion(){try{var v=localStorage.getItem(MKEY);return v==="on"?true
 function setMotion(on,remember){S.motion=on;$("motion").checked=on;var b=$("motionBtn");b.textContent=on?"Motion on":"Motion off";b.setAttribute("aria-pressed",String(on));
   if(remember)try{localStorage.setItem(MKEY,on?"on":"off")}catch(e){}dirty=true}
 var INS={bottom:0}; // screen space a bottom sheet covers; the map centres above it
+/* Course lessons: course/index.html keeps progress under CKEY; a lesson's dot stays grey until it is done */
+var CKEY="ai-course:v1",lit={};
+function readLit(){lit={};try{var s=JSON.parse(localStorage.getItem(CKEY)||"null");if(s&&s.done)for(var k in s.done)lit[k]=1}catch(e){}dirty=true}
+window.addEventListener("storage",function(e){if(e.key===CKEY)readLit()});
 
 /* ---------- data ---------- */
 function validData(d){return d&&Array.isArray(d.rooms)&&d.rooms.length&&d.root&&Array.isArray(d.skills)}
@@ -87,7 +91,7 @@ function start(d,srcLabel){
   $("src").textContent="public data · "+srcLabel;
   window.AIO_READING=d.reading||[];
   drawer=AIODrawer({reading:window.AIO_READING,onClose:function(){S.sel=null;applyFocus();dirty=true}});
-  build(d);buildLegend();wire();renderSides();
+  readLit();build(d);buildLegend();wire();renderSides();
   resize();setLayout(S.layout,true);mountTour();
   requestAnimationFrame(frame);
   if(FRAMED){if(pending)API.select(pending);return}
@@ -107,6 +111,8 @@ var API={
   },
   setInsets:function(bottom){INS.bottom=bottom||0;if(!view.user)fitView();dirty=true},
   overlay:function(on){host.classList.toggle("ov",!!on);setTimeout(resize,0)},
+  lit:readLit, // the course page calls this after a lesson is done
+
   host:host,root:shadow
 };
 var byId={}; // node by its data id (notes, parts, posts) or name (skills, pages)
@@ -423,6 +429,7 @@ function nodeCard(n){
     var Rd=rooms[n.room],f=Rd.folders[n.folder];c.kind=Rd.label;
     c.title=n.name;c.line=inf.line||Rd.label+" / "+f.name;c.body=paras(inf.body);
     c.status=Rd.label+" / "+f.name;c.statusCls="a";c.links=inf.links||[];
+    if(inf.lesson){c.status=lit[inf.lesson]?"done in this browser":"not done yet";c.statusCls=lit[inf.lesson]?"ok":"warn"}
     c.related=(inf.rel||[]).map(function(id){return byId[id]}).filter(Boolean).map(go).concat([go(n.hub)]);
   }else if(n.type==="skill"){
     c.kind="Skill";c.line="skill"+(inf.when?" · when "+inf.when:"");c.body=inf.desc;
@@ -611,7 +618,7 @@ function buildLegend(){
     d.appendChild(i);d.appendChild(el("span",null,r.label+" · "+r.count));L.appendChild(d);
   });
   L.appendChild(el("h3",null,"Shapes"));
-  [["","#ff7a1a","Centre rules file"],["dia","#ff9a3c","Skill (links to the skill map)"],["","#b57bff","Dot: a note, part, setup or post"],["hex","#2ee6c5","Public project (click for its link)"],["hex","#ffd93d","Page of this site (click to read it)"]].forEach(function(s){
+  [["","#ff7a1a","Centre rules file"],["dia","#ff9a3c","Skill (links to the skill map)"],["","#b57bff","Dot: a note, part, setup or post"],["","#5a6270","Course lesson: grey until you finish it"],["hex","#2ee6c5","Public project (click for its link)"],["hex","#ffd93d","Page of this site (click to read it)"]].forEach(function(s){
     var d=el("div"),i=el("i",s[0]);i.style.background=s[1];i.style.borderColor=s[1];d.appendChild(i);d.appendChild(el("span",null,s[2]));L.appendChild(d);
   });
 }
@@ -727,8 +734,9 @@ function draw(t){
     var a=(flagMode?(flags[i]?1:dimA):1)*n.vis*.9;
     var x=n.x,y=n.y;
     if(drift){x+=Math.cos(tm*.6+n.jit)*2.2;y+=Math.sin(tm*.5+n.jit*1.3)*2.2}
-    var sz=n.r*(flagMode&&flags[i]?3.4:3);
-    ctx.globalAlpha=a;ctx.drawImage(sprite(dotColor(n)),x-sz,y-sz,sz*2,sz*2);
+    var sz=n.r*(flagMode&&flags[i]?3.4:3),col=dotColor(n);
+    if(n.info.lesson){if(lit[n.info.lesson])sz*=1.4;else{col="#5a6270";a*=.6}}
+    ctx.globalAlpha=a;ctx.drawImage(sprite(col),x-sz,y-sz,sz*2,sz*2);
   }
   ctx.globalCompositeOperation="source-over";
 

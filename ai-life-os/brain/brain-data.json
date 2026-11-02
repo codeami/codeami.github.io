@@ -1492,6 +1492,138 @@
      ]
     }
    ]
+  },
+  {
+   "id": "course",
+   "label": "Course",
+   "color": "#7dff8a",
+   "note": "Ashish's AI introductory course: 7 short lessons in a fixed order, read with EA-bot. A lesson's dot lights up once you finish it in this browser.",
+   "links": [
+    {
+     "label": "Open the course",
+     "href": "../course/index.html"
+    }
+   ],
+   "folders": [
+    {
+     "name": "lessons",
+     "count": 7,
+     "files": [
+      {
+       "id": "course-wants",
+       "n": "1. Wants and needs",
+       "line": "course · lesson 1 of 7",
+       "body": [
+        "A need is what you cannot do without. A want is one way you would like to meet it."
+       ],
+       "links": [
+        {
+         "label": "Open this lesson",
+         "href": "../course/index.html#wants"
+        }
+       ],
+       "rel": [],
+       "lesson": "wants"
+      },
+      {
+       "id": "course-maslow",
+       "n": "2. Maslow's hierarchy of needs",
+       "line": "course · lesson 2 of 7",
+       "body": [
+        "Maslow's 1943 theory: five kinds of need, roughly in order. The pyramid came later, and the strict order is debated."
+       ],
+       "links": [
+        {
+         "label": "Open this lesson",
+         "href": "../course/index.html#maslow"
+        }
+       ],
+       "rel": [],
+       "lesson": "maslow"
+      },
+      {
+       "id": "course-intent",
+       "n": "3. What you want vs what you say",
+       "line": "course · lesson 3 of 7",
+       "body": [
+        "What you say is a lossy copy of what you want. Good intent names the purpose and what done looks like."
+       ],
+       "links": [
+        {
+         "label": "Open this lesson",
+         "href": "../course/index.html#intent"
+        }
+       ],
+       "rel": [],
+       "lesson": "intent"
+      },
+      {
+       "id": "course-humans",
+       "n": "4. How people pass on intent",
+       "line": "course · lesson 4 of 7",
+       "body": [
+        "Armies learned to send the purpose and the end state, not only the steps, so people can still act when the plan stops fitting."
+       ],
+       "links": [
+        {
+         "label": "Open this lesson",
+         "href": "../course/index.html#humans"
+        }
+       ],
+       "rel": [],
+       "lesson": "humans"
+      },
+      {
+       "id": "course-ai",
+       "n": "5. How AI receives intent",
+       "line": "course · lesson 5 of 7",
+       "body": [
+        "You can steer an AI with a prompt, a skill, a folder of files or a script. Intent engineering says: write the what, and let the model pick the how."
+       ],
+       "links": [
+        {
+         "label": "Open this lesson",
+         "href": "../course/index.html#ai"
+        }
+       ],
+       "rel": [],
+       "lesson": "ai"
+      },
+      {
+       "id": "course-layers",
+       "n": "6. Life intent and project intent",
+       "line": "course · lesson 6 of 7",
+       "body": [
+        "Two sizes of intent: a life file that changes slowly, and a short brief for each task, drawn out by questions."
+       ],
+       "links": [
+        {
+         "label": "Open this lesson",
+         "href": "../course/index.html#layers"
+        }
+       ],
+       "rel": [],
+       "lesson": "layers"
+      },
+      {
+       "id": "course-start",
+       "n": "7. Your first step",
+       "line": "course · lesson 7 of 7",
+       "body": [
+        "Pick one need and one good free read. Learn it with an AI tutor until you can use it. Then keep it in your second brain."
+       ],
+       "links": [
+        {
+         "label": "Open this lesson",
+         "href": "../course/index.html#start"
+        }
+       ],
+       "rel": [],
+       "lesson": "start"
+      }
+     ]
+    }
+   ]
   }
  ],
  "skills": [
@@ -1781,6 +1913,12 @@
    "n": "Chat with EA-bot",
    "state": "start here",
    "url": "../index.html",
+   "kind": "page"
+  },
+  {
+   "n": "AI introductory course",
+   "state": "7 lessons",
+   "url": "../course/index.html",
    "kind": "page"
   },
   {

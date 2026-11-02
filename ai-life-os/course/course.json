@@ -1,0 +1,144 @@
+{
+ "about": "Ashish's AI introductory course: the script EA-bot reads on course/index.html. build_data.py also turns the lessons into the Course room of the second brain. Every claim about Maslow or commander's intent carries a cite; every href was checked to load.",
+ "title": "Ashish's AI introductory course",
+ "opening": "AI or no AI. Let's get real. Let's lock in and let's learn how to balance our wants and needs.",
+ "law": {
+  "quote": "While Parkinson's Law states that work expands to fill the time available for its completion, its inverse - Horstman's Law, the Law of Forced Efficiency - states that work contracts to fit the time allocated for its completion.",
+  "line": "This is how we expect you to use AI: give the work a short, fixed time box and let the AI crew help it contract to fit. This course is built that way: seven short lessons, a few minutes each.",
+  "cites": [
+   {"label": "Parkinson's Law: C. Northcote Parkinson, The Economist, 1955", "href": "https://en.wikipedia.org/wiki/Parkinson%27s_law"},
+   {"label": "Horstman's Corollary to Parkinson's Law, among the Manager Tools podcast's principles (Mark Horstman)", "href": "https://en.wikipedia.org/wiki/Manager_Tools_Podcast"}
+  ]
+ },
+ "intro": "This is Ashish's AI introductory course: seven short lessons in a fixed order. In each one I explain a little, hand you one thing to read, and ask one question. It is modelled on BlueDot Impact's free AI courses. Each lesson you finish lights up on the map behind this page.",
+ "model": {"label": "BlueDot Impact's courses", "href": "https://bluedot.org/courses"},
+ "how": "Each lesson has two to four short messages, one reading and one question. Tap the flag beside a reading to save it to your reading list for later. Your progress stays in this browser only; nothing is sent anywhere.",
+ "who": "Ashish Raina, a program manager turned AI-crew operator, wrote it with his AI crew. Where a lesson states a fact, the source is linked under the message.",
+ "lessons": [
+  {
+   "id": "wants", "title": "Wants and needs",
+   "summary": "A need is what you cannot do without. A want is one way you would like to meet it.",
+   "steps": [
+    {"text": "Start with the line that opened this course: balance wants and needs. It sounds simple. It gets hard fast, because a want often arrives dressed as a need."},
+    {"text": "One clear way to split them comes from the economist Manfred Max-Neef. He argued that basic needs are few, finite and the same in every culture: subsistence, protection, affection, understanding, participation, idleness, creation, identity and freedom. What changes from place to place is the satisfier: the thing you reach for to meet a need.",
+     "cite": {"label": "Max-Neef's fundamental human needs (1986)", "href": "https://en.wikipedia.org/wiki/Manfred_Max-Neef%27s_Fundamental_human_needs"}},
+    {"text": "So a want is a satisfier you have picked: a new phone, a course, a promotion. Each one can meet a need, or miss it. The useful question is: which need is this for, and is there a better way to meet it?"},
+    {"text": "AI matters here because it makes wants cheap to chase. You can get ten options in a minute. It does not tell you which need you were trying to meet. That part stays yours, AI or no AI."}
+   ],
+   "read": {"label": "Max-Neef's fundamental human needs", "href": "https://en.wikipedia.org/wiki/Manfred_Max-Neef%27s_Fundamental_human_needs", "note": "Encyclopedia summary: the nine needs and the idea of satisfiers. About 10 minutes."},
+   "more": [],
+   "check": {"q": "You say you need a new laptop. In Max-Neef's terms, what is the laptop?",
+    "options": ["A fundamental need", "A satisfier: one way to meet a need such as creation or understanding", "Nothing to do with needs at all"],
+    "answer": 1,
+    "why": "The needs are the short list that every culture shares. The laptop is a satisfier you picked. Name the need it serves, then ask whether it is the best way to meet it."}
+  },
+  {
+   "id": "maslow", "title": "Maslow's hierarchy of needs",
+   "summary": "Maslow's 1943 theory: five kinds of need, roughly in order. The pyramid came later, and the strict order is debated.",
+   "steps": [
+    {"text": "The best-known model of needs is Abraham Maslow's. He set it out in 1943 in a paper called “A Theory of Human Motivation”, in the journal Psychological Review.",
+     "cite": {"label": "Maslow (1943), Psychological Review 50, 370–396", "href": "https://psychclassics.yorku.ca/Maslow/motivation.htm"}},
+    {"text": "He named five kinds of basic need: physiological, safety, love, esteem, and self-actualization. As the lower ones are mostly met, the higher ones start to drive us. He also wrote that the order is “not nearly as rigid as we may have implied”, and that most people are partly satisfied and partly unsatisfied in all their basic needs at once.",
+     "cite": {"label": "Maslow (1943), pages 385 and 388", "href": "https://psychclassics.yorku.ca/Maslow/motivation.htm"}},
+    {"text": "Maslow never drew a pyramid. Historians searched his writings and archives and found none. They traced the pyramid to management writing: a step diagram by Keith Davis in 1957, then a pyramid by the consultant Charles McDermid in 1960.",
+     "cite": {"label": "Bridgman, Cummings and Ballard (2019), as reported in Scientific American", "href": "https://www.scientificamerican.com/blog/beautiful-minds/who-created-maslows-iconic-pyramid/"}},
+    {"text": "The strict ranking is debated. A 1976 review found little evidence for the exact order Maslow described, and later work supports universal human needs while questioning the exact hierarchy. So use it as a checklist, not a ladder: when a want pulls hard, ask which need sits underneath, and whether a lower one is being skipped.",
+     "cite": {"label": "Maslow's hierarchy of needs: Criticism (encyclopedia, with sources)", "href": "https://en.wikipedia.org/wiki/Maslow%27s_hierarchy_of_needs"}}
+   ],
+   "read": {"label": "A. H. Maslow (1943), A Theory of Human Motivation", "href": "https://psychclassics.yorku.ca/Maslow/motivation.htm", "note": "The original paper, free to read. The sections on the five needs are enough for now. About 40 minutes."},
+   "more": [{"label": "Who created Maslow's iconic pyramid? (Scott Barry Kaufman, Scientific American, 2019)", "href": "https://www.scientificamerican.com/blog/beautiful-minds/who-created-maslows-iconic-pyramid/"}],
+   "check": {"q": "Which of these is accurate?",
+    "options": ["Maslow drew the pyramid in his 1943 paper", "Maslow said you must fully meet one level before the next one matters", "Maslow named five needs and said the order is not rigid; the pyramid came later"],
+    "answer": 2,
+    "why": "The 1943 paper has the five needs and no pyramid. Maslow himself said the order is not rigid and that people are partly satisfied in every need at once. The pyramid was drawn by others, around 1960."}
+  },
+  {
+   "id": "intent", "title": "What you want vs what you say",
+   "summary": "What you say is a lossy copy of what you want. Good intent names the purpose and what done looks like.",
+   "steps": [
+    {"text": "Intent is the want behind the words. The words are only a copy of it, and copies lose detail."},
+    {"text": "Every hand-off loses a little more. In my post on running AI agents I call it the old telephone game: every hand-off is a chance for “keep it under ₹50k” to become “keep it cheap” (a made-up example).",
+     "cite": {"label": "Post: One captain, many crews, section 3", "href": "../blog/how-it-fits-together.html#s3"}},
+    {"text": "The fix is to say the why and what done looks like, not only the what. “Fix my links” is a request. “Every link on the hub page opens at phone width, with a screenshot as proof” is a check anyone can run."}
+   ],
+   "read": {"label": "One captain, many crews: keeping the model's intent aligned with mine", "href": "../blog/how-it-fits-together.html#s5", "note": "Field Notes, section 5: four checks at four time scales for “did it do what I meant?”. About 8 minutes."},
+   "more": [{"label": "Guided tour: an example brief, intent on top and spec below", "href": "../tour/index.html#intent"}],
+   "check": {"q": "Which ask carries the most intent?",
+    "options": ["Fix the website.", "Make the site faster.", "Make the hub links open on my phone; done when every link opens at 375px, with a screenshot."],
+    "answer": 2,
+    "why": "It says what you want, why it matters to you (your phone) and how anyone can check it is done. The other two leave the purpose and the finish line to a guess."}
+  },
+  {
+   "id": "humans", "title": "How people pass on intent",
+   "summary": "Armies learned to send the purpose and the end state, not only the steps, so people can still act when the plan stops fitting.",
+   "steps": [
+    {"text": "Armies have long had this problem. Orders pass down a chain of people, and the situation changes on the way."},
+    {"text": "In the 19th century the Prussian army developed mission-type tactics (Auftragstaktik): the leader gives the goal, the intent behind it, the resources and the limits, and leaves the method to the person doing the work. Helmuth von Moltke the Elder is seen as one of its main advocates. Historians dispute how consistently it was practised.",
+     "cite": {"label": "Mission-type tactics (encyclopedia, with sources)", "href": "https://en.wikipedia.org/wiki/Mission-type_tactics"}},
+    {"text": "US joint doctrine gives the key part a name, commander's intent: “a clear and concise expression of the purpose of the operation and the military end state”. When the orders no longer fit, people who know the intent can still act in its spirit.",
+     "cite": {"label": "JP 3-0, Joint Operations (2010), as quoted in Intent (military)", "href": "https://en.wikipedia.org/wiki/Intent_(military)"}},
+    {"text": "The same works in a team or a family. Say why, and what done looks like. Then let the person choose the how."}
+   ],
+   "read": {"label": "Mission-type tactics", "href": "https://en.wikipedia.org/wiki/Mission-type_tactics", "note": "Encyclopedia article: where the idea came from and how intent is used when plans change. About 10 minutes."},
+   "more": [{"label": "Intent (military): the doctrine definitions", "href": "https://en.wikipedia.org/wiki/Intent_(military)"}],
+   "check": {"q": "The order says “take the bridge by six”. The bridge is gone. With commander's intent, what does the team do?",
+    "options": ["Stop and wait for new orders", "Work toward the purpose and end state behind the order, by another route", "Follow the original order as closely as they can anyway"],
+    "answer": 1,
+    "why": "The intent says why the bridge mattered and what the end state is. Knowing that, the team can pick a new route to the same result without waiting."}
+  },
+  {
+   "id": "ai", "title": "How AI receives intent",
+   "summary": "You can steer an AI with a prompt, a skill, a folder of files or a script. Intent engineering says: write the what, and let the model pick the how.",
+   "steps": [
+    {"text": "An AI gets your intent only through what you give it. In my setup there are four ways, from loose to strict: a prompt (a chat message), a skill (written instructions that load when a task matches), a folder of files that steers it, and a script (a hook or check that runs the same way every time).",
+     "cite": {"label": "Post: Guides and sensors, section 4", "href": "../blog/guides-and-sensors.html#s4"}},
+    {"text": "At the loose end the model decides almost everything. At the strict end scripts decide and the model fills the gaps. Work that must go the same way every time belongs in a script. Judgement belongs in the prompt or the skill."},
+    {"text": "Daniel Miessler calls the next step intent engineering. As models improve, step-by-step instructions help less, so the thing to write is “not HOW a thing should be done, but rather WHAT should be done.”",
+     "cite": {"label": "Daniel Miessler: From Prompt Engineering to Intent Engineering", "href": "https://danielmiessler.com/blog/intent-engineering"}},
+    {"text": "That is commander's intent again, for a machine: the purpose and what done looks like, plus a check that proves it."}
+   ],
+   "read": {"label": "Daniel Miessler: From Prompt Engineering to Intent Engineering", "href": "https://danielmiessler.com/blog/intent-engineering", "note": "A short essay: why “what” beats “how” as models get better. About 10 minutes."},
+   "more": [{"label": "Guides and sensors: prompt, skill, folder, script", "href": "../blog/guides-and-sensors.html#s4"}],
+   "check": {"q": "Which of these is intent engineering?",
+    "options": ["A 20-step list of exactly which buttons the AI must click", "The outcome you want and how you will check it, with the method left to the model", "Letting the AI guess what you probably want"],
+    "answer": 1,
+    "why": "Intent engineering writes the what and the check, and leaves the how to the model. The step list is the old prompt style; guessing skips the intent altogether."}
+  },
+  {
+   "id": "layers", "title": "Life intent and project intent",
+   "summary": "Two sizes of intent: a life file that changes slowly, and a short brief for each task, drawn out by questions.",
+   "steps": [
+    {"text": "Intent comes in two sizes. Life intent is what you are about: your mission, your goals, your problems. It changes slowly. Project intent is what you want from this one task. It changes every time."},
+    {"text": "For life intent, Miessler's open-source TELOS is a template: a plain file with your mission, goals, problems and strategies, which you hand to an AI as deep context. I keep mine as plain files that every AI tool reads first.",
+     "cite": {"label": "TELOS on GitHub", "href": "https://github.com/danielmiessler/Telos"}},
+    {"text": "For project intent, a short interview beats a form. Matt Pocock's grill-me skill has the AI question you until the ask is settled. My task briefs then keep two parts: my own words on top, kept as I said them, and below that the spec: how the work gets done and checked.",
+     "cite": {"label": "Matt Pocock's skills, with grill-me", "href": "https://github.com/mattpocock/skills"}},
+    {"text": "Put together: life intent is your needs from lessons 1 and 2, written down. Project intent is one want, made precise. The life file helps you judge whether a project is worth doing at all."}
+   ],
+   "read": {"label": "In AI, everything is a file (or a folder)", "href": "../blog/everything-is-a-file.html", "note": "Field Notes: your goals, context and rules written down once in plain folders, and read by every AI tool. About 12 minutes."},
+   "more": [{"label": "TELOS: a template for your life intent file", "href": "https://github.com/danielmiessler/Telos"}],
+   "check": {"q": "“Spend more evenings with my family” and “Fix the links on my site by Friday”. Which is which?",
+    "options": ["Both are project intent", "The first is life intent; the second is project intent", "The first is project intent; the second is life intent"],
+    "answer": 1,
+    "why": "Evenings with family is about what your life is for, and it changes slowly. Fixing links by Friday is one task with a finish line."}
+  },
+  {
+   "id": "start", "title": "Your first step",
+   "summary": "Pick one need and one good free read. Learn it with an AI tutor until you can use it. Then keep it in your second brain.",
+   "steps": [
+    {"text": "Here is the route I am building for myself. Step one: pick one need you want to work on, and one good free read for it. I keep a short directory of free and public-domain reads per area, called Open Brain. It is private for now, so start from the readings in this course."},
+    {"text": "Step two: learn it with an AI tutor, not only a summary. I use LearnHarness, an open-source app by Amos Blomqvist. It finds where your understanding ends, plans a path to your goal, teaches one step at a time, then sets practice problems.",
+     "cite": {"label": "LearnHarness on GitHub (AGPL-3.0)", "href": "https://github.com/amosblomqvist/learnharness"}},
+    {"text": "Step three: only what you can use goes into your second brain. Practice shows you can use it; then it becomes a note you keep and link to the rest. Mine is the map behind this page. This last step is the part I am still working out."},
+    {"text": "To keep going after this course, BlueDot Impact runs free AI courses. Their self-paced introduction, The Future of AI, is free and short.",
+     "cite": {"label": "BlueDot Impact: The Future of AI", "href": "https://bluedot.org/courses/future-of-ai"}}
+   ],
+   "read": {"label": "LearnHarness: an agent harness for learning", "href": "https://github.com/amosblomqvist/learnharness", "note": "The project page: how it measures, plans, teaches and sets practice. About 5 minutes."},
+   "more": [{"label": "BlueDot Impact: The Future of AI (free, self-paced)", "href": "https://bluedot.org/courses/future-of-ai"}, {"label": "A map of my mind you can read without leaving it", "href": "../blog/second-brain-page.html"}],
+   "check": {"q": "What is the first step on this route?",
+    "options": ["Install every AI tool you can find", "Pick one need and one good free read for it", "Write your whole life plan before you start"],
+    "answer": 1,
+    "why": "Start small: one need, one read. The tutor and the second brain come after, and only for what you can use."}
+  }
+ ]
+}

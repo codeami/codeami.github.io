@@ -100,6 +100,13 @@ html { scroll-behavior: smooth; }
 .foot p { margin: 0 0 6px; }
 .warnbox { padding: var(--space-3) var(--space-4); background: var(--surface); border: 1px solid var(--line); box-shadow: inset 4px 0 0 var(--warn); border-radius: var(--radius); }
 .warnbox p { margin: 0 0 6px; }
+/* How we expect you to use AI: the owner's quote, above the chat. */
+.law { max-width: 1120px; margin: var(--space-4) auto 0; padding: 0 var(--space-4); }
+.law > div { padding: var(--space-3) var(--space-4); background: var(--surface); border: 1px solid var(--line); box-shadow: inset 4px 0 0 var(--pop); border-radius: var(--radius); }
+.law h2 { margin: 0 0 6px; font-size: 13px; color: var(--mute); text-transform: uppercase; letter-spacing: .06em; }
+.law blockquote { margin: 0 0 8px; font-style: italic; }
+.law p { margin: 0 0 6px; }
+.law .src { font-size: 13px; color: var(--mute); }
 .k-home { display: flex; align-items: center; gap: var(--space-3); min-width: 0; color: var(--ink); text-decoration: none; }
 .k-nav nav a { white-space: nowrap; }
 
@@ -146,6 +153,13 @@ html { scroll-behavior: smooth; }
     <button class="theme" id="theme" type="button"></button>
   </nav>
 </header>
+
+<aside class="law" aria-labelledby="law-h"><div>
+  <h2 id="law-h">How we expect you to use AI</h2>
+  <blockquote>“While Parkinson's Law states that work expands to fill the time available for its completion, its inverse - Horstman's Law, the Law of Forced Efficiency - states that work contracts to fit the time allocated for its completion.”</blockquote>
+  <p>This is how we expect you to use AI: give the work a short, fixed time box and let the AI crew help it contract to fit. New here? <a href="course/index.html">Take the AI introductory course</a>.</p>
+  <p class="src">Parkinson's Law: C. Northcote Parkinson, <a href="https://en.wikipedia.org/wiki/Parkinson%27s_law">The Economist, 1955</a>. Horstman's Law: listed as “Horstman's Corollary to Parkinson's Law” among the <a href="https://en.wikipedia.org/wiki/Manager_Tools_Podcast">Manager Tools podcast's principles</a> (Mark Horstman).</p>
+</div></aside>
 
 <div class="shell">
   <main class="chatcol" aria-label="Chat with EA-bot">

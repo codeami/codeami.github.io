@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Ashish's AI introductory course · The Chart Room</title>
+<meta name="description" content="Ashish's AI introductory course: seven short lessons with EA-bot, in a fixed order. Wants and needs, Maslow, intent, commander's intent, intent engineering, life and project intent, and a first step.">
+<script src="../article.js"></script>
+<link rel="icon" href="../kit/bosun.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../kit/tokens.css">
+<link rel="stylesheet" href="../kit/kit.css">
+<style>
+/* The course: the same chat as the landing (bubbles, option chips, a save-for-later
+   list), but the script is a fixed reading order from course.json. */
+.k-nav { position: sticky; top: 0; z-index: 2; }
+.k-nav nav { gap: 14px; align-items: center; }
+.k-nav nav a { white-space: nowrap; }
+.k-home { display: flex; align-items: center; gap: var(--space-3); min-width: 0; color: var(--ink); text-decoration: none; }
+.theme { min-height: 44px; min-width: 44px; padding: 0 10px; font: 700 14px/1 var(--font-body); color: var(--ink); background: transparent; border: 1.5px solid var(--line); border-radius: var(--radius); cursor: pointer; }
+.shell { max-width: 760px; margin: 0 auto; padding: 0 var(--space-4); }
+.chatcol .k-chat { padding: var(--space-4) 0; }
+.chatcol .k-row, .chatcol .opts { scroll-margin: 76px 0 90px; }
+.k-bubble p { margin: 0; }
+.k-bubble p + p { margin-top: 6px; }
+.k-bubble .kick { display: block; margin-bottom: 4px; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--mute); }
+.k-bubble .cite { display: block; margin-top: 6px; font-size: 13px; }
+.k-bubble blockquote { margin: 0 0 6px; padding: 6px 10px; font-style: italic; border-left: 3px solid var(--pop); }
+.reads { margin: 6px 0 0; padding: 0; list-style: none; }
+.reads li { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+.reads li a { flex: 1; min-width: 0; font-weight: 700; }
+.reads .note { display: block; font-size: 13px; color: var(--mute); }
+.typing { display: inline-flex; gap: 4px; padding: 14px 16px; }
+.typing i { width: 7px; height: 7px; border-radius: 50%; background: var(--mute); animation: dot 1s infinite ease-in-out; }
+.typing i:nth-child(2) { animation-delay: .15s; } .typing i:nth-child(3) { animation-delay: .3s; }
+@keyframes dot { 0%, 80%, 100% { opacity: .3; } 40% { opacity: 1; } }
+.new { animation: rise .3s ease-out; }
+@keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .typing i, .new { animation: none; } }
+
+/* Options: the chips under EA-bot's message; older ones stay as a record of the path. */
+.opts { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-2); padding-left: 42px; }
+.opts .k-chip { max-width: 100%; padding: 10px 14px; line-height: 1.25; text-align: left; }
+.opts .k-chip:disabled { cursor: default; }
+.opts .k-chip:disabled:not([aria-pressed="true"]) { color: var(--mute); border-color: var(--line); }
+/* The flag beside a reading saves it for later. */
+.save { display: inline-flex; flex: none; align-items: center; gap: 4px; min-height: 36px; min-width: 44px; padding: 0 10px; font: 700 13px/1 var(--font-body); color: var(--mute); background: transparent; border: 1.5px solid var(--line); border-radius: 999px; cursor: pointer; }
+.save svg { width: 14px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; }
+.save[aria-pressed="true"] { color: var(--on-pop); background: var(--pop); border-color: var(--pop); }
+.save[aria-pressed="true"] svg { fill: currentColor; }
+
+.composer { position: sticky; bottom: 0; display: flex; align-items: center; gap: var(--space-2); padding: var(--space-3) 0; background: var(--bg); border-top: 1px solid var(--line); }
+.composer .prog { flex: 1; min-width: 0; font-size: 14px; color: var(--mute); }
+.pill { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.pill b { min-width: 22px; padding: 2px 6px; text-align: center; color: var(--on-pop); background: var(--pop); border-radius: 999px; }
+
+/* Below the chat: the lessons in order, and the reading list in folders. */
+.side { display: grid; gap: var(--space-4); padding: var(--space-4) 0 var(--space-5); scroll-margin-top: 70px; }
+.panel { padding: var(--space-3) var(--space-4); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+.panel h2 { margin: 4px 0 6px; font-size: 18px; }
+.hint { margin: 0 0 var(--space-2); font-size: 14px; color: var(--mute); }
+.lessons { margin: 0; padding: 0; list-style: none; }
+.lessons li { display: flex; align-items: center; gap: 8px; min-height: 40px; }
+.lessons .mark { width: 22px; height: 22px; flex: none; display: grid; place-items: center; font-size: 13px; font-weight: 700; color: var(--mute); border: 1.5px solid var(--line); border-radius: 50%; }
+.lessons li.done .mark { color: var(--on-pop); background: var(--pop); border-color: var(--pop); }
+.lessons .go, .folder .go { flex: 1; min-width: 0; padding: 6px 0; font: 15px/1.3 var(--font-body); text-align: left; color: var(--accent-text); background: none; border: 0; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.folder summary { display: flex; align-items: center; gap: 8px; min-height: 36px; font-weight: 700; cursor: pointer; list-style: none; }
+.folder summary::-webkit-details-marker { display: none; }
+.folder summary svg { width: 18px; height: 15px; flex: none; fill: var(--accent); }
+.folder summary .n { margin-left: auto; font-size: 13px; color: var(--mute); }
+.folder ul { margin: 0 0 var(--space-2) 8px; padding: 0 0 0 10px; list-style: none; border-left: 2px solid var(--line); }
+.folder li { display: flex; align-items: center; gap: 6px; min-height: 40px; padding-left: 8px; }
+.folder input { width: 18px; height: 18px; flex: none; accent-color: var(--accent); }
+.folder li a { flex: 1; min-width: 0; padding: 6px 0; font-size: 15px; line-height: 1.3; }
+.folder li.done a { color: var(--mute); text-decoration: line-through; }
+.folder .rm { width: 32px; height: 32px; flex: none; font-size: 18px; color: var(--mute); background: none; border: 0; border-radius: 50%; cursor: pointer; }
+.restart { margin-top: var(--space-2); }
+.foot { max-width: 760px; margin: 0 auto; padding: var(--space-4); font-size: 14px; color: var(--mute); border-top: 1px solid var(--line); }
+.foot p { margin: 0 0 6px; }
+.warnbox { padding: var(--space-3) var(--space-4); background: var(--surface); border: 1px solid var(--line); box-shadow: inset 4px 0 0 var(--warn); border-radius: var(--radius); }
+.warnbox p { margin: 0 0 6px; }
+@media (max-width: 600px) {
+  .k-logo small { display: none; }
+  .k-nav { gap: 10px; }
+  .k-nav nav { gap: 10px; font-size: 14px; }
+  .opts { padding-left: 0; }
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <!-- Bosun, from kit/bosun.svg, drawn inline so it takes the page's colours. -->
+  <symbol id="bosun" viewBox="0 0 100 100">
+    <line x1="50" y1="19" x2="50" y2="5" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/>
+    <path d="M50 5h17l-4.5 5 4.5 5H50z" fill="var(--pop)" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M25 33Q50 10 75 33Z" fill="var(--surface)" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
+    <rect x="18" y="31" width="64" height="47" rx="17" fill="var(--surface)" stroke="var(--ink)" stroke-width="3"/>
+    <rect x="21" y="28" width="58" height="9" rx="4.5" fill="var(--accent)" stroke="var(--ink)" stroke-width="2"/>
+    <circle cx="38" cy="54" r="6" fill="var(--ink)"/><circle cx="62" cy="54" r="6" fill="var(--ink)"/>
+    <circle cx="40" cy="52" r="2" fill="var(--surface)"/><circle cx="64" cy="52" r="2" fill="var(--surface)"/>
+    <path d="M41 66Q50 73 59 66" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/>
+    <rect x="32" y="80" width="36" height="16" rx="6" fill="var(--accent)" stroke="var(--ink)" stroke-width="3"/>
+    <circle cx="50" cy="88" r="3" fill="var(--pop)"/>
+  </symbol>
+</svg>
+
+<header class="k-nav">
+  <a class="k-home" href="../index.html"><svg class="k-mark" role="img" aria-label="Bosun, the EA-bot mascot"><use href="#bosun"/></svg>
+  <span class="k-logo">The Chart Room<small>How one captain runs a crew of AI agents, safely.</small></span></a>
+  <nav aria-label="Site">
+    <a href="../blog/index.html">Field Notes</a>
+    <a href="index.html" aria-current="page">Course</a>
+    <a href="../arena.html">Arena</a>
+    <a href="../safety.html">Safety</a>
+    <button class="theme" id="theme" type="button"></button>
+  </nav>
+</header>
+
+<div class="shell">
+  <main class="chatcol" aria-label="Ashish's AI introductory course, with EA-bot">
+    <div class="k-chat" id="log" role="log" aria-live="polite">
+      <noscript><p>This course runs as a chat and needs JavaScript. The readings are listed in <a href="course.json">course.json</a>.</p></noscript>
+    </div>
+    <div class="composer">
+      <span class="prog" id="prog">7 short lessons</span>
+      <a class="k-btn secondary pill" href="#later">Saved <b id="pillN">0</b></a>
+    </div>
+  </main>
+
+  <aside class="side" id="later" aria-label="Lessons and reading list">
+    <section class="panel">
+      <h2>Lessons</h2>
+      <p class="hint" id="lcap">In this order. A finished lesson lights up on the map.</p>
+      <ol class="lessons" id="lessons"></ol>
+    </section>
+    <section class="panel">
+      <h2>Reading list</h2>
+      <p class="hint" id="hint">Tap the flag beside a reading to save it here.</p>
+      <div id="folders"></div>
+      <button class="k-btn quiet restart" id="restart" type="button">Start over</button>
+    </section>
+  </aside>
+</div>
+
+<footer class="foot">
+  <p>Ashish's AI introductory course · modelled on <a href="https://bluedot.org/courses">BlueDot Impact's courses</a>. Progress stays in this browser only.</p>
+  <p><a href="../index.html">Chat with EA-bot</a> · <a href="../blog/index.html">Field Notes</a> · <a href="../brain/index.html">Second brain</a> · <a href="../about.html">About</a></p>
+</footer>
+
+<script>
+(function () {
+  var KEY = "ai-course:v1"; // brain/graph.js reads .done from this key to light the lesson dots
+  var NS = "http://www.w3.org/2000/svg";
+  var log = document.getElementById("log");
+  var C, byId = {}, S, busy = false;
+  var calm = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* Progress and the reading list live in localStorage. Blocked storage only means
+     they last for this visit. */
+  function load() {
+    try {
+      var s = JSON.parse(localStorage.getItem(KEY) || "null");
+      if (s && s.done && typeof s.done === "object" && Array.isArray(s.saved) && Array.isArray(s.read)) return s;
+    } catch (e) { /* unreadable or blocked: start fresh */ }
+    return { done: {}, saved: [], read: [] };
+  }
+  function store() {
+    try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* storage blocked */ }
+  }
+  function light() { try { if (window.AIOMap && window.AIOMap.lit) window.AIOMap.lit(); } catch (e) { /* no map */ } }
+  window.addEventListener("aiomap", light);
+
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text) n.textContent = text;
+    return n;
+  }
+  function has(list, id) { return list.indexOf(id) >= 0; }
+  function link(r, cls) {
+    var a = el("a", cls || "", r.label);
+    a.href = r.href; a.target = "_blank"; a.rel = "noopener";
+    return a;
+  }
+  function avatar() {
+    var a = document.createElementNS(NS, "svg");
+    a.setAttribute("class", "k-avatar"); a.setAttribute("aria-hidden", "true");
+    var u = document.createElementNS(NS, "use"); u.setAttribute("href", "#bosun");
+    a.appendChild(u);
+    return a;
+  }
+  function botRow(text, cite) {
+    var row = el("div", "k-row"), b = el("div", "k-bubble");
+    row.appendChild(avatar());
+    if (text) b.appendChild(el("p", "", text));
+    if (cite) { var c = el("span", "cite", "Source: "); c.appendChild(link(cite)); b.appendChild(c); }
+    row.appendChild(b);
+    return row;
+  }
+  function meRow(text) {
+    var row = el("div", "k-row");
+    row.appendChild(el("div", "k-bubble me", text));
+    return row;
+  }
+  function num(id) { return C.lessons.indexOf(byId[id]) + 1; }
+  function nextId() {
+    for (var i = 0; i < C.lessons.length; i++) if (!(C.lessons[i].id in S.done)) return C.lessons[i].id;
+    return null;
+  }
+  function scrollTo(node) { node.scrollIntoView({ block: "nearest" }); }
+
+  /* EA-bot "types", then the row appears. */
+  function say(rows, then) {
+    busy = true;
+    var wait = botRow(""), dots = wait.lastChild;
+    dots.className += " typing";
+    dots.setAttribute("aria-label", "EA-bot is typing");
+    dots.innerHTML = "<i></i><i></i><i></i>";
+    log.appendChild(wait);
+    scrollTo(wait);
+    setTimeout(function () {
+      log.removeChild(wait);
+      rows.forEach(function (r) { r.className += " new"; log.appendChild(r); });
+      busy = false;
+      if (then) then();
+    }, calm ? 150 : 600);
+  }
+  /* Options: each is [label, action]. A pick retires the row and is echoed as your message. */
+  function chips(list) {
+    var box = el("div", "opts new");
+    list.forEach(function (o) {
+      var b = el("button", "k-chip", o[0]);
+      b.type = "button"; b.setAttribute("aria-pressed", "false");
+      b.addEventListener("click", function () {
+        if (busy || b.disabled) return;
+        Array.prototype.forEach.call(box.querySelectorAll("button"), function (x) { x.disabled = true; });
+        b.setAttribute("aria-pressed", "true");
+        log.appendChild(meRow(o[0]));
+        o[1]();
+      });
+      box.appendChild(b);
+    });
+    log.appendChild(box);
+    scrollTo(box);
+  }
+  function retireAll() {
+    Array.prototype.forEach.call(log.querySelectorAll(".opts button"), function (x) { x.disabled = true; });
+  }
+
+  function lawRow() {
+    var row = botRow(""), b = row.lastChild;
+    b.appendChild(el("span", "kick", "First, how to use AI"));
+    b.appendChild(el("blockquote", "", "“" + C.law.quote + "”"));
+    b.appendChild(el("p", "", C.law.line));
+    C.law.cites.forEach(function (c) { var s = el("span", "cite", "Source: "); s.appendChild(link(c)); b.appendChild(s); });
+    return row;
+  }
+  function greet() {
+    log.textContent = "";
+    log.appendChild(botRow(C.opening));
+    log.appendChild(lawRow());
+    var intro = botRow(C.intro), m = el("span", "cite", "The model: ");
+    m.appendChild(link(C.model)); intro.lastChild.appendChild(m);
+    log.appendChild(intro);
+    var n = Object.keys(S.done).length;
+    if (n) log.appendChild(botRow("Welcome back. You have finished " + n + " of " + C.lessons.length + " lessons."));
+    menu();
+  }
+  function menu(skip) {
+    var nx = nextId(), list = [];
+    if (nx) list.push([(Object.keys(S.done).length ? "Continue: lesson " : "Start lesson ") + num(nx) + ": " + byId[nx].title, function () { lesson(nx); }]);
+    else list.push(["Go over lesson 1 again", function () { lesson(C.lessons[0].id); }]);
+    if (skip !== "how") list.push(["How does this course work?", function () { say([botRow(C.how)], function () { menu("how"); }); }]);
+    if (skip !== "who") list.push(["Who wrote it?", function () { say([botRow(C.who)], function () { menu("who"); }); }]);
+    chips(list.slice(0, 3));
+  }
+
+  /* One lesson: its steps, then the reading, then the question. */
+  function lesson(id) {
+    var L = byId[id];
+    retireAll();
+    side();
+    step(L, 0);
+  }
+  function step(L, i) {
+    var s = L.steps[i], row = botRow(s.text, s.cite);
+    if (i === 0) row.lastChild.insertBefore(el("span", "kick", "Lesson " + num(L.id) + " of " + C.lessons.length + ": " + L.title), row.lastChild.firstChild);
+    say([row], function () {
+      if (i + 1 < L.steps.length) chips([["Go on", function () { step(L, i + 1); }]]);
+      else reading(L);
+    });
+  }
+  var FLAG = '<svg viewBox="0 0 14 16" aria-hidden="true"><path d="M2 15V2h10l-3 4 3 4H2"/></svg>';
+  function saveBtn(key) {
+    var b = el("button", "save");
+    b.type = "button"; b.dataset.save = key;
+    b.innerHTML = FLAG + "<span></span>";
+    setSave(b);
+    return b;
+  }
+  function setSave(b) {
+    var on = has(S.saved, b.dataset.save), r = readOf(b.dataset.save);
+    b.setAttribute("aria-pressed", on ? "true" : "false");
+    b.setAttribute("aria-label", (on ? "Saved for later: " : "Save for later: ") + r.label);
+    b.lastChild.textContent = on ? "Saved" : "Later";
+  }
+  /* A reading's key is "<lesson id>:0" for the main read, ":1" and on for the extras. */
+  function readOf(key) {
+    var p = key.split(":"), L = byId[p[0]];
+    return p[1] === "0" ? L.read : L.more[+p[1] - 1];
+  }
+  function reading(L) {
+    var row = botRow("Read this:"), b = row.lastChild, ul = el("ul", "reads");
+    function item(r, key, note) {
+      var li = el("li"), w = el("span");
+      w.style.flex = "1"; w.style.minWidth = "0";
+      w.appendChild(link(r));
+      if (note) w.appendChild(el("span", "note", note));
+      li.appendChild(w); li.appendChild(saveBtn(key));
+      ul.appendChild(li);
+    }
+    item(L.read, L.id + ":0", L.read.note);
+    b.appendChild(ul);
+    if (L.more.length) {
+      b.appendChild(el("p", "", "Also good:"));
+      var u2 = el("ul", "reads");
+      ul = u2;
+      L.more.forEach(function (r, k) { item(r, L.id + ":" + (k + 1)); });
+      b.appendChild(u2);
+    }
+    say([row], function () {
+      chips([
+        ["I've read it. Ask me the question", function () { check(L); }],
+        ["Save it for later, ask me now", function () { if (!has(S.saved, L.id + ":0")) toggleSave(L.id + ":0"); check(L); }]
+      ]);
+    });
+  }
+  function check(L) {
+    var q = botRow(L.check.q);
+    q.lastChild.insertBefore(el("span", "kick", "Check"), q.lastChild.firstChild);
+    say([q], function () {
+      chips(L.check.options.map(function (o, k) { return [o, function () { answer(L, k); }]; }));
+    });
+  }
+  function answer(L, k) {
+    var right = k === L.check.answer;
+    S.done[L.id] = right ? 1 : 0;
+    store(); side(); light();
+    var fb = botRow((right ? "Yes. " : "Not quite. The answer is: " + L.check.options[L.check.answer] + ". ") + L.check.why);
+    var n = num(L.id), last = n === C.lessons.length;
+    var end = botRow(last
+      ? "That is the course. All " + C.lessons.length + " lessons are lit on the map behind this page. Keep the time box short, and say what done looks like."
+      : "Lesson " + n + " of " + C.lessons.length + " done. Its dot is now lit in the Course room on the map behind this page.");
+    say([fb, end], function () {
+      var nx = nextId(), list = [];
+      if (!last) list.push(["Next: lesson " + (n + 1) + ": " + C.lessons[n].title, function () { lesson(C.lessons[n].id); }]);
+      else if (nx) list.push(["Do lesson " + num(nx) + ": " + byId[nx].title, function () { lesson(nx); }]);
+      if (!right) list.push(["Try this question again", function () { check(L); }]);
+      list.push(["Back to the start", function () { say([botRow("Here are your options.")], function () { menu(); }); }]);
+      chips(list);
+    });
+  }
+
+  function toggleSave(key) {
+    var i = S.saved.indexOf(key);
+    if (i >= 0) { S.saved.splice(i, 1); var d = S.read.indexOf(key); if (d >= 0) S.read.splice(d, 1); }
+    else S.saved.push(key);
+    store();
+    Array.prototype.forEach.call(document.querySelectorAll('[data-save="' + key + '"]'), setSave);
+    side();
+  }
+  log.addEventListener("click", function (ev) {
+    var b = ev.target.closest ? ev.target.closest("button[data-save]") : null;
+    if (b) toggleSave(b.dataset.save);
+  });
+
+  /* Below the chat: the lessons in order, and saved readings in one folder per lesson. */
+  var FOLDER = '<svg viewBox="0 0 18 15" aria-hidden="true"><path d="M0 2a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2z"/></svg>';
+  function side() {
+    var ol = document.getElementById("lessons"), n = 0;
+    ol.textContent = "";
+    C.lessons.forEach(function (L, i) {
+      var done = L.id in S.done, li = el("li", done ? "done" : "");
+      if (done) n++;
+      li.appendChild(el("span", "mark", done ? "✓" : String(i + 1)));
+      var go = el("button", "go", L.title);
+      go.type = "button"; go.dataset.lesson = L.id;
+      go.setAttribute("aria-label", "Lesson " + (i + 1) + ": " + L.title + (done ? ", done" : ""));
+      li.appendChild(go);
+      ol.appendChild(li);
+    });
+    document.getElementById("lcap").textContent = n
+      ? n + " of " + C.lessons.length + " done. Each finished lesson is lit on the map."
+      : "In this order. A finished lesson lights up on the map.";
+    document.getElementById("prog").textContent = n + " of " + C.lessons.length + " lessons done";
+
+    var box = document.getElementById("folders");
+    box.textContent = "";
+    C.lessons.forEach(function (L, i) {
+      var items = S.saved.filter(function (k) { return k.split(":")[0] === L.id; });
+      if (!items.length) return;
+      var d = el("details", "folder"), s = el("summary"), ul = el("ul");
+      d.open = true;
+      s.innerHTML = FOLDER;
+      s.appendChild(el("span", "", (i + 1) + ". " + L.title));
+      var left = items.filter(function (k) { return !has(S.read, k); }).length;
+      s.appendChild(el("span", "n", left ? left + " to read" : "all read"));
+      d.appendChild(s);
+      items.forEach(function (k) {
+        var r = readOf(k), li = el("li", has(S.read, k) ? "done" : "");
+        var cb = el("input");
+        cb.type = "checkbox"; cb.checked = has(S.read, k); cb.dataset.read = k;
+        cb.setAttribute("aria-label", "Read: " + r.label);
+        var rm = el("button", "rm", "×");
+        rm.type = "button"; rm.dataset.rm = k;
+        rm.setAttribute("aria-label", "Remove " + r.label);
+        li.appendChild(cb); li.appendChild(link(r)); li.appendChild(rm);
+        ul.appendChild(li);
+      });
+      d.appendChild(ul);
+      box.appendChild(d);
+    });
+    document.getElementById("hint").hidden = S.saved.length > 0;
+    document.getElementById("pillN").textContent = S.saved.length;
+  }
+  function startLesson(id) {
+    if (busy || !byId[id]) return;
+    log.appendChild(meRow("Lesson " + num(id) + ": " + byId[id].title));
+    lesson(id);
+  }
+  document.getElementById("lessons").addEventListener("click", function (ev) {
+    var t = ev.target.closest ? ev.target.closest("[data-lesson]") : null;
+    if (t) startLesson(t.dataset.lesson);
+  });
+  document.getElementById("folders").addEventListener("click", function (ev) {
+    var t = ev.target;
+    if (t.dataset.read) {
+      var i = S.read.indexOf(t.dataset.read);
+      if (t.checked && i < 0) S.read.push(t.dataset.read);
+      if (!t.checked && i >= 0) S.read.splice(i, 1);
+      store(); side();
+    } else if (t.dataset.rm) toggleSave(t.dataset.rm);
+  });
+  document.getElementById("restart").addEventListener("click", function () {
+    if (busy) return;
+    S = { done: {}, saved: [], read: [] };
+    store(); light();
+    greet(); side();
+  });
+  // a link such as course/index.html#maslow (the map's lesson cards) opens that lesson
+  function fromHash() { var id = decodeURIComponent(location.hash.slice(1)); if (byId[id]) startLesson(id); }
+  window.addEventListener("hashchange", fromHash);
+
+  fetch("course.json").then(function (r) {
+    if (!r.ok) throw new Error(r.status);
+    return r.json();
+  }).then(function (D) {
+    C = D;
+    C.lessons.forEach(function (L) { byId[L.id] = L; });
+    S = load();
+    // Drop ids a newer script no longer has.
+    Object.keys(S.done).forEach(function (id) { if (!byId[id]) delete S.done[id]; });
+    function known(k) { var p = k.split(":"); return !!byId[p[0]] && !!readOf(k); }
+    S.saved = S.saved.filter(known); S.read = S.read.filter(known);
+    greet(); side();
+    log.firstChild.scrollIntoView({ block: "nearest" }); // open on the owner's line, not the options
+    fromHash();
+  }).catch(function () {
+    var b = el("div", "warnbox");
+    b.appendChild(el("p", "", "The course could not load its script, course.json. A browser blocks it from a local file."));
+    b.appendChild(el("p", "", "Serve the site folder, for example with python3 -m http.server."));
+    log.appendChild(b);
+  });
+})();
+</script>
+</body>
+</html>
