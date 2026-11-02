@@ -14,7 +14,8 @@
 <style>
 /* The whoami landing: who I am, the latest posts, and one big way into the demo. */
 .who { font-size: 1.15rem; }
-.demo { display: block; margin: var(--space-4, 24px) 0; padding: 20px 22px; color: var(--ink); text-decoration: none;
+.demos { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin: var(--space-4, 24px) 0; }
+.demo { display: block; padding: 20px 22px; color: var(--ink); text-decoration: none;
   border: 1px solid var(--line); border-left: 4px solid var(--accent); background: var(--panel, var(--surface)); border-radius: 2px; }
 .demo:hover, .demo:focus-visible { border-color: var(--accent); outline: none; }
 .demo .k-kicker { margin: 0 0 6px; }
@@ -28,7 +29,7 @@
 <body>
 <header class="k-nav">
   <a class="k-home" href="index.html"><img class="k-mark" src="ai-life-os/kit/bosun.svg" alt=""><span class="k-logo">Ashish Raina<small>whoami</small></span></a>
-  <nav aria-label="Site"><a href="ai-life-os/blog/index.html">Field Notes</a><a href="ai-life-os/index.html">AI-Life-OS</a><a href="ai-life-os/about.html">About</a><button class="theme" id="theme" type="button">Matrix</button></nav>
+  <nav aria-label="Site"><a href="ai-life-os/blog/index.html">Field Notes</a><a href="ai-life-os/index.html">AI-Life-OS</a><a href="ai-life-os/brain/index.html">Second Brain</a><a href="ai-life-os/about.html">About</a><button class="theme" id="theme" type="button">Matrix</button></nav>
 </header>
 <main class="page">
 <article class="k-article">
@@ -37,13 +38,22 @@
 <p class="k-dek who">Program manager turned AI-crew operator. I run a crew of AI coding agents from one chat, and I write down how I steer them, check their work and keep them doing what I meant.</p>
 <blockquote>"Managing a complex AI agentic bot system is sort of like managing a contract with different vendors."</blockquote>
 
+<div class="demos">
 <a class="demo" href="ai-life-os/index.html">
   <p class="k-kicker">Live demo</p>
   <h2>AI-Life-OS</h2>
   <p>The FirstMate setup I run every day, laid open: chat with EA-bot, the skill map, the harness arena, and what the agents may and may not do.</p>
-  <ul><li>Chat with EA-bot</li><li>Skill map</li><li>Harness flow</li><li>Arena</li><li>Safety</li><li>Second brain</li></ul>
+  <ul><li>Chat with EA-bot</li><li>Skill map</li><li>Harness flow</li><li>Arena</li><li>Safety</li></ul>
   <p class="go">Open AI-Life-OS →</p>
 </a>
+<a class="demo" href="ai-life-os/brain/index.html">
+  <p class="k-kicker">Interactive map</p>
+  <h2>Second Brain</h2>
+  <p>How it all connects, as one ring map: the public notes, FirstMate's twelve parts, the skills, the posts and the pages. Click any dot for its card; posts open in a reading drawer beside the map.</p>
+  <ul><li>Ring graph</li><li>Node cards</li><li>Reading drawer</li><li>Guided tour</li></ul>
+  <p class="go">Open the Second Brain →</p>
+</a>
+</div>
 
 <h2>Latest posts</h2>
 <ol class="post-list">

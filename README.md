@@ -8,7 +8,9 @@ Plain static files, served by GitHub Pages from the root of `main` (`.nojekyll` 
 - `blog/index.html`: a redirect. Posts have one home, `ai-life-os/blog/`.
 - `ai-life-os/`: the demo, once The Chart Room at codeami.github.io/firstmate-showcase. Its old section pages (s02 to s10, overview, harness, skills, cast, tasks, testing, vendors) were folded into the story, core logic, safety and about pages and are not carried here.
 
-`ai-life-os/hud.js` adds the version tag (`VERSION`), the whoami link and the GitHub link to every HUD page's top bar.
+The layout is Chart & Cards. The chart is the second brain, a live ring map (`ai-life-os/brain/graph.js`, the AIO prototype's page fed only public data), and it is the base layer of every page. Each page is a card over it: a right-hand panel on wide screens, a bottom sheet on phones, with minimise and close. `ai-life-os/hud.js` mounts the chart and turns the page into the card. A link to another page swaps the card in place when that page has no inline script, otherwise the browser loads it; either way each page keeps its own URL. `hud.js` also adds the version tag (`VERSION`), the Second Brain tab, the whoami link and the GitHub link to the header. HUD and Matrix are the two colour sets.
+
+`ai-life-os/brain/index.html` shows the chart alone. Its data, `brain/brain-data.json`, is built from public files only (the approved notes in `notes.js`, `brain/src/extra.json`, `brain/src/site.json`, the skill map and the Field Notes list): `python3 -I ai-life-os/brain/build_data.py`.
 
 The two maps, `ai-life-os/maps/skills.html` and `flow.html`, are built files. Edit `ai-life-os/maps/src/*/map.json` or the shell in `ai-life-os/maps/_shared/` (from [super-board](https://github.com/EricTechPro/super-board) by EricTechPro, MIT; see its NOTICE), then rebuild:
 

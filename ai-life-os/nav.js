@@ -11,12 +11,12 @@ var PAGES = [
   ["story.html",     "The story"],
   ["core.html",      "Core logic"],
   ["maps/skills.html", "Skill map"],
-  ["maps/flow.html", "Harness flow map"]
+  ["maps/flow.html", "Harness flow map"],
+  ["brain/index.html", "Second Brain"]
 ];
 
 var MORE = [
   ["tour/index.html", "Guided tour"],
-  ["brain/index.html", "Second brain"],
   ["changelog.html", "Changelog"],
   ["about.html",     "About"]
 ];
