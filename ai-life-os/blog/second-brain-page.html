@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>A map of my mind you can read without leaving it · The Chart Room</title>
+<meta name="description" content="One page that shows my whole agent setup as rings around one file, and a rule I won&#x27;t break: read in place, never navigate away">
+<script src="../article.js"></script>
+<link rel="icon" href="../kit/bosun.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../kit/tokens.css">
+<link rel="stylesheet" href="../kit/kit.css">
+<link rel="stylesheet" href="../article.css">
+<style>
+.tag{display:inline-block;font-size:.78rem;font-weight:600;padding:0 .45em;border-radius:4px;white-space:nowrap}
+.tag.ok{background:var(--ok-soft);color:var(--ok)}
+.tag.bad{background:var(--bad-soft);color:var(--bad)}
+.tag.soon{background:var(--warn-soft);color:var(--warn)}
+tr.bad td{background:var(--bad-soft)}
+.test{font-size:.86rem;color:var(--muted)}
+.callout{background:var(--warn-soft);border-left:3px solid var(--warn);padding:10px 14px;border-radius:6px;margin:1.2em 0}
+.gloss{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 16px;margin:0 0 28px}
+.gloss summary{font-weight:600;cursor:pointer}
+.gloss dl{margin:.6em 0 .2em;display:grid;grid-template-columns:1fr;gap:4px 18px;font-size:.92rem}
+@media (min-width:640px){.gloss dl{grid-template-columns:1fr 1fr}}
+.gloss dt{font-weight:600;display:inline}
+.gloss dd{margin:0;display:inline}
+.gloss dl div{line-height:1.45}
+svg .ring{fill:none;stroke:var(--line);stroke-width:1.5}
+svg .ring.dash{stroke-dasharray:5 4}
+svg .hub{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.5}
+svg .core{fill:var(--warn-soft);stroke:var(--warn);stroke-width:2}
+svg .dia{fill:var(--warn-soft);stroke:var(--warn);stroke-width:1.4}
+svg .rt{fill:var(--ok-soft);stroke:var(--ok);stroke-width:1.4}
+svg .rt.bad{fill:var(--bad-soft);stroke:var(--bad)}
+svg .hex{fill:var(--panel);stroke:var(--muted);stroke-width:1.4}
+svg text{font-family:var(--sans);font-size:11px;fill:var(--ink)}
+svg text.dim{fill:var(--muted)}
+svg text.halo{paint-order:stroke;stroke:var(--panel);stroke-width:3px}
+</style>
+</head>
+<body>
+<header class="k-nav">
+  <a class="k-home" href="../index.html"><img class="k-mark" src="../kit/bosun.svg" alt=""><span class="k-logo">The Chart Room<small>How one captain runs a crew of AI agents, safely.</small></span></a>
+  <nav aria-label="Site"><a href="../blog/index.html" aria-current="page">Field Notes</a><a href="../arena.html">Arena</a><a href="../safety.html">Safety</a><button class="theme" id="theme" type="button">Night</button></nav>
+</header>
+<main class="page">
+<article class="k-article">
+<p class="k-kicker"><a href="index.html">Field Notes</a> · Setup</p>
+<h1 class="k-title">A map of my mind you can read without leaving it</h1>
+<p class="k-dek">One page that shows my whole agent setup as rings around one file, and a rule I won't break: read in place, never navigate away</p>
+<p class="k-meta"><span>Ashish Raina</span><time datetime="2026-11-02">2 Nov 2026</time><span>8 min read</span></p>
+
+
+<details class="gloss" id="glossary" open>
+<summary>Glossary: the words this post uses</summary>
+<dl>
+<div><dt>Second brain</dt>: <dd>my notes and setup, kept as plain files so people and agents can both read them.</dd></div>
+<div><dt>AGENTS.md</dt>: <dd>a plain text rules file every agent reads first. <code>CLAUDE.md</code> points to the same text.</dd></div>
+<div><dt>Room</dt>: <dd>a folder of notes about one job (Wiki, Factory, Blog and so on). Each room has its own <code>CONTEXT.md</code>.</dd></div>
+<div><dt>Node</dt>: <dd>one dot or shape on the map: a file, a room, a skill, a routine, an app.</dd></div>
+<div><dt>Ring</dt>: <dd>a circle of nodes of the same kind around the centre.</dd></div>
+<div><dt>Skill</dt>: <dd>a set of instructions an agent loads only when a task needs it.</dd></div>
+<div><dt>Routine</dt>: <dd>a job the computer runs on a schedule, with no one asking.</dd></div>
+<div><dt>launchd</dt>: <dd>the macOS scheduler that runs routines at set times.</dd></div>
+<div><dt>App</dt>: <dd>here, a connector (Gmail, Calendar), a command-line tool, or a project or page I keep.</dd></div>
+<div><dt>JSON</dt>: <dd>a plain text format for structured data. <code>brain-data.json</code> is the page's data file.</dd></div>
+<div><dt>Fallback copy</dt>: <dd>the same data pasted inside the HTML, used when you open the page straight from disk.</dd></div>
+<div><dt>Card</dt>: <dd>a small panel with the details of one node.</dd></div>
+<div><dt>Overlay</dt>: <dd>a panel drawn on top of the page, so you never leave the page.</dd></div>
+<div><dt>PR</dt> (pull request): <dd>a request to merge a change, so someone can review it first.</dd></div>
+</dl>
+</details>
+
+<section id="s1">
+<h2>1. The idea</h2>
+<p>A good city map does not make you walk the streets to learn the layout. You see the whole town at once, then zoom into the street you care about.</p>
+<p>My setup was the opposite. Rules in one file, notes in seven folders, skills in a fourth place, scheduled jobs in a fifth. To see "what do I have?" I had to open all of them. So I built one page that draws the lot.</p>
+<p>It has one rule: read in place, never navigate away. A node's details show up as a card on the page. You never click through and lose your place.</p>
+</section>
+
+<section id="s2">
+<h2>2. What the page shows</h2>
+<p>The centre is <code>AGENTS.md</code>. Everything else is a ring around it.</p>
+<figure id="fig-screenshot">
+<img src="img/second-brain-page.webp" width="1400" height="868" alt="Dark map of rings around a glowing centre file, with the skills deck and routines listed in a column on the right and a card open for one skill" loading="lazy">
+<figcaption>The page as it runs today, with the card for one skill open. Left column cropped out of this copy.</figcaption>
+</figure>
+<p>Four things sit on screen at once:</p>
+<ul>
+<li><strong>The ring graph</strong> in the middle. Seven rooms, a ring of skills, and rings for memory, routines and applications.</li>
+<li><strong>A left column</strong>: apps and pages, each with a status word (connected, installed, live, private, paused).</li>
+<li><strong>A right column</strong>: the skills deck and the routines, with their schedules.</li>
+<li><strong>A menu</strong>: four layouts (Force, Circle, Hex, Rings), two views (Departments, Folders), search, spin and zoom.</li>
+</ul>
+<figure id="fig-rings">
+<svg viewBox="0 0 760 420" role="img" aria-labelledby="fr-t fr-d">
+<title id="fr-t">The ring layout</title>
+<desc id="fr-d">AGENTS.md at the centre. Outward: a ring of 32 skills, seven room clusters, a memory ring, a ring of 6 routines and a ring of 10 applications.</desc>
+<defs>
+<polygon id="hexp" points="7,0 3.5,6.1 -3.5,6.1 -7,0 -3.5,-6.1 3.5,-6.1"/>
+<polygon id="diap" points="0,-6 6,0 0,6 -6,0"/>
+</defs>
+<g transform="translate(-40,0)">
+<circle id="ring-apps" class="ring" cx="280" cy="210" r="192"><title>Applications ring: 10 apps</title></circle>
+<circle id="ring-routines" class="ring" cx="280" cy="210" r="160"><title>Routines ring: 6 routines</title></circle>
+<circle id="ring-memory" class="ring dash" cx="280" cy="210" r="128"><title>Memory ring</title></circle>
+<circle id="ring-rooms" class="ring dash" cx="280" cy="210" r="92"><title>Rooms: 7 clusters, 290 files</title></circle>
+<circle id="ring-skills" class="ring" cx="280" cy="210" r="48"><title>Skills ring: 32 skills</title></circle>
+<!-- skills: 8 of 32 shown -->
+<g id="g-skills">
+<use href="#diap" class="dia" x="328" y="210"/><use href="#diap" class="dia" x="314" y="244"/><use href="#diap" class="dia" x="280" y="258"/><use href="#diap" class="dia" x="246" y="244"/>
+<use href="#diap" class="dia" x="232" y="210"/><use href="#diap" class="dia" x="246" y="176"/><use href="#diap" class="dia" x="280" y="162"/><use href="#diap" class="dia" x="314" y="176"/>
+</g>
+<!-- rooms -->
+<g id="g-rooms">
+<circle class="hub" cx="280" cy="118" r="8"><title>Wiki: 138 files</title></circle>
+<circle class="hub" cx="352" cy="153" r="8"><title>Factory: 10 files</title></circle>
+<circle class="hub" cx="370" cy="230" r="8"><title>Content: 7 files</title></circle>
+<circle class="hub" cx="320" cy="293" r="8"><title>Cert prep: 1 file</title></circle>
+<circle class="hub" cx="240" cy="293" r="8"><title>Tools catalog: 101 files</title></circle>
+<circle class="hub" cx="190" cy="230" r="8"><title>Inbox: 18 files</title></circle>
+<circle class="hub" cx="208" cy="153" r="8"><title>Blog: 15 files</title></circle>
+</g>
+<!-- routines: 6 -->
+<g id="g-routines">
+<circle class="rt" cx="280" cy="50" r="6"><title>herdr server: at login, running</title></circle>
+<circle class="rt" cx="418.6" cy="130" r="6"><title>secondbrain-export: 01:15 daily</title></circle>
+<circle class="rt bad" cx="418.6" cy="290" r="6"><title>nightly backpass: 01:30 daily, not running</title></circle>
+<circle class="rt" cx="280" cy="370" r="6"><title>aio-daily-review: Mon-Fri 09:03</title></circle>
+<circle class="rt" cx="141.4" cy="290" r="6"><title>suggest-routines: Fri 09:00</title></circle>
+<circle class="rt" cx="141.4" cy="130" r="6"><title>secondbrain-weekly-review: Sat 09:00</title></circle>
+</g>
+<!-- apps: 10 -->
+<g id="g-apps">
+<use href="#hexp" class="hex" x="280" y="18"/><use href="#hexp" class="hex" x="392.9" y="54.7"/><use href="#hexp" class="hex" x="462.6" y="150.7"/><use href="#hexp" class="hex" x="462.6" y="269.3"/><use href="#hexp" class="hex" x="392.9" y="365.3"/>
+<use href="#hexp" class="hex" x="280" y="402"/><use href="#hexp" class="hex" x="167.1" y="365.3"/><use href="#hexp" class="hex" x="97.4" y="269.3"/><use href="#hexp" class="hex" x="97.4" y="150.7"/><use href="#hexp" class="hex" x="167.1" y="54.7"/>
+</g>
+<circle id="core" class="core" cx="280" cy="210" r="11"><title>AGENTS.md, also CLAUDE.md: the base map</title></circle>
+<text class="halo" x="280" y="236" text-anchor="middle" font-size="10">AGENTS.md</text>
+</g>
+<g id="legend" transform="translate(470,110)">
+<circle class="core" cx="8" cy="0" r="7"/><text x="24" y="4">centre: AGENTS.md</text>
+<use href="#diap" class="dia" x="8" y="30"/><text x="24" y="34">ring 1: skills, 32</text>
+<circle class="hub" cx="8" cy="60" r="6"/><text x="24" y="64">ring 2: rooms, 7</text>
+<text class="dim" x="24" y="80">290 files, 38 folders</text>
+<circle class="ring dash" cx="8" cy="104" r="6"/><text x="24" y="108">ring 3: memory</text>
+<circle class="rt" cx="8" cy="134" r="5"/><text x="24" y="138">ring 4: routines, 6</text>
+<use href="#hexp" class="hex" x="8" y="164"/><text x="24" y="168">ring 5: apps, 10</text>
+<text class="dim" x="0" y="204">Only 8 of 32 skills drawn.</text>
+</g>
+</svg>
+<figcaption>The ring layout, drawn small. Hover a shape for its title. The routine in red is the one that is not running. Counts come from the data file, not from this drawing.</figcaption>
+</figure>
+</section>
+
+<section id="s3">
+<h2>3. Why rooms are rings, with AGENTS.md at the centre</h2>
+<p>A hospital has one front desk. Every visitor starts there, and the desk sends them to the right ward.</p>
+<p><code>AGENTS.md</code> is the front desk. Every agent loads it first, and it says which room to go to next. So it sits in the middle. My reading of the rings: the further out, the more steps before an agent needs it. That is a design choice, not a measurement.</p>
+<p>Each room is a cluster of dots, one dot per file. Seven rooms hold 290 files in 38 folders.</p>
+<table>
+<thead><tr><th>Room</th><th>Files</th></tr></thead>
+<tbody>
+<tr><td>Wiki</td><td>138</td></tr><tr><td>Tools catalog</td><td>101</td></tr><tr><td>Inbox</td><td>18</td></tr><tr><td>Blog</td><td>15</td></tr><tr><td>Factory</td><td>10</td></tr><tr><td>Content</td><td>7</td></tr><tr><td>Cert prep</td><td>1</td></tr>
+</tbody>
+</table>
+<p>The size of a cluster shows where notes pile up. Wiki and Tools catalog hold most of them. I did not plan that. The map showed me.</p>
+<p>Double-click a room to fold it into one hub with its count. That is how I look at the shape without the noise.</p>
+<p class="test">Test: <code>jq '[.rooms[].folders[].count]|add' brain-data.json</code> prints 290, and <code>jq '[.rooms[].folders|length]|add'</code> prints 38.</p>
+</section>
+
+<section id="s4">
+<h2>4. The skills deck</h2>
+<p>A toolbox only helps if you can see what is in it. A skill is a tool an agent picks up when the job calls for it.</p>
+<p>The right column lists all 32 skills in a deck. Each row says "details" or "open". "Details" shows a card on the page. "Open" goes to a public page, and the arrow tells you before you click. On the map, each skill is a diamond on the first ring, so the ring is the count: 32 diamonds.</p>
+<p>Hover a skill and two lines appear. One runs to the centre, because every skill is reachable from the base rules. The other runs to the routine that uses it, if there is one.</p>
+<p class="test">Test: <code>jq '.skills|length' brain-data.json</code> prints 32.</p>
+</section>
+
+<section id="s5">
+<h2>5. Routines, with schedules</h2>
+<p>The map shows what exists. Routines show what runs while I am away. There are six, each with a time.</p>
+<table id="routines-table">
+<thead><tr><th>Routine</th><th>When</th><th>Status</th></tr></thead>
+<tbody>
+<tr><td>herdr server</td><td>at login, kept alive</td><td><span class="tag ok">running</span></td></tr>
+<tr><td>secondbrain-export</td><td>01:15 daily</td><td><span class="tag ok">scheduled</span></td></tr>
+<tr class="bad"><td>nightly backpass</td><td>01:30 daily</td><td><span class="tag bad">not running</span></td></tr>
+<tr><td>aio-daily-review</td><td>Mon–Fri 09:03</td><td><span class="tag ok">scheduled</span></td></tr>
+<tr><td>suggest-routines</td><td>Fri 09:00</td><td><span class="tag ok">scheduled</span></td></tr>
+<tr><td>secondbrain-weekly-review</td><td>Sat 09:00</td><td><span class="tag ok">scheduled</span></td></tr>
+</tbody>
+</table>
+<p>Look at the "not running" row. The page shows it in red. I like that. A map that only shows good news is not a map. It also fits a point from <a href="guides-and-sensors.html">my last post</a>: a check you cannot see failing is a check you cannot trust.</p>
+</section>
+
+<section id="s6">
+<h2>6. Apps, with live status</h2>
+<p>Ten apps, eight projects and six pages sit in the left column. Each row has one status word, and the word means something.</p>
+<ul>
+<li><strong>Apps:</strong> five connectors (connected), four command-line tools (installed), one model router.</li>
+<li><strong>Projects:</strong> two live on the web, one public repo, three private, one local, one paused.</li>
+<li><strong>Pages:</strong> learn pages, a blog draft, and three pages about FirstMate.</li>
+</ul>
+<div class="callout"><strong>"Live" is a word, not a heartbeat.</strong> The page does not ping anything. The build writes each status into the data, and the data carries a date (2026-11-01). My reading: that is the honest level for now. A real ping would be a good next step.</div>
+<p class="test">Test: <code>jq '.apps|length, (.projects|length), (.pages|length)' brain-data.json</code> prints 10, 8, 6.</p>
+</section>
+
+<section id="s7">
+<h2>7. How the data is built</h2>
+<p>The page does not know my setup. It reads one file, <code>brain-data.json</code>, and draws what is in it.</p>
+<pre><code>my real folders --&gt; build script --&gt; brain-data.json --&gt; the page
+                       (counts)         (names + counts)</code></pre>
+<p>The file holds <strong>names and counts only</strong>. It has room and folder names with file counts, skill names, routine names and times, and app names. It has no file names, no paths, no mail, no calendar contents and no keys. The file says so in its own <code>meta</code> note, and the page header prints "names and counts only" so a viewer can see it too.</p>
+<p>Two small details:</p>
+<ul>
+<li>A browser blocks the fetch when you open the page straight from disk. So the build script also pastes a <strong>fallback copy</strong> of the JSON inside the HTML. The page says "inline copy" when it uses it.</li>
+<li>The <code>?data=</code> option accepts only a plain file name. A link cannot point the page at another site.</li>
+</ul>
+<p class="test">Test: <code>jq '.meta' brain-data.json</code> shows the "names and counts only" note.</p>
+</section>
+
+<section id="s8">
+<h2>8. The design rule: read in place, never navigate away</h2>
+<p>When I click a node, I want an answer, not a trip. Each trip costs me my place on the map.</p>
+<ol>
+<li><strong>Every node gets a card.</strong> Name, kind, a line on what it is, and links.</li>
+<li><strong>Cards overlay the map.</strong> The map keeps its zoom and its folded rooms.</li>
+<li><strong>Links leave only when you ask.</strong> A link that goes elsewhere says "open" with an arrow. Nothing else moves you.</li>
+</ol>
+<p>Today this works for hover cards and click-for-detail cards. A longer read does not exist yet. That is the next section.</p>
+</section>
+
+<section id="s9">
+<h2>9. Coming: a reading overlay, a bots graph, a guided tour</h2>
+<p><span class="tag soon">coming</span> An open pull request adds three things. It has not merged as I write this. Treat all three as coming, not shipped.</p>
+<ul>
+<li><strong>A bots graph.</strong> The same map style for the agents themselves. An operator and an assistant bot sit in the middle, with crew, harness and tools in rings around them. Each bot's card says what it may do freely, what it asks me about, and what it never does.</li>
+<li><strong>"Explain this screen".</strong> A scripted tour. It dims the page, outlines one section at a time, and shows a short caption with Back, Next and Done. It makes no model calls. It is a fixed script.</li>
+<li><strong>A right-side reading overlay</strong> with a logical reading order of notes. It is a path through the nodes, drawn on top of the map. You read it start to end and never navigate away.</li>
+</ul>
+<p>I will update this section when the pull request merges.</p>
+</section>
+
+<section id="s10">
+<h2>10. What I would change</h2>
+<ul>
+<li>Room cards show folder counts, not a note. I want one line per room.</li>
+<li>Statuses are as of the build. A live ping would be better.</li>
+<li>At phone width the side columns become a drawer. I want to check that again once the reading overlay lands.</li>
+<li>The reading order is still a plan. I think it matters most, because a map with no route is a poster.</li>
+</ul>
+</section>
+
+<section id="privacy">
+<h2>Privacy scan</h2>
+<p>I scanned this page and its markdown twin before commit, and the site copy again before it went live. Hits are lines that match.</p>
+<table>
+<thead><tr><th>Pattern</th><th>Hits</th></tr></thead>
+<tbody>
+<tr><td>Local paths (home and user folders)</td><td>0</td></tr>
+<tr><td>Email addresses</td><td>0</td></tr>
+<tr><td>Private hostnames, personal names, private project names</td><td>0</td></tr>
+<tr><td>Keys, tokens, passwords</td><td>0</td></tr>
+<tr><td>Counts in this post against the data file (290 files, 38 folders, 32 skills, 10 apps, 8 projects, 6 pages, 6 routines)</td><td>all match</td></tr>
+</tbody>
+</table>
+<p>The screenshot is cropped to drop the left column, which lists project names I keep private. The data file holds names and counts only.</p>
+</section>
+
+<section id="credits">
+<h2>Credits</h2>
+<ul>
+<li><strong>Kun Chen</strong>: FirstMate and the AXI tools whose names show up in the map.</li>
+<li><strong>Jake Van Clief</strong>: the folder-per-room structure (ICM) the rooms follow.</li>
+<li><strong>Thoughtworks</strong>: the Adopt, Trial, Assess and Hold radar idea, borrowed in <a href="guides-and-sensors.html">the last post</a>.</li>
+</ul>
+</section>
+
+</article>
+<nav class="pager" aria-label="Previous and next"><a href="everything-is-a-file.html" rel="prev">← In AI, everything is a file (or a folder)</a><a href="progress-three-weeks.html" rel="next">Three weeks in: what I built, what I checked, what is still open →</a></nav>
+</main>
+<footer class="k-foot"><p>by Ashish Raina – program manager turned AI-crew operator</p><p><a href="../about.html">About</a> · <a href="../index.html">Chat with EA-bot</a> · <a href="../index.html#pages">All pages</a> · <a href="https://github.com/codeami">GitHub</a></p></footer>
+</body>
+</html>

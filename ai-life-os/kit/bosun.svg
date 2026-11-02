@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Bosun, a small automaton in a sailor cap holding a signal flag">
+  <!-- Bosun, the Harbor Signal mascot. Inline it to take colours from the page's
+       tokens; as an <img> it uses the fallbacks and follows the system theme. -->
+  <style>
+    .bs-i { fill: none; stroke: var(--ink, #0E2233); }
+    .bs-s { fill: var(--surface, #FFFFFF); stroke: var(--ink, #0E2233); }
+    .bs-a { fill: var(--accent, #0B6670); stroke: var(--ink, #0E2233); }
+    .bs-p { fill: var(--pop, #FFC531); stroke: var(--ink, #0E2233); }
+    .bs-e { fill: var(--ink, #0E2233); }
+    .bs-g { fill: var(--surface, #FFFFFF); }
+    .bs-d { fill: var(--pop, #FFC531); }
+    @media (prefers-color-scheme: dark) {
+      .bs-i { stroke: var(--ink, #E6F0F5); }
+      .bs-s { fill: var(--surface, #112433); stroke: var(--ink, #E6F0F5); }
+      .bs-a { fill: var(--accent, #3CC6CF); stroke: var(--ink, #E6F0F5); }
+      .bs-p { stroke: var(--ink, #E6F0F5); }
+      .bs-e { fill: var(--ink, #E6F0F5); }
+      .bs-g { fill: var(--surface, #112433); }
+    }
+  </style>
+  <line class="bs-i" x1="50" y1="19" x2="50" y2="5" stroke-width="3" stroke-linecap="round"/>
+  <path class="bs-p" d="M50 5h17l-4.5 5 4.5 5H50z" stroke-width="2" stroke-linejoin="round"/>
+  <path class="bs-s" d="M25 33Q50 10 75 33Z" stroke-width="3" stroke-linejoin="round"/>
+  <rect class="bs-s" x="18" y="31" width="64" height="47" rx="17" stroke-width="3"/>
+  <rect class="bs-a" x="21" y="28" width="58" height="9" rx="4.5" stroke-width="2"/>
+  <circle class="bs-e" cx="38" cy="54" r="6"/><circle class="bs-e" cx="62" cy="54" r="6"/>
+  <circle class="bs-g" cx="40" cy="52" r="2"/><circle class="bs-g" cx="64" cy="52" r="2"/>
+  <path class="bs-i" d="M41 66Q50 73 59 66" stroke-width="3" stroke-linecap="round"/>
+  <rect class="bs-a" x="32" y="80" width="36" height="16" rx="6" stroke-width="3"/>
+  <circle class="bs-d" cx="50" cy="88" r="3"/>
+</svg>

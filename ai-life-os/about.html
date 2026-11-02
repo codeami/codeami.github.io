@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>About · The Chart Room</title>
+<meta name="description" content="About Ashish Raina, program manager turned AI-crew operator, and this site.">
+<script src="article.js"></script>
+<link rel="icon" href="kit/bosun.svg" type="image/svg+xml">
+<link rel="stylesheet" href="kit/tokens.css">
+<link rel="stylesheet" href="kit/kit.css">
+<link rel="stylesheet" href="article.css">
+</head>
+<body>
+<header class="k-nav">
+  <a class="k-home" href="index.html"><img class="k-mark" src="kit/bosun.svg" alt=""><span class="k-logo">The Chart Room<small>How one captain runs a crew of AI agents, safely.</small></span></a>
+  <nav aria-label="Site"><a href="blog/index.html">Field Notes</a><a href="arena.html">Arena</a><a href="safety.html">Safety</a><button class="theme" id="theme" type="button">Night</button></nav>
+</header>
+<main class="page">
+<article class="k-article">
+<p class="k-kicker">About</p>
+<h1 class="k-title">About</h1>
+<p class="k-dek">by Ashish Raina – program manager turned AI-crew operator</p>
+<p class="k-meta"><a href="https://github.com/codeami">github.com/codeami</a></p>
+
+<p>I'm Ashish Raina. I run a crew of AI coding agents from one chat, and this site, The Chart Room, shows how: how I steer them, how I check their work, and how I keep them doing what I meant.</p>
+<blockquote>"Managing a complex AI agentic bot system is sort of like managing a contract with different vendors."</blockquote>
+<p>That is how I work. Each agent is a vendor with a brief, a scope and a deliverable. I review the work, I approve what ships, and I write the rules down so the next one starts from them.</p>
+
+<h2 id="vendors">Agents as vendors</h2>
+<p>A vendor does work you cannot watch all day. You do not read every line it writes. You write down what you want, check what comes back, and decide what happens when it goes wrong. I do the same with agents.</p>
+<table>
+<tr><th>Vendor practice</th><th>What my setup does</th></tr>
+<tr><td>Scope and brief</td><td>Every task starts as a brief: intent, spec, rules and a definition of done. A worker does one task and nothing outside it.</td></tr>
+<tr><td>Onboarding</td><td>Every agent reads the same plain-text rules file before it starts.</td></tr>
+<tr><td>Statement of work</td><td>A permission list says who may do what. Only I send, publish, spend or merge (see <a href="safety.html">Safety by design</a>).</td></tr>
+<tr><td>Status reports</td><td>A worker writes one status line per phase change. I read reports and drafts as pages, not in a terminal.</td></tr>
+<tr><td>Acceptance</td><td>Work leaves a phase only when its check passes. Validation is evidence, not opinion.</td></tr>
+<tr><td>Escalation</td><td>A worker asks before anything that is mine to decide, and may not close a task while my question is open.</td></tr>
+<tr><td>Audit of claims</td><td>A claim is written down, then checked. A claim with no passing check is "in trial", not a feature.</td></tr>
+<tr><td>Offboarding</td><td>Each worker gets its own throwaway copy of the code. Nothing it wrote goes out without my word.</td></tr>
+</table>
+<p>Where the analogy is thin: a human vendor has its own standards and can refuse. An agent has only its brief and the rules file, and by default my workers skip permission checks, so the brief and my review carry the control.</p>
+
+<h2 id="influences">Influences</h2>
+<ul>
+<li><a href="https://github.com/RinDig/Interpretable-Context-Methodology">ICM</a> by Jake Van Clief: a short map, routing tables, numbered stages with a contract each. It decides what an agent reads, and when.</li>
+<li><a href="https://github.com/kunchenguid">Kun Chen's agent stack</a>: one dispatcher (<a href="https://github.com/kunchenguid/firstmate">FirstMate</a>), throwaway worktrees, a gate before push, rule proposals from logs (<a href="https://github.com/kunchenguid/backpass">backpass</a>) and review pages. It decides how agents are run, checked and corrected.</li>
+<li><a href="https://github.com/mattpocock/skills">Matt Pocock's skills</a>: strongest on intent capture, specs and review. Ideas I want to borrow: a short interview before a spec, and a shared glossary.</li>
+</ul>
+<p>No head-to-head test of these approaches exists here, and the token numbers in each source are their own claims.</p>
+
+<p>Where to start:</p>
+<ul>
+<li><a href="blog/index.html">Field Notes</a>: posts on harness engineering and alignment.</li>
+<li><a href="arena.html">The harness arena</a>: eleven agent setups on the same twelve parts, and my own radar.</li>
+<li><a href="safety.html">Safety by design</a>: what the agents may do alone, what waits for me, and what they never do.</li>
+<li><a href="index.html">Chat with EA-bot</a>: the same story, one click at a time.</li>
+</ul>
+<p>Most of the machinery is Kun Chen's open-source <a href="https://github.com/kunchenguid/firstmate">FirstMate</a> stack. Each page credits who made what.</p>
+</article>
+</main>
+<footer class="k-foot"><p>by Ashish Raina – program manager turned AI-crew operator</p><p><a href="about.html">About</a> · <a href="index.html">Chat with EA-bot</a> · <a href="index.html#pages">All pages</a> · <a href="https://github.com/codeami">GitHub</a></p></footer>
+</body>
+</html>

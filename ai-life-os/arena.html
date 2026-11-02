@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>The harness arena · The Chart Room</title>
+<meta name="description" content="Eleven agent setups scored on twelve harness parts, plus a personal Adopt, Trial, Assess, Hold radar.">
+<script src="article.js"></script>
+<link rel="icon" href="kit/bosun.svg" type="image/svg+xml">
+<link rel="stylesheet" href="kit/tokens.css">
+<link rel="stylesheet" href="kit/kit.css">
+<link rel="stylesheet" href="article.css">
+<style>
+td:first-child{min-width:120px}
+@media (min-width:640px){td:first-child{min-width:180px}}
+#radar-table td:first-child{min-width:0;width:2.2em}
+tr.half td{background:var(--warn-soft)}
+.tag{display:inline-block;font-size:.78rem;font-weight:600;padding:0 .45em;border-radius:4px;white-space:nowrap}
+.tag.cpu{background:var(--ok-soft);color:var(--ok)}
+.tag.gpu{background:var(--warn-soft);color:var(--warn)}
+.tag.me{background:var(--accent-soft);color:var(--accent)}
+figure.slide img{display:block;width:100%;height:auto;border-radius:6px}
+.q{font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin:0 0 6px}
+.test{font-size:.86rem;color:var(--muted)}
+.callout{background:var(--warn-soft);border-left:3px solid var(--warn);padding:10px 14px;border-radius:6px;margin:1.2em 0}
+.gloss{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 16px;margin:0 0 28px}
+.gloss summary{font-weight:600;cursor:pointer}
+.gloss dl{margin:.6em 0 .2em;display:grid;grid-template-columns:1fr;gap:4px 18px;font-size:.92rem}
+@media (min-width:640px){.gloss dl{grid-template-columns:1fr 1fr}}
+.gloss dt{font-weight:600;display:inline}
+.gloss dd{margin:0;display:inline}
+.gloss dl div{line-height:1.45}
+.note-hint{font-size:.86rem;color:var(--muted)}
+svg a{cursor:pointer}
+svg a:hover .box,svg a:focus .box{stroke-width:2.6}
+svg a:hover .ring,svg a:focus .ring{stroke-width:2.4}
+svg .ring{fill:none;stroke:var(--line);stroke-width:1.5}
+svg .ring.outer{fill:var(--accent-soft);stroke:var(--accent);stroke-dasharray:6 4}
+svg .ring.agent{fill:var(--paper)}
+svg .box{fill:var(--paper);stroke:var(--line);stroke-width:1.5}
+svg .box.cpu{fill:var(--ok-soft);stroke:var(--ok)}
+svg .box.gpu{fill:var(--warn-soft);stroke:var(--warn)}
+svg .box.me{fill:var(--panel);stroke:var(--accent)}
+svg .box.hi{fill:var(--accent-soft);stroke:var(--accent)}
+svg .bar.has{fill:var(--ok)}
+svg .bar.diff{fill:var(--accent)}
+svg .bar.lacks{fill:var(--line)}
+svg .bar.guess{fill:var(--paper);stroke:var(--muted);stroke-dasharray:3 2}
+svg .bar.none{fill:none;stroke:var(--muted);stroke-dasharray:5 4}
+svg .t{fill:var(--ink);font-family:var(--sans);font-size:14px;font-weight:600}
+svg .s{fill:var(--muted);font-family:var(--sans);font-size:12px}
+svg .h{fill:var(--accent);font-family:var(--sans);font-size:12px;font-weight:600;letter-spacing:.04em}
+svg .edge{stroke:var(--muted);stroke-width:1.6;fill:none}
+svg .edge.me{stroke:var(--accent);stroke-dasharray:5 4}
+svg .lbl{fill:var(--muted);font-family:var(--sans);font-size:11.5px}
+svg .dot{fill:var(--panel);stroke:var(--muted);stroke-width:1.5}
+svg .dot.moved{fill:var(--accent-soft);stroke:var(--accent);stroke-width:2.2}
+svg .dot.new{fill:var(--warn-soft);stroke:var(--warn);stroke-width:2;stroke-dasharray:3 2}
+svg a:hover .dot,svg a:focus .dot{stroke-width:3}
+svg .dn{fill:var(--ink);font-family:var(--sans);font-size:10px;font-weight:600;text-anchor:middle}
+svg .arrowhead{fill:var(--muted)}
+svg .arrowhead.me{fill:var(--accent)}
+</style>
+</head>
+<body>
+<header class="k-nav">
+  <a class="k-home" href="index.html"><img class="k-mark" src="kit/bosun.svg" alt=""><span class="k-logo">The Chart Room<small>How one captain runs a crew of AI agents, safely.</small></span></a>
+  <nav aria-label="Site"><a href="blog/index.html">Field Notes</a><a href="arena.html" aria-current="page">Arena</a><a href="safety.html">Safety</a><button class="theme" id="theme" type="button">Night</button></nav>
+</header>
+<main class="page">
+<article class="k-article">
+<p class="k-kicker">Harness engineering</p>
+<h1 class="k-title">The harness arena</h1>
+<p class="k-dek">Eleven agent setups scored on the same twelve harness parts, and my own radar of what I use, try, watch and stopped.</p>
+<p class="k-meta"><span>Ashish Raina</span><time datetime="2026-11-02">2 Nov 2026</time><span>9 min read</span></p>
+<p>This page is section 5 of <a href="blog/guides-and-sensors.html">Guides, sensors, and the rules I'm still begging for</a>, on its own so it is easy to find. Section numbers below point into that post.</p>
+<p class="q">How do other setups compare, and what's become standard?</p>
+<p>A spec sheet doesn't tell you how a car drives. It does tell you what's missing.</p>
+<p>I think of this as an arena, not a ranking. New harnesses enter it. Techniques that several harnesses share get compared side by side. And some techniques stop being special: rules files like <code>AGENTS.md</code>, worktrees and skills are close to standard now, so I mark them that way. The arena holds two views: the tier list below, and my own radar in "How we composed ours".</p>
+<p><strong>How often it runs:</strong> it isn't scheduled yet. The tier list ran once, on 27 October. The radar was drawn on 17 October and refreshed for this post.</p>
+<h3 id="s5-tier">The tier list</h3>
+<p>On 27 October a research agent compared eleven setups on the same twelve harness parts: always-loaded context, rules, skills, memory, hooks, isolation, orchestrator, review gate before push, human approval points, self-improvement from failures, sync across machines and tools, and a goals layer. Each part is marked: <strong>has</strong> it, does it <strong>differently</strong>, <strong>lacks</strong> it, or a <strong>guess</strong> the agent couldn't confirm from a primary source.</p>
+<figure id="fig-tier">
+<svg viewBox="0 0 680 428" role="img" aria-labelledby="fig-tier-title">
+<title id="fig-tier-title">Harness tier list: eleven setups scored on twelve parts, plus Vercel d0 and LifeOS not scored yet</title>
+<g id="tier-legend"><title>Legend</title><rect class="bar has" x="210" y="10" width="14" height="12"/><text class="s" x="230" y="21">has</text><rect class="bar diff" x="270" y="10" width="14" height="12"/><text class="s" x="290" y="21">different</text><rect class="bar lacks" x="360" y="10" width="14" height="12"/><text class="s" x="380" y="21">lacks</text><rect class="bar guess" x="430" y="10" width="14" height="12"/><text class="s" x="450" y="21">guess</text></g>
+<g id="tier-0"><title>Our composite: 10 has, 2 different, 0 lacks, 0 guess</title><text class="s" x="200" y="64" text-anchor="end">Our composite</text><rect class="bar has" x="210" y="50" width="300" height="18"/><rect class="bar diff" x="510" y="50" width="60" height="18"/><text class="s" x="580" y="64">10 has</text></g>
+<g id="tier-1"><title>Kun Chen stack: 8 has, 4 different, 0 lacks, 0 guess</title><text class="s" x="200" y="92" text-anchor="end">Kun Chen stack</text><rect class="bar has" x="210" y="78" width="240" height="18"/><rect class="bar diff" x="450" y="78" width="120" height="18"/><text class="s" x="580" y="92">8 has</text></g>
+<g id="tier-2"><title>Troupe design (a design, not shipped software): 7 has, 2 different, 3 lacks, 0 guess</title><text class="s" x="200" y="120" text-anchor="end">Troupe design</text><rect class="bar has" x="210" y="106" width="210" height="18"/><rect class="bar diff" x="420" y="106" width="60" height="18"/><rect class="bar lacks" x="480" y="106" width="90" height="18"/><text class="s" x="580" y="120">7 has</text></g>
+<g id="tier-3"><title>Claude Code: 7 has, 2 different, 3 lacks, 0 guess</title><text class="s" x="200" y="148" text-anchor="end">Claude Code</text><rect class="bar has" x="210" y="134" width="210" height="18"/><rect class="bar diff" x="420" y="134" width="60" height="18"/><rect class="bar lacks" x="480" y="134" width="90" height="18"/><text class="s" x="580" y="148">7 has</text></g>
+<g id="tier-4"><title>Warp: 5 has, 1 different, 5 lacks, 1 guess</title><text class="s" x="200" y="176" text-anchor="end">Warp</text><rect class="bar has" x="210" y="162" width="150" height="18"/><rect class="bar diff" x="360" y="162" width="30" height="18"/><rect class="bar lacks" x="390" y="162" width="150" height="18"/><rect class="bar guess" x="540" y="162" width="30" height="18"/><text class="s" x="580" y="176">5 has</text></g>
+<g id="tier-5"><title>Databricks Omnigent: 4 has, 5 different, 2 lacks, 1 guess</title><text class="s" x="200" y="204" text-anchor="end">Databricks Omnigent</text><rect class="bar has" x="210" y="190" width="120" height="18"/><rect class="bar diff" x="330" y="190" width="150" height="18"/><rect class="bar lacks" x="480" y="190" width="60" height="18"/><rect class="bar guess" x="540" y="190" width="30" height="18"/><text class="s" x="580" y="204">4 has</text></g>
+<g id="tier-6"><title>OpenCode: 4 has, 3 different, 4 lacks, 1 guess</title><text class="s" x="200" y="232" text-anchor="end">OpenCode</text><rect class="bar has" x="210" y="218" width="120" height="18"/><rect class="bar diff" x="330" y="218" width="90" height="18"/><rect class="bar lacks" x="420" y="218" width="120" height="18"/><rect class="bar guess" x="540" y="218" width="30" height="18"/><text class="s" x="580" y="232">4 has</text></g>
+<g id="tier-7"><title>ICM (Van Clief): 3 has, 5 different, 3 lacks, 1 guess</title><text class="s" x="200" y="260" text-anchor="end">ICM (Van Clief)</text><rect class="bar has" x="210" y="246" width="90" height="18"/><rect class="bar diff" x="300" y="246" width="150" height="18"/><rect class="bar lacks" x="450" y="246" width="90" height="18"/><rect class="bar guess" x="540" y="246" width="30" height="18"/><text class="s" x="580" y="260">3 has</text></g>
+<g id="tier-8"><title>Google Harness-squared: 3 has, 4 different, 5 lacks, 0 guess</title><text class="s" x="200" y="288" text-anchor="end">Google Harness-squared</text><rect class="bar has" x="210" y="274" width="90" height="18"/><rect class="bar diff" x="300" y="274" width="120" height="18"/><rect class="bar lacks" x="420" y="274" width="150" height="18"/><text class="s" x="580" y="288">3 has</text></g>
+<g id="tier-9"><title>Pi: 3 has, 3 different, 6 lacks, 0 guess</title><text class="s" x="200" y="316" text-anchor="end">Pi</text><rect class="bar has" x="210" y="302" width="90" height="18"/><rect class="bar diff" x="300" y="302" width="90" height="18"/><rect class="bar lacks" x="390" y="302" width="180" height="18"/><text class="s" x="580" y="316">3 has</text></g>
+<g id="tier-10"><title>Stanford Meta-Harness: 1 has, 6 different, 4 lacks, 1 guess</title><text class="s" x="200" y="344" text-anchor="end">Stanford Meta-Harness</text><rect class="bar has" x="210" y="330" width="30" height="18"/><rect class="bar diff" x="240" y="330" width="180" height="18"/><rect class="bar lacks" x="420" y="330" width="120" height="18"/><rect class="bar guess" x="540" y="330" width="30" height="18"/><text class="s" x="580" y="344">1 has</text></g>
+<g id="tier-11"><title>Vercel d0: not scored yet</title><text class="s" x="200" y="372" text-anchor="end">Vercel d0</text><rect class="bar none" x="210" y="358" width="360" height="18"/><text class="s" x="390" y="372" text-anchor="middle">not scored yet</text></g>
+<g id="tier-12"><title>LifeOS (Miessler): not scored yet</title><text class="s" x="200" y="400" text-anchor="end">LifeOS (Miessler)</text><rect class="bar none" x="210" y="386" width="360" height="18"/><text class="s" x="390" y="400" text-anchor="middle">not scored yet</text></g>
+</svg>
+<figcaption>Scores from a research agent's report dated 27 Oct 2026. It read public docs, repos and papers; none of the tools were tested. The counts treat all twelve parts as equal: they show coverage, not quality. Vercel d0 and LifeOS were added after and aren't scored.</figcaption>
+</figure>
+<p>Two honest caveats. "Our composite" includes Kun Chen's tools, so it inherits most of his rows; what it adds is the folder map, a goals layer, and one rules file shared by several tools. And Troupe is a design, not shipped software, so its "has" means "designed".</p>
+
+<h3 id="s5-types">Harness types</h3>
+<p>The tier list ranks setups. It doesn't say what <em>kind</em> each one is. Here they are grouped by the four types from section 4, plus one that sits off that line. This grouping is my reading.</p>
+<table id="types-table">
+<tr><th>Type</th><th>What steers the agent</th><th>Setups</th></tr>
+<tr><td><strong>Prompt-driven</strong></td><td>a chat and maybe one rules file; the model decides the rest</td><td>none in the list; it's where most people start</td></tr>
+<tr><td><strong>Skill-driven</strong></td><td>instructions that load when a task matches</td><td>Claude Code, OpenCode, Pi, Warp, used as they ship</td></tr>
+<tr><td><strong>Folder-structure-controlled</strong> (repo as harness)</td><td>a folder of files and scripts, like a GitHub repo; the prompts live inside the files</td><td>ICM, Vercel d0 (not scored), my context folders; Troupe (my guess)</td></tr>
+<tr><td><strong>Script-driven</strong></td><td>hooks, gates and refusals that run the same way every time</td><td>Kun Chen stack (FirstMate), our composite; Omnigent's policies (my guess)</td></tr>
+<tr><td><strong>Meta-harness</strong> (off the line)</td><td>a loop that edits the harness itself and keeps what scores better</td><td>Google Harness-squared, Stanford Meta-Harness</td></tr>
+</table>
+
+<h3 id="s5-folder">Folder as harness</h3>
+<p>A good kitchen is half the recipe. If the knives are where the knives go, you don't need a note saying where the knives go.</p>
+<p>In a folder-controlled harness, the agent is steered mostly by where things are. There are still prompts, but they live inside files: a <code>CONTEXT.md</code> per stage, a numbered folder per step, a script next to the step that checks it. The folder is basically a GitHub repo.</p>
+<p><strong>ICM</strong> (Jake Van Clief's Interpretable Context Methodology) works this way. Numbered stage folders carry the order; each stage has a one-page contract of inputs, process and outputs; one agent reads the right files at the right time. My context folders follow it.</p>
+<p><strong>Vercel's d0</strong> is the other example. It's Vercel's internal agent that turns data questions into SQL. In <a href="https://vercel.com/blog/we-removed-80-percent-of-our-agents-tools">"We removed 80% of our agent's tools"</a> (Andrew Qu, 22 Dec 2025), the team says they replaced 17 specialised tools and heavy prompt engineering, and "stripped the agent down to a single tool: execute arbitrary bash commands". The agent (Claude Opus 4.5, per the post) reads their "Cube semantic layer as a directory of YAML, Markdown, and JSON files" with <code>grep</code>, <code>cat</code>, <code>find</code> and <code>ls</code>. On their five test queries, success went from 80% to 100%, runs got about 3.5 times faster, and token use fell 37%. They add that it "only worked because our semantic layer was already good documentation."</p>
+<p class="callout">What I haven't verified: the d0 numbers are Vercel's own, on five queries, and I haven't tried it. I haven't scored d0 on the twelve parts.</p>
+<p>Why is a folder more deterministic than a prompt?</p>
+<ul>
+<li><strong>Versioned.</strong> Every change to a file is a Git commit. You can see when a rule changed and undo it.</li>
+<li><strong>Diffable.</strong> You can compare two versions line by line. A rule you typed into a chat is gone the moment the chat ends.</li>
+<li><strong>Reviewed.</strong> A change to the folder can go through review like code. No one reviews a prompt typed at 2 a.m.</li>
+<li><strong>Same steps every time.</strong> A script in the folder runs the same way on every call. The model still reads the files, but what it reads is fixed.</li>
+</ul>
+<p>It's still not fully deterministic: the model chooses which files to read and what to do with them. That's why it sits between skills and scripts.</p>
+
+<h3 id="s5-ours">How we composed ours</h3>
+<p>A kit car is built from other makers' parts. The skill is in choosing them and making them fit.</p>
+<p>"Our composite" scores 10 has and 2 different. Here is where each of the twelve parts comes from, and whether that part is now standard across the arena. "Now standard" is my reading of the 27 October report: <strong>yes</strong> if most setups have it, <strong>becoming</strong> if the big coding agents are adding it, <strong>no</strong> if it's still rare.</p>
+<table id="ours-table">
+<tr><th>Part</th><th>Where ours comes from</th><th>Mark</th><th>Now standard?</th></tr>
+<tr><td>Always-loaded context</td><td>a small base map, <code>AGENTS.md</code> (about 1.5k tokens), kept small the ICM way</td><td>has</td><td><span class="tag cpu">yes</span></td></tr>
+<tr><td>Rules / instructions</td><td>the map, plus a <code>CONTEXT.md</code> per room, plus each repo's <code>AGENTS.md</code>; a routing table says which room to read (ICM)</td><td>has</td><td><span class="tag cpu">yes</span></td></tr>
+<tr><td>Skills</td><td>Claude Code skills: descriptions always loaded, bodies on use</td><td>has</td><td><span class="tag cpu">yes</span></td></tr>
+<tr><td>Memory and decay</td><td>FirstMate's <code>/stow</code> with decay tiers (Kun Chen), session notes, second-brain notes</td><td>different</td><td><span class="tag gpu">no</span></td></tr>
+<tr><td>Hooks</td><td>Claude Code hooks, FirstMate's tool-call and turn-end guards, nightly launchd jobs</td><td>has</td><td><span class="tag me">becoming</span></td></tr>
+<tr><td>Isolation</td><td>treehouse worktrees, one per task (Kun Chen)</td><td>has</td><td><span class="tag me">becoming</span></td></tr>
+<tr><td>Orchestrator</td><td>FirstMate (Kun Chen)</td><td>has</td><td><span class="tag gpu">no</span></td></tr>
+<tr><td>Review gate before push</td><td>no-mistakes (Kun Chen), plus my structure tests and <code>chain-check</code></td><td>has</td><td><span class="tag gpu">no</span></td></tr>
+<tr><td>Human approval points</td><td>Lavish review pages and <code>backpass apply</code> (Kun Chen); my "drafts, not sends" and "ask before destructive" rules</td><td>has</td><td><span class="tag cpu">yes</span></td></tr>
+<tr><td>Self-improvement from failures</td><td>backpass (Kun Chen), plus the weekly corrections review</td><td>has</td><td><span class="tag gpu">no</span></td></tr>
+<tr><td>Sync across tools</td><td>one <code>AGENTS.md</code> linked into several agents (the AGENTS.md convention)</td><td>different</td><td><span class="tag gpu">no</span></td></tr>
+<tr><td>Goals layer</td><td>a private priorities file</td><td>has</td><td><span class="tag gpu">no</span></td></tr>
+</table>
+<p>So most of the machinery is Kun Chen's, the folder shape is ICM's, and the skills and hooks come with Claude Code. What's mine is the map that routes between them, the goals layer, and one rules file shared across tools.</p>
+<p class="test">Test: 10 rows say "has" and 2 say "different", matching the tier list. Sources are the "Our composite" column of the 27 October report.</p>
+
+<h4 id="s5-radar">My radar</h4>
+<p>The ring idea is borrowed from the <a href="https://www.thoughtworks.com/radar">Thoughtworks Technology Radar</a>: <strong>Adopt</strong> (use it), <strong>Trial</strong> (using it on real work), <strong>Assess</strong> (looking at it), <strong>Hold</strong> (stopped or parked). I drew my own on 17 October with 25 items in four quadrants: tools, skills, context and habits. Here it is refreshed to 2 November: the same 25 items, three moved, and five new ones.</p>
+<p class="callout">Every placement on this radar is a draft. The owner decides.</p>
+<figure id="fig-radar">
+<svg viewBox="0 0 680 680" role="img" aria-labelledby="fig-radar-title">
+<title id="fig-radar-title">My factory radar on 2 November: 30 numbered items in four quadrants and four rings, Adopt in the middle and Hold at the edge</title>
+<g id="rd-rings"><title>Rings: Adopt, Trial, Assess, Hold</title>
+<circle class="ring" cx="340" cy="340" r="310"/><circle class="ring" cx="340" cy="340" r="250"/><circle class="ring" cx="340" cy="340" r="180"/><circle class="ring agent" cx="340" cy="340" r="110"/>
+<path class="edge" d="M340 30 V650 M30 340 H650" style="stroke:var(--line)"/>
+<text class="h" x="340" y="398" text-anchor="middle">ADOPT</text><text class="h" x="340" y="488" text-anchor="middle">TRIAL</text><text class="h" x="340" y="558" text-anchor="middle">ASSESS</text><text class="h" x="340" y="638" text-anchor="middle">HOLD</text></g>
+<g id="rd-quads"><title>Quadrants</title><text class="t" x="16" y="24">Tools</text><text class="t" x="664" y="24" text-anchor="end">Skills</text><text class="t" x="16" y="668">Context</text><text class="t" x="664" y="668" text-anchor="end">Habits</text></g>
+<a href="brain/index.html#first-mate"><g><title>1 firstmate (dispatcher): Adopt</title><circle class="dot" cx="328" cy="271" r="10"/><text class="dn" x="328" y="275">1</text></g></a>
+<a href="brain/index.html#worktree-pooling"><g><title>2 treehouse worktrees: Adopt</title><circle class="dot" cx="302" cy="281" r="10"/><text class="dn" x="302" y="285">2</text></g></a>
+<a href="brain/index.html#validate-dont-review"><g><title>3 no-mistakes gate: Adopt</title><circle class="dot" cx="281" cy="302" r="10"/><text class="dn" x="281" y="306">3</text></g></a>
+<a href="brain/index.html#human-in-the-loop"><g><title>4 lavish-axi pages: Adopt</title><circle class="dot" cx="271" cy="328" r="10"/><text class="dn" x="271" y="332">4</text></g></a>
+<a href="brain/index.html#long-running-loops"><g><title>5 gnhf overnight loops: Trial</title><circle class="dot" cx="290" cy="204" r="10"/><text class="dn" x="290" y="208">5</text></g></a>
+<g><title>6 quota-axi: Trial</title><circle class="dot" cx="238" cy="238" r="10"/><text class="dn" x="238" y="242">6</text></g>
+<g><title>7 Harness sensors (secret scan, plain-check hook, link check): Trial, new</title><circle class="dot new" cx="204" cy="290" r="10"/><text class="dn" x="204" y="294">7</text></g>
+<g><title>8 Greptile-style test design: Assess</title><circle class="dot" cx="188" cy="188" r="10"/><text class="dn" x="188" y="192">8</text></g>
+<g><title>9 Daily links page: Hold</title><circle class="dot" cx="142" cy="142" r="10"/><text class="dn" x="142" y="146">9</text></g>
+<a href="brain/index.html#dialogue-freezes-into-skills"><g><title>10 /grill-with-docs (grill-me): Adopt</title><circle class="dot" cx="406" cy="316" r="10"/><text class="dn" x="406" y="320">10</text></g></a>
+<g><title>11 taste-check and plain-check: moved Trial to Adopt</title><circle class="dot moved" cx="390" cy="291" r="10"/><text class="dn" x="390" y="295">11</text></g>
+<g><title>12 backpass: moved Trial to Adopt</title><circle class="dot moved" cx="364" cy="274" r="10"/><text class="dn" x="364" y="278">12</text></g>
+<a href="brain/index.html#pocock-steers-with-skills-kun-builds-machinery"><g><title>13 Pocock's other skills: Assess</title><circle class="dot" cx="552" cy="303" r="10"/><text class="dn" x="552" y="307">13</text></g></a>
+<a href="brain/index.html#kun-chen-agent-policy"><g><title>14 Kun Chen /vision: Assess</title><circle class="dot" cx="535" cy="249" r="10"/><text class="dn" x="535" y="253">14</text></g></a>
+<a href="brain/index.html#icm-layer-ladder"><g><title>15 Jake's icm-architect: Assess</title><circle class="dot" cx="505" cy="202" r="10"/><text class="dn" x="505" y="206">15</text></g></a>
+<g><title>16 "Introduce me to AI" onboarding mode: Assess, new</title><circle class="dot new" cx="463" cy="164" r="10"/><text class="dn" x="463" y="168">16</text></g>
+<g><title>17 PAUL (Plan-Apply-Unify Loop): Assess, new</title><circle class="dot new" cx="414" cy="138" r="10"/><text class="dn" x="414" y="142">17</text></g>
+<g><title>18 Claude animation skills: Assess, new</title><circle class="dot new" cx="359" cy="126" r="10"/><text class="dn" x="359" y="130">18</text></g>
+<g><title>19 Dotfiles (reproducible setup): Adopt</title><circle class="dot" cx="272" cy="358" r="10"/><text class="dn" x="272" y="362">19</text></g>
+<a href="brain/index.html#icm-routing-table-is-the-core-pattern"><g><title>20 AGENTS.md base map: Adopt</title><circle class="dot" cx="286" cy="385" r="10"/><text class="dn" x="286" y="389">20</text></g></a>
+<a href="brain/index.html#second-brain-is-a-context-layer"><g><title>21 Second-brain notes: moved Trial to Adopt</title><circle class="dot moved" cx="298" cy="412" r="10"/><text class="dn" x="298" y="416">21</text></g></a>
+<g><title>22 Context sync (Drive + Claude): Trial</title><circle class="dot" cx="238" cy="443" r="10"/><text class="dn" x="238" y="447">22</text></g>
+<g><title>23 Obsidian as planner: Assess</title><circle class="dot" cx="138" cy="414" r="10"/><text class="dn" x="138" y="418">23</text></g>
+<a href="brain/index.html#compaction-is-an-implementation-detail"><g><title>24 HumanLayer ideas: Assess</title><circle class="dot" cx="188" cy="492" r="10"/><text class="dn" x="188" y="496">24</text></g></a>
+<g><title>25 Vercel d0 (folder as harness): Assess, new</title><circle class="dot new" cx="267" cy="542" r="10"/><text class="dn" x="267" y="546">25</text></g>
+<a href="brain/index.html#icm-layer-ladder"><g><title>26 Ordered stages (ICM): Adopt</title><circle class="dot" cx="390" cy="390" r="10"/><text class="dn" x="390" y="394">26</text></g></a>
+<g><title>27 Secondmates: Trial</title><circle class="dot" cx="401" cy="471" r="10"/><text class="dn" x="401" y="475">27</text></g>
+<g><title>28 Voice-first capture: Trial</title><circle class="dot" cx="471" cy="401" r="10"/><text class="dn" x="471" y="405">28</text></g>
+<g><title>29 Twice-a-day reflection: Assess</title><circle class="dot" cx="492" cy="492" r="10"/><text class="dn" x="492" y="496">29</text></g>
+<g><title>30 Claude architect exam: Hold</title><circle class="dot" cx="538" cy="538" r="10"/><text class="dn" x="538" y="542">30</text></g>
+<g id="rd-legend"><title>Legend</title><circle class="dot" cx="470" cy="600" r="7"/><text class="s" x="482" y="604">same</text><circle class="dot moved" cx="530" cy="600" r="7"/><text class="s" x="542" y="604">moved</text><circle class="dot new" cx="600" cy="600" r="7"/><text class="s" x="612" y="604">new</text></g>
+</svg>
+<figcaption>My own drawing, after the ring idea of the <a href="https://www.thoughtworks.com/radar">Thoughtworks Technology Radar</a>. Draft placements, refreshed 2 Nov 2026; the owner decides. Dots with a public note link to it.</figcaption>
+</figure>
+<table id="radar-table">
+<tr><th>#</th><th>Item</th><th>Ring (draft, owner decides)</th><th>Since 17 Oct</th></tr>
+<tr><td colspan="4"><strong>Tools</strong></td></tr>
+<tr><td>1</td><td>firstmate (dispatcher): the one place work is handed out from</td><td>Adopt</td><td>same</td></tr>
+<tr><td>2</td><td>treehouse worktrees: disposable copies so work never touches the main copy</td><td>Adopt</td><td>same</td></tr>
+<tr><td>3</td><td>no-mistakes gate: checks before anything is pushed</td><td>Adopt</td><td>same</td></tr>
+<tr><td>4</td><td>lavish-axi pages: how I review drafts and plans</td><td>Adopt</td><td>same</td></tr>
+<tr><td>5</td><td>gnhf overnight loops: used less than the rest</td><td>Trial</td><td>same</td></tr>
+<tr><td>6</td><td>quota-axi: cost check before long runs</td><td>Trial</td><td>same</td></tr>
+<tr><td>7</td><td>Harness sensors: secret scan, plain-check hook, link check (section 10)</td><td>Trial</td><td><strong>new</strong>: the three sensors this post proposes, being built</td></tr>
+<tr><td>8</td><td>Greptile-style test design: closed and paid; the gap is a free tool</td><td>Assess</td><td>same</td></tr>
+<tr><td>9</td><td>Daily links page</td><td>Hold</td><td>same</td></tr>
+<tr><td colspan="4"><strong>Skills</strong></td></tr>
+<tr><td>10</td><td>/grill-with-docs: adapted from Matt Pocock's grill-me and domain modelling (MIT)</td><td>Adopt</td><td>same; section 4 names it as an onboarding tool</td></tr>
+<tr><td>11</td><td>taste-check and plain-check: no-model checks on intent and plain words</td><td>Adopt</td><td><strong>moved</strong> from Trial: now a named check in the factory's review and learn stages, though not yet hook-wired</td></tr>
+<tr><td>12</td><td>backpass: proposes rule edits from transcripts; I approve</td><td>Adopt</td><td><strong>moved</strong> from Trial: runs every night from a launchd job</td></tr>
+<tr><td>13</td><td>Pocock's other skills: not installed, not compared yet</td><td>Assess</td><td>same</td></tr>
+<tr><td>14</td><td>Kun Chen's /vision: read and compared, not adopted</td><td>Assess</td><td>same</td></tr>
+<tr><td>15</td><td>Jake Van Clief's icm-architect: its questions feed the grill design</td><td>Assess</td><td>same</td></tr>
+<tr><td>16</td><td>"Introduce me to AI" onboarding mode (section 4)</td><td>Assess</td><td><strong>new</strong>: an idea, not built</td></tr>
+<tr><td>17</td><td><a href="https://github.com/ChristopherKahler/paul">PAUL</a> (Plan-Apply-Unify Loop for Claude Code)</td><td>Assess</td><td><strong>new</strong>: found 2 Nov, not tried</td></tr>
+<tr><td>18</td><td>Claude animation skills, for short videos</td><td>Assess</td><td><strong>new</strong>: on the list to vet first</td></tr>
+<tr><td colspan="4"><strong>Context</strong></td></tr>
+<tr><td>19</td><td>Dotfiles: a reproducible machine setup, Kun Chen's starting point</td><td>Adopt</td><td>same</td></tr>
+<tr><td>20</td><td>AGENTS.md base map: one base file every tool loads</td><td>Adopt</td><td>same</td></tr>
+<tr><td>21</td><td>Second-brain notes</td><td>Adopt</td><td><strong>moved</strong> from Trial: a harness hub and notes exist; this post links to them</td></tr>
+<tr><td>22</td><td>Context sync (Drive and Claude): the phone sync test worked once</td><td>Trial</td><td>same</td></tr>
+<tr><td>23</td><td>Obsidian as planner: picked, not built</td><td>Assess</td><td>same</td></tr>
+<tr><td>24</td><td>HumanLayer ideas: frequent compaction, smart and dumb zones</td><td>Assess</td><td>same</td></tr>
+<tr><td>25</td><td><a href="https://vercel.com/blog/we-removed-80-percent-of-our-agents-tools">Vercel d0</a>: folder as harness (section 5)</td><td>Assess</td><td><strong>new</strong>: read Vercel's post, not tried</td></tr>
+<tr><td colspan="4"><strong>Habits</strong></td></tr>
+<tr><td>26</td><td>Ordered stages (ICM): numbered folders, one task each, a check at the end</td><td>Adopt</td><td>same</td></tr>
+<tr><td>27</td><td>Secondmates: helper agents for marketing, product and finance</td><td>Trial</td><td>same</td></tr>
+<tr><td>28</td><td>Voice-first capture: my words saved as I said them</td><td>Trial</td><td>same</td></tr>
+<tr><td>29</td><td>Twice-a-day reflection</td><td>Assess</td><td>same</td></tr>
+<tr><td>30</td><td>Claude architect exam</td><td>Hold</td><td>same</td></tr>
+<tr><td colspan="4"><strong>Miessler review (2 Nov)</strong></td></tr>
+<tr><td>R1</td><td><a href="https://github.com/danielmiessler/TheAlgorithm">TheAlgorithm</a> (ideal-state criteria)</td><td>Trial</td><td><strong>new</strong>: binary done-tests with evidence fit our brief and gate at no cost</td></tr>
+<tr><td>R2</td><td><a href="https://github.com/danielmiessler/Telos">TELOS</a> (goals file)</td><td>Trial</td><td><strong>new</strong>: free template. Our mind-profile intent layer already fills most of it</td></tr>
+<tr><td>R3</td><td><a href="https://aiharnesses.ai">aiharnesses.ai</a> (method)</td><td>Trial</td><td><strong>new</strong>: its per-cell source and date rule fixes our arena's "Guess" column</td></tr>
+<tr><td>R4</td><td><a href="https://github.com/danielmiessler/LifeOS">LifeOS</a></td><td>Assess</td><td><strong>new</strong>: best ideas here, but it installs into Claude Code's own settings folder and clashes with our base map. Not installed</td></tr>
+<tr><td>R5</td><td><a href="https://github.com/danielmiessler/Fabric">Fabric</a></td><td>Assess</td><td><strong>new</strong>: our skills already do this. Take only its fixed shape and output section</td></tr>
+<tr><td>R6</td><td><a href="https://daemon.danielmiessler.com">Daemon</a></td><td>Assess</td><td><strong>new</strong>: good ideas (expiring fields, privacy gate). It has no licence, so don't copy the code</td></tr>
+<tr><td>R7</td><td><a href="https://github.com/danielmiessler/Substrate">Substrate</a></td><td>Hold</td><td><strong>new</strong>: a public-knowledge project, not our problem space</td></tr>
+</table>
+<p class="test">Test: items 1 to 6, 8 to 15, 19 to 24 and 26 to 30 are the 25 from the 17 October radar. Items 7, 16, 17, 18 and 25 are new. Items 11, 12 and 21 moved. Rows R1 to R7 are seven more new items from the Miessler review. The radar figure does not plot them yet.</p>
+<p><strong>Outside comparison.</strong> <a href="https://aiharnesses.ai">aiharnesses.ai</a> (matrix at <a href="https://aiharnesses.ai/matrix">aiharnesses.ai/matrix</a>, read 2 Nov 2026) compares six harnesses on 17 feature rows. I'm adopting its rule for this arena. Every cell carries one source URL and a read date. A cell the source doesn't answer says "unknown", not a guess. It also warns that scores across different product shapes aren't meaningful.</p>
+<p>I read it through a page summariser, so its figures are close readings, and I'm not reusing its data (no terms seen). I haven't applied the rule to the 27 October tier list yet, so its "guess" column stays as it was. The tier list shows LifeOS as "not scored yet", as it does Vercel d0.</p>
+
+</article>
+</main>
+<footer class="k-foot"><p>by Ashish Raina – program manager turned AI-crew operator</p><p><a href="about.html">About</a> · <a href="index.html">Chat with EA-bot</a> · <a href="index.html#pages">All pages</a> · <a href="https://github.com/codeami">GitHub</a></p></footer>
+</body>
+</html>

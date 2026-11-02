@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Your corrections are your next rules · The Chart Room</title>
+<meta name="description" content="How I turn a week of &quot;no, not like that&quot; into rules my agents read, without letting them edit their own rules">
+<script src="../article.js"></script>
+<link rel="icon" href="../kit/bosun.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../kit/tokens.css">
+<link rel="stylesheet" href="../kit/kit.css">
+<link rel="stylesheet" href="../article.css">
+<style>
+td.n{text-align:right;min-width:80px;font-variant-numeric:tabular-nums}
+.q{font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin:0 0 6px}
+.test{font-size:.86rem;color:var(--muted)}
+.callout{background:var(--warn-soft);border-left:3px solid var(--warn);padding:10px 14px;border-radius:6px;margin:1.2em 0}
+.ex{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:4px 16px 8px;margin:1.2em 0}
+.ex h3{margin-top:.9em}
+.words{font-style:italic;color:var(--muted)}
+.try{background:var(--accent-soft);border:1px solid var(--accent);border-radius:10px;padding:14px 16px;margin:1.2em 0}
+.try pre{margin:.6em 0}
+.try button{font:600 .9rem var(--sans);color:var(--panel);background:var(--accent);border:0;border-radius:6px;padding:7px 14px;cursor:pointer}
+svg .box{fill:var(--paper);stroke:var(--line);stroke-width:1.5}
+svg .box.hi{fill:var(--accent-soft);stroke:var(--accent)}
+svg .box.warn{fill:var(--warn-soft);stroke:var(--warn)}
+svg .box.ok{fill:var(--ok-soft);stroke:var(--ok)}
+svg .t{fill:var(--ink);font-family:var(--sans);font-size:15px;font-weight:600}
+svg .s{fill:var(--muted);font-family:var(--sans);font-size:12.5px}
+svg .edge{stroke:var(--muted);stroke-width:1.5;fill:none}
+svg .edge.no{stroke:var(--warn);stroke-dasharray:5 4}
+svg .lbl{fill:var(--muted);font-family:var(--sans);font-size:12px}
+svg .lbl.no{fill:var(--warn)}
+svg .arrowhead{fill:var(--muted)}
+</style>
+</head>
+<body>
+<header class="k-nav">
+  <a class="k-home" href="../index.html"><img class="k-mark" src="../kit/bosun.svg" alt=""><span class="k-logo">The Chart Room<small>How one captain runs a crew of AI agents, safely.</small></span></a>
+  <nav aria-label="Site"><a href="../blog/index.html" aria-current="page">Field Notes</a><a href="../arena.html">Arena</a><a href="../safety.html">Safety</a><button class="theme" id="theme" type="button">Night</button></nav>
+</header>
+<main class="page">
+<article class="k-article">
+<p class="k-kicker"><a href="index.html">Field Notes</a> · Alignment</p>
+<h1 class="k-title">Your corrections are your next rules</h1>
+<p class="k-dek">How I turn a week of "no, not like that" into rules my agents read, without letting them edit their own rules</p>
+<p class="k-meta"><span>Ashish Raina</span><time datetime="2026-11-02">2 Nov 2026</time><span>6 min read</span></p>
+
+
+<section id="s1">
+<h2>1. The question</h2>
+<p>A good coach watches the game tape. Not to relive the match, but to spot the mistake that keeps coming back, and drill it once.</p>
+<p>My game tape is my chat history. Every time I correct an agent, I'm writing a rule out loud and then throwing it away. So one Sunday I asked an agent to go back through the week and pick them up:</p>
+<pre id="the-prompt">Look back at our chats from this week. List every time I corrected you or redid your work. For each one, tell me whether the fix belongs in project instructions or a skill, or nowhere because it was a one-time thing. Then write the exact wording I should add.</pre>
+<p>It came back with a review page I could read on my phone: every correction in my own words, where the fix belongs, and the exact wording to add. This post walks through how that page was made, and what I did with it.</p>
+</section>
+
+<section id="s2">
+<h2>2. How the review ran</h2>
+<p class="q">What did the agent actually read?</p>
+<p>Think of sorting a week of mail: first throw out the flyers, then read what's left.</p>
+<ol>
+<li id="s2-find"><strong>Find the chats.</strong> It listed every session log changed in the last seven days: 190 files across 30 project folders.</li>
+<li id="s2-mine"><strong>Keep only what I typed.</strong> In my setup, agents talk to agents a lot. It dropped tool output, system reminders, hook messages, orchestrator pings and wake-ups, and the briefs one agent writes for another. 875 turns became 502.</li>
+<li id="s2-context"><strong>Read each one with the reply before it.</strong> A correction only makes sense next to what it corrected.</li>
+<li id="s2-group"><strong>Group repeats.</strong> Five different "this link doesn't work" messages are one problem, not five.</li>
+<li id="s2-check"><strong>Check the existing rules.</strong> Before proposing anything, it read the rule files I already have, so it could say "already covered" instead of writing a duplicate.</li>
+</ol>
+<p>It also wrote down what it did <em>not</em> count: retries after network errors, my own typos, and plain "yes" approvals. That list matters as much as the main one; it's how I can tell the agent didn't pad the numbers.</p>
+<p class="test">Test: the report lists every correction with its date and my exact words, so each count can be checked by hand.</p>
+</section>
+
+<section id="s3">
+<h2>3. Three places a fix can go</h2>
+<p class="q">Where does a lesson belong?</p>
+<p>Some lessons go on the fridge, some go in the recipe book, and some you just remember for tonight.</p>
+<table>
+<tr><th>Place</th><th>When it loads</th><th>Good for</th></tr>
+<tr id="s3-instructions"><td><strong>Project instructions</strong> (<code>AGENTS.md</code> and its kin)</td><td>every session</td><td>things that should be true every time, like "check a link opens before you send it". They cost tokens in every session, so they must earn their place.</td></tr>
+<tr id="s3-skill"><td><strong>A skill</strong></td><td>only when a task matches it</td><td>"how to do X" steps that only matter when doing X</td></tr>
+<tr id="s3-nowhere"><td><strong>Nowhere</strong></td><td>never</td><td>a one-time fix. "The day color is not sticky" was a bug on one page. As a rule it would only add noise.</td></tr>
+</table>
+<p>In practice there was a fourth answer: <strong>already covered</strong>. A rule existed and the agent broke it anyway. That one teaches the most, and I come back to it in section 5.</p>
+</section>
+
+<section id="s4">
+<h2>4. The results in numbers</h2>
+<p>46 corrections in one week, in 12 groups.</p>
+<table id="s4-table">
+<tr><th>Outcome</th><th>Corrections</th><th>What happens next</th></tr>
+<tr><td>New wording proposed (P1 to P4)</td><td class="n">18</td><td>I approve or edit them</td></tr>
+<tr><td>Already covered by a rule</td><td class="n">14</td><td>nothing to add; the rule was missed</td></tr>
+<tr><td>One-time fixes</td><td class="n">11</td><td>nothing</td></tr>
+<tr><td>Needs tooling, not wording</td><td class="n">3</td><td>a separate task</td></tr>
+</table>
+<p>No fix landed in a skill this week. The closest was "skills and hooks did not fire", and a rule can't fix a skill that doesn't load, so that became a task instead. I like that the agent said so rather than forcing something into the skill column.</p>
+<p class="test">Test: 18 + 14 + 11 + 3 = 46, and each row of the review page carries its count.</p>
+</section>
+
+<section id="s5">
+<h2>5. Three real examples</h2>
+
+<div class="ex" id="ex-links">
+<h3>Links that did not open (5 times)</h3>
+<p class="words">"report is not linking" · "Cant see on mobile"</p>
+<p>The agent gave links without opening them first, and many were local-only addresses that never open on a phone. Proposed (P1), for the shared instructions every agent reads:</p>
+<blockquote>Before you give a link, open it and check that it loads. He often reads on his phone: give the Tailscale […] address when there is one, and say "opens only on this Mac" when there is not.</blockquote>
+</div>
+
+<div class="ex" id="ex-look">
+<h3>Making what already existed (7 times)</h3>
+<p class="words">"wishperX is a duplicate tool ?" · "We are sending scouts to learn about scouts"</p>
+<p>It installed a tool when one already did the job, and sent research agents to find things it could have just looked up. An old rule covered research agents only; the same mistake also showed up as a web search, an install, a new file and a new script. Proposed (P2):</p>
+<blockquote><strong>Look before you make.</strong> Before a web search, a scout, a new install or a new file, look for what already exists […]. Extend what is there; do not start a second copy.</blockquote>
+</div>
+
+<div class="ex" id="ex-covered">
+<h3>Already covered, still broken (3 times)</h3>
+<p class="words">"eli5 this to me"</p>
+<p>I already have "talk very simply" in two rule files. The review said so, proposed no new wording, and added a caveat I agree with: when a rule exists and still breaks, more wording probably won't help. A check might. It labelled that last part "a guess", which is the right label.</p>
+</div>
+</section>
+
+<section id="s6">
+<h2>6. I approve; the agent never edits its own rules</h2>
+<p class="q">Who gets to change the rules?</p>
+<p>The agent that makes the mistakes doesn't get to rewrite its own rules. The review is read-only. Its output is a page and four proposals, presented as one decision. Nothing changes until I say so, and then a separate step applies the change.</p>
+<figure id="fig-loop">
+<svg viewBox="0 0 640 392" role="img" aria-labelledby="fig-loop-title">
+<title id="fig-loop-title">From a week of chats to approved rules, and back into next week's chats</title>
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="arrowhead" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<g id="loop-logs"><title>A week of session logs from every project</title><rect class="box" x="10" y="20" width="180" height="58" rx="8"/><text class="t" x="100" y="45" text-anchor="middle">A week of chats</text><text class="s" x="100" y="64" text-anchor="middle">190 session logs</text></g>
+<g id="loop-e1"><title>Filter</title><path class="edge" d="M190 49 H226" marker-end="url(#ah)"/></g>
+<g id="loop-mine"><title>Keep only what the human typed; drop tool output and agent-to-agent messages</title><rect class="box" x="230" y="20" width="180" height="58" rx="8"/><text class="t" x="320" y="45" text-anchor="middle">My turns only</text><text class="s" x="320" y="64" text-anchor="middle">875 → 502</text></g>
+<g id="loop-e2"><title>Group</title><path class="edge" d="M410 49 H446" marker-end="url(#ah)"/></g>
+<g id="loop-group"><title>Group repeats and check each group against the rules that already exist</title><rect class="box hi" x="450" y="20" width="180" height="58" rx="8"/><text class="t" x="540" y="45" text-anchor="middle">Group + check</text><text class="s" x="540" y="64" text-anchor="middle">against existing rules</text></g>
+<g id="loop-e3"><title>Sort each group</title><path class="edge" d="M540 78 V112" marker-end="url(#ah)"/></g>
+<g id="loop-sort"><title>Sort: where does each fix belong?</title><rect class="box hi" x="450" y="116" width="180" height="50" rx="8"/><text class="t" x="540" y="146" text-anchor="middle">Where does it go?</text></g>
+<g id="loop-sort-edges"><title>Three answers</title><path class="edge" d="M490 166 L330 196" marker-end="url(#ah)"/><path class="edge" d="M525 166 L460 196" marker-end="url(#ah)"/><path class="edge" d="M580 166 L580 196" marker-end="url(#ah)"/></g>
+<g id="loop-nowhere"><title>Nowhere: a one-time fix, or a rule that already covers it</title><rect class="box" x="250" y="200" width="150" height="50" rx="8"/><text class="t" x="325" y="222" text-anchor="middle">Nowhere</text><text class="s" x="325" y="240" text-anchor="middle">one-time or covered</text></g>
+<g id="loop-instr"><title>Project instructions: loaded into every session</title><rect class="box" x="410" y="200" width="110" height="50" rx="8"/><text class="t" x="465" y="222" text-anchor="middle">Instructions</text><text class="s" x="465" y="240" text-anchor="middle">every session</text></g>
+<g id="loop-skill"><title>A skill: loaded only when a task matches</title><rect class="box" x="530" y="200" width="100" height="50" rx="8"/><text class="t" x="580" y="222" text-anchor="middle">Skill</text><text class="s" x="580" y="240" text-anchor="middle">on demand</text></g>
+<g id="loop-to-props"><title>Both become proposed wording</title><path class="edge" d="M465 250 L515 286" marker-end="url(#ah)"/><path class="edge" d="M580 250 L565 286" marker-end="url(#ah)"/></g>
+<g id="loop-props"><title>Proposals: exact wording plus where it goes, presented as one decision</title><rect class="box" x="450" y="290" width="180" height="50" rx="8"/><text class="t" x="540" y="312" text-anchor="middle">Proposals</text><text class="s" x="540" y="330" text-anchor="middle">exact wording</text></g>
+<g id="loop-e4"><title>Shown to the human on a review page</title><path class="edge" d="M450 315 H414" marker-end="url(#ah)"/></g>
+<g id="loop-approve"><title>The human approves or edits each proposal; nothing changes before this</title><rect class="box warn" x="230" y="290" width="180" height="50" rx="8"/><text class="t" x="320" y="312" text-anchor="middle">I approve</text><text class="s" x="320" y="330" text-anchor="middle">or edit, or say no</text></g>
+<g id="loop-e5"><title>Approved wording is applied</title><path class="edge" d="M230 315 H194" marker-end="url(#ah)"/></g>
+<g id="loop-rules"><title>Rule files: the instructions every agent loads</title><rect class="box ok" x="10" y="290" width="180" height="50" rx="8"/><text class="t" x="100" y="312" text-anchor="middle">Rule files</text><text class="s" x="100" y="330" text-anchor="middle">AGENTS.md, skills</text></g>
+<g id="loop-back"><title>Next week's sessions load the new rules</title><path class="edge" d="M100 290 V82" marker-end="url(#ah)"/><text class="lbl" x="110" y="190">next week's</text><text class="lbl" x="110" y="206">sessions read them</text></g>
+<g id="loop-nodirect"><title>The agent never writes the rule files itself</title><path class="edge no" d="M540 340 V372 H130 V344" marker-end="url(#ah)"/><text class="lbl no" x="335" y="366" text-anchor="middle">✕ agent never writes here directly</text></g>
+</svg>
+<figcaption>The agent does everything up to "Proposals". Only my approval moves wording into the rule files.</figcaption>
+</figure>
+<p>Two reasons for the gate. A model's guess shouldn't get the authority of something I said. And a review that can only propose stays honest about what it's unsure of: this one flagged that P4 might overlap a rule file it hadn't read.</p>
+<p>This is the same idea as Kun Chen's <a href="https://github.com/kunchenguid/backpass">backpass</a>, which reads logs from many tools overnight and proposes rule edits with quoted evidence. Here I ran it by hand, as one prompt, to see what a week looks like.</p>
+</section>
+
+<section id="s7">
+<h2>7. Try it yourself</h2>
+<div class="try" id="try-box">
+<p><strong>Paste this into a coding agent that can read its own session logs.</strong> Claude Code, for example, keeps them in the <code>projects</code> folder of its own settings folder.</p>
+<pre id="try-prompt">Look back at our chats from this week. List every time I corrected you or redid your work. For each one, tell me whether the fix belongs in project instructions or a skill, or nowhere because it was a one-time thing. Then write the exact wording I should add.
+
+Read only my own messages, not tool output or messages between agents. Check each fix against the rules I already have. Do not edit any rule file; propose only.</pre>
+<button type="button" id="copy-btn">Copy prompt</button>
+</div>
+<p>The first paragraph is my original prompt. The second adds the three things that made the result trustworthy: only my words, checked against what exists, and no edits.</p>
+</section>
+
+<section id="s8">
+<h2>8. What's still rough</h2>
+<ul>
+<li>One week is a small sample. Some groups have three items.</li>
+<li>The agent judges its own mistakes. It may miss a correction I phrased politely.</li>
+<li>Two groups broke rules that already exist. Wording is not enforcement.</li>
+<li>P1 to P4 were waiting for my decision when I wrote this. I approved all four on 2 November.</li>
+</ul>
+</section>
+
+<section id="credits">
+<h2>Credits</h2>
+<ul>
+<li><strong>Kun Chen</strong>: <a href="https://github.com/kunchenguid/firstmate">FirstMate</a>, <a href="https://github.com/kunchenguid/backpass">backpass</a> (the same idea, across many tools, with quoted evidence), and <a href="https://github.com/kunchenguid/lavish-axi">Lavish</a>, the review page format.</li>
+<li><strong>Jake Van Clief</strong>: the <a href="https://arxiv.org/abs/2603.16021">Interpretable Context Methodology</a>, the rooms-and-rules structure these rules live in.</li>
+<li><strong>The <a href="https://agents.md">AGENTS.md</a> convention</strong>: one instructions file that many coding agents read.</li>
+</ul>
+</section>
+
+
+</article>
+<nav class="pager" aria-label="Previous and next"><a href="guides-and-sensors.html" rel="prev">← Guides, sensors, and the rules I'm still begging for</a><a href="how-it-fits-together.html" rel="next">One captain, many crews, one chart room →</a></nav>
+</main>
+<footer class="k-foot"><p>by Ashish Raina – program manager turned AI-crew operator</p><p><a href="../about.html">About</a> · <a href="../index.html">Chat with EA-bot</a> · <a href="../index.html#pages">All pages</a> · <a href="https://github.com/codeami">GitHub</a></p></footer>
+<script>
+document.getElementById('copy-btn').addEventListener('click', function () {
+  var btn = this, text = document.getElementById('try-prompt').textContent;
+  try {
+    navigator.clipboard.writeText(text).then(function () { btn.textContent = 'Copied'; }, function () { btn.textContent = 'Select and copy'; });
+  } catch (e) { btn.textContent = 'Select and copy'; }
+});
+</script>
+</body>
+</html>
