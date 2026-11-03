@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light">
-<title>In AI, everything is a file (or a folder) · The Chart Room</title>
+<title>Everything is a file: an ordered folder harness for your AI · The Chart Room</title>
 <meta name="description" content="Your goals, your context and your rules, written down once in plain folders and read by every AI tool you use">
 <link rel="stylesheet" href="../hud.css">
 <link rel="icon" href="../kit/bosun.svg" type="image/svg+xml">
@@ -20,23 +20,25 @@
 
 <header class="p-head">
 <p class="p-kicker"><a href="index.html">Blog</a><span>Context</span></p>
-<h1 class="p-title">In AI, everything is <mark class="p-hl">a file</mark> (or a folder)</h1>
-<p class="p-sub">Your goals, your context and your rules, written down once in plain folders and read by every AI tool you use</p>
+<h1 class="p-title">Everything is <mark class="p-hl">a file</mark>: an ordered folder harness for your AI</h1>
+<p class="p-sub">In AI, everything is a file (or a folder)</p>
 <p class="p-byline"><span>Ashish Raina</span><time datetime="2026-11-02">2 Nov 2026</time><span>12 min read</span></p>
-<ul class="p-tags" aria-label="Topics"><li>ICM</li><li>AGENTS.md</li><li>Dotfiles</li><li>Plain files</li><li>7 panels</li></ul>
+<ul class="p-tags" aria-label="Topics"><li>ICM</li><li>AGENTS.md</li><li>Dotfiles</li><li>Plain files</li><li>8 panels</li></ul>
 </header>
+<p class="p-intro">This simple file-and-folder method is good enough to start.</p>
 
 <div class="p-top">
 <nav class="p-index" aria-label="In this post">
 <h2>In this post</h2>
 <ol>
-<li><a href="#p1">Three levels of using AI</a></li>
-<li><a href="#p2">Map, rooms and tools</a></li>
-<li><a href="#p3">A file on disk is not something the AI knows</a></li>
-<li><a href="#p4">Every workflow starts as a conversation</a></li>
-<li><a href="#p5">Separate the model from the system</a></li>
-<li><a href="#p6">Fix one thing, then rerun</a></li>
-<li><a href="#p7">How I wired it up</a></li>
+<li><a href="#p1">The problem</a></li>
+<li><a href="#p2">The idea: an ordered folder harness</a></li>
+<li><a href="#p3">Three levels of using AI</a></li>
+<li><a href="#p4">Map, rooms and tools</a></li>
+<li><a href="#p5">A file on disk is not something the AI knows</a></li>
+<li><a href="#p6">Conversations become rules, one fix at a time</a></li>
+<li><a href="#p7">The model is not the system</a></li>
+<li><a href="#p8">Why it matters</a></li>
 </ol>
 </nav>
 <aside class="p-side" aria-label="At a glance">
@@ -49,7 +51,57 @@
 <div class="p-grid">
 
 <section class="p-panel" id="p1" aria-labelledby="p1-t">
-<header class="p-panel-h"><span class="p-num">01</span><h2 id="p1-t">Three levels of using AI</h2></header>
+<header class="p-panel-h"><span class="p-num">01</span><h2 id="p1-t">The problem</h2></header>
+<div class="p-box"><h3 class="p-lab">Noise and overload</h3><p>There is more AI than anyone can follow. New tools and new advice arrive every week, and I think most of us end up skimming and saving links we never open.</p></div>
+<div class="p-box"><h3 class="p-lab">AI that guesses what you want</h3><p>I ask for one thing and get a confident answer to a different question, because the AI doesn't know what I meant. In my reading, that gap is why many people give up.</p></div>
+<div class="p-box"><h3 class="p-lab">Knowledge scattered everywhere</h3><p>What I know about my own life sits in notes apps, chats, email and my head. No AI can see it, so every chat starts from zero.</p></div>
+<div class="p-box"><h3 class="p-lab">Newcomers left behind</h3><p>If you are just starting, there is no obvious place to begin, and the people who already know how seem a long way ahead.</p></div>
+<p class="p-principle"><span class="p-lab">My view, not a study</span>All four get easier when what you know sits in one place the AI can read.</p>
+<a class="p-more" href="#s-problem">Read the problem</a>
+</section>
+
+<section class="p-panel p-wide" id="p2" aria-labelledby="p2-t">
+<header class="p-panel-h"><span class="p-num">02</span><h2 id="p2-t">The idea: an ordered folder harness</h2></header>
+<div class="p-box"><h3 class="p-lab">The idea in one line</h3><p>Every want and need becomes a folder the AI can read. Each folder holds a few plain files. Anyone, or any AI tool, can open the folder and see what you mean.</p></div>
+<figure class="p-fig">
+<svg class="p-svg" viewBox="0 0 340 450" role="img" aria-labelledby="fig-t fig-d">
+<title id="fig-t">Folders for everyday wants and needs</title>
+<desc id="fig-d">One folder called my-life holds a map file and six folders: money, health, work and career, personal brand, learning, and family and community. Each folder holds three example files.</desc>
+<line class="p-svg-line" x1="170" y1="44" x2="170" y2="400"/>
+<rect class="p-svg-root" x="80" y="6" width="180" height="38" rx="8"/>
+<text class="p-svg-name" x="170" y="22" text-anchor="middle">my-life/</text>
+<text class="p-svg-file" x="170" y="37" text-anchor="middle">AGENTS.md (the map)</text>
+<line class="p-svg-line" x1="160" y1="127" x2="170" y2="127"/><line class="p-svg-line" x1="170" y1="127" x2="180" y2="127"/>
+<line class="p-svg-line" x1="160" y1="257" x2="170" y2="257"/><line class="p-svg-line" x1="170" y1="257" x2="180" y2="257"/>
+<line class="p-svg-line" x1="160" y1="387" x2="170" y2="387"/><line class="p-svg-line" x1="170" y1="387" x2="180" y2="387"/>
+<rect class="p-svg-folder" x="6" y="70" width="154" height="114" rx="8"/>
+<text class="p-svg-name" x="18" y="94">money/</text>
+<text class="p-svg-file" x="18" y="120">budget.md</text><text class="p-svg-file" x="18" y="142">goals.md</text><text class="p-svg-file" x="18" y="164">bills-calendar.md</text>
+<rect class="p-svg-folder" x="180" y="70" width="154" height="114" rx="8"/>
+<text class="p-svg-name" x="192" y="94">health/</text>
+<text class="p-svg-file" x="192" y="120">sleep-notes.md</text><text class="p-svg-file" x="192" y="142">exercise-plan.md</text><text class="p-svg-file" x="192" y="164">appointments.md</text>
+<rect class="p-svg-folder" x="6" y="200" width="154" height="114" rx="8"/>
+<text class="p-svg-name" x="18" y="224">work-and-career/</text>
+<text class="p-svg-file" x="18" y="250">skills.md</text><text class="p-svg-file" x="18" y="272">wins-this-year.md</text><text class="p-svg-file" x="18" y="294">next-role.md</text>
+<rect class="p-svg-folder" x="180" y="200" width="154" height="114" rx="8"/>
+<text class="p-svg-name" x="192" y="224">personal-brand/</text>
+<text class="p-svg-file" x="192" y="250">about-me.md</text><text class="p-svg-file" x="192" y="272">writing-topics.md</text><text class="p-svg-file" x="192" y="294">draft-posts.md</text>
+<rect class="p-svg-folder" x="6" y="330" width="154" height="114" rx="8"/>
+<text class="p-svg-name" x="18" y="354">learning/</text>
+<text class="p-svg-file" x="18" y="380">reading-list.md</text><text class="p-svg-file" x="18" y="402">course-notes.md</text><text class="p-svg-file" x="18" y="424">questions.md</text>
+<rect class="p-svg-folder" x="180" y="330" width="154" height="114" rx="8"/>
+<text class="p-svg-name" x="192" y="354">family-community/</text>
+<text class="p-svg-file" x="192" y="380">birthdays.md</text><text class="p-svg-file" x="192" y="402">shared-plans.md</text><text class="p-svg-file" x="192" y="424">volunteering.md</text>
+</svg>
+<figcaption>Made-up example: one folder for each want or need, three plain files in each.</figcaption>
+</figure>
+<div class="p-box"><h3 class="p-lab">When it outgrows this</h3><p>Bigger setups, such as a company's document store, later move to retrieval (RAG, a search index) when the files outgrow what fits in context.</p></div>
+<p class="p-principle"><span class="p-lab">Principle</span>One folder per want or need, a few plain files in each, and the AI reads only the ones the task needs.</p>
+<a class="p-more" href="#s-idea">Read the idea</a>
+</section>
+
+<section class="p-panel" id="p3" aria-labelledby="p3-t">
+<header class="p-panel-h"><span class="p-num">03</span><h2 id="p3-t">Three levels of using AI</h2></header>
 <div class="p-box"><h3 class="p-lab">Think of cooking</h3>
 <table class="p-table"><thead><tr><th>Level</th><th>In the kitchen</th><th>With AI</th></tr></thead><tbody>
 <tr><td>1</td><td>The recipe card</td><td>You look it up again next time</td></tr>
@@ -63,8 +115,8 @@
 <a class="p-more" href="#s1">Read section 1</a>
 </section>
 
-<section class="p-panel" id="p2" aria-labelledby="p2-t">
-<header class="p-panel-h"><span class="p-num">02</span><h2 id="p2-t">Map, rooms and tools</h2></header>
+<section class="p-panel" id="p4" aria-labelledby="p4-t">
+<header class="p-panel-h"><span class="p-num">04</span><h2 id="p4-t">Map, rooms and tools</h2></header>
 <div class="p-box"><h3 class="p-lab">Three kinds of file</h3>
 <ul><li><strong>The map:</strong> one short file at the top (<code>AGENTS.md</code>). Who I am, my house rules, and a routing table.</li>
 <li><strong>The rooms:</strong> one folder per kind of work, each with a <code>CONTEXT.md</code>.</li>
@@ -76,8 +128,8 @@
 <a class="p-more" href="#s2">Read section 2</a>
 </section>
 
-<section class="p-panel" id="p3" aria-labelledby="p3-t">
-<header class="p-panel-h"><span class="p-num">03</span><h2 id="p3-t">A file on disk is not something the AI knows</h2></header>
+<section class="p-panel" id="p5" aria-labelledby="p5-t">
+<header class="p-panel-h"><span class="p-num">05</span><h2 id="p5-t">A file on disk is not something the AI knows</h2></header>
 <div class="p-box"><h3 class="p-lab">Library and desk</h3>
 <table class="p-table"><thead><tr><th>What</th><th>Is the</th></tr></thead><tbody>
 <tr><td>Your folders</td><td>Library: thousands of books</td></tr>
@@ -90,8 +142,8 @@
 <a class="p-more" href="#s3">Read section 3</a>
 </section>
 
-<section class="p-panel" id="p4" aria-labelledby="p4-t">
-<header class="p-panel-h"><span class="p-num">04</span><h2 id="p4-t">Every workflow starts as a conversation</h2></header>
+<section class="p-panel" id="p6" aria-labelledby="p6-t">
+<header class="p-panel-h"><span class="p-num">06</span><h2 id="p6-t">Conversations become rules, one fix at a time</h2></header>
 <div class="p-box"><h3 class="p-lab">Four rounds to tighten a paragraph</h3>
 <table class="p-table"><thead><tr><th>You say</th><th>It becomes</th></tr></thead><tbody>
 <tr><td>"too wordy"</td><td>goal: shorter</td></tr>
@@ -100,33 +152,18 @@
 <tr><td>"more measured"</td><td>measured, not casual</td></tr>
 </tbody></table></div>
 <div class="p-box"><h3 class="p-lab">Keep the card</h3><p>Nobody set out to write a style guide, but by round four there is one, scattered across the chat. Save the decisions as a file (<code>areas/blog/voice.md</code>).</p></div>
-<p class="p-principle"><span class="p-lab">Principle</span>Next time "tighten this paragraph" is right in one go.</p>
-<a class="p-more" href="#s4">Read section 4</a>
-</section>
-
-<section class="p-panel" id="p5" aria-labelledby="p5-t">
-<header class="p-panel-h"><span class="p-num">05</span><h2 id="p5-t">Separate the model from the system</h2></header>
-<div class="p-box"><h3 class="p-lab">The model is one step in the middle</h3>
-<ol class="p-steps"><li>Request</li><li>Routing (code)</li><li>Tools (code)</li><li>Model (swap)</li><li>Check (person and code)</li><li>Result</li></ol></div>
-<div class="p-box"><h3 class="p-lab">The useful question</h3><p>If I changed the model tomorrow, what would still work?</p></div>
-<div class="p-box"><h3 class="p-lab">In my setup</h3><p>Almost everything. FirstMate and Kun Chen's tools are the kitchen. The map in <code>AGENTS.md</code> is the written rules. Claude, Codex or Pi is whichever chef is on shift.</p></div>
-<p class="p-principle"><span class="p-lab">Principle</span>Swap the chef and a well-run kitchen still serves the same menu.</p>
-<a class="p-more" href="#s5">Read section 5</a>
-</section>
-
-<section class="p-panel" id="p6" aria-labelledby="p6-t">
-<header class="p-panel-h"><span class="p-num">06</span><h2 id="p6-t">Fix one thing, then rerun</h2></header>
 <div class="p-box"><h3 class="p-lab">When an answer comes back wrong</h3>
 <ol class="p-steps"><li>Read</li><li>Draft</li><li>Check against the source</li><li>Find the one cause</li><li>Change one line</li><li>Rerun the same task</li></ol></div>
-<div class="p-box"><h3 class="p-lab">Then</h3><p>Keep the change if it helped. Drop it if it didn't.</p></div>
-<p class="p-principle"><span class="p-lab">Principle</span>One change, one visible effect.</p>
+<p class="p-principle"><span class="p-lab">Principle</span>Keep the card, and change one thing at a time: one change, one visible effect.</p>
+<a class="p-more" href="#s4">Read section 4</a>
 <a class="p-more" href="#s6">Read section 6</a>
 </section>
 
 <section class="p-panel" id="p7" aria-labelledby="p7-t">
-<header class="p-panel-h"><span class="p-num">07</span><h2 id="p7-t">How I wired it up</h2></header>
-<div class="p-box"><h3 class="p-lab">Setting up a machine</h3>
-<ol class="p-steps"><li>Clone the repo</li><li>Run the rebuild script</li><li>Run the tests</li></ol></div>
+<header class="p-panel-h"><span class="p-num">07</span><h2 id="p7-t">The model is not the system</h2></header>
+<div class="p-box"><h3 class="p-lab">The model is one step in the middle</h3>
+<ol class="p-steps"><li>Request</li><li>Routing (code)</li><li>Tools (code)</li><li>Model (swap)</li><li>Check (person and code)</li><li>Result</li></ol></div>
+<div class="p-box"><h3 class="p-lab">The useful question</h3><p>If I changed the model tomorrow, what would still work? In my setup, almost everything. FirstMate and Kun Chen's tools are the kitchen. The map in <code>AGENTS.md</code> is the written rules. Claude, Codex or Pi is whichever chef is on shift.</p></div>
 <div class="p-box"><h3 class="p-lab">A normal day</h3>
 <table class="p-table"><tbody>
 <tr><td>Start a session</td><td>Any tool reads the map and routes to a room</td></tr>
@@ -135,9 +172,20 @@
 <tr><td>Daily</td><td>backpass proposes rule changes, writes nothing</td></tr>
 <tr><td>Review</td><td>I approve the changes I agree with</td></tr>
 </tbody></table></div>
-<div class="p-box"><h3 class="p-lab">Still missing</h3><p>Chat apps can't follow links on my disk. For now I paste the map into a project there.</p></div>
-<p class="p-principle"><span class="p-lab">Principle</span>Write down what you keep explaining. Put it where every tool can find it. Change it only on purpose.</p>
+<p class="p-principle"><span class="p-lab">Principle</span>Swap the chef and a well-run kitchen still serves the same menu.</p>
+<a class="p-more" href="#s5">Read section 5</a>
 <a class="p-more" href="#s7">Read section 7</a>
+</section>
+
+<section class="p-panel" id="p8" aria-labelledby="p8-t">
+<header class="p-panel-h"><span class="p-num">08</span><h2 id="p8-t">Why it matters</h2></header>
+<div class="p-box"><h3 class="p-lab">It helps you first</h3><p>Journaling and note-taking turn a busy week into a record you can look back on. It is also a way to express yourself.</p></div>
+<div class="p-box"><h3 class="p-lab">It helps the AI work your way</h3><p>The same record means no re-explaining. The AI reads what you wrote.</p></div>
+<div class="p-box"><h3 class="p-lab">It helps newcomers</h3><p>I think a record like this makes it easier for someone new to learn AI. They start from their own notes, not a blank page, and can go on to contribute to the bigger good.</p></div>
+<div class="p-box"><h3 class="p-lab">Try it yourself</h3>
+<ol class="p-steps"><li>Make three folders: one for something you want, one for something you need, one for something you are learning.</li><li>Write one note a day in one of them. A few plain lines is enough.</li><li>When you ask an AI for help, point it at the folder that fits.</li></ol></div>
+<p class="p-principle"><span class="p-lab">Principle</span>Three folders, one note a day.</p>
+<a class="p-more" href="#s-why">Read why it matters</a>
 </section>
 
 </div>
@@ -149,6 +197,34 @@
 <p>Unix has an old idea: everything is a file. Your keyboard, your disk, even a running program show up as files you can read and write. It made a complicated machine simple to work with.</p>
 <p>Working with AI is heading the same way. Jake Van Clief calls his version the <a href="https://arxiv.org/abs/2603.16021">Interpretable Context Methodology</a> (ICM). Strip away the name and it says this: stop pasting the same explanations into chats. Write them down as plain files in folders, and let the AI read the ones it needs.</p>
 <p>This post walks through how I set that up. I built a small working version as I went, and each section ends with a test that checks it.</p>
+
+<section id="s-problem">
+<h2>The problem</h2>
+<p>Picture a kitchen drawer where every receipt, spare key and takeaway menu has been thrown in together. You know what you need is in there somewhere. That is how AI feels to me today, and I think it shows up in four ways. This is my view from using it every day, not a survey.</p>
+<ul>
+<li><strong>Noise and overload.</strong> There is more AI than anyone can follow. New tools and new advice arrive every week, and I think most of us end up skimming and saving links we never open.</li>
+<li><strong>AI that guesses what you want.</strong> I ask for one thing and get a confident answer to a different question, because the AI doesn't know what I meant. In my reading, that gap is why many people give up.</li>
+<li><strong>Knowledge scattered everywhere.</strong> What I know about my own life sits in notes apps, chats, email and my head. No AI can see it, so every chat starts from zero.</li>
+<li><strong>Newcomers left behind.</strong> If you are just starting, there is no obvious place to begin, and the people who already know how seem a long way ahead.</li>
+</ul>
+<p>All four get easier when what you know sits in one place the AI can read.</p>
+</section>
+
+<section id="s-idea">
+<h2>The idea: an ordered folder harness</h2>
+<p>A harness is the straps and buckles that let a horse pull a cart in the right direction. Here it is a set of folders. The idea is simple: <strong>every want and need becomes a folder the AI can read</strong>. Each folder holds a few plain files. Anyone, or any AI tool, can open the folder and see what you mean.</p>
+<p>Here is a made-up example, with generic names. Yours will differ. The diagram above shows the same folders.</p>
+<ul>
+<li><strong>money/</strong>: <code>budget.md</code>, <code>goals.md</code>, <code>bills-calendar.md</code></li>
+<li><strong>health/</strong>: <code>sleep-notes.md</code>, <code>exercise-plan.md</code>, <code>appointments.md</code></li>
+<li><strong>work-and-career/</strong>: <code>skills.md</code>, <code>wins-this-year.md</code>, <code>next-role.md</code></li>
+<li><strong>personal-brand/</strong>: <code>about-me.md</code>, <code>writing-topics.md</code>, <code>draft-posts.md</code></li>
+<li><strong>learning/</strong>: <code>reading-list.md</code>, <code>course-notes.md</code>, <code>questions.md</code></li>
+<li><strong>family-community/</strong>: <code>birthdays.md</code>, <code>shared-plans.md</code>, <code>volunteering.md</code></li>
+</ul>
+<p>One short file at the top, the map, says which folder to read for which kind of task. The rest of this post is about how to set that up and keep it tidy.</p>
+<p>This simple file-and-folder method is good enough to start. Bigger setups, such as a company's document store, later move to retrieval (RAG, a search index) when the files outgrow what fits in context.</p>
+</section>
 
 <section id="s1">
 <h2>1. Three levels of using AI</h2>
@@ -303,6 +379,19 @@ review             I approve the changes I agree with</pre>
 <p>What's still missing: chat apps can't follow links on my disk. These include Claude.ai, Claude Desktop's chat and Gemini on the web. For now I paste the map into a project there. One idea I haven't built: a small MCP server with two tools, "load context" and "save context", so chat apps could read the map and write to the inbox too.</p>
 <p>If you take one thing from this post, take this. Write down what you keep explaining. Put it where every tool can find it. Change it only on purpose.</p>
 <p>The next post, <a href="how-it-fits-together.html">One captain, many crews, one chart room</a>, covers the other half: how the work gets done when several agents run at once.</p>
+</section>
+
+<section id="s-why">
+<h2>Why it matters</h2>
+<p>A diary does two jobs. It helps you sort out your week, and years later it is the record you reach for. Folders of notes work the same way, and now an AI can read them too.</p>
+<p>Expressing yourself, journaling and taking notes build a record that helps you. The same record means the AI works your way, with no re-explaining. I also think it makes it easier for newcomers to learn AI: they start from their own notes, not a blank page, and can go on to contribute to the bigger good.</p>
+<h3>Try it yourself</h3>
+<ol>
+<li>Make three folders: one for something you want, one for something you need, one for something you are learning.</li>
+<li>Write one note a day in one of them. A few plain lines is enough.</li>
+<li>When you ask an AI for help, point it at the folder that fits.</li>
+</ol>
+<p>Start small. Three folders and one note a day is enough to begin.</p>
 </section>
 
 <section id="credits">

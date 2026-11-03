@@ -29,7 +29,7 @@ html[data-skin="calm"] :target { scroll-margin-top: 16px; }
 .p-kicker { display: flex; flex-wrap: wrap; gap: 4px 0; font-size: 13px; }
 .p-kicker a { color: inherit; text-decoration: none; }
 .p-kicker > * + * { margin-left: var(--s-md); padding-left: var(--s-md); border-left: 1px solid var(--line-2); }
-.p-title { max-width: 20ch; margin: var(--s-md) 0 var(--s-sm); font: 500 clamp(2rem, 7vw, 3.4rem)/1.08 var(--f-head); letter-spacing: -.01em; text-wrap: balance; }
+.p-title { max-width: 26ch; margin: var(--s-md) 0 var(--s-sm); font: 500 clamp(2rem, 7vw, 3.4rem)/1.08 var(--f-head); letter-spacing: -.01em; text-wrap: balance; }
 .p-hl { padding: 0 .12em; color: var(--accent); background: var(--accent-dim); -webkit-box-decoration-break: clone; box-decoration-break: clone; border-radius: 4px; }
 .p-sub { max-width: 46rem; margin: 0 0 var(--s-md); font: italic 1.15rem/1.45 var(--f-head); color: var(--mute); }
 .p-byline { display: flex; flex-wrap: wrap; gap: 2px var(--s-lg); margin: 0 0 var(--s-md); font-size: 14px; color: var(--mute); }
@@ -80,6 +80,17 @@ html[data-skin="calm"] :target { scroll-margin-top: 16px; }
 .p-principle { margin: 0; padding: var(--s-md); background: var(--accent-dim); border-left: 3px solid var(--accent); border-radius: 0 var(--radius-calm) var(--radius-calm) 0; font-size: 15px; }
 .p-principle .p-lab { display: block; margin-bottom: var(--s-xs); color: var(--accent); }
 .p-more { font-size: 14px; }
+.p-wide { grid-column: 1 / -1; }
+@media (min-width: 1100px) { .p-wide { grid-column: span 2; } }
+/* Figure: an inline SVG drawn with the role tokens, no fixed width, so a phone never scrolls sideways. */
+.p-fig { max-width: 30rem; margin: 0 auto; padding: var(--s-md); background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-calm); }
+.p-fig figcaption { margin-top: var(--s-sm); font-size: 14px; color: var(--mute); }
+.p-svg { display: block; width: 100%; height: auto; }
+.p-svg-folder { fill: var(--bg); stroke: var(--line-2); stroke-width: 1; }
+.p-svg-root { fill: var(--accent-dim); stroke: var(--accent); stroke-width: 1; }
+.p-svg-line { stroke: var(--line-2); stroke-width: 1; }
+.p-svg-name { font: 700 13px var(--f-read); fill: var(--ink); }
+.p-svg-file { font: 12px var(--font-mono); fill: var(--mute); }
 
 /* The full prose, for readers who want it. */
 .p-full { max-width: 46rem; margin: 0 auto; padding-top: var(--s-xl); border-top: 1px solid var(--line-2); }

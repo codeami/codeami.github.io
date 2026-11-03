@@ -451,6 +451,11 @@ stays).
     table (`.p-table`), then one **principle box** (`.p-principle`: the single
     sentence to keep) and a link to the full section. Panels use the post's
     own words, shortened; never new claims.
+  - **Wide panel and figure** (`.p-wide`, `.p-fig`): a panel that spans every
+    column, for a diagram. The figure is an inline SVG with `viewBox` and no
+    fixed width, drawn only with the role tokens through `.p-svg-*` classes
+    (folder, root, line, name, file), max 30rem, with a `<title>`, a `<desc>`
+    and a caption that says when the example is made up.
   - **Full prose** (`.p-full.p-prose`): the whole post below the panels, with
     `.p-test` for a test note and `.p-callout` for an honest note.
   - **Post card** (`.p-post` in `.p-posts`, under a `.p-group` heading): kicker,

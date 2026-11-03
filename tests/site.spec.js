@@ -195,11 +195,18 @@ test('panel post: header, index, side cards, numbered panels; columns follow the
   expect(side).toBeGreaterThanOrEqual(1);
   expect(side).toBeLessThanOrEqual(3);
   const panels = page.locator('.p-grid > .p-panel');
-  expect(await panels.count()).toBe(7);
-  await expect(panels.locator('.p-principle')).toHaveCount(7);
-  await expect(page.locator('.p-panel .p-num')).toHaveText(['01', '02', '03', '04', '05', '06', '07']);
+  expect(await panels.count(), 'panels capped near 7').toBe(8);
+  await expect(panels.locator('.p-principle')).toHaveCount(8);
+  await expect(page.locator('.p-panel .p-num')).toHaveText(['01', '02', '03', '04', '05', '06', '07', '08']);
+  await expect(page.locator('.p-panel h2').first()).toHaveText('The problem');
+  await expect(page.locator('.p-panel h2').nth(1)).toContainText('The idea');
+  await expect(page.locator('.p-panel h2').last()).toHaveText('Why it matters');
+  await expect(page.locator('.p-head + .p-intro')).toHaveText('This simple file-and-folder method is good enough to start.');
+  await expect(page.locator('#p2')).toContainText('retrieval (RAG, a search index)');
+  await expect(page.locator('#p1 .p-box'), 'four problems').toHaveCount(4);
+  await expect(page.locator('#p8 .p-steps li'), 'try it yourself: three steps').toHaveCount(3);
   const targets = await page.$$eval('.p-index a', (as) => as.map((a) => a.getAttribute('href')));
-  expect(targets.length).toBe(7);
+  expect(targets.length).toBe(8);
   for (const t of [...targets, ...(await page.$$eval('.p-more', (as) => as.map((a) => a.getAttribute('href'))))]) {
     await expect(page.locator(t), t).toHaveCount(1);
   }
@@ -208,6 +215,36 @@ test('panel post: header, index, side cards, numbered panels; columns follow the
   if (test.info().project.name === 'mobile-390') expect(cols, 'panels stack at 390').toBe(1);
   else expect(cols, 'panels use 2 or 3 columns at 1280').toBeGreaterThanOrEqual(2);
   expect(await page.locator('[style], style').count(), 'no inline style').toBe(0);
+});
+
+test('panel post: the folder diagram is a labelled SVG that fits the width and shows six folders of three files', async ({ page }) => {
+  await page.goto('/ai-life-os/blog/everything-is-a-file.html');
+  const svg = page.locator('.p-fig svg');
+  await expect(svg).toHaveAttribute('role', 'img');
+  await expect(svg.locator('title')).not.toBeEmpty();
+  await expect(svg.locator('desc')).not.toBeEmpty();
+  await expect(svg.locator('.p-svg-folder')).toHaveCount(6);
+  await expect(svg.locator('text.p-svg-file')).toHaveCount(19);
+  const box = await svg.boundingBox();
+  const vw = page.viewportSize().width;
+  expect(box.x, 'inside the page').toBeGreaterThanOrEqual(0);
+  expect(box.x + box.width, 'inside the page').toBeLessThanOrEqual(vw);
+  // every label stays inside its folder: no text runs past the drawing
+  const out = await svg.evaluate((s) => {
+    const r = s.getBoundingClientRect();
+    return [...s.querySelectorAll('text')].filter((t) => { const b = t.getBoundingClientRect(); return b.left < r.left - 1 || b.right > r.right + 1; }).map((t) => t.textContent);
+  });
+  expect(out).toEqual([]);
+  // and inside its own folder card, not just inside the drawing
+  const spill = await svg.evaluate((s) => {
+    const rects = [...s.querySelectorAll('.p-svg-folder')].map((r) => r.getBoundingClientRect());
+    return [...s.querySelectorAll('text')].filter((t) => {
+      const b = t.getBoundingClientRect();
+      const home = rects.find((r) => b.left >= r.left - 1 && b.left < r.right && b.top >= r.top - 1 && b.top <= r.bottom);
+      return home && b.right > home.right - 2;
+    }).map((t) => t.textContent);
+  });
+  expect(spill, 'label runs past its folder').toEqual([]);
 });
 
 // ---- the landing at / ----
