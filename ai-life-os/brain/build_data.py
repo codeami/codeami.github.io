@@ -125,6 +125,12 @@ out = {"meta": {"name": "AI-Life-OS public second brain", "invented": False,
        "apps": [], "projects": [dict(p, kind="project") for p in site["projects"]], "pages": [dict(p, kind="page") for p in site["pages"] if live(p["url"])],
        "reading": [r for r in site["reading"] if live(r["url"])]}
 (HERE / "brain-data.json").write_text(json.dumps(out, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
-# Search engines skip what is retired, so a page still linked from elsewhere does not stay in results.
-(ROOT / "robots.txt").write_text("User-agent: *\n" + "".join("Disallow: /%s\n" % p for p in sorted(RETIRED)), encoding="utf-8")
+pages = json.loads((ROOT / "share.json").read_text(encoding="utf-8"))["pages"]
+# A link-only page carries a static noindex meta and is not in robots.txt, so crawlers can fetch it and see the meta.
+for p in (ROOT / r["path"] for r in pages if r["level"] == "link-only"):
+    text = p.read_text(encoding="utf-8")
+    if not re.search(r'<meta\s+name="robots"', text):
+        p.write_text(re.sub(r"<head[^>]*>", lambda m: m.group(0) + '\n<meta name="robots" content="noindex">', text, count=1), encoding="utf-8")
+# Retired pages are disallowed, so a page still linked from elsewhere does not stay in results.
+(ROOT / "robots.txt").write_text("User-agent: *\n" + "".join("Disallow: /%s\n" % r["path"] for r in sorted(pages, key=lambda r: r["path"]) if r["level"] == "retired"), encoding="utf-8")
 print("rooms",[(r["label"], sum(f["count"] for f in r["folders"])) for r in out["rooms"]], "skills", len(skills))
