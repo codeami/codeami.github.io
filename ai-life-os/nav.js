@@ -152,9 +152,9 @@ document.addEventListener("click", function (ev) {
   if (id && scrollToId(id)) ev.preventDefault();
 });
 
-/* Pages listed in retired.json at the site root are left out of the nav and the pager.
+/* Pages in share.json at the site root that are not public are left out of the nav and the pager.
    If the file cannot be read, the nav shows everything. */
-var RETIRED_URL = document.currentScript ? document.currentScript.src.replace(/[^\/]*$/, "") + "../retired.json" : "";
+var RETIRED_URL = document.currentScript ? document.currentScript.src.replace(/[^\/]*$/, "") + "../share.json" : "";
 function dropRetired(list, gone) {
   return list.filter(function (p) { return gone.indexOf("ai-life-os/" + p[0]) < 0; });
 }
@@ -171,7 +171,7 @@ function start() {
   }
   if (!RETIRED_URL || !window.fetch) return go(null);
   fetch(RETIRED_URL).then(function (r) { return r.ok ? r.json() : null; })
-    .then(function (j) { go(j && j.retired ? j.retired.map(function (e) { return e.path; }) : null); })
+    .then(function (j) { go(j && j.pages ? j.pages.filter(function (e) { return e.level !== "public"; }).map(function (e) { return e.path; }) : null); })
     .catch(function () { go(null); });
 }
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start);

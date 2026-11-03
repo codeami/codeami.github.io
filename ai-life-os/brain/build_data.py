@@ -8,7 +8,7 @@ Reads only public files of this site:
   maps/src/skills/map.json  the skills (the inner ring)
   blog/index.html           the Field Notes posts
   course/course.json        the AI introductory course's lessons
-  ../../retired.json        pages hidden from the chart; also writes ../../robots.txt from it
+  ../../share.json          pages that are not public stay out of the chart; also writes ../../robots.txt from it
 Every url in the output is relative to brain/ or a public https link. Stdlib only."""
 import html, json, posixpath, re
 from pathlib import Path
@@ -17,11 +17,11 @@ HERE = Path(__file__).resolve().parent
 SITE = HERE.parent
 ROOT = SITE.parent
 rd = lambda p: (SITE / p).read_text(encoding="utf-8")
-RETIRED = {r["path"] for r in json.loads((ROOT / "retired.json").read_text(encoding="utf-8"))["retired"]}
+RETIRED = {r["path"] for r in json.loads((ROOT / "share.json").read_text(encoding="utf-8"))["pages"] if r["level"] != "public"}
 
 
 def live(url):
-    """False for a url (relative to brain/) that points at a retired page."""
+    """False for a url (relative to brain/) that points at a page that is not public."""
     if re.match(r"^[a-z][a-z0-9+.-]*:", url):
         return True
     return posixpath.normpath(posixpath.join("ai-life-os/brain", url.split("#")[0].split("?")[0])) not in RETIRED
@@ -125,6 +125,12 @@ out = {"meta": {"name": "AI-Life-OS public second brain", "invented": False,
        "apps": [], "projects": [dict(p, kind="project") for p in site["projects"]], "pages": [dict(p, kind="page") for p in site["pages"] if live(p["url"])],
        "reading": [r for r in site["reading"] if live(r["url"])]}
 (HERE / "brain-data.json").write_text(json.dumps(out, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
-# Search engines skip what is retired, so a page still linked from elsewhere does not stay in results.
-(ROOT / "robots.txt").write_text("User-agent: *\n" + "".join("Disallow: /%s\n" % p for p in sorted(RETIRED)), encoding="utf-8")
+pages = json.loads((ROOT / "share.json").read_text(encoding="utf-8"))["pages"]
+# A link-only page carries a static noindex meta and is not in robots.txt, so crawlers can fetch it and see the meta.
+for p in (ROOT / r["path"] for r in pages if r["level"] == "link-only"):
+    text = p.read_text(encoding="utf-8")
+    if not re.search(r'<meta\s+name="robots"', text):
+        p.write_text(re.sub(r"<head[^>]*>", lambda m: m.group(0) + '\n<meta name="robots" content="noindex">', text, count=1), encoding="utf-8")
+# Retired pages are disallowed, so a page still linked from elsewhere does not stay in results.
+(ROOT / "robots.txt").write_text("User-agent: *\n" + "".join("Disallow: /%s\n" % r["path"] for r in sorted(pages, key=lambda r: r["path"]) if r["level"] == "retired"), encoding="utf-8")
 print("rooms",[(r["label"], sum(f["count"] for f in r["folders"])) for r in out["rooms"]], "skills", len(skills))

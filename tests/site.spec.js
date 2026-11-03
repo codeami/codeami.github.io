@@ -1,5 +1,7 @@
 const { test, expect } = require('@playwright/test');
-const { readdirSync, readFileSync, existsSync, statSync } = require('node:fs');
+const { readdirSync, readFileSync, existsSync, statSync, mkdtempSync, cpSync, writeFileSync, rmSync } = require('node:fs');
+const { execFileSync } = require('node:child_process');
+const { tmpdir } = require('node:os');
 const { join, dirname, extname, relative, sep } = require('node:path');
 const { root, pages, templates } = require('./pages');
 
@@ -88,23 +90,33 @@ test('no private addresses or home paths in published files', () => {
   expect(hits).toEqual([]);
 });
 
-// ---- retired.json: hidden, not deleted ----
-const retired = JSON.parse(readFileSync(join(root, 'retired.json'), 'utf8')).retired;
+// ---- share.json: one entry for every page; what is not public is hidden, not deleted ----
+const share = JSON.parse(readFileSync(join(root, 'share.json'), 'utf8')).pages;
+const retired = share.filter((r) => r.level === 'retired');
+const hidden = share.filter((r) => r.level !== 'public');
 const external = (u) => /^https?:/.test(u);
 
-test('retired.json: files are kept and every "into" target exists', () => {
+test('share.json: every published HTML page has an entry with a valid level', () => {
+  const listed = new Set(share.map((r) => r.path));
+  expect([...pages, ...templates].filter((f) => !listed.has(f)), 'pages with no entry').toEqual([]);
+  expect(share.filter((r) => !['public', 'link-only', 'retired'].includes(r.level)).map((r) => r.path), 'bad level').toEqual([]);
+  expect(share.filter((r) => !existsSync(join(root, r.path))).map((r) => r.path), 'entries with no file').toEqual([]);
+  expect(listed.size, 'duplicate entries').toBe(share.length);
+});
+
+test('share.json: retired files are kept and every "into" target exists', () => {
   for (const r of retired) {
     expect(existsSync(join(root, r.path)), `kept: ${r.path}`).toBe(true);
     if (!external(r.into)) expect(existsSync(join(root, r.into)), `into: ${r.into}`).toBe(true);
   }
 });
 
-test('retired.json: no chart node points at a retired path', () => {
+test('share.json: no chart node points at a page that is not public', () => {
   const data = readFileSync(join(root, 'ai-life-os/brain/brain-data.json'), 'utf8');
   const urls = [...data.matchAll(/"(?:url|href)":\s*"([^"]+)"/g)].map((m) => m[1]).filter((u) => !external(u));
   const hit = urls
     .map((u) => join('ai-life-os/brain', u.split('#')[0]).split(sep).join('/'))
-    .filter((p) => retired.some((r) => r.path === p));
+    .filter((p) => share.some((r) => r.level !== 'public' && r.path === p));
   expect(hit).toEqual([]);
 });
 
@@ -112,11 +124,40 @@ test('retired pages are out of the nav and show a notice', async ({ page }) => {
   await page.goto('/ai-life-os/core.html');
   await page.waitForSelector('nav[aria-label="Pages"] a.nav', { state: 'attached' });
   const hrefs = await page.$$eval('a[href]', (as) => as.map((a) => new URL(a.href).pathname));
-  expect(hrefs.filter((h) => retired.some((r) => h === `/${r.path}`))).toEqual([]);
+  expect(hrefs.filter((h) => hidden.some((r) => h === `/${r.path}`))).toEqual([]);
   for (const r of retired.filter((x) => pages.includes(x.path))) {
     await page.goto(`/${r.path}`);
     await expect(page.locator('.retired-note'), r.path).toContainText('Retired');
     await expect(page.locator('.retired-note a')).toHaveAttribute('href', external(r.into) ? r.into : `/${r.into}`);
+  }
+});
+
+test('a link-only page is out of the nav, still opens, and carries noindex', async ({ page }) => {
+  const listed = share.map((r) => (r.path === 'ai-life-os/changelog.html' ? { ...r, level: 'link-only' } : r));
+  await page.route('**/share.json', (route) => route.fulfill({ json: { pages: listed } }));
+  await page.goto('/ai-life-os/core.html');
+  await page.waitForSelector('nav[aria-label="Pages"] a.nav', { state: 'attached' });
+  const hrefs = await page.$$eval('nav a[href]', (as) => as.map((a) => new URL(a.href).pathname));
+  expect(hrefs).not.toContain('/ai-life-os/changelog.html');
+  const res = await page.goto('/ai-life-os/changelog.html');
+  expect(res.status()).toBe(200);
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex');
+  await expect(page.locator('.retired-note')).toHaveCount(0);
+});
+
+test('build: a link-only page gets a static noindex and no robots.txt line, a retired one keeps its Disallow', () => {
+  const tmp = mkdtempSync(join(tmpdir(), 'share-build-'));
+  try {
+    cpSync(join(root, 'ai-life-os'), join(tmp, 'ai-life-os'), { recursive: true });
+    const fixture = share.map((r) => (r.path === 'ai-life-os/changelog.html' ? { ...r, level: 'link-only' } : r));
+    writeFileSync(join(tmp, 'share.json'), JSON.stringify({ pages: fixture }));
+    execFileSync('python3', ['-I', join(tmp, 'ai-life-os/brain/build_data.py')], { stdio: 'pipe' });
+    expect(readFileSync(join(tmp, 'ai-life-os/changelog.html'), 'utf8')).toMatch(/<meta\s+name="robots"\s+content="noindex">/);
+    const disallowed = readFileSync(join(tmp, 'robots.txt'), 'utf8').split('\n').filter((l) => l.startsWith('Disallow:'));
+    expect(disallowed).not.toContain('Disallow: /ai-life-os/changelog.html');
+    expect(disallowed).toEqual(retired.map((r) => `Disallow: /${r.path}`).sort());
+  } finally {
+    rmSync(tmp, { recursive: true, force: true });
   }
 });
 
