@@ -1,0 +1,13 @@
+{
+  "name": "codeami.github.io",
+  "private": true,
+  "description": "Personal site of Ashish Raina. Static files; this package only holds the end-to-end tests.",
+  "scripts": {
+    "test": "docker run --rm --ipc=host -v \"$PWD\":/work -w /work mcr.microsoft.com/playwright:v1.64.1-noble npx playwright test",
+    "test:update": "docker run --rm --ipc=host -v \"$PWD\":/work -w /work mcr.microsoft.com/playwright:v1.64.1-noble npx playwright test --update-snapshots",
+    "test:host": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1"
+  }
+}

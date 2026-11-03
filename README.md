@@ -21,4 +21,14 @@ The two maps, `ai-life-os/maps/skills.html` and `flow.html`, are built files. Ed
 
 The Field Notes posts, `ai-life-os/blog/index.html` and `ai-life-os/arena.html` are built from the owner's private drafts by a script kept outside this repo. Their links to the retired pages were repointed here by hand, so the next rebuild needs the same mapping (for example `overview.html` becomes `index.html#pages`).
 
+## Tests
+
+End-to-end tests (Playwright, in `tests/`) walk the repo for every HTML page, so new pages are covered without a list. Each page is opened at 390px and 1280px and must: load with no console errors, failed requests or broken internal links; not scroll sideways; and match its committed screenshot in `tests/__screenshots__/` (1 in 1000 pixels may differ; the live chart canvas is masked). One more test checks that no published file holds a localhost, `.ts.net` or home-path address. Build templates (files with `%%PLACEHOLDER%%`, such as `maps/_shared/shell.html`) are not pages and are skipped.
+
+    npm ci
+    npm test              # run everything (needs Docker)
+    npm run test:update   # on purpose: rewrite the baseline screenshots, then commit them
+
+The tests run inside the Playwright Docker image, the same one CI uses, because fonts render differently on each OS and the baselines are Linux ones. `npm run test:host` runs without Docker; screenshot checks will fail on a Mac, the other checks stay valid. After a look change, run `npm run test:update` and review the changed PNGs in the diff. CI (`.github/workflows/e2e.yml`) runs on every PR and push to `main` and uploads the diff images as the `playwright-diffs` artifact when a check fails. Known issue: `ai-life-os/kit/index.html` scrolls 2px sideways at 390px; it is listed in `tests/site.spec.js` until the page is fixed.
+
 The supervisor and most crew mechanics are upstream [Firstmate](https://github.com/kunchenguid/firstmate) by Kun Chen and contributors. See `ai-life-os/LICENSE`.
