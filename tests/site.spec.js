@@ -57,7 +57,12 @@ for (const file of pages) {
     // Scroll anchoring can leave an inner scroll area at a different offset depending on load timing; start every capture from the top.
     await page.evaluate(() => document.querySelectorAll('*').forEach((e) => { e.scrollTop = 0; }));
 
+    // The long panel post can still be settling its layout on a slow runner (two captures 68px apart); wait for fonts and the network, and allow more time for the stable pair.
+    await page.evaluate(() => document.fonts.ready);
+    await page.waitForLoadState('networkidle');
+
     await expect(page).toHaveScreenshot(`${file.replace(/\//g, '__')}.png`, {
+      timeout: 15000,
       fullPage: true,
       // The chart canvas is a live animation (random starts, real clock), so it is masked; the page around it is compared.
       mask: [page.locator('canvas')],
