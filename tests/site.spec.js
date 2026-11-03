@@ -146,6 +146,20 @@ test('landing: eight steps with the fork, no sideways scroll, no console errors,
   expect(problems).toEqual([]);
 });
 
+test("landing: the first reply shows Sam's made-up personality chart", async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'What can AI do now?' }).click();
+  const chart = page.locator('.pchart');
+  await expect(chart).toContainText('made-up example: Sam');
+  await expect(chart.locator('li')).toHaveCount(11);
+  await expect(chart.locator('.pconf')).toHaveCount(11);
+  for (const w of ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism', 'Pace', 'Delegation', 'Novelty appetite', 'Need for structure', 'Review and control', 'Outside memory']) {
+    await expect(chart).toContainText(w);
+  }
+  const over = await chart.evaluate((c) => c.scrollWidth - c.clientWidth);
+  expect(over).toBeLessThanOrEqual(0);
+});
+
 test("landing: the dog interview ends on Sam's criterion", async ({ page }) => {
   await page.goto('/#step-3');
   await page.getByRole('button', { name: 'Start the interview.' }).click();

@@ -273,6 +273,35 @@
       {
         "id": "ov2", "chip": "What can AI do now?",
         "fact": "Today's AI models read and write plain English well. Ask for a plan, a draft or a small program, and you often get a usable first version in minutes.",
+        "more": ["Good help also starts from who you are. Here is the kind of picture I can keep of a person. Sam is made up."],
+        "chart": {
+          "title": "Sam's personality chart (made-up example: Sam)",
+          "note": "Every value and every evidence line is invented for this demo. Scale 0 to 20. The confidence word says how sure the evidence makes me.",
+          "max": 20,
+          "groups": [
+            {
+              "name": "Big Five",
+              "rows": [
+                { "label": "Openness", "value": 15, "conf": "medium", "evidence": "Tried three new hobbies last year, kept one." },
+                { "label": "Conscientiousness", "value": 17, "conf": "high", "evidence": "Pays bills the day they arrive." },
+                { "label": "Extraversion", "value": 7, "conf": "medium", "evidence": "Prefers a quiet evening to a party." },
+                { "label": "Agreeableness", "value": 14, "conf": "low", "evidence": "Only two examples so far." },
+                { "label": "Neuroticism (stress)", "value": 9, "conf": "medium", "evidence": "Stays calm in a crisis, worries in advance." }
+              ]
+            },
+            {
+              "name": "Working style",
+              "rows": [
+                { "label": "Pace", "value": 12, "conf": "medium", "evidence": "Steady, rarely rushed." },
+                { "label": "Delegation", "value": 6, "conf": "high", "evidence": "Does most things alone, even when busy." },
+                { "label": "Novelty appetite", "value": 14, "conf": "low", "evidence": "Likes new tools, but one story only." },
+                { "label": "Need for structure", "value": 18, "conf": "high", "evidence": "Keeps a weekly plan and follows it." },
+                { "label": "Review and control", "value": 16, "conf": "medium", "evidence": "Re-reads every message before sending." },
+                { "label": "Outside memory", "value": 5, "conf": "low", "evidence": "Keeps most things in their head." }
+              ]
+            }
+          ]
+        },
         "next": ["ov3"]
       },
       {

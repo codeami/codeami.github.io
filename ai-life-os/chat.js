@@ -35,6 +35,7 @@
         c.appendChild(dl);
         b.appendChild(c);
       }
+      if (node.chart) b.appendChild(chart(node.chart));
       if (node.see) {
         var a = el("a", "see", node.see.label);
         a.href = node.see.href;
@@ -42,6 +43,31 @@
       }
       row.appendChild(img); row.appendChild(b);
       return row;
+    }
+    /* A bar chart as a list: label, a bar out of "max", the value, a confidence word and one evidence line. */
+    function chart(c) {
+      var box = el("div", "pchart");
+      box.appendChild(el("h4", "", c.title));
+      box.appendChild(el("p", "pnote", c.note));
+      c.groups.forEach(function (g) {
+        box.appendChild(el("h5", "", g.name));
+        var ul = el("ul");
+        g.rows.forEach(function (r) {
+          var li = el("li"), top = el("div", "ptop"), bar = el("div", "pbar"), fill = el("i");
+          top.appendChild(el("span", "plabel", r.label));
+          top.appendChild(el("span", "pval", r.value + " of " + c.max));
+          fill.style.width = (r.value / c.max * 100) + "%";
+          bar.appendChild(fill);
+          bar.setAttribute("role", "img");
+          bar.setAttribute("aria-label", r.label + " " + r.value + " of " + c.max + ", " + r.conf + " confidence");
+          li.appendChild(top); li.appendChild(bar);
+          li.appendChild(el("span", "pconf pconf-" + r.conf, r.conf + " confidence"));
+          li.appendChild(el("span", "pev", r.evidence));
+          ul.appendChild(li);
+        });
+        box.appendChild(ul);
+      });
+      return box;
     }
     function meRow(text) {
       var row = el("div", "k-row");
