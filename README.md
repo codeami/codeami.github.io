@@ -23,7 +23,7 @@ The Field Notes posts, `ai-life-os/blog/index.html` and `ai-life-os/arena.html` 
 
 ## Tests
 
-End-to-end tests (Playwright, in `tests/`) walk the repo for every HTML page, so new pages are covered without a list. Each page is opened at 390px and 1280px and must: load with no console errors, failed requests or broken internal links; not scroll sideways; and match its committed screenshot in `tests/__screenshots__/` (1 in 1000 pixels may differ; the live chart canvas is masked). One more test checks that no published file holds a localhost, `.ts.net` or home-path address. Build templates (files with `%%PLACEHOLDER%%`, such as `maps/_shared/shell.html`) are not pages and are skipped.
+End-to-end tests (Playwright, in `tests/`) walk the repo for every HTML page, so new pages are covered without a list. Each page is opened at 390px and 1280px and must: load with no console errors, failed requests or broken internal links; not scroll sideways; and match its committed screenshot in `tests/__screenshots__/` (1 in 1000 pixels may differ; the live chart canvas is masked). One more test checks that no published file holds a loopback, tailnet or home-directory address (the patterns are in `tests/site.spec.js`). Build templates (files with `%%PLACEHOLDER%%`, such as `maps/_shared/shell.html`) are not pages and are skipped.
 
     npm ci
     npm test              # run everything (needs Docker)
