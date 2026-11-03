@@ -1,0 +1,28 @@
+{
+ "about": "What is shared, one entry for every published HTML page (a test fails when a page has none). 'path' is relative to the site root. 'level': public = in the nav, the chart and the lists; link-only = published and reachable by URL but left out of the nav, the chart and the lists, with a noindex meta and a robots.txt Disallow line; retired = hidden like link-only, shows a one-line notice, and every link to it is sent to 'into'. Retired entries also carry 'into' (a site-root path or an https link), 'label' (names it in the notice), 'why' and 'since'. The files stay; change a level to republish. Read by ai-life-os/nav.js, ai-life-os/hud.js and ai-life-os/brain/build_data.py (which also writes robots.txt).",
+ "pages": [
+  {"path": "index.html", "level": "public"},
+  {"path": "blog/index.html", "level": "public"},
+  {"path": "ai-life-os/index.html", "level": "public"},
+  {"path": "ai-life-os/about.html", "level": "public"},
+  {"path": "ai-life-os/arena.html", "level": "public"},
+  {"path": "ai-life-os/changelog.html", "level": "public"},
+  {"path": "ai-life-os/core.html", "level": "public"},
+  {"path": "ai-life-os/safety.html", "level": "public"},
+  {"path": "ai-life-os/brain/index.html", "level": "public"},
+  {"path": "ai-life-os/course/index.html", "level": "public"},
+  {"path": "ai-life-os/maps/flow.html", "level": "public"},
+  {"path": "ai-life-os/maps/skills.html", "level": "public"},
+  {"path": "ai-life-os/blog/index.html", "level": "public"},
+  {"path": "ai-life-os/blog/everything-is-a-file.html", "level": "public"},
+  {"path": "ai-life-os/blog/guides-and-sensors.html", "level": "public"},
+  {"path": "ai-life-os/blog/how-it-fits-together.html", "level": "public"},
+  {"path": "ai-life-os/blog/rules-from-chat-history.html", "level": "public"},
+  {"path": "ai-life-os/blog/second-brain-page.html", "level": "public"},
+  {"path": "ai-life-os/story.html", "level": "retired", "into": "ai-life-os/index.html", "label": "the Chart Room chat", "why": "merged into", "since": "2026-11-03"},
+  {"path": "ai-life-os/tour/index.html", "level": "retired", "into": "ai-life-os/index.html", "label": "the Chart Room chat", "why": "merged into", "since": "2026-11-03"},
+  {"path": "ai-life-os/blog/progress-three-weeks.html", "level": "retired", "into": "ai-life-os/changelog.html", "label": "the changelog", "why": "merged into", "since": "2026-11-03"},
+  {"path": "ai-life-os/kit/index.html", "level": "retired", "into": "https://github.com/codeami/codeami.github.io/blob/main/DESIGN.md", "label": "DESIGN.md", "why": "merged into", "since": "2026-11-03"},
+  {"path": "ai-life-os/maps/_shared/shell.html", "level": "retired", "into": "ai-life-os/maps/flow.html", "label": "the harness flow map", "why": "a build template, merged into", "since": "2026-11-03"}
+ ]
+}

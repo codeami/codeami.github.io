@@ -109,7 +109,7 @@ html[data-skin] .theme:hover, html[data-skin] .theme:focus-visible { border-colo
 @media (prefers-reduced-motion: reduce) { .hud-bg { opacity: .55; } }
 
 /* Top bar extras from hud.js: version tag, the whoami home link and GitHub. */
-/* The one-line notice on a page listed in retired.json (hud.js adds it; kit/index.html carries its own). */
+/* The one-line notice on a page in share.json that is retired (hud.js adds it; kit/index.html carries its own). */
 .retired-note { margin: 0; padding: 8px 16px; font-size: 14px; color: var(--ink); background: var(--panel); border-bottom: 1px solid var(--line); box-shadow: inset 4px 0 0 var(--pop); }
 .retired-note a { color: var(--accent-text, var(--accent)); font-weight: 700; }
 html[data-skin] .vtag { flex: none; font: 11px/1 var(--font-mono, var(--mono, ui-monospace, Menlo, monospace)); letter-spacing: .08em; color: var(--mute); border: 1px solid var(--line); border-radius: 999px; padding: 4px 8px; }

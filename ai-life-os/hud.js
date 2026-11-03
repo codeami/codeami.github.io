@@ -100,8 +100,9 @@
     // the tour folds the card away for the map's steps, and puts it back as it was
     function shown(on) { if (!on) { if (held === null) held = state; if (state === "open") set("min"); } else if (held !== null) { set(held); held = null; } }
 
-    /* retired.json (site root): pages hidden but not deleted. A link to one goes to its 'into' page,
-       a post list drops its entry, and the retired page itself opens with a one-line notice. */
+    /* share.json (site root): pages that are not public are hidden but not deleted. A post list drops their entries.
+       A link to a retired page goes to its 'into' page, and the retired page itself opens with a one-line notice.
+       A link-only page keeps its links and gets a noindex meta. */
     var gone = [], siteRoot = new URL(base + "../", location.href).pathname;
     function pathOf(u) { var p = u.pathname; return p.charAt(p.length - 1) === "/" ? p + "index.html" : p; }
     function entry(u) { for (var i = 0; i < gone.length; i++) if (siteRoot + gone[i].path === pathOf(u)) return gone[i]; return null; }
@@ -111,21 +112,23 @@
       [].forEach.call(scope.querySelectorAll("a[href]"), function (a) {
         var e = entry(new URL(a.href, location.href)); if (!e) return;
         var li = a.closest(".post-list li");
-        if (li) li.remove(); else a.href = intoUrl(e);
+        if (li) li.remove(); else if (e.level === "retired") a.href = intoUrl(e);
       });
     }
     function notice() {
       var e = entry(location), old = body.querySelector(".retired-note");
       if (old) old.remove();
       if (!e) return;
+      if (!document.querySelector('meta[name="robots"]')) { var m = mk("meta"); m.name = "robots"; m.content = "noindex"; document.head.appendChild(m); }
+      if (e.level !== "retired") return;
       var p = mk("p", "retired-note"), a = mk("a", "", e.label);
       p.setAttribute("role", "note"); a.href = intoUrl(e);
       p.appendChild(document.createTextNode("Retired " + e.since + ": " + e.why + " ")); p.appendChild(a); p.appendChild(document.createTextNode("."));
       body.insertBefore(p, body.firstChild);
     }
     function settle() { retire(body); if (nav) retire(nav); notice(); }
-    fetch(base + "../retired.json").then(function (r) { return r.ok ? r.json() : { retired: [] }; })
-      .then(function (j) { gone = j.retired || []; settle(); }).catch(function () { /* no list: nothing is hidden */ });
+    fetch(base + "../share.json").then(function (r) { return r.ok ? r.json() : { pages: [] }; })
+      .then(function (j) { gone = (j.pages || []).filter(function (e) { return e.level !== "public"; }); settle(); }).catch(function () { /* no list: nothing is hidden */ });
 
     function framed(doc) { return doc.querySelector(".k-nav") && !doc.querySelector("script:not([src])"); }
     var swappable = framed(document);
@@ -179,7 +182,7 @@
   }
 
   function start() {
-    // nav.js builds its header after it has read retired.json: frame the page after that. The header
+    // nav.js builds its header after it has read share.json: frame the page after that. The header
     // then grows with chrome(), so the frame measures it again.
     function frame() { setTimeout(function () { chartAndCards(); chrome(); bindToggle(); window.dispatchEvent(new Event("resize")); }, 0); }
     if (window.navPending) document.addEventListener("navbuilt", frame, { once: true }); else frame();

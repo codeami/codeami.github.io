@@ -8,7 +8,7 @@ Reads only public files of this site:
   maps/src/skills/map.json  the skills (the inner ring)
   blog/index.html           the Field Notes posts
   course/course.json        the AI introductory course's lessons
-  ../../retired.json        pages hidden from the chart; also writes ../../robots.txt from it
+  ../../share.json          pages that are not public stay out of the chart; also writes ../../robots.txt from it
 Every url in the output is relative to brain/ or a public https link. Stdlib only."""
 import html, json, posixpath, re
 from pathlib import Path
@@ -17,11 +17,11 @@ HERE = Path(__file__).resolve().parent
 SITE = HERE.parent
 ROOT = SITE.parent
 rd = lambda p: (SITE / p).read_text(encoding="utf-8")
-RETIRED = {r["path"] for r in json.loads((ROOT / "retired.json").read_text(encoding="utf-8"))["retired"]}
+RETIRED = {r["path"] for r in json.loads((ROOT / "share.json").read_text(encoding="utf-8"))["pages"] if r["level"] != "public"}
 
 
 def live(url):
-    """False for a url (relative to brain/) that points at a retired page."""
+    """False for a url (relative to brain/) that points at a page that is not public."""
     if re.match(r"^[a-z][a-z0-9+.-]*:", url):
         return True
     return posixpath.normpath(posixpath.join("ai-life-os/brain", url.split("#")[0].split("?")[0])) not in RETIRED
