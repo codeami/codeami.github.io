@@ -160,6 +160,18 @@ test("landing: the first reply shows Sam's made-up personality chart", async ({ 
   expect(over).toBeLessThanOrEqual(0);
 });
 
+test('landing: the CV lists the approved roles and years, with one external link', async ({ page }) => {
+  await page.goto('/#step-8');
+  const cv = page.locator('#cv-roles');
+  await expect(cv.locator('li')).toHaveCount(9);
+  await expect(cv).toContainText('Senior Software Engineer, a global sportswear brand (Dec 2020 - present)');
+  await expect(cv).toContainText('QA Engineer, Mindfire Solutions (2006-2008)');
+  await expect(cv).toContainText('University of Pune (2005)');
+  await expect(page.locator('#step-8')).not.toContainText('coming soon');
+  const ext = await page.$$eval('#step-8 a[href^="http"]', (as) => as.map((a) => a.href));
+  expect(ext).toEqual(['https://github.com/codeami']);
+});
+
 test("landing: the dog interview ends on Sam's criterion", async ({ page }) => {
   await page.goto('/#step-3');
   await page.getByRole('button', { name: 'Start the interview.' }).click();
