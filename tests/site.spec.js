@@ -1,5 +1,7 @@
 const { test, expect } = require('@playwright/test');
-const { readdirSync, readFileSync, existsSync, statSync } = require('node:fs');
+const { readdirSync, readFileSync, existsSync, statSync, mkdtempSync, cpSync, writeFileSync, rmSync } = require('node:fs');
+const { execFileSync } = require('node:child_process');
+const { tmpdir } = require('node:os');
 const { join, dirname, extname, relative, sep } = require('node:path');
 const { root, pages, templates } = require('./pages');
 
@@ -141,6 +143,22 @@ test('a link-only page is out of the nav, still opens, and carries noindex', asy
   expect(res.status()).toBe(200);
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex');
   await expect(page.locator('.retired-note')).toHaveCount(0);
+});
+
+test('build: a link-only page gets a static noindex and no robots.txt line, a retired one keeps its Disallow', () => {
+  const tmp = mkdtempSync(join(tmpdir(), 'share-build-'));
+  try {
+    cpSync(join(root, 'ai-life-os'), join(tmp, 'ai-life-os'), { recursive: true });
+    const fixture = share.map((r) => (r.path === 'ai-life-os/changelog.html' ? { ...r, level: 'link-only' } : r));
+    writeFileSync(join(tmp, 'share.json'), JSON.stringify({ pages: fixture }));
+    execFileSync('python3', ['-I', join(tmp, 'ai-life-os/brain/build_data.py')], { stdio: 'pipe' });
+    expect(readFileSync(join(tmp, 'ai-life-os/changelog.html'), 'utf8')).toMatch(/<meta\s+name="robots"\s+content="noindex">/);
+    const disallowed = readFileSync(join(tmp, 'robots.txt'), 'utf8').split('\n').filter((l) => l.startsWith('Disallow:'));
+    expect(disallowed).not.toContain('Disallow: /ai-life-os/changelog.html');
+    expect(disallowed).toEqual(retired.map((r) => `Disallow: /${r.path}`).sort());
+  } finally {
+    rmSync(tmp, { recursive: true, force: true });
+  }
 });
 
 // ---- the landing at / ----
