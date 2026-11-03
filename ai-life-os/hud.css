@@ -5,9 +5,8 @@
    attribute), "matrix" (green) and "calm" (the reading theme; its tokens are
    here, but no page switches to it yet). nav.js or article.js sets data-skin in
    the head; hud.js draws the ring graph behind the page and runs the toggle.
-   html:root[data-skin] outranks the light/dark rules in kit/tokens.css (the
-   retired Harbor Signal palette, kept for the kit page), so pages that still
-   link it get these colours. */
+   kit/tokens.css carries the same values for pages built outside this site;
+   change the two together. */
 
 /* Colours by role (DESIGN.md "Colors"), the graph palette (--k-* node kinds,
    --r1 to --r7 rooms), then older names that have no role, kept so pages that

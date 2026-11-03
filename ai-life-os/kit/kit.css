@@ -1,6 +1,6 @@
 /* The kit: shared parts for every app. Reads only token names, so it holds no
-   colour values. Link ../hud.css first (the kit page links tokens.css, the
-   retired Harbor Signal palette, to show it). */
+   colour values. Link ../hud.css first, or tokens.css (the same DESIGN.md
+   values, for pages built outside this site). */
 *, *::before, *::after { box-sizing: border-box; }
 body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.55 var(--font-body); -webkit-text-size-adjust: 100%; }
 h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; letter-spacing: -.02em; line-height: 1.15; }

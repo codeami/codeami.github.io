@@ -4,8 +4,8 @@ import html, json, math, re, textwrap
 E = html.escape
 STAGES = ["plan", "design", "build", "test", "deploy", "maintain"]
 SNAME = dict(plan="Plan", design="Design", build="Build", test="Test", deploy="Deploy", maintain="Maintain")
-LIGHT = dict(plan="#b45309", design="#7c3aed", build="#2563eb", test="#15803d", deploy="#c2410c", maintain="#0e7490", anytime="#475569")
-DARK = dict(plan="#fbbf24", design="#a78bfa", build="#60a5fa", test="#34d399", deploy="#fb923c", maintain="#22d3ee", anytime="#94a3b8")
+# Stage colours are the graph palette of ../../hud.css (DESIGN.md room-1 to room-7), so HUD and Matrix both recolour them.
+ST = dict(plan="var(--r5)", design="var(--r1)", build="var(--r3)", test="var(--r4)", deploy="var(--r6)", maintain="var(--r7)", anytime="var(--mute)")
 W = 1440; X0 = 16; NW = 132; NH = 64; GX = 30; GY = 26; PADX = 14; CW = 330
 
 ICON_ALL = '<svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><rect x="3" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5"/></svg>'
@@ -133,7 +133,7 @@ def build(data, mdir):
     VH = y + 16
     svg = (f'<svg class="map" id="map" viewBox="0 0 {TW} {VH}" role="group" aria-label="{E(meta["name"])} diagram"><defs>'
            '<marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" class="ahp"/></marker></defs>' + "".join(out) + "</svg>")
-    css = (":root{" + "".join(f"--st-{k}:{v};" for k, v in LIGHT.items()) + "}\n@media (prefers-color-scheme:dark){:root:not([data-theme=\"light\"]){" + "".join(f"--st-{k}:{v};" for k, v in DARK.items()) + "}}\n:root[data-theme=\"dark\"]{" + "".join(f"--st-{k}:{v};" for k, v in DARK.items()) + "}\n" + "".join(f".st-{k}{{--c:var(--st-{k})}}" for k in LIGHT) + r'''
+    css = (":root{" + "".join(f"--st-{k}:{v};" for k, v in ST.items()) + "}\n" + "".join(f".st-{k}{{--c:var(--st-{k})}}" for k in ST) + r'''
 .col{fill:none;stroke:none}.empty .stn,.empty .stc,.empty .sbn{opacity:.55}
 .sh{cursor:pointer;outline:none}.stn{fill:var(--c);font:800 16px var(--sans)}.stc{fill:var(--muted);font:11px var(--sans)}
 .sic{stroke:var(--c)}.empty .sic{stroke:var(--muted)}.hdiv{stroke:var(--border);stroke-width:1;stroke-dasharray:4 4}

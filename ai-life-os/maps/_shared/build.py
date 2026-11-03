@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Build one map page for this site: python3 -I maps/_shared/build.py <map.json> <out.html>
 Follows super-board's build_skillmap.py (see NOTICE). Renders map.json through the vendored sdlc layout, swaps the
-super-board site nav for a link bar for this site, reads the site's day/night choice, and adds status badges and a key.
+super-board site nav for a link bar for this site, links the site's ../hud.css (DESIGN.md colours and type), swaps the
+light/dark button for the site's HUD/Matrix skin toggle, and adds status badges and a key.
 meta.marks maps a node id to space-separated tokens: planned, unproven, added, owner, evidence. meta.key lists the key chips to show.
 Stdlib only."""
 import html, json, re, sys
@@ -62,16 +63,26 @@ GH = ('<svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="
 links = "".join(f'<a class="lk" href="{h}"{CUR if h == here else ""}><span class="tl">{t}</span></a>' for h, t in LINKS)
 links += f'<a class="lk gh" href="{REPO}" aria-label="GitHub: this site\'s source">{GH}<span class="tl">GitHub</span></a>'
 NAV = ('<header class="top wide"><div class="in">'
-       '<a class="logo" href="../index.html"><svg viewBox="0 0 96 96" aria-hidden="true"><rect x="4" y="4" width="88" height="88" rx="20" fill="#191816" stroke="#36332f" stroke-width="2"/>'
-       '<rect x="16" y="18" width="16" height="60" rx="4" fill="#fff" fill-opacity=".1"/><rect x="40" y="18" width="16" height="60" rx="4" fill="#fff" fill-opacity=".1"/><rect x="64" y="18" width="16" height="60" rx="4" fill="#fff" fill-opacity=".1"/>'
-       '<rect x="19" y="22" width="10" height="9" rx="2" fill="#e07b6a"/><rect x="43" y="22" width="10" height="9" rx="2" fill="#8cc594"/><rect x="67" y="22" width="10" height="9" rx="2" fill="#b4a6e6"/></svg><span class="lt">The Chart Room</span></a>'
+       '<a class="logo" href="../index.html"><svg viewBox="0 0 96 96" aria-hidden="true"><rect x="4" y="4" width="88" height="88" rx="20" style="fill:var(--panel);stroke:var(--line-2)" stroke-width="2"/>'
+       '<rect x="16" y="18" width="16" height="60" rx="4" style="fill:var(--ink)" fill-opacity=".1"/><rect x="40" y="18" width="16" height="60" rx="4" style="fill:var(--ink)" fill-opacity=".1"/><rect x="64" y="18" width="16" height="60" rx="4" style="fill:var(--ink)" fill-opacity=".1"/>'
+       '<rect x="19" y="22" width="10" height="9" rx="2" style="fill:var(--accent)"/><rect x="43" y="22" width="10" height="9" rx="2" style="fill:var(--mute)"/><rect x="67" y="22" width="10" height="9" rx="2" style="fill:var(--mute)"/></svg><span class="lt">The Chart Room</span></a>'
        f'<span class="vtag">{VERSION}</span><span class="sp"></span>' + links +
-       '<button class="btn" id="sbtt" type="button" aria-label="Toggle light or dark theme"><svg class="ni" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><span class="nl">Theme</span></button>'
+       '<button class="btn" id="sbtt" type="button" aria-label="Switch to the Matrix green colours" aria-pressed="false"><svg class="ni" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg><span class="nl">Matrix</span></button>'
        '</div></header>')
+
+# The site's look: hud.css, and the skin the reader last picked ("skin" in localStorage, as nav.js sets it), before the body is drawn.
+HEAD = ('<link rel="stylesheet" href="../hud.css">\n<script>(function(){var s=null;try{s=localStorage.getItem("skin")}catch(e){}'
+        'document.documentElement.setAttribute("data-skin",s==="matrix"?"matrix":"hud")})();</script>')
+# The vendored light/dark button becomes the site's skin toggle (hud.js does the same for the other pages).
+THEME_JS = ("""try{var th=localStorage.getItem('sb-theme');if(th)root.setAttribute('data-theme',th)}catch(e){}\n"""
+            """ document.getElementById('sbtt').onclick=function(){var d=root.getAttribute('data-theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'),n=d==='dark'?'light':'dark';root.setAttribute('data-theme',n);try{localStorage.setItem('sb-theme',n)}catch(e){}};""")
+SKIN_JS = ("""var sbtt=document.getElementById('sbtt');function skinLabel(){var m=root.getAttribute('data-skin')==='matrix';sbtt.querySelector('.nl').textContent=m?'HUD':'Matrix';"""
+           """sbtt.setAttribute('aria-label',m?'Switch to the HUD colours':'Switch to the Matrix green colours');sbtt.setAttribute('aria-pressed',m?'true':'false')}\n"""
+           """ sbtt.onclick=function(){var n=root.getAttribute('data-skin')==='matrix'?'hud':'matrix';root.setAttribute('data-skin',n);try{localStorage.setItem('skin',n)}catch(e){}skinLabel()};skinLabel();""")
 
 EXTRA_CSS = r'''
 .top .tl{white-space:nowrap}.top .lk[aria-current="page"]{background:var(--bg2);font-weight:600}
-@media (max-width:640px){.top .in{flex-wrap:wrap;gap:4px 8px}.top .sp{display:none}}
+@media (max-width:1040px){.top .in{flex-wrap:wrap;gap:4px 8px}.top .sp{display:none}}
 .nd.own rect{stroke:var(--accent);stroke-width:3}.nd.evd rect{fill:color-mix(in srgb,var(--ok) 12%,var(--bg))}
 .nd.pln rect{stroke-dasharray:5 4}.nd.pln .nn,.nd.pln .nt{opacity:.75}
 .bdg{stroke:none!important}.bdg-planned{fill:var(--muted)!important}.bdg-unproven{fill:var(--st-plan)!important}.bdg-added{fill:var(--accent)!important}
@@ -88,15 +99,15 @@ ANY_JS = ("\n;(function(){var m0=SMPAGE.model;SMPAGE.model=function(id){if(id===
           "v:Object.keys(PACK.any).map(function(g){return 'any:'+g})}]}}return m0(id)}})();\n")
 
 shell_js = rd("shell.js")
-if "'sb-theme'" not in shell_js:
-    sys.exit("shell.js no longer holds the sb-theme key; update build.py")
-shell_js = shell_js.replace("'sb-theme'", "'theme'")  # share the site's day/night choice
+if THEME_JS not in shell_js:
+    sys.exit("shell.js no longer holds the light/dark button code; update build.py")
+shell_js = shell_js.replace(THEME_JS, SKIN_JS)
 
 foot = m["footer"]
 foot = (foot + " · " if foot else "") + 'Map shell: <a href="https://github.com/EricTechPro/super-board" target="_blank" rel="noopener">super-board</a> by EricTechPro (MIT) · <a href="_shared/NOTICE">notice</a> · <a href="../index.html">Back to the site</a>'
 
 t = rd("shell.html").replace("Best-practice order", E(meta.get("orderTitle", "Stages in order")))
-for k, v in {"%%TITLE%%": E(m["title"]), "%%PLOGO%%": "", "%%FAV%%": "", "%%VERSION%%": E(m["version"]), "%%SUBTITLE%%": m["subtitle"], "%%NAV%%": NAV,
+for k, v in {"%%TITLE%%": E(m["title"]), "%%PLOGO%%": "", "%%FAV%%": HEAD, "%%VERSION%%": E(m["version"]), "%%SUBTITLE%%": m["subtitle"], "%%NAV%%": NAV,
              "%%FILTER%%": "", "%%TOOLS%%": "", "%%SVG%%": mark_nodes(m["svg"]), "%%LEGEND%%": legend, "%%ORDER%%": "".join(
                  f'<div class="step {c}"><i>{E(n)}</i><span><b>{E(tt)}</b><small>{E(s)}</small></span></div>' for n, tt, s, c in m["order"]),
              "%%FOOTER%%": foot, "%%SHELLCSS%%": rd("shell.css") + "\n:root{--mapw:%dpx}" % m["mapw"], "%%SMCSS%%": rd("skillmap.css"),

@@ -84,4 +84,6 @@ label.ck{display:flex;gap:8px;align-items:center;margin:8px 0;color:var(--ink);f
 .vtag{align-self:center;font-size:10px;letter-spacing:.08em;color:var(--mute);border:1px solid var(--line);border-radius:999px;padding:3px 8px}
 .top .btn{padding:6px 9px;letter-spacing:.08em}
 .title{top:60px}#panel{top:104px;max-height:calc(100% - 124px)}
+/* the tabs are wider than the map between the side columns: they span the page, and the columns start under them */
+@media (min-width:900px){:host(:not(.framed)) .top{right:16px}:host(:not(.framed)) .side-col{top:58px}}
 @media (max-width:760px){.top{left:16px;right:16px;flex-wrap:wrap;justify-content:flex-end}.title{top:128px}.vtag{display:none}.nav .btn{padding:5px 8px;letter-spacing:.06em}}
