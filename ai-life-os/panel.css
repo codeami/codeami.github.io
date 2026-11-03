@@ -1,0 +1,119 @@
+/* The Calm panel post: kicker, editorial title, tag chips, series index, side cards,
+   numbered panels, principle box, post cards. DESIGN.md "Calm panel post" names every
+   class here. Link after hud.css and kit/kit.css, on a page whose <html> carries
+   data-skin="calm" (set in the markup: the Calm pages load no article.js or hud.js,
+   so no graph is drawn). Colours are the role tokens of hud.css only; the three
+   layout and corner values below are the panel tokens listed in DESIGN.md. */
+:root { --radius-calm: 8px; --page-max: 74rem; --panel-gap: 16px; }
+html[data-skin="calm"] { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html[data-skin="calm"] { scroll-behavior: auto; } }
+html[data-skin="calm"] body { font-size: 16px; }
+html[data-skin="calm"] main h1 { text-shadow: none; }
+html[data-skin="calm"] :target { scroll-margin-top: 16px; }
+
+/* Nav bar: brand left, three links, no theme switch (Calm has one palette). */
+.p-nav { display: flex; align-items: center; gap: var(--s-md); padding: 10px var(--gutter); background: var(--panel); border-bottom: 1px solid var(--line); }
+.p-nav .p-brand { display: flex; align-items: center; gap: var(--s-md); min-width: 0; margin-right: auto; color: var(--ink); text-decoration: none; font: 500 18px/1 var(--f-head); }
+.p-nav img { width: 28px; height: 28px; flex: none; }
+.p-nav nav { display: flex; flex-wrap: wrap; gap: 4px var(--s-lg); font-size: 15px; }
+.p-nav nav a { padding: 8px 0; color: var(--mute); text-decoration: none; }
+.p-nav nav a[aria-current] { color: var(--ink); font-weight: 700; box-shadow: inset 0 -2px 0 var(--accent); }
+@media (max-width: 420px) { .p-nav .p-brand span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } }
+
+.p-page { max-width: var(--page-max); margin: 0 auto; padding: var(--s-xl) var(--gutter) var(--s-xl); }
+
+/* Small labels: the only spaced, small-caps text. */
+.p-lab, .p-kicker { margin: 0; font: 11px/1.2 var(--f-read); font-variant: small-caps; letter-spacing: .12em; color: var(--mute); }
+
+/* Head: kicker, editorial title with one highlighted phrase, italic subtitle, byline, tag chips. */
+.p-kicker { display: flex; flex-wrap: wrap; gap: 4px 0; font-size: 13px; }
+.p-kicker a { color: inherit; text-decoration: none; }
+.p-kicker > * + * { margin-left: var(--s-md); padding-left: var(--s-md); border-left: 1px solid var(--line-2); }
+.p-title { max-width: 20ch; margin: var(--s-md) 0 var(--s-sm); font: 500 clamp(2rem, 7vw, 3.4rem)/1.08 var(--f-head); letter-spacing: -.01em; text-wrap: balance; }
+.p-hl { padding: 0 .12em; color: var(--accent); background: var(--accent-dim); -webkit-box-decoration-break: clone; box-decoration-break: clone; border-radius: 4px; }
+.p-sub { max-width: 46rem; margin: 0 0 var(--s-md); font: italic 1.15rem/1.45 var(--f-head); color: var(--mute); }
+.p-byline { display: flex; flex-wrap: wrap; gap: 2px var(--s-lg); margin: 0 0 var(--s-md); font-size: 14px; color: var(--mute); }
+.p-tags { display: flex; flex-wrap: wrap; gap: var(--s-sm); margin: 0 0 var(--s-xl); padding: 0; list-style: none; }
+.p-tags li { padding: 4px 10px; font-size: 13px; color: var(--mute); background: var(--panel); border: 1px solid var(--line); border-radius: 999px; }
+
+/* Top row: the series index on the left, the side cards on the right. */
+.p-top { display: grid; gap: var(--s-xl); margin-bottom: var(--s-xl); }
+@media (min-width: 900px) { .p-top { grid-template-columns: minmax(0, 1fr) 22rem; align-items: start; } }
+.p-index h2 { margin: 0 0 var(--s-sm); font: 11px/1.2 var(--f-read); font-variant: small-caps; letter-spacing: .12em; color: var(--mute); }
+.p-index ol { margin: 0; padding: 0; list-style: none; counter-reset: p-idx; border-top: 1px solid var(--line); }
+.p-index li { counter-increment: p-idx; border-bottom: 1px solid var(--line); }
+.p-index a { display: flex; gap: var(--s-md); padding: 10px 0; color: var(--ink); text-decoration: none; }
+.p-index a::before { content: counter(p-idx, decimal-leading-zero); flex: none; width: 2ch; font: 700 13px/1.6 var(--f-ui); color: var(--accent); }
+.p-index a:hover { color: var(--accent); }
+.p-side { display: grid; gap: var(--s-md); }
+.p-side > * { min-width: 0; margin: 0; }
+.p-card { padding: var(--s-md) var(--s-lg); background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-calm); }
+.p-card .p-lab { margin-bottom: var(--s-sm); }
+.p-card p { margin: 0; }
+.p-quote { padding: var(--s-md) var(--s-lg); background: var(--accent-dim); border-left: 3px solid var(--accent); border-radius: 0 var(--radius-calm) var(--radius-calm) 0; }
+.p-quote .p-lab { margin-bottom: var(--s-sm); color: var(--accent); }
+.p-quote p { margin: 0; font: italic 1.1rem/1.45 var(--f-head); }
+.p-quote p.p-lab { font: 11px/1.2 var(--f-read); font-variant: small-caps; letter-spacing: .12em; }
+.p-card.core { border-color: var(--accent); }
+
+/* Panel grid: one column on a phone, two from 760px, three from 1100px. */
+.p-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--panel-gap); align-items: start; margin-bottom: var(--s-xl); }
+@media (min-width: 760px) { .p-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1100px) { .p-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.p-panel { display: grid; gap: var(--s-md); min-width: 0; padding: var(--s-lg); background: var(--bg); border: 1px solid var(--line-2); border-radius: var(--radius-calm); }
+.p-panel-h { display: flex; align-items: baseline; gap: var(--s-md); padding-bottom: var(--s-sm); border-bottom: 1px solid var(--line); }
+.p-num { flex: none; font: 700 14px/1 var(--f-ui); color: var(--accent); }
+.p-panel h2 { margin: 0; font: 500 1.2rem/1.2 var(--f-head); letter-spacing: 0; }
+.p-box { min-width: 0; padding: var(--s-md); background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-calm); font-size: 15px; }
+.p-box > .p-lab { margin-bottom: var(--s-sm); }
+.p-box > :last-child { margin-bottom: 0; }
+.p-box p { margin: 0 0 var(--s-sm); }
+.p-box ul, .p-box ol { margin: 0; padding-left: 1.2em; }
+.p-box li + li { margin-top: var(--s-xs); }
+.p-box q, .p-box blockquote { font-style: italic; }
+.p-steps { counter-reset: p-step; padding-left: 0 !important; list-style: none; }
+.p-steps li { position: relative; padding-left: 2em; counter-increment: p-step; }
+.p-steps li::before { content: counter(p-step); position: absolute; left: 0; top: .1em; width: 1.4em; height: 1.4em; font: 700 12px/1.4em var(--f-ui); text-align: center; color: var(--accent); border: 1px solid var(--accent); border-radius: 999px; }
+.p-table { display: table; width: 100%; margin: 0; font-size: 14px; border-collapse: collapse; table-layout: fixed; }
+.p-table th, .p-table td { padding: 5px 6px; text-align: left; vertical-align: top; border: 0; border-top: 1px solid var(--line); overflow-wrap: anywhere; background: none; }
+.p-table th { font: 11px/1.2 var(--f-read); font-variant: small-caps; letter-spacing: .12em; color: var(--mute); border-top: 0; }
+.p-principle { margin: 0; padding: var(--s-md); background: var(--accent-dim); border-left: 3px solid var(--accent); border-radius: 0 var(--radius-calm) var(--radius-calm) 0; font-size: 15px; }
+.p-principle .p-lab { display: block; margin-bottom: var(--s-xs); color: var(--accent); }
+.p-more { font-size: 14px; }
+
+/* The full prose, for readers who want it. */
+.p-full { max-width: 46rem; margin: 0 auto; padding-top: var(--s-xl); border-top: 1px solid var(--line-2); }
+.p-full > h2:first-child { margin: 0 0 var(--s-sm); font: 500 1.6rem/1.2 var(--f-head); }
+.p-full > .p-lab { margin-bottom: var(--s-lg); }
+.p-prose h2 { margin: 2em 0 .5em; padding-top: .7em; font: 500 1.5rem/1.2 var(--f-head); letter-spacing: 0; border-top: 1px solid var(--line); }
+.p-prose h3 { margin: 1.6em 0 .4em; font: 500 1.2rem/1.2 var(--f-head); letter-spacing: 0; }
+.p-prose p, .p-prose ul, .p-prose ol { max-width: var(--measure); }
+.p-prose ul, .p-prose ol { padding-left: 1.3em; }
+.p-prose li { margin-bottom: 4px; }
+.p-prose code { padding: .05em .3em; font: .88em var(--font-mono); background: var(--accent-dim); border-radius: 4px; overflow-wrap: anywhere; }
+.p-prose pre { padding: 12px 14px; font: 13.5px/1.5 var(--font-mono); background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-calm); overflow-x: auto; }
+.p-prose pre code { padding: 0; background: none; }
+.p-test { font-size: .86rem; color: var(--mute); }
+.p-callout { margin: 1.2em 0; padding: 10px 14px; background: var(--panel); border-left: 3px solid var(--warn); border-radius: 0 var(--radius-calm) var(--radius-calm) 0; }
+
+/* Pager and footer. */
+.p-pager { display: flex; justify-content: space-between; gap: var(--s-lg); max-width: 46rem; margin: var(--s-xl) auto 0; padding-top: var(--s-lg); border-top: 1px solid var(--line); }
+.p-pager a:last-child { text-align: right; }
+.p-foot { max-width: var(--page-max); margin: 0 auto; padding: var(--s-lg) var(--gutter) 40px; font-size: 14px; color: var(--mute); }
+.p-foot p { margin: 0 0 var(--s-sm); }
+.p-foot ul { display: flex; flex-wrap: wrap; gap: 4px var(--s-lg); margin: 0; padding: 0; list-style: none; }
+
+/* Blog index: groups of post cards, newest first. */
+.p-intro { max-width: 46rem; margin: 0 0 var(--s-xl); font-size: 1.1rem; }
+.p-group { margin-bottom: var(--s-xl); }
+.p-group > h2 { margin: 0 0 var(--s-md); padding-bottom: var(--s-sm); font: 500 1.3rem/1.2 var(--f-head); letter-spacing: 0; border-bottom: 1px solid var(--line); }
+.p-posts { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--panel-gap); margin: 0; padding: 0; list-style: none; }
+@media (min-width: 760px) { .p-posts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1100px) { .p-posts { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.p-post { position: relative; display: grid; align-content: start; gap: var(--s-sm); padding: var(--s-lg); background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-calm); }
+.p-post:hover, .p-post:focus-within { border-color: var(--accent); }
+.p-post h3 { margin: 0; font: 500 1.2rem/1.25 var(--f-head); letter-spacing: 0; }
+.p-post h3 a { color: var(--ink); text-decoration: none; }
+.p-post h3 a::after { content: ""; position: absolute; inset: 0; }
+.p-post p { margin: 0; }
+.p-post .p-byline { margin: var(--s-xs) 0 0; font-size: 13px; }

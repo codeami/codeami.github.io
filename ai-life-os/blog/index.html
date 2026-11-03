@@ -1,39 +1,48 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-skin="calm">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="color-scheme" content="light dark">
+<meta name="color-scheme" content="light">
 <title>Blog · The Chart Room</title>
 <meta name="description" content="Blog: posts on harness engineering and alignment from running a crew of AI agents.">
 <link rel="stylesheet" href="../hud.css">
-<script src="../article.js"></script>
 <link rel="icon" href="../kit/bosun.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../kit/kit.css">
-<link rel="stylesheet" href="../article.css">
+<link rel="stylesheet" href="../panel.css">
 </head>
 <body>
-<header class="k-nav">
-  <a class="k-home" href="../index.html"><img class="k-mark" src="../kit/bosun.svg" alt=""><span class="k-logo">The Chart Room<small>How one captain runs a crew of AI agents, safely.</small></span></a>
-  <nav aria-label="Site"><a href="../blog/index.html" aria-current="page">Blog</a><a href="../arena.html">Arena</a><a href="../safety.html">Safety</a><button class="theme" id="theme" type="button">Night</button></nav>
+<header class="p-nav">
+  <a class="p-brand" href="../index.html"><img src="../kit/bosun.svg" alt=""><span>The Chart Room</span></a>
+  <nav aria-label="Site"><a href="index.html" aria-current="page">Blog</a><a href="../arena.html">Arena</a><a href="../safety.html">Safety</a></nav>
 </header>
-<main class="page">
-<article class="k-article">
-<p class="k-kicker">The Chart Room</p>
-<h1 class="k-title">Blog</h1>
-<p class="k-dek">How one captain runs a crew of AI agents, safely.</p>
-<p class="k-meta"><span>Ashish Raina</span><span>6 posts</span></p>
-<p>Notes from running a crew of AI agents. Harness and alignment come first: how I steer agents, how I check their work, and how I keep them doing what I meant rather than what they heard.</p>
-<ol class="post-list">
-<li><p class="k-kicker">Harness engineering</p><h2><a href="guides-and-sensors.html">Guides, sensors, and the rules I'm still begging for</a></h2><p>Mapping my agent setup onto the harness engineering frame, honestly, and picking the next three sensors</p><p class="k-meta"><time datetime="2026-11-02">2 Nov 2026</time><span>21 min read</span></p></li>
-<li><p class="k-kicker">Alignment</p><h2><a href="rules-from-chat-history.html">Your corrections are your next rules</a></h2><p>How I turn a week of "no, not like that" into rules my agents read, without letting them edit their own rules</p><p class="k-meta"><time datetime="2026-11-02">2 Nov 2026</time><span>6 min read</span></p></li>
-<li><p class="k-kicker">Alignment</p><h2><a href="how-it-fits-together.html">One captain, many crews, one chart room</a></h2><p>How I fit Kun Chen's agent factory together with plain-file context, and how I keep the agents doing what I actually meant</p><p class="k-meta"><time datetime="2026-10-07">7 Oct 2026</time><span>11 min read</span></p></li>
-<li><p class="k-kicker">Context</p><h2><a href="everything-is-a-file.html">In AI, everything is a file (or a folder)</a></h2><p>Your goals, your context and your rules, written down once in plain folders and read by every AI tool you use</p><p class="k-meta"><time datetime="2026-11-02">2 Nov 2026</time><span>12 min read</span></p></li>
-<li><p class="k-kicker">Setup</p><h2><a href="second-brain-page.html">A map of my mind you can read without leaving it</a></h2><p>One page that shows my whole agent setup as rings around one file, and a rule I won't break: read in place, never navigate away</p><p class="k-meta"><time datetime="2026-11-02">2 Nov 2026</time><span>8 min read</span></p></li>
-<li><p class="k-kicker">Progress report</p><h2><a href="progress-three-weeks.html">Three weeks in: what I built, what I checked, what is still open</a></h2><p>A dated progress report on running a crew of AI workers, as of 14 October, with the evidence next to each claim and a 2 November update</p><p class="k-meta"><time datetime="2026-10-14">14 Oct 2026</time><span>5 min read</span></p></li>
-</ol>
-</article>
+<main class="p-page">
+
+<header class="p-head">
+<p class="p-kicker"><span>The Chart Room</span><span>Ashish Raina</span></p>
+<h1 class="p-title">Notes from running a <mark class="p-hl">crew of AI agents</mark></h1>
+<p class="p-sub">How one captain runs a crew of AI agents, safely.</p>
+</header>
+<p class="p-intro">Harness and alignment first: how I steer agents, how I check their work, and how I keep them doing what I meant rather than what they heard. Newest first.</p>
+
+<section class="p-group" aria-labelledby="g-context">
+<h2 id="g-context">Context and setup</h2>
+<ul class="p-posts">
+<li class="p-post"><p class="p-kicker">Context</p><h3><a href="everything-is-a-file.html">In AI, everything is a file (or a folder)</a></h3><p>Your goals, your context and your rules, written down once in plain folders and read by every AI tool you use</p><p class="p-byline"><time datetime="2026-11-02">2 Nov 2026</time><span>12 min read</span></p></li>
+<li class="p-post"><p class="p-kicker">Setup</p><h3><a href="second-brain-page.html">A map of my mind you can read without leaving it</a></h3><p>One page that shows my whole agent setup as rings around one file, and a rule I won't break: read in place, never navigate away</p><p class="p-byline"><time datetime="2026-11-02">2 Nov 2026</time><span>8 min read</span></p></li>
+</ul>
+</section>
+
+<section class="p-group" aria-labelledby="g-harness">
+<h2 id="g-harness">Harness and alignment</h2>
+<ul class="p-posts">
+<li class="p-post"><p class="p-kicker">Harness engineering</p><h3><a href="guides-and-sensors.html">Guides, sensors, and the rules I'm still begging for</a></h3><p>Mapping my agent setup onto the harness engineering frame, honestly, and picking the next three sensors</p><p class="p-byline"><time datetime="2026-11-02">2 Nov 2026</time><span>21 min read</span></p></li>
+<li class="p-post"><p class="p-kicker">Alignment</p><h3><a href="rules-from-chat-history.html">Your corrections are your next rules</a></h3><p>How I turn a week of "no, not like that" into rules my agents read, without letting them edit their own rules</p><p class="p-byline"><time datetime="2026-11-02">2 Nov 2026</time><span>6 min read</span></p></li>
+<li class="p-post"><p class="p-kicker">Alignment</p><h3><a href="how-it-fits-together.html">One captain, many crews, one chart room</a></h3><p>How I fit Kun Chen's agent factory together with plain-file context, and how I keep the agents doing what I actually meant</p><p class="p-byline"><time datetime="2026-10-07">7 Oct 2026</time><span>11 min read</span></p></li>
+</ul>
+</section>
+
 </main>
-<footer class="k-foot"><p>by Ashish Raina – program manager turned AI-crew operator</p><p><a href="../about.html">About</a> · <a href="../index.html">Chat with EA-bot</a> · <a href="../index.html#pages">All pages</a> · <a href="https://github.com/codeami">GitHub</a></p></footer>
+<footer class="p-foot"><p>by Ashish Raina – program manager turned AI-crew operator</p><ul><li><a href="../about.html">About</a></li><li><a href="../index.html">Chat with EA-bot</a></li><li><a href="../index.html#pages">All pages</a></li><li><a href="https://github.com/codeami">GitHub</a></li></ul></footer>
 </body>
 </html>

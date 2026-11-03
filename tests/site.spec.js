@@ -161,6 +161,50 @@ test('build: a link-only page gets a static noindex and no robots.txt line, a re
   }
 });
 
+// ---- the blog: index cards from share.json, and the Calm panel post ----
+test('blog index: lists exactly the public posts, newest first inside each group, no hidden post', async ({ page }) => {
+  const posts = share
+    .filter((r) => /^ai-life-os\/blog\/(?!index\.html)[^/]+\.html$/.test(r.path))
+    .map((r) => ({ ...r, file: r.path.split('/').pop() }));
+  await page.goto('/ai-life-os/blog/index.html');
+  const listed = await page.$$eval('.p-post h3 a', (as) => as.map((a) => a.getAttribute('href')));
+  expect([...listed].sort()).toEqual(posts.filter((p) => p.level === 'public').map((p) => p.file).sort());
+  expect(listed.filter((h) => posts.some((p) => p.level !== 'public' && p.file === h)), 'hidden posts listed').toEqual([]);
+  const groups = await page.$$eval('.p-group', (gs) => gs.map((g) => [...g.querySelectorAll('.p-post time')].map((t) => t.getAttribute('datetime'))));
+  for (const dates of groups) expect(dates, 'newest first').toEqual([...dates].sort().reverse());
+  for (const c of await page.locator('.p-post').all()) {
+    await expect(c.locator('.p-kicker')).not.toBeEmpty();
+    await expect(c.locator('time')).toHaveCount(1);
+    await expect(c.locator('.p-byline')).toContainText('min read');
+  }
+});
+
+test('panel post: header, index, side cards, numbered panels; columns follow the width; no inline styles', async ({ page }) => {
+  await page.goto('/ai-life-os/blog/everything-is-a-file.html');
+  await expect(page.locator('html')).toHaveAttribute('data-skin', 'calm');
+  await expect(page.locator('.p-kicker')).toBeVisible();
+  await expect(page.locator('.p-title .p-hl')).toHaveCount(1);
+  await expect(page.locator('.p-sub')).toBeVisible();
+  expect(await page.locator('.p-tags li').count()).toBeGreaterThan(0);
+  const side = await page.locator('.p-side > *').count();
+  expect(side).toBeGreaterThanOrEqual(1);
+  expect(side).toBeLessThanOrEqual(3);
+  const panels = page.locator('.p-grid > .p-panel');
+  expect(await panels.count()).toBe(7);
+  await expect(panels.locator('.p-principle')).toHaveCount(7);
+  await expect(page.locator('.p-panel .p-num')).toHaveText(['01', '02', '03', '04', '05', '06', '07']);
+  const targets = await page.$$eval('.p-index a', (as) => as.map((a) => a.getAttribute('href')));
+  expect(targets.length).toBe(7);
+  for (const t of [...targets, ...(await page.$$eval('.p-more', (as) => as.map((a) => a.getAttribute('href'))))]) {
+    await expect(page.locator(t), t).toHaveCount(1);
+  }
+  await expect(page.locator('.p-full .p-prose, .p-full.p-prose')).toHaveCount(1);
+  const cols = await page.$eval('.p-grid', (g) => getComputedStyle(g).gridTemplateColumns.split(' ').length);
+  if (test.info().project.name === 'mobile-390') expect(cols, 'panels stack at 390').toBe(1);
+  else expect(cols, 'panels use 2 or 3 columns at 1280').toBeGreaterThanOrEqual(2);
+  expect(await page.locator('[style], style').count(), 'no inline style').toBe(0);
+});
+
 // ---- the landing at / ----
 test('landing: eight steps with the fork, no sideways scroll, no console errors, no capture', async ({ page }) => {
   const problems = [];

@@ -3,7 +3,7 @@
    add it only when a page does not, as pages built outside this repo may not.
    Skins on <html data-skin>: "hud" (warm accent, the default, also with no
    attribute), "matrix" (green) and "calm" (the reading theme; its tokens are
-   here, but no page switches to it yet). nav.js or article.js sets data-skin in
+   here; the Blog index and the panel posts set it in their markup and add panel.css). nav.js or article.js sets data-skin in
    the head; hud.js draws the ring graph behind the page and runs the toggle.
    kit/tokens.css carries the same values for pages built outside this site;
    change the two together. */
