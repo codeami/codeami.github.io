@@ -266,6 +266,40 @@
     "label": "Scripted. EA-bot reads a fixed script. No AI model answers on this page.",
     "nodes": [
       {
+        "id": "j1",
+        "fact": "Four problems, in plain words.",
+        "more": [
+          "Too much noise. Everything is loud, and the thing you need is buried.",
+          "Scattered notes and goals. Home, work and a passion each keep their own pile.",
+          "AI that guesses what you want. Say it loosely and it fills the gap with a confident guess.",
+          "Agents nobody can trust. They run fast, and you cannot tell what they did or why."
+        ],
+        "next": ["j2"]
+      },
+      {
+        "id": "j2", "chip": "How do you solve them?",
+        "fact": "One written intent, one place for it all, and a crew you can check.",
+        "more": [
+          "Noise: a second brain holds only what you chose to keep, as plain linked files.",
+          "Scatter: your goals sit in one life file, with the notes that serve them beside it.",
+          "Guessing: an interview comes first. It turns a want into a goal and a check anyone can run.",
+          "Trust: each agent works in its own copy, and a gate checks its work before you see it."
+        ],
+        "next": ["j3"]
+      },
+      {
+        "id": "j3", "chip": "What do you stand for?",
+        "fact": "Four values.",
+        "more": [
+          "Signal from noise.",
+          "Customize everything, including yourself.",
+          "Self-learning, evolving, powerful yet safe AI bot-swarm managers that work toward your needs.",
+          "Smart goal tracking that harmonises your wants.",
+          "Some of this is built and some is still a plan. Each page says which."
+        ],
+        "next": [{ "label": "Show me how it works", "step": 1, "path": "learner" }, { "label": "Start the free course", "href": "ai-life-os/course/index.html" }]
+      },
+      {
         "id": "ov1",
         "fact": "I'm EA-bot, the executive assistant in Ashish's setup. This chat is a fixed script, so I can only say what is written here.",
         "next": ["ov2", { "label": "I'm hiring. Show me the work.", "step": 8, "path": "evaluator" }]

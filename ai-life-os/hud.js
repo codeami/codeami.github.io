@@ -81,6 +81,15 @@
     [].slice.call(document.body.childNodes).forEach(function (n) { if (n !== nav && n.nodeName !== "SCRIPT") body.appendChild(n); });
     document.body.appendChild(ov); document.body.appendChild(reopen);
     var state = "open", held = null; // open | min | closed
+    /* The landing (meta calm-landing) opens on the chart alone, with the page one tap away.
+       A deep link to a step opens the page; otherwise the visitor's last pick (open or closed) is kept in this browser. */
+    var calm = !!document.querySelector('meta[name="calm-landing"]');
+    function remember(v) { try { localStorage.setItem("landing-page", v); } catch (e) { /* storage blocked: the pick lasts for this visit only */ } }
+    if (calm) {
+      var kept = null;
+      try { kept = localStorage.getItem("landing-page"); } catch (e) { /* storage blocked: calm by default */ }
+      state = /^#(step-|explain)/.test(location.hash) || kept === "open" ? "open" : "closed";
+    }
     function phone() { return window.innerWidth <= 760; }
     function layout() {
       document.body.style.setProperty("--navh", (nav ? nav.offsetHeight : 0) + "px");
@@ -94,8 +103,13 @@
     }
     function set(s) { state = s; layout(); }
     min.onclick = function () { set(state === "min" ? "open" : "min"); };
-    x.onclick = function () { set("closed"); reopen.focus(); };
-    reopen.onclick = function () { set("open"); };
+    x.onclick = function () {
+      set("closed"); reopen.focus();
+      if (calm) { remember("closed"); try { history.replaceState(null, "", location.pathname + location.search); } catch (e) { /* sandbox may refuse */ } }
+    };
+    reopen.onclick = function () { set("open"); if (calm) remember("open"); };
+    // "Explain this" on the landing: open the page and tell it to start the journey
+    function explain() { set("open"); remember("open"); window.dispatchEvent(new Event("explain")); }
     window.addEventListener("resize", layout);
     // the tour folds the card away for the map's steps, and puts it back as it was
     function shown(on) { if (!on) { if (held === null) held = state; if (state === "open") set("min"); } else if (held !== null) { set(held); held = null; } }
@@ -174,7 +188,7 @@
     }
     layout();
     load(["drawer.js", "tour.js", "graph.js"], function () {
-      G = window.AIOBrain({ base: B, framed: true, onPage: go, overlayShown: shown });
+      G = window.AIOBrain({ base: B, framed: true, onPage: go, overlayShown: shown, explain: calm ? explain : null });
       G.select(location.href); layout();
       // the course page lights its lesson dots through this handle
       window.AIOMap = G; window.dispatchEvent(new Event("aiomap"));

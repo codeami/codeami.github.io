@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
 <title>The Chart Room: chat with EA-bot</title>
-<meta name="description" content="The Chart Room: how one captain runs a crew of AI agents, safely. A plain chat with EA-bot, field notes on harness engineering and alignment, and the day's numbers.">
+<meta name="description" content="The Chart Room: how one captain runs a crew of AI agents, safely. A plain chat with EA-bot, posts on harness engineering and alignment, and the day's numbers.">
 <link rel="stylesheet" href="hud.css">
 <script src="article.js"></script>
 <link rel="icon" href="kit/bosun.svg" type="image/svg+xml">
@@ -148,7 +148,7 @@ html { scroll-behavior: smooth; }
   <a class="k-home" href="index.html"><svg class="k-mark" role="img" aria-label="Bosun, the EA-bot mascot"><use href="#bosun"/></svg>
   <span class="k-logo">The Chart Room<small>How one captain runs a crew of AI agents, safely.</small></span></a>
   <nav aria-label="Site">
-    <a href="blog/index.html">Field Notes</a>
+    <a href="blog/index.html">Blog</a>
     <a href="arena.html">Arena</a>
     <a href="safety.html">Safety</a>
     <button class="theme" id="theme" type="button"></button>
@@ -165,7 +165,7 @@ html { scroll-behavior: smooth; }
 <div class="shell">
   <main class="chatcol" aria-label="Chat with EA-bot">
     <div class="k-chat" id="log" role="log" aria-live="polite">
-      <noscript><p>This chat needs JavaScript. <a href="blog/index.html">Read Field Notes</a> instead.</p></noscript>
+      <noscript><p>This chat needs JavaScript. <a href="blog/index.html">Read the Blog</a> instead.</p></noscript>
     </div>
     <form class="composer" onsubmit="return false">
       <input type="text" name="message" disabled placeholder="Typing is coming soon. Pick an option." aria-label="Message (coming soon)">
@@ -203,7 +203,7 @@ html { scroll-behavior: smooth; }
 </section>
 
 <footer class="foot">
-  <p id="pages">Prefer to read? <a href="blog/index.html">Field Notes</a> · <a href="arena.html">Harness arena</a> · <a href="safety.html">Safety by design</a> · <a href="safety.html#works-today">What works today</a> · <a href="core.html">Core logic</a> · <a href="maps/skills.html">Skill map</a> · <a href="maps/flow.html">Harness flow map</a> · <a href="brain/index.html">Second brain</a> · <a href="changelog.html">Changelog</a> · <a href="about.html">About</a></p>
+  <p id="pages">Prefer to read? <a href="blog/index.html">Blog</a> · <a href="arena.html">Harness arena</a> · <a href="safety.html">Safety by design</a> · <a href="safety.html#works-today">What works today</a> · <a href="core.html">Core logic</a> · <a href="maps/skills.html">Skill map</a> · <a href="maps/flow.html">Harness flow map</a> · <a href="brain/index.html">Second brain</a> · <a href="changelog.html">Changelog</a> · <a href="about.html">About</a></p>
   <p>The supervisor and most crew mechanics are upstream <a href="https://github.com/kunchenguid/firstmate">Firstmate</a>, MIT licence, by Kun Chen and contributors.</p>
 </footer>
 
@@ -552,7 +552,7 @@ html { scroll-behavior: smooth; }
     var b = el("div", "warnbox");
     b.appendChild(el("p", "", "The chat could not load its script, tour/tour.json. A browser blocks it from a local file."));
     var p = el("p", "", "Serve the site folder, for example with python3 -m http.server, or ");
-    var a = el("a", "", "read Field Notes"); a.href = "blog/index.html";
+    var a = el("a", "", "read the Blog"); a.href = "blog/index.html";
     p.appendChild(a); p.appendChild(document.createTextNode(" instead."));
     b.appendChild(p);
     log.appendChild(b);

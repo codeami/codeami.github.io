@@ -6,7 +6,7 @@ var DRAFT = false; // false removes the draft banner on every page
 window.navPending = true; // hud.js waits for the shell (see start() below)
 
 var PAGES = [
-  ["blog/index.html", "Field Notes"],
+  ["blog/index.html", "Blog"],
   ["arena.html",     "Harness arena"],
   ["safety.html",    "Safety by design"],
   ["story.html",     "The story"],

@@ -13,14 +13,14 @@ The layout is Chart & Cards. The chart is the second brain, a live ring map (`ai
 
 `ai-life-os/course/index.html` is Ashish's AI introductory course: EA-bot reads seven lessons in a fixed order from `ai-life-os/course/course.json`. Progress stays in the reader's localStorage (`ai-course:v1`); `graph.js` reads it to light each finished lesson in the Course room, and `build_data.py` builds that room from the same file.
 
-`ai-life-os/brain/index.html` shows the chart alone. Its data, `brain/brain-data.json`, is built from public files only (the approved notes in `notes.js`, `brain/src/extra.json`, `brain/src/site.json`, the skill map and the Field Notes list): `python3 -I ai-life-os/brain/build_data.py`.
+`ai-life-os/brain/index.html` shows the chart alone. Its data, `brain/brain-data.json`, is built from public files only (the approved notes in `notes.js`, `brain/src/extra.json`, `brain/src/site.json`, the skill map and the Blog list): `python3 -I ai-life-os/brain/build_data.py`.
 
 The two maps, `ai-life-os/maps/skills.html` and `flow.html`, are built files. Edit `ai-life-os/maps/src/*/map.json` or the shell in `ai-life-os/maps/_shared/` (from [super-board](https://github.com/EricTechPro/super-board) by EricTechPro, MIT; see its NOTICE), then rebuild:
 
     python3 -I ai-life-os/maps/_shared/build.py ai-life-os/maps/src/skills/map.json ai-life-os/maps/skills.html
     python3 -I ai-life-os/maps/_shared/build.py ai-life-os/maps/src/flow/map.json ai-life-os/maps/flow.html
 
-The Field Notes posts, `ai-life-os/blog/index.html` and `ai-life-os/arena.html` are built from the owner's private drafts by a script kept outside this repo. Their links to the retired pages were repointed here by hand, so the next rebuild needs the same mapping (for example `overview.html` becomes `index.html#pages`).
+The Blog posts, `ai-life-os/blog/index.html` and `ai-life-os/arena.html` are built from the owner's private drafts by a script kept outside this repo. Their links to the retired pages were repointed here by hand, so the next rebuild needs the same mapping (for example `overview.html` becomes `index.html#pages`).
 
 ## Tests
 

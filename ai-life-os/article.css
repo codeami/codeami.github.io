@@ -1,4 +1,4 @@
-/* Shared look for the kit article pages: Field Notes, the arena, safety and about.
+/* Shared look for the kit article pages: Blog, the arena, safety and about.
    Link after hud.css and kit/kit.css. Reads only token names from hud.css. The posts'
    figures use their drafts' colour names, so those are mapped onto the tokens here
    (--panel is already a hud.css role). */
@@ -47,7 +47,7 @@ figure svg { display: block; width: 100%; min-width: 560px; height: auto; }
 figure img { display: block; width: 100%; height: auto; border-radius: 6px; }
 figcaption { margin-top: 8px; font-size: 14px; color: var(--mute); }
 
-/* Field Notes list and the post pager. */
+/* Blog list and the post pager. */
 .k-article .post-list { max-width: none; padding: 0; list-style: none; }
 .post-list li { padding: 16px 0; border-top: 1px solid var(--line); }
 .post-list h2 { margin: 6px 0; padding: 0; font-size: 21px; border: 0; }

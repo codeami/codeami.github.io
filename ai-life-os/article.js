@@ -1,4 +1,4 @@
-/* Skin for the kit pages: the home page chat, Field Notes, the arena, the story,
+/* Skin for the kit pages: the home page chat, Blog, the arena, the story,
    safety and about. Load it in the head, so the reader's last pick ("hud" or
    "matrix", kept in localStorage as "skin") is set before the body is drawn.
    It then loads hud.js from this file's folder, and hud.css too when the page
