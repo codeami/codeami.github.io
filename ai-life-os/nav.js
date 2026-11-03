@@ -3,6 +3,7 @@
    To add or rename a page, edit one line in PAGES or MORE. Order here is reading order.
    PAGES are the main pages. MORE holds every other page, behind a "More" fold. */
 var DRAFT = false; // false removes the draft banner on every page
+window.navPending = true; // hud.js waits for the shell (see start() below)
 
 var PAGES = [
   ["blog/index.html", "Field Notes"],
@@ -151,9 +152,27 @@ document.addEventListener("click", function (ev) {
   if (id && scrollToId(id)) ev.preventDefault();
 });
 
+/* Pages listed in retired.json at the site root are left out of the nav and the pager.
+   If the file cannot be read, the nav shows everything. */
+var RETIRED_URL = document.currentScript ? document.currentScript.src.replace(/[^\/]*$/, "") + "../retired.json" : "";
+function dropRetired(list, gone) {
+  return list.filter(function (p) { return gone.indexOf("ai-life-os/" + p[0]) < 0; });
+}
 function start() {
-  buildShell();
-  if (location.hash) scrollToId(decodeURIComponent(location.hash.slice(1)));
+  var done = false;
+  function go(gone) {
+    if (done) return;
+    done = true;
+    if (gone) { PAGES = dropRetired(PAGES, gone); MORE = dropRetired(MORE, gone); }
+    buildShell();
+    if (location.hash) scrollToId(decodeURIComponent(location.hash.slice(1)));
+    window.navPending = false;
+    document.dispatchEvent(new Event("navbuilt")); // hud.js frames the page once the shell is there
+  }
+  if (!RETIRED_URL || !window.fetch) return go(null);
+  fetch(RETIRED_URL).then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (j) { go(j && j.retired ? j.retired.map(function (e) { return e.path; }) : null); })
+    .catch(function () { go(null); });
 }
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start);
 else start();

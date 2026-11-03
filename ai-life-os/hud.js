@@ -100,6 +100,33 @@
     // the tour folds the card away for the map's steps, and puts it back as it was
     function shown(on) { if (!on) { if (held === null) held = state; if (state === "open") set("min"); } else if (held !== null) { set(held); held = null; } }
 
+    /* retired.json (site root): pages hidden but not deleted. A link to one goes to its 'into' page,
+       a post list drops its entry, and the retired page itself opens with a one-line notice. */
+    var gone = [], siteRoot = new URL(base + "../", location.href).pathname;
+    function pathOf(u) { var p = u.pathname; return p.charAt(p.length - 1) === "/" ? p + "index.html" : p; }
+    function entry(u) { for (var i = 0; i < gone.length; i++) if (siteRoot + gone[i].path === pathOf(u)) return gone[i]; return null; }
+    function intoUrl(e) { return /^https?:/.test(e.into) ? e.into : siteRoot + e.into; }
+    function retire(scope) {
+      if (!gone.length) return;
+      [].forEach.call(scope.querySelectorAll("a[href]"), function (a) {
+        var e = entry(new URL(a.href, location.href)); if (!e) return;
+        var li = a.closest(".post-list li");
+        if (li) li.remove(); else a.href = intoUrl(e);
+      });
+    }
+    function notice() {
+      var e = entry(location), old = body.querySelector(".retired-note");
+      if (old) old.remove();
+      if (!e) return;
+      var p = mk("p", "retired-note"), a = mk("a", "", e.label);
+      p.setAttribute("role", "note"); a.href = intoUrl(e);
+      p.appendChild(document.createTextNode("Retired " + e.since + ": " + e.why + " ")); p.appendChild(a); p.appendChild(document.createTextNode("."));
+      body.insertBefore(p, body.firstChild);
+    }
+    function settle() { retire(body); if (nav) retire(nav); notice(); }
+    fetch(base + "../retired.json").then(function (r) { return r.ok ? r.json() : { retired: [] }; })
+      .then(function (j) { gone = j.retired || []; settle(); }).catch(function () { /* no list: nothing is hidden */ });
+
     function framed(doc) { return doc.querySelector(".k-nav") && !doc.querySelector("script:not([src])"); }
     var swappable = framed(document);
     // the header stays while the URL changes under it: pin its relative links and images to absolute URLs
@@ -122,6 +149,7 @@
         [].slice.call(doc.body.childNodes).forEach(function (n) { if (n !== dn && n.nodeName !== "SCRIPT") body.appendChild(document.importNode(n, true)); });
         if (nav) [].forEach.call(nav.querySelectorAll("a[href]"), function (a) {
           if (a.href.split("#")[0] === u.href.split("#")[0]) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
+        settle();
         body.scrollTop = 0; set("open"); if (G) G.select(u.href);
         var t = u.hash && document.getElementById(decodeURIComponent(u.hash.slice(1))); if (t) t.scrollIntoView();
       }).catch(function () { location.href = u.href; });
@@ -151,9 +179,10 @@
   }
 
   function start() {
-    // nav.js builds its header on DOMContentLoaded: frame the page after it. The header
+    // nav.js builds its header after it has read retired.json: frame the page after that. The header
     // then grows with chrome(), so the frame measures it again.
-    setTimeout(function () { chartAndCards(); chrome(); bindToggle(); window.dispatchEvent(new Event("resize")); }, 0);
+    function frame() { setTimeout(function () { chartAndCards(); chrome(); bindToggle(); window.dispatchEvent(new Event("resize")); }, 0); }
+    if (window.navPending) document.addEventListener("navbuilt", frame, { once: true }); else frame();
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start);
   else start();

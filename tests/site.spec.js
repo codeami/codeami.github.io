@@ -84,3 +84,79 @@ test('no private addresses or home paths in published files', () => {
   })(root);
   expect(hits).toEqual([]);
 });
+
+// ---- retired.json: hidden, not deleted ----
+const retired = JSON.parse(readFileSync(join(root, 'retired.json'), 'utf8')).retired;
+const external = (u) => /^https?:/.test(u);
+
+test('retired.json: files are kept and every "into" target exists', () => {
+  for (const r of retired) {
+    expect(existsSync(join(root, r.path)), `kept: ${r.path}`).toBe(true);
+    if (!external(r.into)) expect(existsSync(join(root, r.into)), `into: ${r.into}`).toBe(true);
+  }
+});
+
+test('retired.json: no chart node points at a retired path', () => {
+  const data = readFileSync(join(root, 'ai-life-os/brain/brain-data.json'), 'utf8');
+  const urls = [...data.matchAll(/"(?:url|href)":\s*"([^"]+)"/g)].map((m) => m[1]).filter((u) => !external(u));
+  const hit = urls
+    .map((u) => join('ai-life-os/brain', u.split('#')[0]).split(sep).join('/'))
+    .filter((p) => retired.some((r) => r.path === p));
+  expect(hit).toEqual([]);
+});
+
+test('retired pages are out of the nav and show a notice', async ({ page }) => {
+  await page.goto('/ai-life-os/core.html');
+  await page.waitForSelector('nav[aria-label="Pages"] a.nav', { state: 'attached' });
+  const hrefs = await page.$$eval('a[href]', (as) => as.map((a) => new URL(a.href).pathname));
+  expect(hrefs.filter((h) => retired.some((r) => h === `/${r.path}`))).toEqual([]);
+  for (const r of retired.filter((x) => pages.includes(x.path))) {
+    await page.goto(`/${r.path}`);
+    await expect(page.locator('.retired-note'), r.path).toContainText('Retired');
+    await expect(page.locator('.retired-note a')).toHaveAttribute('href', external(r.into) ? r.into : `/${r.into}`);
+  }
+});
+
+// ---- the landing at / ----
+test('landing: eight steps with the fork, no sideways scroll, no console errors, no capture', async ({ page }) => {
+  const problems = [];
+  page.on('console', (m) => m.type() === 'error' && problems.push(m.text()));
+  page.on('pageerror', (e) => problems.push(e.message));
+  await page.route('**/*', (route) => (route.request().url().startsWith(origin) ? route.continue() : route.fulfill({ status: 200, body: '' })));
+  await page.goto('/');
+  await expect(page.locator('#flowN')).toHaveText('1');
+  await page.getByRole('button', { name: 'What can AI do now?' }).click();
+  await page.getByRole('button', { name: "So what's the catch?" }).click();
+  await expect(page.getByRole('button', { name: 'Walk me through it (about 10 min)' })).toBeVisible();
+  await expect(page.getByRole('button', { name: "I'm hiring or evaluating" })).toBeVisible();
+  for (let n = 1; n <= 8; n++) {
+    await page.goto('about:blank');
+    await page.goto(`/#step-${n}`);
+    await expect(page.locator('#flowN')).toHaveText(String(n));
+    const w = await page.evaluate(() => ({ s: document.documentElement.scrollWidth, c: document.documentElement.clientWidth, o: [...document.querySelectorAll('.pov-body')].map((b) => b.scrollWidth - b.clientWidth) }));
+    expect(w.s, `step ${n} page width`).toBeLessThanOrEqual(w.c);
+    expect(Math.max(0, ...w.o), `step ${n} card width`).toBeLessThanOrEqual(0);
+  }
+  await page.goto('/');
+  await page.getByRole('button', { name: "I'm hiring. Show me the work." }).click();
+  await expect(page.locator('#flowN')).toHaveText('8');
+  const html = await page.content();
+  expect(html).not.toMatch(/type="email"|<form|<input/i);
+  expect(html).not.toMatch(/\$\d|\bprice|\bsubscribe|\bsign up\b|\bnewsletter/i);
+  expect(problems).toEqual([]);
+});
+
+test("landing: the dog interview ends on Sam's criterion", async ({ page }) => {
+  await page.goto('/#step-3');
+  await page.getByRole('button', { name: 'Start the interview.' }).click();
+  for (let i = 0; i < 3; i++) await page.locator('.chat .k-chip:not([disabled])', { hasText: 'Take the suggested answers.' }).click();
+  await expect(page.locator('.chat-card')).toContainText('Done when a two-week foster fits the weekday schedule.');
+});
+
+test('Chart Room chat holds the story and tour branches', () => {
+  const t = JSON.parse(readFileSync(join(root, 'ai-life-os/tour/tour.json'), 'utf8')).chat;
+  const folders = new Set(t.nodes.map((n) => n.folder));
+  expect(folders.has('story') && folders.has('tour')).toBe(true);
+  const ids = new Set(t.nodes.map((n) => n.id));
+  for (const n of t.nodes) for (const x of n.next) expect(ids.has(x), `${n.id} -> ${x}`).toBe(true);
+});

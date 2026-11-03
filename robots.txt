@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /ai-life-os/blog/progress-three-weeks.html
+Disallow: /ai-life-os/kit/index.html
+Disallow: /ai-life-os/maps/_shared/shell.html
+Disallow: /ai-life-os/story.html
+Disallow: /ai-life-os/tour/index.html

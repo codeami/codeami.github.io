@@ -1115,10 +1115,6 @@
          "href": "../core.html#part-approval"
         },
         {
-         "label": "The story",
-         "href": "../story.html"
-        },
-        {
          "label": "Changelog",
          "href": "../changelog.html"
         }
@@ -1463,28 +1459,6 @@
         {
          "label": "Read the post",
          "href": "../blog/second-brain-page.html"
-        }
-       ],
-       "rel": []
-      }
-     ]
-    },
-    {
-     "name": "Progress report",
-     "count": 1,
-     "files": [
-      {
-       "id": "progress-three-weeks",
-       "n": "Three weeks in: what I built, what I checked, what is still open",
-       "line": "post · 14 Oct 2026",
-       "body": [
-        "A dated progress report on running a crew of AI workers, as of 14 October, with the evidence next to each claim and a 2 November update"
-       ],
-       "url": "../blog/progress-three-weeks.html",
-       "links": [
-        {
-         "label": "Read the post",
-         "href": "../blog/progress-three-weeks.html"
         }
        ],
        "rel": []
@@ -1922,14 +1896,8 @@
    "kind": "page"
   },
   {
-   "n": "The story",
-   "state": "for beginners",
-   "url": "../story.html",
-   "kind": "page"
-  },
-  {
    "n": "Field Notes",
-   "state": "6 posts",
+   "state": "5 posts",
    "url": "../blog/index.html",
    "kind": "page"
   },
@@ -1943,12 +1911,6 @@
    "n": "Safety by design",
    "state": "limits, honestly",
    "url": "../safety.html",
-   "kind": "page"
-  },
-  {
-   "n": "Guided tour",
-   "state": "step by step",
-   "url": "../tour/index.html",
    "kind": "page"
   },
   {
@@ -1987,11 +1949,6 @@
  ],
  "reading": [
   {
-   "title": "The story",
-   "url": "../story.html",
-   "line": "Start · how it works, from the very beginning"
-  },
-  {
    "title": "In AI, everything is a file",
    "url": "../blog/everything-is-a-file.html",
    "line": "Context · Field Notes"
@@ -2025,11 +1982,6 @@
    "title": "A map of my mind",
    "url": "../blog/second-brain-page.html",
    "line": "Setup · Field Notes"
-  },
-  {
-   "title": "Three weeks in",
-   "url": "../blog/progress-three-weeks.html",
-   "line": "Progress report · Field Notes"
   },
   {
    "title": "About",

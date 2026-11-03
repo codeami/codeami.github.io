@@ -4,7 +4,8 @@ Personal site of Ashish Raina: a blog landing page at the root and the AI-Life-O
 
 Plain static files, served by GitHub Pages from the root of `main` (`.nojekyll` turns Jekyll off). To read it locally: `python3 -m http.server`, then open `/`.
 
-- `index.html`: the whoami landing. It uses the demo's kit and HUD skin from `ai-life-os/`.
+- `index.html`: the whoami landing: a guided walk in eight steps (intent first, with a fork for evaluators) over the chart. Its scripted chats are in `ai-life-os/tour/tour.json` (`landing` block), drawn by `ai-life-os/chat.js`. It uses the demo's kit and HUD skin from `ai-life-os/`.
+- `retired.json`: pages hidden but not deleted. `nav.js`, `hud.js` and `brain/build_data.py` read it (the build also writes `robots.txt`). A retired page shows a one-line notice and links to it go to its `into` page. Delete a line to republish it.
 - `blog/index.html`: a redirect. Posts have one home, `ai-life-os/blog/`.
 - `ai-life-os/`: the demo, once The Chart Room at codeami.github.io/firstmate-showcase. Its old section pages (s02 to s10, overview, harness, skills, cast, tasks, testing, vendors) were folded into the story, core logic, safety and about pages and are not carried here.
 
