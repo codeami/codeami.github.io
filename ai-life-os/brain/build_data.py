@@ -8,13 +8,23 @@ Reads only public files of this site:
   maps/src/skills/map.json  the skills (the inner ring)
   blog/index.html           the Field Notes posts
   course/course.json        the AI introductory course's lessons
+  ../../retired.json        pages hidden from the chart; also writes ../../robots.txt from it
 Every url in the output is relative to brain/ or a public https link. Stdlib only."""
-import html, json, re
+import html, json, posixpath, re
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 SITE = HERE.parent
+ROOT = SITE.parent
 rd = lambda p: (SITE / p).read_text(encoding="utf-8")
+RETIRED = {r["path"] for r in json.loads((ROOT / "retired.json").read_text(encoding="utf-8"))["retired"]}
+
+
+def live(url):
+    """False for a url (relative to brain/) that points at a retired page."""
+    if re.match(r"^[a-z][a-z0-9+.-]*:", url):
+        return True
+    return posixpath.normpath(posixpath.join("ai-life-os/brain", url.split("#")[0].split("?")[0])) not in RETIRED
 site = json.loads(rd("brain/src/site.json"))
 extra = json.loads(rd("brain/src/extra.json"))
 notes = json.loads(rd("brain/notes.js").split("=", 1)[1].strip().rstrip(";"))
@@ -23,7 +33,7 @@ plain = lambda s: re.sub(r"\*\*|==|`|\[\[([^\]]+)\]\]", lambda m: m.group(1) or 
 
 
 def links(pairs):
-    return [{"label": l, "href": h} for l, h in pairs or []]
+    return [{"label": l, "href": h} for l, h in pairs or [] if live(h)]
 
 
 # Room 1: the wiki notes, one folder per first tag
@@ -87,6 +97,8 @@ POST = re.compile(r'<li><p class="k-kicker">([^<]+)</p><h2><a href="([^"]+)">(.+
 posts = {}
 for kick, href, title, dek, _, date in POST.findall(rd("blog/index.html")):
     url = "../blog/" + href
+    if not live(url):
+        continue
     posts.setdefault(html.unescape(kick), []).append({"id": href[:-5], "n": html.unescape(title), "line": "post · " + date,
                                                      "body": [html.unescape(dek)], "url": url, "links": links([["Read the post", url]]), "rel": []})
 posts_room = {"id": "posts", "label": "Field Notes", "color": "#5cd3ff", "note": "Published posts on harness engineering and alignment.",
@@ -110,7 +122,9 @@ skills = [{"n": s["name"], "desc": plain(s.get("whatItIs")), "when": s.get("trig
 out = {"meta": {"name": "AI-Life-OS public second brain", "invented": False,
                 "note": "Public data only: the approved wiki notes, this site's pages and posts, the skill map and the harness tier list. No private files, paths, routines or links."},
        "root": site["root"], "rooms": [notes_room, fm_room, areas_room, tier_room, posts_room, course_room], "skills": skills, "routines": [],
-       "apps": [], "projects": [dict(p, kind="project") for p in site["projects"]], "pages": [dict(p, kind="page") for p in site["pages"]],
-       "reading": site["reading"]}
+       "apps": [], "projects": [dict(p, kind="project") for p in site["projects"]], "pages": [dict(p, kind="page") for p in site["pages"] if live(p["url"])],
+       "reading": [r for r in site["reading"] if live(r["url"])]}
 (HERE / "brain-data.json").write_text(json.dumps(out, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
-print("rooms", [(r["label"], sum(f["count"] for f in r["folders"])) for r in out["rooms"]], "skills", len(skills))
+# Search engines skip what is retired, so a page still linked from elsewhere does not stay in results.
+(ROOT / "robots.txt").write_text("User-agent: *\n" + "".join("Disallow: /%s\n" % p for p in sorted(RETIRED)), encoding="utf-8")
+print("rooms",[(r["label"], sum(f["count"] for f in r["folders"])) for r in out["rooms"]], "skills", len(skills))

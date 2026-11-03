@@ -5,21 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
 <title>Ashish Raina · whoami</title>
-<meta name="description" content="Ashish Raina: program manager turned AI-crew operator. Field Notes on running a crew of AI agents, and AI-Life-OS, a live demo of the setup.">
+<meta name="description" content="Ashish Raina: program manager turned AI-crew operator. A guided walk from what AI can do now to asking it well, with a free course, Field Notes and AI-Life-OS, a live demo of the setup.">
 <link rel="stylesheet" href="ai-life-os/hud.css">
 <script src="ai-life-os/article.js"></script>
 <link rel="icon" href="ai-life-os/kit/bosun.svg" type="image/svg+xml">
 <link rel="stylesheet" href="ai-life-os/kit/kit.css">
 <link rel="stylesheet" href="ai-life-os/article.css">
+<script src="ai-life-os/chat.js" defer></script>
 <style>
-/* The whoami landing: who I am, the latest posts, and one big way into the demo. */
+/* The whoami landing: who I am, then a guided walk in eight steps (intent first), then the work. */
 .who { font-size: 1.15rem; }
 .demos { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin: var(--space-4, 24px) 0; }
 .demo { display: block; padding: 20px 22px; color: var(--ink); text-decoration: none;
   border: 1px solid var(--line); border-left: 4px solid var(--accent); background: var(--panel, var(--surface)); border-radius: 2px; }
 .demo:hover, .demo:focus-visible { border-color: var(--accent); outline: none; }
 .demo .k-kicker { margin: 0 0 6px; }
-.demo h2 { margin: 0 0 6px; font-size: 1.6rem; }
+.demo h3 { margin: 0 0 6px; font-size: 1.4rem; }
 .demo p { margin: 0 0 10px; color: var(--mute); }
 .demo .go { color: var(--accent-text, var(--accent)); font-weight: 700; }
 .demo ul { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 6px; }
@@ -30,6 +31,82 @@
 .law blockquote { margin: 0 0 10px; padding: 0; border: 0; font-size: 1.05rem; font-style: italic; }
 .law p { margin: 0 0 6px; }
 .law .src { font-size: 13px; color: var(--mute); }
+
+/* The guided flow. Without scripts every step shows, one after the other. */
+.flow { margin: var(--space-4, 24px) 0; }
+.flow-bar { display: flex; justify-content: space-between; gap: 4px 12px; flex-wrap: wrap; margin: 0 0 6px; font-size: 14px; color: var(--mute); }
+.flow-bar b { color: var(--ink); }
+.meter { height: 4px; background: var(--line); margin: 0 0 var(--space-3, 16px); }
+.meter i { display: block; height: 100%; width: 12.5%; background: var(--accent); }
+.step { margin: 0 0 var(--space-4, 24px); }
+.step h2 { margin: 0 0 8px; }
+.step h2:focus { outline: none; }
+.step h3 { margin: var(--space-3, 16px) 0 6px; }
+.step .lead { color: var(--mute); margin: 0 0 12px; }
+.scripted { margin: 0 0 12px; padding: 6px 10px; font-size: 13px; color: var(--mute); border: 1px dashed var(--line-2); border-radius: 2px; }
+.chat { margin: 0 0 12px; }
+.chat .k-chips { padding-left: 42px; }
+.k-bubble p { margin: 0; }
+.k-bubble p + p { margin-top: 6px; }
+.k-bubble .see { display: inline-block; margin-top: 6px; font-size: 14px; font-weight: 700; }
+.chat-card { margin-top: 8px; padding: 10px 12px; background: var(--bg); border: 1px solid var(--line); box-shadow: inset 3px 0 0 var(--accent); border-radius: 2px; }
+.chat-card h4 { margin: 0 0 6px; }
+.chat-card dt { font-size: 13px; font-weight: 700; color: var(--mute); }
+.chat-card dd { margin: 0 0 6px; }
+.pchart { margin-top: 8px; padding: 10px 12px; background: var(--bg); border: 1px solid var(--line); box-shadow: inset 3px 0 0 var(--accent); border-radius: 2px; }
+.pchart h4 { margin: 0 0 4px; }
+.pchart h5 { margin: 10px 0 4px; font-size: 14px; }
+.pchart .pnote { margin: 0 0 4px; font-size: 13px; color: var(--mute); }
+.pchart ul { margin: 0; padding: 0; list-style: none; }
+.pchart li { margin: 0 0 10px; }
+.pchart .ptop { display: flex; justify-content: space-between; gap: 8px; font-size: 14px; }
+.pchart .pval { color: var(--mute); white-space: nowrap; }
+.pchart .pbar { height: 8px; margin: 3px 0; background: var(--line); }
+.pchart .pbar i { display: block; height: 100%; background: var(--accent); }
+.pchart .pconf { display: inline-block; margin-right: 8px; font-size: 12px; font-weight: 700; padding: 1px 7px; border: 1px solid var(--mute); border-radius: 999px; }
+.pchart .pconf-low { border-style: dashed; }
+.pchart .pev { font-size: 13px; color: var(--mute); }
+.typing { display: inline-flex; gap: 4px; padding: 14px 16px; }
+.typing i { width: 7px; height: 7px; border-radius: 50%; background: var(--mute); animation: dot 1s infinite ease-in-out; }
+.typing i:nth-child(2) { animation-delay: .15s; } .typing i:nth-child(3) { animation-delay: .3s; }
+@keyframes dot { 0%, 80%, 100% { opacity: .3; } 40% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .typing i { animation: none; } }
+.flow-nav { display: flex; justify-content: space-between; gap: 12px; margin: 0; }
+.flow-nav .k-btn[hidden] { display: none; }
+.flow-nav .spacer { flex: 1; }
+
+.figs { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin: 12px 0; }
+.fig { margin: 0; padding: 10px 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 2px; }
+.fig svg { display: block; width: 100%; min-width: 0; height: auto; max-width: 520px; margin: 0 auto; }
+.fig figcaption { margin-top: 6px; font-size: 14px; color: var(--mute); }
+.fig text { font-family: var(--font-body); font-size: 12px; fill: var(--ink); }
+.fig .mute { fill: var(--mute); }
+.fig .ln { stroke: var(--mute); stroke-width: 1.5; fill: none; }
+.fig .ln.dash { stroke-dasharray: 4 3; }
+.fig .ln.hit { stroke: var(--accent); stroke-width: 2; }
+.fig .box { fill: var(--bg); stroke: var(--line-2); stroke-width: 1.5; }
+.fig .box.hit { stroke: var(--accent); stroke-width: 2; }
+.fig .dot { fill: var(--ink); }
+.fig .dot.hit { fill: var(--accent); }
+
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin: 12px 0; }
+.card { padding: 14px 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 2px; }
+.card h3 { margin: 0 0 6px; font-size: 1.1rem; }
+.card ul { margin: 0; padding-left: 18px; }
+.card li { margin: 0 0 6px; }
+.card p { margin: 0 0 6px; }
+.card .src { font-size: 13px; color: var(--mute); }
+.card.todo, .card.planned { background: transparent; border: 2px dashed var(--line-2); }
+.badge { display: inline-block; font-size: 12px; font-weight: 700; padding: 2px 8px; border: 1px dashed var(--mute); border-radius: 999px; color: var(--mute); }
+.badge.live { border-style: solid; color: var(--ink); }
+.strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin: 12px 0; }
+.strip .card { padding: 10px 12px; }
+.strip h3 { font-size: 1rem; }
+.credits { margin: 8px 0 0; padding-left: 18px; }
+.credits li { margin: 0 0 6px; }
+.sections { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 12px; padding: 0; list-style: none; }
+.sections li { font-size: 13px; padding: 3px 9px; border: 1px solid var(--line); border-radius: 999px; color: var(--mute); }
+.next-links { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
 </style>
 </head>
 <body>
@@ -48,41 +125,312 @@
 <p class="k-kicker">whoami</p>
 <h1 class="k-title">Ashish Raina</h1>
 <p class="k-dek who">Program manager turned AI-crew operator. I run a crew of AI coding agents from one chat, and I write down how I steer them, check their work and keep them doing what I meant.</p>
-<blockquote>"Managing a complex AI agentic bot system is sort of like managing a contract with different vendors."</blockquote>
 
+<section class="flow" id="flow" aria-label="A guided walk in eight steps">
+<p class="flow-bar"><span>Step <b id="flowN">1</b> of 8</span><span id="flowName">What AI can do now</span></p>
+<div class="meter" aria-hidden="true"><i id="flowFill"></i></div>
+
+<section class="step" id="step-1" data-name="What AI can do now" aria-labelledby="step-1-h">
+<p class="k-kicker">Ideal state overview</p>
+<h2 id="step-1-h" tabindex="-1">What AI can do now, and which way you want to go</h2>
+<p class="lead">Thirty seconds. Then pick a path: a ten-minute walk, or straight to who made this.</p>
+<p class="scripted">Scripted. EA-bot reads a fixed script. No AI model answers on this page.</p>
+<div class="chat" data-start="ov1"><noscript><p>This chat needs JavaScript. Step through the page below instead, or open the <a href="ai-life-os/course/index.html">course</a>.</p></noscript></div>
+</section>
+
+<section class="step" id="step-2" data-name="It only works when your intent is clear" aria-labelledby="step-2-h">
+<p class="k-kicker">Ideal state overview</p>
+<h2 id="step-2-h" tabindex="-1">It only works when your intent is clear</h2>
+<p class="lead">The telephone game. Say what you want to three helpers, one for home, one for work and one for a passion, and each hears a slightly different thing.</p>
+<div class="figs">
+<figure class="fig">
+<svg viewBox="0 0 300 130" role="img" aria-labelledby="f2a-t"><title id="f2a-t">Three lines start together and end far apart</title>
+<circle class="dot" cx="14" cy="25" r="4"/><text x="24" y="29">Home</text>
+<circle class="dot" cx="14" cy="65" r="4"/><text x="24" y="69">Work</text>
+<circle class="dot" cx="14" cy="105" r="4"/><text x="24" y="109">Passion</text>
+<line class="ln dash" x1="96" y1="25" x2="270" y2="8"/><line class="ln dash" x1="96" y1="65" x2="270" y2="68"/><line class="ln dash" x1="96" y1="105" x2="270" y2="124"/>
+<circle class="dot" cx="270" cy="8" r="4"/><circle class="dot" cx="270" cy="68" r="4"/><circle class="dot" cx="270" cy="124" r="4"/>
+</svg>
+<figcaption>No written goal. The three drift apart, and each guesses.</figcaption>
+</figure>
+<figure class="fig">
+<svg viewBox="0 0 300 130" role="img" aria-labelledby="f2b-t"><title id="f2b-t">Three lines start together and meet at one goal</title>
+<circle class="dot" cx="14" cy="25" r="4"/><text x="24" y="29">Home</text>
+<circle class="dot" cx="14" cy="65" r="4"/><text x="24" y="69">Work</text>
+<circle class="dot" cx="14" cy="105" r="4"/><text x="24" y="109">Passion</text>
+<line class="ln hit" x1="96" y1="25" x2="256" y2="62"/><line class="ln hit" x1="96" y1="65" x2="256" y2="65"/><line class="ln hit" x1="96" y1="105" x2="256" y2="68"/>
+<circle class="box hit" cx="268" cy="65" r="11"/><circle class="dot hit" cx="268" cy="65" r="4"/>
+<text x="290" y="100" text-anchor="end">one written goal</text>
+</svg>
+<figcaption>One goal, written down. They line up.</figcaption>
+</figure>
+</div>
+<p>Power without a clear intent gives confident guesses. The fix is not a smarter model. It is a goal you can say out loud and a check anyone could run.</p>
+<div class="chat" data-start="ov4"></div>
+</section>
+
+<section class="step" id="step-3" data-name="Watch an AI interview someone" aria-labelledby="step-3-h">
+<p class="k-kicker">Ideal My-Intent state</p>
+<h2 id="step-3-h" tabindex="-1">Watch an AI interview someone</h2>
+<p class="lead">The interview comes before the explanation. Tap through it.</p>
+<p class="scripted">Scripted. Sam, the dog and the plan are made up. No AI model answers on this page.</p>
+<div class="chat" data-start="d1"></div>
+</section>
+
+<section class="step" id="step-4" data-name="Why we start from the ideal state" aria-labelledby="step-4-h">
+<p class="k-kicker">Ideal state overview</p>
+<h2 id="step-4-h" tabindex="-1">Why we start from the ideal state</h2>
+<p class="lead">Write down where you are and where you want to be. Then write checks anyone could run to tell when you got there.</p>
+<figure class="fig">
+<svg viewBox="0 0 320 160" role="img" aria-labelledby="f4-t"><title id="f4-t">Current state, a climb to the ideal state with criteria, and a loop that records each miss</title>
+<rect class="box" x="8" y="40" width="96" height="44"/><text x="56" y="66" text-anchor="middle">Current state</text>
+<rect class="box hit" x="216" y="40" width="96" height="44"/><text x="264" y="66" text-anchor="middle">Ideal state</text>
+<line class="ln hit" x1="104" y1="62" x2="216" y2="62"/><text x="160" y="54" text-anchor="middle">climb</text>
+<text x="312" y="104" text-anchor="end" class="mute">criteria anyone can check</text>
+<path class="ln dash" d="M264 112 Q160 156 56 112"/><text x="160" y="146" text-anchor="middle">record each miss</text>
+</svg>
+<figcaption>Current state, ideal state, criteria, then climb and record each miss. It is like writing the test before the code.</figcaption>
+</figure>
+<h3>Credit</h3>
+<ul class="credits">
+<li>The method, from current state to ideal state through checks you can verify: <a href="https://github.com/danielmiessler/TheAlgorithm">Daniel Miessler, TheAlgorithm</a>. The loop is set out in <a href="https://danielmiessler.com/blog/general-hill-climbing">General Hill-Climbing</a>, and writing what, not how, in <a href="https://danielmiessler.com/blog/intent-engineering">Intent Engineering</a>.</li>
+<li>The interview that runs until you share an understanding: <a href="https://github.com/mattpocock/skills/blob/main/skills/productivity/grilling/SKILL.md">Matt Pocock, the grilling skill</a>. Only the interview idea is borrowed.</li>
+<li>Test first, as an analogy only: Kent Beck, credited with rediscovering <a href="https://en.wikipedia.org/wiki/Test-driven_development">test-driven development</a>.</li>
+</ul>
+<div class="chat" data-start="ov6"></div>
+</section>
+
+<section class="step" id="step-5" data-name="Ideal My-Intent state" aria-labelledby="step-5-h">
+<p class="k-kicker">Ideal My-Intent state</p>
+<h2 id="step-5-h" tabindex="-1">From a want to a need to an avenue</h2>
+<p class="lead">Under a want sits a need. One need opens several avenues. Needs work as a checklist, not a ladder.</p>
+<figure class="fig">
+<svg viewBox="0 0 300 200" role="img" aria-labelledby="f5-t"><title id="f5-t">One need in the middle, three avenues around it: study or career, giving, passion</title>
+<circle class="box" cx="150" cy="100" r="88" stroke-dasharray="4 3"/>
+<circle class="box hit" cx="150" cy="100" r="34"/><text x="150" y="97" text-anchor="middle">One need</text><text x="150" y="112" text-anchor="middle" class="mute">checked off</text>
+<line class="ln" x1="150" y1="66" x2="150" y2="26"/><circle class="dot" cx="150" cy="16" r="5"/><text x="162" y="20">Study or career</text>
+<line class="ln" x1="122" y1="124" x2="64" y2="156"/><circle class="dot" cx="56" cy="160" r="5"/><text x="12" y="184">Giving</text>
+<line class="ln" x1="178" y1="124" x2="236" y2="156"/><circle class="dot" cx="244" cy="160" r="5"/><text x="226" y="184">Passion</text>
+</svg>
+<figcaption>Needs in the middle, avenues around them.</figcaption>
+</figure>
+<div class="cards">
+<div class="card">
+<h3>Sam's life plan</h3>
+<p><span class="badge">made-up example</span></p>
+<ul><li>1 need: company in the evenings.</li><li>3 avenues: a dog-walking group, volunteering at a shelter, a pet-care course.</li><li>1 project: a two-week foster.</li><li>2 notes: what Sam regrets, and what the lease allows.</li></ul>
+</div>
+<div class="card">
+<h3>The shape of a life file</h3>
+<p>Structure only. The sections come from the public TELOS template by Daniel Miessler. Mine stays private.</p>
+<ul class="sections"><li>Problems</li><li>Mission</li><li>Goals</li><li>Challenges</li><li>Strategies</li><li>Projects</li><li>Things I've been wrong about</li><li>Metrics</li></ul>
+<p class="src"><a href="https://github.com/danielmiessler/Telos">TELOS on GitHub</a></p>
+</div>
+</div>
+<div class="chat" data-start="ov7"></div>
+</section>
+
+<section class="step" id="step-6" data-name="Ideal Tech-Intent state" aria-labelledby="step-6-h">
+<p class="k-kicker">Ideal Tech-Intent state</p>
+<h2 id="step-6-h" tabindex="-1">How the AIs carry it</h2>
+<p class="lead">Personal, work and passion AI, kept in line by one assistant and one second brain.</p>
+<figure class="fig">
+<svg viewBox="0 0 320 200" role="img" aria-labelledby="f6-t"><title id="f6-t">EA-bot at the top, three rooms below it, and the second brain underneath</title>
+<circle class="box hit" cx="160" cy="34" r="26"/><text x="160" y="38" text-anchor="middle">EA-bot</text>
+<line class="ln" x1="160" y1="60" x2="60" y2="100"/><line class="ln" x1="160" y1="60" x2="160" y2="100"/><line class="ln" x1="160" y1="60" x2="260" y2="100"/>
+<rect class="box" x="16" y="100" width="88" height="32"/><text x="60" y="120" text-anchor="middle">Personal AI</text>
+<rect class="box" x="116" y="100" width="88" height="32"/><text x="160" y="120" text-anchor="middle">Work AI</text>
+<rect class="box" x="216" y="100" width="88" height="32"/><text x="260" y="120" text-anchor="middle">Passion AI</text>
+<line class="ln" x1="60" y1="132" x2="60" y2="158"/><line class="ln" x1="160" y1="132" x2="160" y2="158"/><line class="ln" x1="260" y1="132" x2="260" y2="158"/>
+<rect class="box" x="16" y="158" width="288" height="32"/><text x="160" y="178" text-anchor="middle">Second brain: plain files, notes linked</text>
+</svg>
+<figcaption>One picture of what you are trying to do, kept in files all three can read.</figcaption>
+</figure>
+<div class="cards">
+<div class="card">
+<h3>Notes and mental load</h3>
+<ul>
+<li>A specific plan for an unfinished goal stopped the nagging thoughts it caused, in lab studies (<a href="https://pubmed.ncbi.nlm.nih.gov/21688924/">Masicampo and Baumeister, 2011</a>). That suggests writing the plan down. It was not tested on note apps.</li>
+<li>“There is an inverse relationship between things on your mind and those things getting done.” David Allen, as quoted on <a href="https://en.wikipedia.org/wiki/Getting_Things_Done">the Getting Things Done page</a>. A method, not a study.</li>
+<li>Working memory is limited, and design can reduce the load: <a href="https://en.wikipedia.org/wiki/Cognitive_load">cognitive load theory</a>. Applying it to life planning is our reading.</li>
+</ul>
+</div>
+<div class="card">
+<h3>Four habits, with sources</h3>
+<ul>
+<li>Time-box the work: Parkinson and Horstman, at the top of this page.</li>
+<li>Protect long blocks for making things: <a href="https://paulgraham.com/makersschedule.html">Paul Graham, Maker's Schedule, Manager's Schedule</a>.</li>
+<li>Sort the urgent from the important: <a href="https://en.wikipedia.org/wiki/Eisenhower_matrix">the Eisenhower matrix</a>.</li>
+<li>Spend effort where it multiplies: <a href="https://en.wikipedia.org/wiki/High_Output_Management">Andy Grove, High Output Management</a>.</li>
+</ul>
+</div>
+</div>
+<h3>The areas</h3>
+<div class="strip">
+<div class="card"><h3>AIOS Factory</h3><p><span class="badge live">live</span></p><p>The life OS and second brain.</p></div>
+<div class="card planned"><h3>Trading</h3><p><span class="badge">planned</span></p><p>Drafts only. Nothing published.</p></div>
+<div class="card planned"><h3>Marketing stack</h3><p><span class="badge">planned</span></p></div>
+<div class="card planned"><h3>Marketing factory</h3><p><span class="badge">planned</span></p></div>
+<div class="card planned"><h3>CRM</h3><p><span class="badge">planned</span></p></div>
+</div>
 <div class="demos">
 <a class="demo" href="ai-life-os/index.html">
   <p class="k-kicker">Live demo</p>
-  <h2>AI-Life-OS</h2>
-  <p>The FirstMate setup I run every day, laid open: chat with EA-bot, the skill map, the harness arena, and what the agents may and may not do.</p>
-  <ul><li>Chat with EA-bot</li><li>Skill map</li><li>Harness flow</li><li>Arena</li><li>Safety</li></ul>
-  <p class="go">Open AI-Life-OS →</p>
+  <h3>AI-Life-OS</h3>
+  <p>The setup I run every day, laid open: chat with EA-bot, the skill map, the harness arena, and what the agents may and may not do.</p>
+  <p class="go">Open AI-Life-OS</p>
 </a>
 <a class="demo" href="ai-life-os/brain/index.html">
   <p class="k-kicker">Interactive map</p>
-  <h2>Second Brain</h2>
-  <p>How it all connects, as one ring map: the public notes, FirstMate's twelve parts, the skills, the posts and the pages. Click any dot for its card; posts open in a reading drawer beside the map.</p>
-  <ul><li>Ring graph</li><li>Node cards</li><li>Reading drawer</li><li>Guided tour</li></ul>
-  <p class="go">Open the Second Brain →</p>
-</a>
-<a class="demo" href="ai-life-os/course/index.html">
-  <p class="k-kicker">Start here</p>
-  <h2>Ashish's AI introductory course</h2>
-  <p>Seven short lessons with EA-bot, in a fixed order: wants and needs, Maslow, intent, and how people and AI pass it on. One reading and one question each.</p>
-  <ul><li>7 lessons</li><li>One read each</li><li>Lights up the map</li></ul>
-  <p class="go">Start the course →</p>
+  <h3>Second Brain</h3>
+  <p>How it all connects, as one ring map: the public notes, the twelve parts of the harness, the skills, the posts and the pages.</p>
+  <p class="go">Open the Second Brain</p>
 </a>
 </div>
+<div class="chat" data-start="ov8"></div>
+</section>
 
-<h2>Latest posts</h2>
+<section class="step" id="step-7" data-name="The free course, and what is next" aria-labelledby="step-7-h">
+<p class="k-kicker">Learn</p>
+<h2 id="step-7-h" tabindex="-1">The free course, and more to come</h2>
+<div class="demos">
+<a class="demo" href="ai-life-os/course/index.html">
+  <p class="k-kicker">Start here</p>
+  <h3>Ashish's AI introductory course</h3>
+  <p>Seven short lessons with EA-bot, in a fixed order: wants and needs, Maslow, intent, and how people and AI pass it on. One reading and one question each.</p>
+  <ul><li>7 lessons</li><li>One read each</li><li>Lights up the map</li></ul>
+  <p class="go">Start the course</p>
+</a>
+</div>
+<h3>More to come</h3>
+<div class="cards">
+<div class="card planned"><h3>Grill your own intent</h3><p><span class="badge">planned</span></p></div>
+<div class="card planned"><h3>Build your second brain</h3><p><span class="badge">planned</span></p></div>
+<div class="card planned"><h3>Run a small AI crew</h3><p><span class="badge">planned</span></p></div>
+</div>
+<p class="scripted">Scripted. EA-bot reads a fixed script. No AI model answers on this page.</p>
+<div class="chat" data-start="ov9"></div>
+</section>
+
+<section class="step" id="step-8" data-name="Who made this" aria-labelledby="step-8-h">
+<p class="k-kicker">Who made this</p>
+<h2 id="step-8-h" tabindex="-1">Ashish Raina</h2>
+<p class="lead">Program manager turned AI-crew operator. These are the facts already public on this site.</p>
+<div class="cards">
+<div class="card">
+<h3>What I do</h3>
+<ul>
+<li>I run a crew of AI coding agents from one chat. I write down how I steer them, check their work and keep them doing what I meant.</li>
+<li>I built the rules, hooks, work index and review flow on top of Kun Chen's open-source FirstMate.</li>
+<li>On one day, four workers ran side by side and three delivered a reviewed pull request: this site, reels4mphotos and swarm-referee.</li>
+<li>Influences: ICM (Jake Van Clief), Kun Chen's stack, Matt Pocock's skills.</li>
+</ul>
+</div>
+<div class="card" id="cv-roles">
+<h3>Roles and years</h3>
+<ul>
+<li>Senior Software Engineer, a global sportswear brand (Dec 2020 - present)</li>
+<li>Senior QA Lead, Centric Consulting (2017-2020)</li>
+<li>Senior QA Lead, MPHRx (2016)</li>
+<li>Senior Test Lead, nerdapplabs (2015-2016)</li>
+<li>QA Team Lead, ION Trading (2013-2015)</li>
+<li>Automation Analyst, Tech Mahindra (2010-2013)</li>
+<li>Senior QA Engineer, Pitney Bowes MapInfo (2008-2010)</li>
+<li>QA Engineer, Mindfire Solutions (2006-2008)</li>
+</ul>
+<h3>Education</h3>
+<ul><li>BE Electronics and Telecommunication, University of Pune (2005)</li></ul>
+</div>
+</div>
+<blockquote>"Managing a complex AI agentic bot system is sort of like managing a contract with different vendors."</blockquote>
+<p><a href="ai-life-os/about.html#vendors">The vendor practices, in a table</a>. Code and notes: <a href="https://github.com/codeami">github.com/codeami</a>.</p>
+<h3>Work you can read</h3>
 <ol class="post-list">
 <li><p class="k-kicker">Harness engineering</p><h3><a href="ai-life-os/blog/guides-and-sensors.html">Guides, sensors, and the rules I'm still begging for</a></h3><p>Mapping my agent setup onto the harness engineering frame, honestly, and picking the next three sensors</p><p class="k-meta"><time datetime="2026-11-02">2 Nov 2026</time><span>21 min read</span></p></li>
 <li><p class="k-kicker">Alignment</p><h3><a href="ai-life-os/blog/rules-from-chat-history.html">Your corrections are your next rules</a></h3><p>How I turn a week of "no, not like that" into rules my agents read, without letting them edit their own rules</p><p class="k-meta"><time datetime="2026-11-02">2 Nov 2026</time><span>6 min read</span></p></li>
 <li><p class="k-kicker">Context</p><h3><a href="ai-life-os/blog/everything-is-a-file.html">In AI, everything is a file (or a folder)</a></h3><p>Your goals, your context and your rules, written down once in plain folders and read by every AI tool you use</p><p class="k-meta"><time datetime="2026-11-02">2 Nov 2026</time><span>12 min read</span></p></li>
 </ol>
-<p><a href="ai-life-os/blog/index.html">All Field Notes →</a></p>
+<div class="next-links" id="evalLinks" hidden>
+<button class="k-btn secondary" type="button" id="watchDemo">Watch the interview demo</button>
+<a class="k-btn primary" href="ai-life-os/index.html">Open the Chart Room chat</a>
+<a class="k-btn secondary" href="ai-life-os/blog/index.html">All Field Notes</a>
+</div>
+<div class="next-links" id="learnLinks">
+<a class="k-btn primary" href="ai-life-os/blog/index.html">All Field Notes</a>
+<a class="k-btn secondary" href="ai-life-os/index.html">Open the Chart Room chat</a>
+</div>
+<div class="chat" data-start="ov10" hidden></div>
+</section>
+
+<div class="flow-nav" id="flowNav" hidden>
+<button class="k-btn secondary" type="button" id="flowBack">Back</button>
+<span class="spacer"></span>
+<button class="k-btn primary" type="button" id="flowNext">Next</button>
+</div>
+</section>
 </article>
 </main>
 <footer class="k-foot"><p>Ashish Raina – program manager turned AI-crew operator</p><p><a href="ai-life-os/about.html">About</a> · <a href="ai-life-os/blog/index.html">Field Notes</a> · <a href="ai-life-os/index.html">AI-Life-OS</a> · <a href="https://github.com/codeami">GitHub</a></p></footer>
+<script>
+(function () {
+  var flow = document.getElementById("flow");
+  var steps = [].slice.call(flow.querySelectorAll(".step"));
+  var ctx = { path: "learner" }, cur = 1, trail = [], script = null, mounted = {};
+  var $ = function (id) { return document.getElementById(id); };
+  var back = $("flowBack"), next = $("flowNext"), nav = $("flowNav");
+
+  // Without scripts every step shows. With them, one step at a time.
+  flow.className += " js";
+  nav.hidden = false;
+  // The step-8 chat (ov10) is for the course hand-off at the end of step 7, not for step 8 itself.
+  steps[7].querySelector(".chat").remove();
+
+  function mount(n) {
+    if (!script || !window.EAChat || mounted[n]) return;
+    var box = steps[n - 1].querySelector(".chat");
+    if (!box) return;
+    mounted[n] = true;
+    EAChat.mount(box, { nodes: script.nodes, start: box.dataset.start, avatar: "ai-life-os/kit/bosun.svg", ctx: ctx, onStep: function (to, path) { if (path) ctx.path = path; go(to, true); } });
+  }
+
+  function go(n, user) {
+    if (n < 1 || n > 8) return;
+    if (user && n !== cur) trail.push(cur);
+    cur = n;
+    steps.forEach(function (s, i) { s.hidden = i !== n - 1; });
+    $("flowN").textContent = n;
+    $("flowName").textContent = steps[n - 1].dataset.name;
+    $("flowFill").style.width = (n * 12.5) + "%";
+    back.hidden = !trail.length;
+    var evalPath = ctx.path === "evaluator";
+    // Learner: step 1 goes by the chat, steps 2 to 7 by Next, step 8 ends. Evaluator: 1, then 8, then the demo.
+    next.hidden = n === 1 || n === 8 || (n === 3 && evalPath && false);
+    next.textContent = n === 3 && evalPath ? "Open the Chart Room chat" : "Next";
+    $("evalLinks").hidden = !evalPath;
+    $("learnLinks").hidden = evalPath;
+    mount(n);
+    try { history.replaceState(null, "", "#step-" + n); } catch (e) { /* sandbox may refuse */ }
+    if (user) {
+      var h = steps[n - 1].querySelector("h2");
+      h.focus({ preventScroll: true });
+      flow.scrollIntoView({ block: "start" });
+    }
+  }
+
+  back.addEventListener("click", function () { if (trail.length) { go(trail.pop(), false); flow.scrollIntoView({ block: "start" }); } });
+  next.addEventListener("click", function () {
+    if (cur === 3 && ctx.path === "evaluator") location.href = "ai-life-os/index.html";
+    else go(cur + 1, true);
+  });
+  $("watchDemo").addEventListener("click", function () { ctx.path = "evaluator"; go(3, true); });
+
+  var m = /^#step-([1-8])$/.exec(location.hash);
+  go(m ? +m[1] : 1, false);
+
+  fetch("ai-life-os/tour/tour.json").then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function (t) { script = t.landing; mount(cur); })
+    .catch(function () { /* the steps read on their own without the chat */ });
+})();
+</script>
 </body>
 </html>

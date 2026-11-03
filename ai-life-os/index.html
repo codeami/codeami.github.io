@@ -24,6 +24,7 @@ html { scroll-behavior: smooth; }
 .chatcol .k-chat { flex: 1; align-content: start; padding: var(--space-4) 0; }
 .chatcol .k-row, .chatcol .opts { scroll-margin: 76px 0 90px; }
 .k-bubble p { margin: 0; }
+.k-bubble p + p { margin-top: 6px; }
 .k-bubble .see { display: inline-block; margin-top: 6px; font-size: 14px; font-weight: 700; }
 .k-bubble .k-status { display: flex; margin-top: 6px; }
 /* An example brief: the owner's words on top, Firstmate's spec below. */
@@ -164,7 +165,7 @@ html { scroll-behavior: smooth; }
 <div class="shell">
   <main class="chatcol" aria-label="Chat with EA-bot">
     <div class="k-chat" id="log" role="log" aria-live="polite">
-      <noscript><p>This chat needs JavaScript. <a href="story.html">Read the story</a> instead.</p></noscript>
+      <noscript><p>This chat needs JavaScript. <a href="blog/index.html">Read Field Notes</a> instead.</p></noscript>
     </div>
     <form class="composer" onsubmit="return false">
       <input type="text" name="message" disabled placeholder="Typing is coming soon. Pick an option." aria-label="Message (coming soon)">
@@ -182,7 +183,7 @@ html { scroll-behavior: smooth; }
     <section class="panel graph">
       <h2>Your map</h2>
       <p class="hint" id="gcap">It grows as you open topics.</p>
-      <svg id="graph" viewBox="0 0 320 250" role="group" aria-labelledby="gtitle"><title id="gtitle">Topics you opened or saved, linked to their folders</title></svg>
+      <svg id="graph" viewBox="0 -28 320 306" role="group" aria-labelledby="gtitle"><title id="gtitle">Topics you opened or saved, linked to their folders</title></svg>
       <p class="key"><span><i style="background:var(--accent)"></i>opened</span><span><i style="background:var(--pop)"></i>saved, not read</span></p>
       <button class="k-btn quiet restart" id="restart" type="button">Start over</button>
     </section>
@@ -202,7 +203,7 @@ html { scroll-behavior: smooth; }
 </section>
 
 <footer class="foot">
-  <p id="pages">Prefer to read? <a href="blog/index.html">Field Notes</a> · <a href="story.html">The story</a> · <a href="tour/index.html">Guided tour</a> · <a href="arena.html">Harness arena</a> · <a href="safety.html">Safety by design</a> · <a href="safety.html#works-today">What works today</a> · <a href="core.html">Core logic</a> · <a href="maps/skills.html">Skill map</a> · <a href="maps/flow.html">Harness flow map</a> · <a href="brain/index.html">Second brain</a> · <a href="changelog.html">Changelog</a> · <a href="kit/index.html">Style kit</a> · <a href="about.html">About</a></p>
+  <p id="pages">Prefer to read? <a href="blog/index.html">Field Notes</a> · <a href="arena.html">Harness arena</a> · <a href="safety.html">Safety by design</a> · <a href="safety.html#works-today">What works today</a> · <a href="core.html">Core logic</a> · <a href="maps/skills.html">Skill map</a> · <a href="maps/flow.html">Harness flow map</a> · <a href="brain/index.html">Second brain</a> · <a href="changelog.html">Changelog</a> · <a href="about.html">About</a></p>
   <p>The supervisor and most crew mechanics are upstream <a href="https://github.com/kunchenguid/firstmate">Firstmate</a>, MIT licence, by Kun Chen and contributors.</p>
 </footer>
 
@@ -268,6 +269,7 @@ html { scroll-behavior: smooth; }
   function factRow(node) {
     var row = botRow(node.fact);
     var b = row.lastChild;
+    (node.more || []).forEach(function (t) { b.appendChild(el("p", "", t)); });
     if (node.status) b.appendChild(el("span", "k-status warn", node.status));
     if (node.brief && I) b.appendChild(briefBox(I));
     if (node.see) {
@@ -451,7 +453,7 @@ html { scroll-behavior: smooth; }
 
   /* The map: EA-bot in the middle, a hub per folder, a dot per topic opened or saved. */
   var CX = 160, CY = 125;
-  var HUBS = [[70, 62], [250, 62], [70, 190], [250, 190]];
+  var HUBS = [[70, 62], [250, 62], [70, 190], [250, 190], [160, 20], [160, 230]];
   var drawn = {};
   function spot(id) {
     var n = byId[id];
@@ -550,7 +552,7 @@ html { scroll-behavior: smooth; }
     var b = el("div", "warnbox");
     b.appendChild(el("p", "", "The chat could not load its script, tour/tour.json. A browser blocks it from a local file."));
     var p = el("p", "", "Serve the site folder, for example with python3 -m http.server, or ");
-    var a = el("a", "", "read the story"); a.href = "story.html";
+    var a = el("a", "", "read Field Notes"); a.href = "blog/index.html";
     p.appendChild(a); p.appendChild(document.createTextNode(" instead."));
     b.appendChild(p);
     log.appendChild(b);

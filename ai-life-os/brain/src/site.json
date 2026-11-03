@@ -8,7 +8,7 @@
   {"n": "Chat with EA-bot", "state": "start here", "url": "../index.html"},
   {"n": "AI introductory course", "state": "7 lessons", "url": "../course/index.html"},
   {"n": "The story", "state": "for beginners", "url": "../story.html"},
-  {"n": "Field Notes", "state": "6 posts", "url": "../blog/index.html"},
+  {"n": "Field Notes", "state": "5 posts", "url": "../blog/index.html"},
   {"n": "Harness arena", "state": "11 setups scored", "url": "../arena.html"},
   {"n": "Safety by design", "state": "limits, honestly", "url": "../safety.html"},
   {"n": "Guided tour", "state": "step by step", "url": "../tour/index.html"},

@@ -1,12 +1,13 @@
 # codeami.github.io
 
-Personal site of Ashish Raina: a blog landing page at the root and the AI-Life-OS demo (FirstMate, the agent crew) at /ai-life-os/.
+Personal site of Ashish Raina: a whoami landing (CV and front door to the tutorials) at the root and the AI-Life-OS demo (FirstMate, the agent crew) at /ai-life-os/.
 
 Plain static files, served by GitHub Pages from the root of `main` (`.nojekyll` turns Jekyll off). To read it locally: `python3 -m http.server`, then open `/`.
 
-- `index.html`: the whoami landing. It uses the demo's kit and HUD skin from `ai-life-os/`.
+- `index.html`: the whoami landing: a guided walk in eight steps (intent first, with a fork for evaluators) over the chart. Its scripted chats are in `ai-life-os/tour/tour.json` (`landing` block), drawn by `ai-life-os/chat.js`. It uses the demo's kit and HUD skin from `ai-life-os/`.
+- `retired.json`: pages hidden but not deleted. `nav.js`, `hud.js` and `brain/build_data.py` read it (the build also writes `robots.txt`). A retired page shows a one-line notice and links to it go to its `into` page. Delete a line to republish it.
 - `blog/index.html`: a redirect. Posts have one home, `ai-life-os/blog/`.
-- `ai-life-os/`: the demo, once The Chart Room at codeami.github.io/firstmate-showcase. Its old section pages (s02 to s10, overview, harness, skills, cast, tasks, testing, vendors) were folded into the story, core logic, safety and about pages and are not carried here.
+- `ai-life-os/`: the demo, once The Chart Room at codeami.github.io/firstmate-showcase. Its old section pages (s02 to s10, overview, harness, skills, cast, tasks, testing, vendors) were folded into the Chart Room chat, core logic, safety and about pages and are not carried here.
 
 The layout is Chart & Cards. The chart is the second brain, a live ring map (`ai-life-os/brain/graph.js`, the AIO prototype's page fed only public data), and it is the base layer of every page. Each page is a card over it: a right-hand panel on wide screens, a bottom sheet on phones, with minimise and close. `ai-life-os/hud.js` mounts the chart and turns the page into the card. A link to another page swaps the card in place when that page has no inline script, otherwise the browser loads it; either way each page keeps its own URL. `hud.js` also adds the version tag (`VERSION`), the Second Brain tab, the whoami link and the GitHub link to the header. HUD and Matrix are the two colour sets.
 

@@ -14,7 +14,9 @@
       { "id": "work", "title": "How I work" },
       { "id": "safety", "title": "Checks and safety" },
       { "id": "memory", "title": "Memory" },
-      { "id": "us", "title": "You and me" }
+      { "id": "us", "title": "You and me" },
+      { "id": "story", "title": "From the very beginning" },
+      { "id": "tour", "title": "Guided tour" }
     ],
     "root": "root",
     "nodes": [
@@ -22,7 +24,7 @@
         "id": "root", "title": "EA-bot",
         "fact": "First surprise: I'm not the model. I'm the harness around it: the rules, tools, checks and notes that make a model useful.",
         "see": { "label": "Core logic", "href": "core.html" },
-        "next": ["work", "safety", "memory"]
+        "next": ["st-start", "work", "safety"]
       },
       {
         "id": "work", "folder": "work", "title": "Jobs side by side", "chip": "How do you get work done?",
@@ -34,7 +36,7 @@
         "id": "intent", "folder": "work", "title": "Intent, not steps", "chip": "How do I ask for something?",
         "fact": "You describe what done looks like, and the crew picks how. Here is an example brief.",
         "brief": true,
-        "see": { "label": "Tour: intent engineering", "href": "tour/index.html#intent" },
+        "see": { "label": "Core logic: the pipeline", "href": "core.html#pipeline" },
         "next": ["pipeline", "worktree", "buttons"]
       },
       {
@@ -64,7 +66,7 @@
       {
         "id": "scripts", "folder": "work", "title": "Scripts, not guesses", "chip": "How do you stay fast?",
         "fact": "Work that must go the same way every time moves out of the model and into scripts: hooks, checks and builders. They are faster, cheaper and never guess.",
-        "see": { "label": "Tour: performance", "href": "tour/index.html#performance" },
+        "see": { "label": "Harness flow map", "href": "maps/flow.html" },
         "next": ["index", "hooks", "running"]
       },
       {
@@ -136,13 +138,13 @@
       {
         "id": "charter", "folder": "us", "title": "The charter", "chip": "What's our deal?",
         "fact": "A chatbot sets no contract. We do. We both organize life and build knowledge. The third task matters most: teach it to each other, and check the other has learned it.",
-        "see": { "label": "Guided tour", "href": "tour/index.html" },
-        "next": ["teachback", "modes", "vendor"]
+        "see": { "label": "About: agents as vendors", "href": "about.html#vendors" },
+        "next": ["teachback", "tour-start", "vendor"]
       },
       {
         "id": "teachback", "folder": "us", "title": "Teach it back", "chip": "How do you check I learned it?",
-        "fact": "At the end of a tour track I ask you to teach it back in your own words. A teach-back shows the gaps a re-read hides.",
-        "see": { "label": "Guided tour", "href": "tour/index.html" },
+        "fact": "At the end of a learning track I ask you to teach it back in your own words. A teach-back shows the gaps a re-read hides.",
+        "see": { "label": "The free course", "href": "course/index.html" },
         "next": ["charter", "brain", "modes"]
       },
       {
@@ -150,6 +152,242 @@
         "fact": "Like a contract with vendors. You scope the work, write down who may do what, ask for status, and accept work only on evidence.",
         "see": { "label": "About: agents as vendors", "href": "about.html#vendors" },
         "next": ["buttons", "charter", "running"]
+      },
+      {
+        "id": "st-start", "folder": "story", "title": "What an AI assistant is", "chip": "I'm new here. Start at the very beginning.",
+        "fact": "Then we start with no jargon. You may have chatted with an AI like ChatGPT or Claude. You type a message, and it writes back.",
+        "more": [
+          "Underneath is a model: a program that has read a huge amount of text and is very good at writing what comes next.",
+          "On its own, a model only talks. It can't open your files, check its own work, or remember yesterday."
+        ],
+        "next": ["st-harness", "models"]
+      },
+      {
+        "id": "st-harness", "folder": "story", "title": "What a harness is", "chip": "So how does it do real work?",
+        "fact": "It needs a harness. Think of a horse: the horse does the pulling, and the harness makes the pulling go where you want.",
+        "more": [
+          "For AI, the harness is everything around the model: the rules it reads, the tools it may use, the checks on its work, and the notes it keeps.",
+          "That's me. I'm not the model. I'm the harness around it."
+        ],
+        "see": { "label": "Core logic: the twelve parts", "href": "core.html" },
+        "next": ["st-crew", "models"]
+      },
+      {
+        "id": "st-crew", "folder": "story", "title": "Why a crew", "chip": "Why a whole crew of helpers?",
+        "fact": "One helper doing everything is like one person running a whole office. It gets slow, and things get mixed up.",
+        "more": [
+          "So the work is split. You talk only to me. I turn your ask into jobs and hand each job to a worker.",
+          "Each worker gets a written brief, with one task and what done looks like, and its own copy of the work. Nobody trips over anybody, and your main copy stays safe.",
+          "Some workers find things out and write a report. Others change code and send it back as a pull request: a proposed change that waits for review."
+        ],
+        "see": { "label": "Harness flow map", "href": "maps/flow.html" },
+        "next": ["st-checks", "pipeline"]
+      },
+      {
+        "id": "st-checks", "folder": "story", "title": "How the work is checked", "chip": "How do you know their work is right?",
+        "fact": "First, each worker checks its own work. It runs the tests, and it backs each claim with proof.",
+        "more": [
+          "Then automatic checks run before work leaves the machine: a review, tests, and a scan for secrets like passwords.",
+          "To be honest: some limits are scripts that can't be skipped, and some are still only written rules. Safety by design says which is which."
+        ],
+        "see": { "label": "Safety by design", "href": "safety.html" },
+        "next": ["st-captain", "hooks"]
+      },
+      {
+        "id": "st-captain", "folder": "story", "title": "What the captain decides", "chip": "So what do I still decide?",
+        "fact": "You're the captain. The crew does the work. You make the calls.",
+        "more": [
+          "Only you can accept a change into the main copy, publish, send, delete, or spend money.",
+          "The crew can even suggest better rules for itself. It proposes. You approve each one. It never rewrites its own rules."
+        ],
+        "see": { "label": "Core logic: human approval", "href": "core.html#part-approval" },
+        "next": ["st-memory", "buttons"]
+      },
+      {
+        "id": "st-memory", "folder": "story", "title": "Memory is files", "chip": "Do you remember anything?",
+        "fact": "Not in my head. In files.",
+        "more": [
+          "One short rules file, the map, is read first by every helper. Notes from each session are saved, and the next session starts from them.",
+          "Because it's all files, you can read exactly what each helper was told."
+        ],
+        "see": { "label": "Post: everything is a file", "href": "blog/everything-is-a-file.html" },
+        "next": ["st-real", "memory"]
+      },
+      {
+        "id": "st-real", "folder": "story", "title": "Is it real", "chip": "Is this real, or a design?",
+        "fact": "It's real. It's in daily use on the owner's machine. One of my workers built these pages.",
+        "more": [
+          "On one day, four workers ran side by side, and three delivered a reviewed pull request: this site, reels4mphotos and swarm-referee.",
+          "Not everything works yet, and this site says so. What works today lists both."
+        ],
+        "see": { "label": "Safety: what works today", "href": "safety.html#works-today" },
+        "next": ["vendor", "tour-start", "honest"]
+      },
+      {
+        "id": "tour-start", "folder": "tour", "title": "What I can do for you", "chip": "What can you do for me?",
+        "fact": "Five things: help you get organized, manage your knowledge, show you our way of keeping notes, help you build your own second brain, and help you learn something hard. Pick one.",
+        "see": { "label": "Skill map", "href": "maps/skills.html" },
+        "next": ["tour-organize", "tour-knowledge", "tour-build"]
+      },
+      {
+        "id": "tour-organize", "folder": "tour", "title": "Help you organize", "chip": "Help me get organized.",
+        "fact": "Hand me the whole to-do pile. I sort it into jobs, run them side by side, and check each result. You decide before anything sends, pays, merges or deletes.",
+        "see": { "label": "Core logic: the pipeline", "href": "core.html#pipeline" },
+        "next": ["tour-knowledge", "pipeline", "buttons"]
+      },
+      {
+        "id": "tour-knowledge", "folder": "tour", "title": "Manage your knowledge", "chip": "Help me manage what I know.",
+        "fact": "What we learn goes into a second brain: caught the same day, sorted, and linked. My own rules get updated too, and you approve each change.",
+        "see": { "label": "Second brain map", "href": "brain/index.html" },
+        "next": ["tour-ours", "learn", "memory"]
+      },
+      {
+        "id": "tour-ours", "folder": "tour", "title": "Use our way of keeping notes", "chip": "How do you keep notes?",
+        "fact": "It's opinionated: one idea per note, a one-line description on each, a link from every new note to a neighbour, and nothing filed until you approve it.",
+        "see": { "label": "Post: everything is a file", "href": "blog/everything-is-a-file.html" },
+        "next": ["tour-build", "tour-learn", "index"]
+      },
+      {
+        "id": "tour-build", "folder": "tour", "title": "Build your own second brain", "chip": "Help me build my own second brain.",
+        "fact": "Start from scratch with plain files: three parts, then your first linked notes, then a review rhythm.",
+        "see": { "label": "Post: everything is a file", "href": "blog/everything-is-a-file.html" },
+        "next": ["tour-learn", "tour-ours", "brain"]
+      },
+      {
+        "id": "tour-learn", "folder": "tour", "title": "Learn deeply", "chip": "Help me learn something hard.",
+        "fact": "Pick one hard topic, learn it by teaching it back to me, and file what you learned. The route comes from the LearnHarness project.",
+        "see": { "label": "LearnHarness on GitHub", "href": "https://github.com/amosblomqvist/learnharness" },
+        "next": ["teachback", "tour-build", "brain"]
+      }
+    ]
+  },
+  "landing": {
+    "about": "The scripted chats on the site root (index.html), drawn by chat.js in the same node format as the chat block above. Links are relative to the site root. A next entry is a node id, {label, step} to move the landing to that step, or {label, href}; if and unless limit an entry to a path. Sam, the dog and the plan are made up. No model answers: the page only shows what is written here.",
+    "label": "Scripted. EA-bot reads a fixed script. No AI model answers on this page.",
+    "nodes": [
+      {
+        "id": "ov1",
+        "fact": "I'm EA-bot, the executive assistant in Ashish's setup. This chat is a fixed script, so I can only say what is written here.",
+        "next": ["ov2", { "label": "I'm hiring. Show me the work.", "step": 8, "path": "evaluator" }]
+      },
+      {
+        "id": "ov2", "chip": "What can AI do now?",
+        "fact": "Today's AI models read and write plain English well. Ask for a plan, a draft or a small program, and you often get a usable first version in minutes.",
+        "more": ["Good help also starts from who you are. Here is the kind of picture I can keep of a person. Sam is made up."],
+        "chart": {
+          "title": "Sam's personality chart (made-up example: Sam)",
+          "note": "Every value and every evidence line is invented for this demo. Scale 0 to 20. The confidence word says how sure the evidence makes me.",
+          "max": 20,
+          "groups": [
+            {
+              "name": "Big Five",
+              "rows": [
+                { "label": "Openness", "value": 15, "conf": "medium", "evidence": "Tried three new hobbies last year, kept one." },
+                { "label": "Conscientiousness", "value": 17, "conf": "high", "evidence": "Pays bills the day they arrive." },
+                { "label": "Extraversion", "value": 7, "conf": "medium", "evidence": "Prefers a quiet evening to a party." },
+                { "label": "Agreeableness", "value": 14, "conf": "low", "evidence": "Only two examples so far." },
+                { "label": "Neuroticism (stress)", "value": 9, "conf": "medium", "evidence": "Stays calm in a crisis, worries in advance." }
+              ]
+            },
+            {
+              "name": "Working style",
+              "rows": [
+                { "label": "Pace", "value": 12, "conf": "medium", "evidence": "Steady, rarely rushed." },
+                { "label": "Delegation", "value": 6, "conf": "high", "evidence": "Does most things alone, even when busy." },
+                { "label": "Novelty appetite", "value": 14, "conf": "low", "evidence": "Likes new tools, but one story only." },
+                { "label": "Need for structure", "value": 18, "conf": "high", "evidence": "Keeps a weekly plan and follows it." },
+                { "label": "Review and control", "value": 16, "conf": "medium", "evidence": "Re-reads every message before sending." },
+                { "label": "Outside memory", "value": 5, "conf": "low", "evidence": "Keeps most things in their head." }
+              ]
+            }
+          ]
+        },
+        "next": ["ov3"]
+      },
+      {
+        "id": "ov3", "chip": "So what's the catch?",
+        "fact": "It works from your words, and your words are a lossy copy of what you want. Where you leave a gap, it fills it with a guess, often a confident one.",
+        "more": ["Which way do you want to go?"],
+        "next": [{ "label": "Walk me through it (about 10 min)", "step": 2, "path": "learner" }, { "label": "I'm hiring or evaluating", "step": 8, "path": "evaluator" }]
+      },
+      {
+        "id": "ov4",
+        "fact": "Can't it just ask? It can, if you let it. Newer models are better at reading what you mean. No model can read what you have not decided yet. So let it interview you first.",
+        "next": [{ "label": "Show me.", "step": 3 }]
+      },
+      {
+        "id": "d1",
+        "fact": "Here is an interview before any explanation. Sam is made up. Sam tells me: \"I want a dog.\"",
+        "more": ["Before I look for a breeder, I ask in rounds. Each question comes with a suggested answer, and you tap to take it."],
+        "next": ["d2"]
+      },
+      {
+        "id": "d2", "chip": "Start the interview.",
+        "fact": "Round 1 of 3: daily life.",
+        "more": [
+          "1. Who walks the dog at seven in the morning? Suggested: Sam, before work.",
+          "2. What can Sam spend each month? Suggested: about 120.",
+          "3. Who keeps the dog when Sam travels? Suggested: Sam's sister, two weekends a year."
+        ],
+        "next": ["d3"]
+      },
+      {
+        "id": "d3", "chip": "Take the suggested answers.", "you": "Sam walks it at seven. About 120 a month. Sam's sister keeps it on trips.",
+        "fact": "Round 2 of 3: what the dog is for.",
+        "more": [
+          "1. Is the dog for company, exercise, or a routine? Suggested: company in the evenings.",
+          "2. What would Sam regret in a year? Suggested: a dog left alone ten hours a day.",
+          "3. Does the lease allow a pet? Suggested: yes, up to two."
+        ],
+        "next": ["d4"]
+      },
+      {
+        "id": "d4", "chip": "Take the suggested answers.", "you": "Company in the evenings. Not a dog left alone all day. The lease allows it.",
+        "fact": "Round 3 of 3: how Sam will know.",
+        "more": [
+          "1. How would Sam know it is working? Suggested: a calm evening walk most days.",
+          "2. What is a cheap way to test first? Suggested: foster a dog for two weeks.",
+          "3. When does Sam decide? Suggested: at the end of the foster."
+        ],
+        "next": ["d5"]
+      },
+      {
+        "id": "d5", "chip": "Take the suggested answers.", "you": "A calm evening walk most days. A two-week foster first. Decide after it.",
+        "fact": "Three rounds, and the plan is on one card.",
+        "card": {
+          "title": "Sam's dog (made-up example)",
+          "rows": [
+            ["Current state", "Sam lives alone, works weekdays and has no dog."],
+            ["Ideal state", "A dog that gives Sam company in the evenings and a reason to walk, for about 120 a month."],
+            ["Criterion", "Done when a two-week foster fits the weekday schedule."]
+          ]
+        },
+        "next": [{ "label": "Why ask first?", "step": 4, "unless": "evaluator" }, { "label": "Open the Chart Room chat", "href": "ai-life-os/index.html", "if": "evaluator" }]
+      },
+      {
+        "id": "ov6",
+        "fact": "Each answer moves you from where you are to a clear picture of where you want to be, with a check anyone can run. If you cannot say what done looks like, I cannot either.",
+        "next": [{ "label": "Map your own intent", "step": 5 }]
+      },
+      {
+        "id": "ov7",
+        "fact": "The same questions work for bigger wants: a degree, a career move, a cause you want to give time to. Under each want sits a need, such as safety, belonging, respect or growth. Name the need, and you can judge the want.",
+        "next": [{ "label": "How the AIs carry it", "step": 6 }]
+      },
+      {
+        "id": "ov8",
+        "fact": "Many people use AI in three places: home, work, and a passion. They pull apart unless they share one picture of what you are trying to do. In this setup I keep that picture: goals as plain files, notes in a second brain, and a crew that works from both.",
+        "next": [{ "label": "Start the free course", "step": 7 }]
+      },
+      {
+        "id": "ov9",
+        "fact": "Plainly: I can be wrong and sound sure. I don't know your life unless you write it down. Some of what you see here is still a design, and each page says which parts. I promise no results.",
+        "next": ["ov10"]
+      },
+      {
+        "id": "ov10", "chip": "Where do I start?",
+        "fact": "Two ways in: the free course, seven short lessons on needs and intent, or who built this and how he works.",
+        "next": [{ "label": "Start the course", "href": "ai-life-os/course/index.html" }, { "label": "Who built this?", "step": 8 }]
       }
     ]
   },
