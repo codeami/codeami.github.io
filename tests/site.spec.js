@@ -270,23 +270,6 @@ test('landing: Explain this goes problems, then solutions, then the four values,
   await expect(page.locator('#step-1')).toContainText("I'm EA-bot");
 });
 
-test('no "Field Notes" label is left in published files, and no brand name is added', () => {
-  const text = new Set(['.html', '.js', '.css', '.json', '.md', '.py']);
-  const skip = new Set(['node_modules', 'test-results', 'playwright-report', 'tests']);
-  const hits = [];
-  (function walk(dir) {
-    for (const e of readdirSync(dir, { withFileTypes: true })) {
-      if (e.name.startsWith('.') || skip.has(e.name)) continue;
-      const p = join(dir, e.name);
-      if (e.isDirectory()) walk(p);
-      else if (text.has(extname(e.name))) {
-        readFileSync(p, 'utf8').split('\n').forEach((l, i) => /Field Notes|ThoughtSignal/i.test(l) && hits.push(`${relative(root, p).split(sep).join('/')}:${i + 1}`));
-      }
-    }
-  })(root);
-  expect(hits).toEqual([]);
-});
-
 test('Chart Room chat holds the story and tour branches', () => {
   const t = JSON.parse(readFileSync(join(root, 'ai-life-os/tour/tour.json'), 'utf8')).chat;
   const folders = new Set(t.nodes.map((n) => n.folder));

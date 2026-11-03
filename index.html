@@ -443,7 +443,9 @@
   // "Explain this": the journey replaces the page until it hands over to the walk below.
   var explain = $("explain"), intro = $("intro"), jbox = $("journeyChat");
   explain.hidden = true;
+  var failed = false;
   function journey(on) {
+    if (on && failed) return;
     explain.hidden = !on; intro.hidden = on; flow.hidden = on;
     if (!on) return;
     try { history.replaceState(null, "", "#explain"); } catch (e) { /* sandbox may refuse */ }
@@ -460,10 +462,11 @@
 
   var m = /^#step-([1-8])$/.exec(location.hash);
   go(m ? +m[1] : 1, false);
+  if (location.hash === "#explain") journey(true);
 
   fetch("ai-life-os/tour/tour.json").then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
     .then(function (t) { script = t.landing; mount(cur); mountJourney(); })
-    .catch(function () { /* the steps read on their own without the chat */ });
+    .catch(function () { failed = true; if (!explain.hidden) journey(false); });
 })();
 </script>
 </body>
