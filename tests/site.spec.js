@@ -167,7 +167,7 @@ test('landing: eight steps with the fork, no sideways scroll, no console errors,
   page.on('console', (m) => m.type() === 'error' && problems.push(m.text()));
   page.on('pageerror', (e) => problems.push(e.message));
   await page.route('**/*', (route) => (route.request().url().startsWith(origin) ? route.continue() : route.fulfill({ status: 200, body: '' })));
-  await page.goto('/');
+  await page.goto('/#step-1'); // a step link opens the page card; plain "/" stays calm
   await expect(page.locator('#flowN')).toHaveText('1');
   await page.getByRole('button', { name: 'What can AI do now?' }).click();
   await page.getByRole('button', { name: "So what's the catch?" }).click();
@@ -181,7 +181,7 @@ test('landing: eight steps with the fork, no sideways scroll, no console errors,
     expect(w.s, `step ${n} page width`).toBeLessThanOrEqual(w.c);
     expect(Math.max(0, ...w.o), `step ${n} card width`).toBeLessThanOrEqual(0);
   }
-  await page.goto('/');
+  await page.goto('/#step-1');
   await page.getByRole('button', { name: "I'm hiring. Show me the work." }).click();
   await expect(page.locator('#flowN')).toHaveText('8');
   const html = await page.content();
@@ -191,7 +191,7 @@ test('landing: eight steps with the fork, no sideways scroll, no console errors,
 });
 
 test("landing: the first reply shows Sam's made-up personality chart", async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/#step-1');
   await page.getByRole('button', { name: 'What can AI do now?' }).click();
   const chart = page.locator('.pchart');
   await expect(chart).toContainText('made-up example: Sam');
@@ -221,6 +221,53 @@ test("landing: the dog interview ends on Sam's criterion", async ({ page }) => {
   await page.getByRole('button', { name: 'Start the interview.' }).click();
   for (let i = 0; i < 3; i++) await page.locator('.chat .k-chip:not([disabled])', { hasText: 'Take the suggested answers.' }).click();
   await expect(page.locator('.chat-card')).toContainText('Done when a two-week foster fits the weekday schedule.');
+});
+
+// ---- the calm landing: chart first, one Explain this button, the journey ----
+const explainBtn = (page) => page.locator('#askBar').getByRole('button', { name: 'Explain this', exact: true });
+
+test('landing: opens on the chart alone, with the nav label Blog and one Explain this button', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('#pageov')).toBeHidden();
+  await expect(page.getByRole('button', { name: 'Show page' })).toBeVisible();
+  await expect(page.locator('.k-nav').getByRole('link', { name: 'Blog' })).toHaveAttribute('href', 'http://127.0.0.1:4173/ai-life-os/blog/index.html');
+  await expect(explainBtn(page)).toBeVisible();
+  const others = ['Tour the map', 'What do the shapes mean?', 'How do I find something?', 'Show me the skill map'];
+  for (const q of others) await expect(page.locator('#askBar').getByText(q)).toBeHidden();
+  await page.locator('#askBar').getByRole('button', { name: 'More' }).click();
+  for (const q of others) await expect(page.locator('#askBar').getByText(q)).toBeVisible();
+});
+
+test('landing: the visitor\'s choice to show or hide the page is remembered', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Show page' }).click();
+  await expect(page.locator('#pageov')).toBeVisible();
+  await page.reload();
+  await expect(page.locator('#pageov')).toBeVisible();
+  await page.getByRole('button', { name: 'Close the page and show the whole map' }).click();
+  await page.reload();
+  await expect(page.locator('#pageov')).toBeHidden();
+});
+
+test('landing: Explain this goes problems, then solutions, then the four values, then the walk', async ({ page }) => {
+  await page.goto('/');
+  await explainBtn(page).click();
+  const chat = page.locator('#journeyChat');
+  const shot = (n) => expect(page).toHaveScreenshot(`landing-journey-${n}.png`, { mask: [page.locator('canvas')] });
+  for (const p of ['Too much noise', 'Scattered notes and goals', 'AI that guesses what you want', 'Agents nobody can trust']) await expect(chat).toContainText(p);
+  await expect(chat).not.toContainText('Signal from noise');
+  await shot(1);
+  await chat.getByRole('button', { name: 'How do you solve them?' }).click();
+  await expect(chat).toContainText('One written intent, one place for it all, and a crew you can check.');
+  await expect(chat).not.toContainText('Signal from noise');
+  await shot(2);
+  await chat.getByRole('button', { name: 'What do you stand for?' }).click();
+  for (const v of ['Signal from noise.', 'Customize everything, including yourself.', 'Self-learning, evolving, powerful yet safe AI bot-swarm managers that work toward your needs.', 'Smart goal tracking that harmonises your wants.']) await expect(chat).toContainText(v);
+  await shot(3);
+  await chat.getByRole('button', { name: 'Show me how it works' }).click();
+  await expect(page.locator('#explain')).toBeHidden();
+  await expect(page.locator('#flowN')).toHaveText('1');
+  await expect(page.locator('#step-1')).toContainText("I'm EA-bot");
 });
 
 test('Chart Room chat holds the story and tour branches', () => {

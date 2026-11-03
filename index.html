@@ -4,8 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
+<meta name="calm-landing" content="chart first: hud.js opens the page card only when asked">
+
 <title>Ashish Raina · whoami</title>
-<meta name="description" content="Ashish Raina: program manager turned AI-crew operator. A guided walk from what AI can do now to asking it well, with a free course, Field Notes and AI-Life-OS, a live demo of the setup.">
+<meta name="description" content="Ashish Raina: program manager turned AI-crew operator. A guided walk from what AI can do now to asking it well, with a free course, a blog and AI-Life-OS, a live demo of the setup.">
 <link rel="stylesheet" href="ai-life-os/hud.css">
 <script src="ai-life-os/article.js"></script>
 <link rel="icon" href="ai-life-os/kit/bosun.svg" type="image/svg+xml">
@@ -112,10 +114,22 @@
 <body>
 <header class="k-nav">
   <a class="k-home" href="index.html"><img class="k-mark" src="ai-life-os/kit/bosun.svg" alt=""><span class="k-logo">Ashish Raina<small>whoami</small></span></a>
-  <nav aria-label="Site"><a href="ai-life-os/blog/index.html">Field Notes</a><a href="ai-life-os/index.html">AI-Life-OS</a><a href="ai-life-os/course/index.html">Course</a><a href="ai-life-os/brain/index.html">Second Brain</a><a href="ai-life-os/about.html">About</a><button class="theme" id="theme" type="button">Matrix</button></nav>
+  <nav aria-label="Site"><a href="ai-life-os/blog/index.html">Blog</a><a href="ai-life-os/index.html">AI-Life-OS</a><a href="ai-life-os/course/index.html">Course</a><a href="ai-life-os/brain/index.html">Second Brain</a><a href="ai-life-os/about.html">About</a><button class="theme" id="theme" type="button">Matrix</button></nav>
 </header>
 <main class="page">
 <article class="k-article">
+<!-- "Explain this" (the one button on the calm landing): the journey is problems, then how they are solved, then the four values, then the walk below. -->
+<section class="explain" id="explain" aria-labelledby="explain-h">
+<p class="k-kicker">Explain this</p>
+<h2 id="explain-h" tabindex="-1">The problems, and how we solve them</h2>
+<p class="scripted">Scripted. EA-bot reads a fixed script. No AI model answers on this page.</p>
+<div class="chat" id="journeyChat" data-start="j1"><noscript>
+<p>Four problems: too much noise; scattered notes and goals; AI that guesses what you want; agents nobody can trust.</p>
+<p>The answer: one written intent, one place for it all, and a crew you can check.</p>
+<p>Four values: signal from noise; customize everything, including yourself; self-learning, evolving, powerful yet safe AI bot-swarm managers that work toward your needs; smart goal tracking that harmonises your wants.</p>
+</noscript></div>
+</section>
+<div id="intro">
 <aside class="law" aria-label="How we expect you to use AI">
 <p class="k-kicker">How we expect you to use AI</p>
 <blockquote>“While Parkinson's Law states that work expands to fill the time available for its completion, its inverse - Horstman's Law, the Law of Forced Efficiency - states that work contracts to fit the time allocated for its completion.”</blockquote>
@@ -125,6 +139,7 @@
 <p class="k-kicker">whoami</p>
 <h1 class="k-title">Ashish Raina</h1>
 <p class="k-dek who">Program manager turned AI-crew operator. I run a crew of AI coding agents from one chat, and I write down how I steer them, check their work and keep them doing what I meant.</p>
+</div>
 
 <section class="flow" id="flow" aria-label="A guided walk in eight steps">
 <p class="flow-bar"><span>Step <b id="flowN">1</b> of 8</span><span id="flowName">What AI can do now</span></p>
@@ -353,10 +368,10 @@
 <div class="next-links" id="evalLinks" hidden>
 <button class="k-btn secondary" type="button" id="watchDemo">Watch the interview demo</button>
 <a class="k-btn primary" href="ai-life-os/index.html">Open the Chart Room chat</a>
-<a class="k-btn secondary" href="ai-life-os/blog/index.html">All Field Notes</a>
+<a class="k-btn secondary" href="ai-life-os/blog/index.html">All posts</a>
 </div>
 <div class="next-links" id="learnLinks">
-<a class="k-btn primary" href="ai-life-os/blog/index.html">All Field Notes</a>
+<a class="k-btn primary" href="ai-life-os/blog/index.html">All posts</a>
 <a class="k-btn secondary" href="ai-life-os/index.html">Open the Chart Room chat</a>
 </div>
 <div class="chat" data-start="ov10" hidden></div>
@@ -370,7 +385,7 @@
 </section>
 </article>
 </main>
-<footer class="k-foot"><p>Ashish Raina – program manager turned AI-crew operator</p><p><a href="ai-life-os/about.html">About</a> · <a href="ai-life-os/blog/index.html">Field Notes</a> · <a href="ai-life-os/index.html">AI-Life-OS</a> · <a href="https://github.com/codeami">GitHub</a></p></footer>
+<footer class="k-foot"><p>Ashish Raina – program manager turned AI-crew operator</p><p><a href="ai-life-os/about.html">About</a> · <a href="ai-life-os/blog/index.html">Blog</a> · <a href="ai-life-os/index.html">AI-Life-OS</a> · <a href="https://github.com/codeami">GitHub</a></p></footer>
 <script>
 (function () {
   var flow = document.getElementById("flow");
@@ -409,7 +424,8 @@
     $("evalLinks").hidden = !evalPath;
     $("learnLinks").hidden = evalPath;
     mount(n);
-    try { history.replaceState(null, "", "#step-" + n); } catch (e) { /* sandbox may refuse */ }
+    // The first draw leaves the address alone: the calm landing is "/", and a hash would open the page card.
+    if (user || m) { try { history.replaceState(null, "", "#step-" + n); } catch (e) { /* sandbox may refuse */ } }
     if (user) {
       var h = steps[n - 1].querySelector("h2");
       h.focus({ preventScroll: true });
@@ -424,12 +440,33 @@
   });
   $("watchDemo").addEventListener("click", function () { ctx.path = "evaluator"; go(3, true); });
 
+  // "Explain this": the journey replaces the page until it hands over to the walk below.
+  var explain = $("explain"), intro = $("intro"), jbox = $("journeyChat");
+  explain.hidden = true;
+  var failed = false;
+  function journey(on) {
+    if (on && failed) return;
+    explain.hidden = !on; intro.hidden = on; flow.hidden = on;
+    if (!on) return;
+    try { history.replaceState(null, "", "#explain"); } catch (e) { /* sandbox may refuse */ }
+    mountJourney();
+    $("explain-h").focus({ preventScroll: true });
+    explain.scrollIntoView({ block: "start" });
+  }
+  function mountJourney() {
+    if (explain.hidden || !script || !window.EAChat) return;
+    jbox.textContent = ""; jbox.className = "chat";
+    EAChat.mount(jbox, { nodes: script.nodes, start: jbox.dataset.start, avatar: "ai-life-os/kit/bosun.svg", ctx: ctx, onStep: function (to, path) { if (path) ctx.path = path; journey(false); go(to, true); } });
+  }
+  window.addEventListener("explain", function () { journey(true); });
+
   var m = /^#step-([1-8])$/.exec(location.hash);
   go(m ? +m[1] : 1, false);
+  if (location.hash === "#explain") journey(true);
 
   fetch("ai-life-os/tour/tour.json").then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
-    .then(function (t) { script = t.landing; mount(cur); })
-    .catch(function () { /* the steps read on their own without the chat */ });
+    .then(function (t) { script = t.landing; mount(cur); mountJourney(); })
+    .catch(function () { failed = true; if (!explain.hidden) journey(false); });
 })();
 </script>
 </body>

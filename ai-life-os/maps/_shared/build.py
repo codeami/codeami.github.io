@@ -55,7 +55,7 @@ legend = f'<div class="sm-key" aria-label="Legend"><span class="kt">Legend</span
 
 # The site's main pages and both maps. A map marks itself as current.
 here = out.name
-LINKS = [("../blog/index.html", "Field Notes"), ("../core.html", "Core logic"), ("skills.html", "Skill map"),
+LINKS = [("../blog/index.html", "Blog"), ("../core.html", "Core logic"), ("skills.html", "Skill map"),
          ("flow.html", "Harness flow"), ("../safety.html", "Safety"), ("../brain/index.html", "Second Brain")]
 CUR = ' aria-current="page"'
 VERSION, REPO = "v1.0", "https://github.com/codeami/codeami.github.io"

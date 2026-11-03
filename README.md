@@ -4,8 +4,8 @@ Personal site of Ashish Raina: a whoami landing (CV and front door to the tutori
 
 Plain static files, served by GitHub Pages from the root of `main` (`.nojekyll` turns Jekyll off). To read it locally: `python3 -m http.server`, then open `/`.
 
-- `index.html`: the whoami landing: a guided walk in eight steps (intent first, with a fork for evaluators) over the chart. Its scripted chats are in `ai-life-os/tour/tour.json` (`landing` block), drawn by `ai-life-os/chat.js`. It uses the demo's kit and HUD skin from `ai-life-os/`.
 - `share.json`: one entry for every published page (`public`, `link-only` or `retired`); a test fails when a page has none. Pages that are not public are hidden from the nav and the chart but not deleted. `nav.js`, `hud.js` and `brain/build_data.py` read it (the build also writes `robots.txt`, listing retired pages only). A link-only page stays reachable and the build writes a static noindex meta into it; it is not in `robots.txt`. A retired page shows a one-line notice and links to it go to its `into` page. Set a page to `public` to republish it.
+- `index.html`: the whoami landing: a calm first view over the chart with one "Explain this" button. It opens a short journey (the problems, how they are solved, the four values; deep link `#explain`) that hands over to a guided walk in eight steps (intent first, with a fork for evaluators). Its scripted chats are in `ai-life-os/tour/tour.json` (`landing` block), drawn by `ai-life-os/chat.js`. It uses the demo's kit and HUD skin from `ai-life-os/`.
 - `blog/index.html`: a redirect. Posts have one home, `ai-life-os/blog/`.
 - `ai-life-os/`: the demo, once The Chart Room at codeami.github.io/firstmate-showcase. Its old section pages (s02 to s10, overview, harness, skills, cast, tasks, testing, vendors) were folded into the Chart Room chat, core logic, safety and about pages and are not carried here.
 
@@ -13,14 +13,14 @@ The layout is Chart & Cards. The chart is the second brain, a live ring map (`ai
 
 `ai-life-os/course/index.html` is Ashish's AI introductory course: EA-bot reads seven lessons in a fixed order from `ai-life-os/course/course.json`. Progress stays in the reader's localStorage (`ai-course:v1`); `graph.js` reads it to light each finished lesson in the Course room, and `build_data.py` builds that room from the same file.
 
-`ai-life-os/brain/index.html` shows the chart alone. Its data, `brain/brain-data.json`, is built from public files only (the approved notes in `notes.js`, `brain/src/extra.json`, `brain/src/site.json`, the skill map and the Field Notes list): `python3 -I ai-life-os/brain/build_data.py`.
+`ai-life-os/brain/index.html` shows the chart alone. Its data, `brain/brain-data.json`, is built from public files only (the approved notes in `notes.js`, `brain/src/extra.json`, `brain/src/site.json`, the skill map and the Blog list): `python3 -I ai-life-os/brain/build_data.py`.
 
 The two maps, `ai-life-os/maps/skills.html` and `flow.html`, are built files. Edit `ai-life-os/maps/src/*/map.json` or the shell in `ai-life-os/maps/_shared/` (from [super-board](https://github.com/EricTechPro/super-board) by EricTechPro, MIT; see its NOTICE), then rebuild:
 
     python3 -I ai-life-os/maps/_shared/build.py ai-life-os/maps/src/skills/map.json ai-life-os/maps/skills.html
     python3 -I ai-life-os/maps/_shared/build.py ai-life-os/maps/src/flow/map.json ai-life-os/maps/flow.html
 
-The Field Notes posts, `ai-life-os/blog/index.html` and `ai-life-os/arena.html` are built from the owner's private drafts by a script kept outside this repo. Their links to the retired pages were repointed here by hand, so the next rebuild needs the same mapping (for example `overview.html` becomes `index.html#pages`).
+The Blog posts, `ai-life-os/blog/index.html` and `ai-life-os/arena.html` are built from the owner's private drafts by a script kept outside this repo. Their links to the retired pages were repointed here by hand, so the next rebuild needs the same mapping (for example `overview.html` becomes `index.html#pages`).
 
 ## Tests
 

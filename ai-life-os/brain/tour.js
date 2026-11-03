@@ -15,6 +15,7 @@ var CSS=
 "#askBar .chip{flex:none;background:#07080a;color:var(--ink,#e9e6e0);border:1px solid var(--line,#23262b);border-radius:12px;font:inherit;font-size:11px;padding:4px 10px;cursor:pointer;white-space:nowrap;text-decoration:none}"+
 "#askBar .chip:hover,#askBar .chip:focus-visible{border-color:var(--accent,#ff7a1a);color:var(--accent,#ff7a1a);outline:none}"+
 "#askBar .chip.first{border-color:var(--accent,#ff7a1a)}"+
+"#askBar .chip.sec{display:none}#askBar.open .chip.sec{display:inline-block}"+
 "@media (max-width:760px){#askBar{left:16px;right:16px}#legendBtn{bottom:64px!important}#legend{bottom:104px!important}}"+
 "#tourBlock{position:fixed;inset:0;z-index:20}"+
 "#tourHole{position:fixed;z-index:21;pointer-events:none;border:2px solid var(--accent,#ff7a1a);box-shadow:0 0 0 200vmax rgba(2,3,6,.72),0 0 18px rgba(255,122,26,.45)}"+
@@ -35,8 +36,14 @@ window.AIOTour=function(o){
   bar.appendChild(el("b",null,"ASK"));
   var row=el("div","chips");bar.appendChild(row);
   o.chips.forEach(function(c,i){
-    var b=el(c.href?"a":"button","chip"+(i?"":" first"),c.q);
-    if(c.href)b.href=c.href;else{b.type="button";b.addEventListener("click",function(){run(c)})}
+    var b=el(c.href?"a":"button","chip"+(i?"":" first")+(c.sec?" sec":""),c.q);
+    if(c.href)b.href=c.href;else{b.type="button";b.addEventListener("click",function(){c.act?c.act():run(c)})}
+    // chips marked sec sit behind one "More" button, so the bar stays quiet
+    if(c.sec&&!row.querySelector(".more")){
+      var more=el("button","chip more","More");more.type="button";more.setAttribute("aria-expanded","false");
+      more.addEventListener("click",function(){more.setAttribute("aria-expanded",bar.classList.toggle("open"))});
+      row.appendChild(more);
+    }
     row.appendChild(b);
   });
   document.body.appendChild(bar);

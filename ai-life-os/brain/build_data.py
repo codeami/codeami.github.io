@@ -6,7 +6,7 @@ Reads only public files of this site:
   brain/src/extra.json      hand-written nodes: areas, FirstMate parts and tricks, the harness tier list
   brain/src/site.json       the centre file, this site's pages, public projects, the reading order
   maps/src/skills/map.json  the skills (the inner ring)
-  blog/index.html           the Field Notes posts
+  blog/index.html           the Blog posts
   course/course.json        the AI introductory course's lessons
   ../../share.json          pages that are not public stay out of the chart; also writes ../../robots.txt from it
 Every url in the output is relative to brain/ or a public https link. Stdlib only."""
@@ -92,7 +92,7 @@ for tid, label, has, dif, lacks, guess, src in extra["tier"]:
                  "links": links(ls), "rel": extra["tier_edges"].get(tid, [])})
 tier_room = hub_of("g-tier", "tier", "Harness tier list", "#ffd93d", [("scored setups", tier)])
 
-# Room 5: Field Notes posts, one folder per kicker; a post opens in the reading drawer
+# Room 5: Blog posts, one folder per kicker; a post opens in the reading drawer
 POST = re.compile(r'<li><p class="k-kicker">([^<]+)</p><h2><a href="([^"]+)">(.+?)</a></h2><p>(.+?)</p><p class="k-meta"><time datetime="([^"]+)">([^<]+)</time>')
 posts = {}
 for kick, href, title, dek, _, date in POST.findall(rd("blog/index.html")):
@@ -101,8 +101,8 @@ for kick, href, title, dek, _, date in POST.findall(rd("blog/index.html")):
         continue
     posts.setdefault(html.unescape(kick), []).append({"id": href[:-5], "n": html.unescape(title), "line": "post · " + date,
                                                      "body": [html.unescape(dek)], "url": url, "links": links([["Read the post", url]]), "rel": []})
-posts_room = {"id": "posts", "label": "Field Notes", "color": "#5cd3ff", "note": "Published posts on harness engineering and alignment.",
-              "links": links([["All Field Notes", "../blog/index.html"]]),
+posts_room = {"id": "posts", "label": "Blog", "color": "#5cd3ff", "note": "Published posts on harness engineering and alignment.",
+              "links": links([["All posts", "../blog/index.html"]]),
               "folders": [{"name": k, "count": len(v), "files": v} for k, v in posts.items()]}
 
 # Room 6: the AI introductory course, one dot per lesson; graph.js greys a lesson until it is done in this browser

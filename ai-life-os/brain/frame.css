@@ -37,6 +37,8 @@ body { --ow: clamp(420px, 48vw, 700px); }
 @media (max-width: 760px) {
   #pageov { top: auto; left: 0; right: 0; bottom: 0; width: auto; height: 58vh; height: 58dvh; border-radius: 12px 12px 0 0; border-left: 0; border-right: 0; }
   #pageov.min { height: auto; }
+  /* the ask bar fills the bottom edge: the reopen button sits above it, level with the legend button */
+  #povOpen { bottom: 64px; }
   body.framed.ovopen { --ob: 58vh; }
   /* one header row: the tabs scroll sideways, so the chart keeps the room above the sheet */
   html[data-skin] body.framed .k-nav { flex-wrap: nowrap; padding: 6px 10px; }

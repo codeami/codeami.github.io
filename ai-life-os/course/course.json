@@ -61,7 +61,7 @@
      "cite": {"label": "Post: One captain, many crews, section 3", "href": "../blog/how-it-fits-together.html#s3"}},
     {"text": "The fix is to say the why and what done looks like, not only the what. “Fix my links” is a request. “Every link on the hub page opens at phone width, with a screenshot as proof” is a check anyone can run."}
    ],
-   "read": {"label": "One captain, many crews: keeping the model's intent aligned with mine", "href": "../blog/how-it-fits-together.html#s5", "note": "Field Notes, section 5: four checks at four time scales for “did it do what I meant?”. About 8 minutes."},
+   "read": {"label": "One captain, many crews: keeping the model's intent aligned with mine", "href": "../blog/how-it-fits-together.html#s5", "note": "Blog, section 5: four checks at four time scales for “did it do what I meant?”. About 8 minutes."},
    "more": [{"label": "Guided tour: an example brief, intent on top and spec below", "href": "../tour/index.html#intent"}],
    "check": {"q": "Which ask carries the most intent?",
     "options": ["Fix the website.", "Make the site faster.", "Make the hub links open on my phone; done when every link opens at 375px, with a screenshot."],
@@ -115,7 +115,7 @@
      "cite": {"label": "Matt Pocock's skills, with grill-me", "href": "https://github.com/mattpocock/skills"}},
     {"text": "Put together: life intent is your needs from lessons 1 and 2, written down. Project intent is one want, made precise. The life file helps you judge whether a project is worth doing at all."}
    ],
-   "read": {"label": "In AI, everything is a file (or a folder)", "href": "../blog/everything-is-a-file.html", "note": "Field Notes: your goals, context and rules written down once in plain folders, and read by every AI tool. About 12 minutes."},
+   "read": {"label": "In AI, everything is a file (or a folder)", "href": "../blog/everything-is-a-file.html", "note": "Blog: your goals, context and rules written down once in plain folders, and read by every AI tool. About 12 minutes."},
    "more": [{"label": "TELOS: a template for your life intent file", "href": "https://github.com/danielmiessler/Telos"}],
    "check": {"q": "“Spend more evenings with my family” and “Fix the links on my site by Friday”. Which is which?",
     "options": ["Both are project intent", "The first is life intent; the second is project intent", "The first is project intent; the second is life intent"],

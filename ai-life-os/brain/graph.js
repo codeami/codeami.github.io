@@ -13,7 +13,7 @@ var host=document.createElement("div");host.id="brainHost";if(FRAMED)host.classN
 var shadow=host.attachShadow({mode:"open"});
 var NAV=FRAMED?"":'<nav class="nav" aria-label="Site"><span class="vtag">v1.0</span>'+
   '<a class="btn" href="../../index.html">whoami</a><a class="btn" href="../index.html">AI-Life-OS</a>'+
-  '<a class="btn" href="../blog/index.html">Field Notes</a><a class="btn" href="../course/index.html">Course</a><a class="btn" href="index.html" aria-current="page">Second Brain</a>'+
+  '<a class="btn" href="../blog/index.html">Blog</a><a class="btn" href="../course/index.html">Course</a><a class="btn" href="index.html" aria-current="page">Second Brain</a>'+
   '<a class="btn" href="https://github.com/codeami/codeami.github.io">GitHub</a></nav>';
 shadow.innerHTML='<link rel="stylesheet" href="'+BASE+'graph.css">'+
   '<div id="stage"><canvas id="cv" role="img" aria-label="Second brain map: a centre rules file linked to rooms of public notes, harness parts and posts, with a ring of skills and a ring of pages and projects. The side lists hold the same items as buttons."></canvas></div>'+
@@ -354,7 +354,7 @@ function wire(){
   // the menu starts closed unless the map has room beside it (the Menu button or / or ⌘K opens it)
   if(window.innerWidth<1400){$("panel").hidden=true;$("menuBtn").setAttribute("aria-expanded","false")}
   $("sideBtn").addEventListener("click",function(){setSides($("side").hidden)});
-  setSides(window.innerWidth>=900);
+  setSides(window.innerWidth>=900&&!opts.explain); // the calm landing keeps the side lists behind Widgets
   window.addEventListener("resize",resize);
   if(mq.addEventListener)mq.addEventListener("change",function(){if(savedMotion()==null)setMotion(!mq.matches,false)});
   document.addEventListener("keydown",function(e){
@@ -468,10 +468,10 @@ function mountTour(){
       {sel:FRAMED?sh("cv"):sh("src"),before:mapView,title:"The second brain",text:"A map of how the owner works with a crew of AI agents, always running behind every page of this site. It shows only public things: approved wiki notes, FirstMate's parts, the posts, the skills and this site's pages."},
       {rect:ring(function(){return 30}),before:mapView,title:"The centre: "+root.label,text:"Every agent reads this rules file first. Everything else on the map hangs off it."},
       {rect:ring(guide(0)),before:mapView,title:"Inner ring: skills",text:"Each diamond is a skill: a playbook an agent loads only when a task calls for it. Each one links to its box on the skill map."},
-      {rect:ring(guide(1)),before:mapView,title:"Memory: rooms of notes",text:"Each coloured arc is a room, like Wiki notes or Field Notes. One dot is one note, part or post. Click a dot for its card; double-click a room to fold it."},
+      {rect:ring(guide(1)),before:mapView,title:"Memory: rooms of notes",text:"Each coloured arc is a room, like Wiki notes or Blog. One dot is one note, part or post. Click a dot for its card; double-click a room to fold it."},
       {rect:ring(guide(2)),before:mapView,title:"Outer ring: pages and projects",text:"Hexagons are this site's pages and public projects. A page or post opens on top of the map, and its node lights up."}];
   if(FRAMED)steps.push(
-      {sel:doc(".k-nav"),before:mapView,title:"Site tabs",text:"The same tabs on every page: Field Notes, the AI-Life-OS demo, the Second Brain on its own, whoami and GitHub. Each one opens over this same map."},
+      {sel:doc(".k-nav"),before:mapView,title:"Site tabs",text:"The same tabs on every page: Blog, the AI-Life-OS demo, the Second Brain on its own, whoami and GitHub. Each one opens over this same map."},
       {sel:doc("#pageov"),before:function(){setLegend(false);fold(true)},title:"The page overlay",text:"Every page of the site reads in this panel, on top of the live map. Minimise it to see the whole map, or close it; the button that is left brings it back."});
   steps.push(
       {sel:sh("motionBtn"),before:mapView,title:"Buttons",text:"Turn the motion on or off (remembered on this device), show or hide the side lists, and open the menu."},
@@ -483,12 +483,13 @@ function mountTour(){
   function at(t){for(var i=0;i<steps.length;i++)if(steps[i].title===t)return i;return 0}
   AIOTour({
     steps:steps,
-    chips:[
-      {q:"Explain this screen",from:0},
-      {q:"What do the shapes mean?",only:at("Legend")},
-      {q:"How do I find something?",only:at("Menu")},
-      {q:"Show me the skill map",href:BASE+"../maps/skills.html"}
-    ],
+    // the landing passes opts.explain: one primary button, the map questions behind "More"
+    chips:(opts.explain?[{q:"Explain this",act:opts.explain}]:[]).concat([
+      {q:opts.explain?"Tour the map":"Explain this screen",from:0,sec:!!opts.explain},
+      {q:"What do the shapes mean?",only:at("Legend"),sec:!!opts.explain},
+      {q:"How do I find something?",only:at("Menu"),sec:!!opts.explain},
+      {q:"Show me the skill map",href:BASE+"../maps/skills.html",sec:!!opts.explain}
+    ]),
     onStart:function(){
       keep={sides:!$("side").hidden,panel:!$("panel").hidden,legend:S.legend,layout:S.layout};
       drawer.close();S.sel=null;hideCard();applyFocus();view.user=false;setLayout("rings",true);
