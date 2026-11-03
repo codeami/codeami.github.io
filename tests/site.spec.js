@@ -52,6 +52,9 @@ for (const file of pages) {
     }
     expect(problems, 'console errors, failed requests, broken links').toEqual([]);
 
+    // Scroll anchoring can leave an inner scroll area at a different offset depending on load timing; start every capture from the top.
+    await page.evaluate(() => document.querySelectorAll('*').forEach((e) => { e.scrollTop = 0; }));
+
     await expect(page).toHaveScreenshot(`${file.replace(/\//g, '__')}.png`, {
       fullPage: true,
       // The chart canvas is a live animation (random starts, real clock), so it is masked; the page around it is compared.
