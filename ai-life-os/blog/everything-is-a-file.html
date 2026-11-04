@@ -302,7 +302,7 @@ review  → you approve or reject; only approved rules go into the map</pre>
 <li><strong>Never let a session edit the shared file.</strong> Notes go into <code>inbox/</code>, not into the map. Kun Chen's <a href="https://github.com/kunchenguid/backpass">backpass</a> reads the session logs and proposes a rule only when the same correction shows up in at least two sessions, with exact quotes as proof. I go through the proposals one at a time and approve what is right. The map only changes with my OK, so it stays a rulebook I agreed to.</li>
 </ol>
 <p class="p-test">Test: <code>tests/run.sh</code> section S2 checks that the map has a routing table with a fallback row, that every file the table names exists, and that <code>home.nix</code> links Claude, Codex, OpenCode and Gemini to the one map. Section S3 checks that the map says what to do on "end of session" and routes rule changes through backpass.</p>
-<p class="p-callout">An honest note: S2 also checks the map is short, at 120 lines or fewer. On 2 November my copy is 133 lines, so that check fails until I trim it. The map grows one reasonable rule at a time. The test is there to catch exactly that.</p>
+<p class="p-callout">S2 also checks the map stays short, at 120 lines or fewer. The map grows one reasonable rule at a time. The test is there to catch exactly that.</p>
 </section>
 
 <section id="s3">
@@ -376,7 +376,7 @@ work               say feedback as rules
 daily              backpass proposes rule changes, writes nothing
 review             I approve the changes I agree with</pre>
 <p>FirstMate runs several agents at once. Each picks up the same map through its own tool's link, so there's nothing extra to sync. Each project repo adds its own short <code>AGENTS.md</code> for its build and test rules.</p>
-<p>What's still missing: chat apps can't follow links on my disk. These include Claude.ai, Claude Desktop's chat and Gemini on the web. For now I paste the map into a project there. One idea I haven't built: a small MCP server with two tools, "load context" and "save context", so chat apps could read the map and write to the inbox too.</p>
+<p>What's next: chat apps can't follow links on my disk. These include Claude.ai, Claude Desktop's chat and Gemini on the web. I paste the map into a project there. One idea for next: a small MCP server with two tools, "load context" and "save context", so chat apps could read the map and write to the inbox too.</p>
 <p>If you take one thing from this post, take this. Write down what you keep explaining. Put it where every tool can find it. Change it only on purpose.</p>
 <p>The post <a href="how-it-fits-together.html">How one person runs a crew of AI agents, safely</a> covers the other half: how the work gets done when several agents run at once.</p>
 </section>

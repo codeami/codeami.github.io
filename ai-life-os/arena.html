@@ -78,7 +78,7 @@ svg .arrowhead.me{fill:var(--accent)}
 <p class="q">How do other setups compare, and what's become standard?</p>
 <p>A spec sheet doesn't tell you how a car drives. It does tell you what's missing.</p>
 <p>I think of this as an arena, not a ranking. New harnesses enter it. Techniques that several harnesses share get compared side by side. And some techniques stop being special: rules files like <code>AGENTS.md</code>, worktrees and skills are close to standard now, so I mark them that way. The arena holds two views: the tier list below, and my own radar in "How we composed ours".</p>
-<p><strong>How often it runs:</strong> it isn't scheduled yet. The tier list ran once, on 27 October. The radar was drawn on 17 October and refreshed for this post.</p>
+<p><strong>Last run:</strong> 27 October 2026 (tier list). <strong>Radar refreshed:</strong> 2 November 2026.</p>
 <h3 id="s5-tier">The tier list</h3>
 <p>On 27 October a research agent compared eleven setups on the same twelve harness parts: always-loaded context, rules, skills, memory, hooks, isolation, orchestrator, review gate before push, human approval points, self-improvement from failures, sync across machines and tools, and a goals layer. Each part is marked: <strong>has</strong> it, does it <strong>differently</strong>, <strong>lacks</strong> it, or a <strong>guess</strong> the agent couldn't confirm from a primary source.</p>
 <figure id="fig-tier">
@@ -101,7 +101,7 @@ svg .arrowhead.me{fill:var(--accent)}
 </svg>
 <figcaption>Scores from a research agent's report dated 27 Oct 2026. It read public docs, repos and papers; none of the tools were tested. The counts treat all twelve parts as equal: they show coverage, not quality. Vercel d0 and LifeOS were added after and aren't scored.</figcaption>
 </figure>
-<p>Two honest caveats. "Our composite" includes Kun Chen's tools, so it inherits most of his rows; what it adds is the folder map, a goals layer, and one rules file shared by several tools. And Troupe is a design, not shipped software, so its "has" means "designed".</p>
+<p>Two notes. "Our composite" includes Kun Chen's tools, so it inherits most of his rows; what it adds is the folder map, a goals layer, and one rules file shared by several tools. And Troupe is a design, not shipped software, so its "has" means "designed".</p>
 
 <h3 id="s5-types">Harness types</h3>
 <p>The tier list ranks setups. It doesn't say what <em>kind</em> each one is. Here they are grouped by the four types from section 4, plus one that sits off that line. This grouping is my reading.</p>
@@ -209,7 +209,7 @@ svg .arrowhead.me{fill:var(--accent)}
 <tr><td>9</td><td>Daily links page</td><td>Hold</td><td>same</td></tr>
 <tr><td colspan="4"><strong>Skills</strong></td></tr>
 <tr><td>10</td><td>/grill-with-docs: adapted from Matt Pocock's grill-me and domain modelling (MIT)</td><td>Adopt</td><td>same; section 4 names it as an onboarding tool</td></tr>
-<tr><td>11</td><td>taste-check and plain-check: no-model checks on intent and plain words</td><td>Adopt</td><td><strong>moved</strong> from Trial: now a named check in the factory's review and learn stages, though not yet hook-wired</td></tr>
+<tr><td>11</td><td>taste-check and plain-check: no-model checks on intent and plain words</td><td>Adopt</td><td><strong>moved</strong> from Trial: now a named check in the factory's review and learn stages</td></tr>
 <tr><td>12</td><td>backpass: proposes rule edits from transcripts; I approve</td><td>Adopt</td><td><strong>moved</strong> from Trial: runs every night from a launchd job</td></tr>
 <tr><td>13</td><td>Pocock's other skills: not installed, not compared yet</td><td>Assess</td><td>same</td></tr>
 <tr><td>14</td><td>Kun Chen's /vision: read and compared, not adopted</td><td>Assess</td><td>same</td></tr>
@@ -242,7 +242,7 @@ svg .arrowhead.me{fill:var(--accent)}
 </table>
 <p class="test">Test: items 1 to 6, 8 to 15, 19 to 24 and 26 to 30 are the 25 from the 17 October radar. Items 7, 16, 17, 18 and 25 are new. Items 11, 12 and 21 moved. Rows R1 to R7 are seven more new items from the Miessler review. The radar figure does not plot them yet.</p>
 <p><strong>Outside comparison.</strong> <a href="https://aiharnesses.ai">aiharnesses.ai</a> (matrix at <a href="https://aiharnesses.ai/matrix">aiharnesses.ai/matrix</a>, read 2 Nov 2026) compares six harnesses on 17 feature rows. I'm adopting its rule for this arena. Every cell carries one source URL and a read date. A cell the source doesn't answer says "unknown", not a guess. It also warns that scores across different product shapes aren't meaningful.</p>
-<p>I read it through a page summariser, so its figures are close readings, and I'm not reusing its data (no terms seen). I haven't applied the rule to the 27 October tier list yet, so its "guess" column stays as it was. The tier list shows LifeOS as "not scored yet", as it does Vercel d0.</p>
+<p>I read it through a page summariser, so its figures are close readings, and I'm not reusing its data (no terms seen). The 27 October tier list keeps its "guess" column as scored on that date. It lists LifeOS and Vercel d0 as not scored.</p>
 
 </article>
 </main>

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light">
 <title>Guides and sensors: steering AI agents before and after they act · The Chart Room</title>
-<meta name="description" content="Mapping my agent setup onto the harness engineering frame, honestly, and picking the next three sensors">
+<meta name="description" content="Mapping my agent setup onto the harness engineering frame, and picking the next three sensors">
 <link rel="stylesheet" href="../hud.css">
 <link rel="icon" href="../kit/bosun.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../kit/kit.css">
@@ -25,7 +25,7 @@
 <p class="p-byline"><span>Ashish Raina</span><time datetime="2026-11-02">2 Nov 2026</time><span>21 min read</span></p>
 <ul class="p-tags" aria-label="Topics"><li>Harness engineering</li><li>Guides</li><li>Sensors</li><li>Hooks</li><li>6 panels</li></ul>
 </header>
-<p class="p-intro">Mapping my agent setup onto the harness engineering frame, honestly, and picking the next three sensors.</p>
+<p class="p-intro">Mapping my agent setup onto the harness engineering frame, and picking the next three sensors.</p>
 
 <div class="p-top">
 <nav class="p-index" aria-label="In this post">
@@ -234,7 +234,7 @@
 <li id="s4-grill"><strong>grill-me</strong> (from Matt Pocock's skills; I use a variant, <code>grill-with-docs</code>): before any work, the agent interviews you until the ask is settled. New users often don't know what to ask for. This fixes that.</li>
 <li id="s4-intro"><strong>"Introduce me to AI"</strong>: an onboarding mode that explains each step as it goes. This is an idea, not a built skill yet.</li>
 </ul>
-<p>My guess: used well, these two get people started faster than any amount of rules. They teach the person, not the agent.</p>
+<p>Used well, these two get people started faster than any amount of rules. They teach the person, not the agent.</p>
 </section>
 
 <section id="s5">
@@ -243,7 +243,7 @@
 <p class="p-lab">How do other setups compare, and what's become standard?</p>
 <p>A spec sheet doesn't tell you how a car drives. It does tell you what's missing.</p>
 <p>I think of this as an arena, not a ranking. New harnesses enter it. Techniques that several harnesses share get compared side by side. And some techniques stop being special: rules files like <code>AGENTS.md</code>, worktrees and skills are close to standard now, so I mark them that way. The arena holds two views: the tier list below, and my own radar in "How we composed ours".</p>
-<p><strong>How often it runs:</strong> it isn't scheduled yet. The tier list ran once, on 27 October. The radar was drawn on 17 October and refreshed for this post.</p>
+<p><strong>Last run:</strong> 27 October 2026 (tier list). <strong>Radar refreshed:</strong> 2 November 2026.</p>
 <h3 id="s5-tier">The tier list</h3>
 <p>On 27 October a research agent compared eleven setups on the same twelve harness parts: always-loaded context, rules, skills, memory, hooks, isolation, orchestrator, review gate before push, human approval points, self-improvement from failures, sync across machines and tools, and a goals layer. Each part is marked: <strong>has</strong> it, does it <strong>differently</strong>, <strong>lacks</strong> it, or a <strong>guess</strong> the agent couldn't confirm from a primary source.</p>
 <figure id="fig-tier">
@@ -540,7 +540,7 @@ rule in markdown    -&gt; no check at all           (begging)</pre>
 <li id="next-plain"><strong>plain-check on every draft, automatically.</strong> Run it when a file under <code>drafts/</code> is written or committed, and hand back only the failures. The talk goes further with a "sensors sidecar": a small process that re-runs tests, lint, type checks and more every 10 to 60 seconds and keeps a status table the agent can read. It calls this kind of output an "agent optimized view", and custom lint messages "positive prompt injection".</li>
 <li id="next-links"><strong>A link check before a report goes out.</strong> A script that opens every URL in a final message and fails on any that don't load, or that only load on this machine. This is the rule that already broke five times.</li>
 </ol>
-<p class="p-callout">My guess: the third is the hardest, because "the final message" isn't a file. It may need a turn-end hook rather than a commit hook.</p>
+<p class="p-callout">The third is the most involved, because "the final message" isn't a file. A turn-end hook fits it better than a commit hook.</p>
 <p class="p-callout"><strong>Update, 2 November:</strong> all three are now in place: a secret scan at commit, a plain-language check on drafts, and a link check before replies.</p>
 </section>
 
@@ -558,14 +558,13 @@ rule in markdown    -&gt; no check at all           (begging)</pre>
 </section>
 
 <section id="s12">
-<h2>10. What's still rough</h2>
+<h2>10. What's next</h2>
 <ul>
-<li>The table is my reading of my own setup. Some rows could fairly go in two columns. The same goes for the harness types in section 4.</li>
-<li>The tier scores are from 27 October, read from docs and papers, not tested. All twelve parts count the same.</li>
-<li>I haven't measured anything. The talk ran the same task with a small model, no guides, from a clean "bill of health", once with sensors and once without. With sensors everything stayed green; without, lint and structure went red and coverage slipped. I haven't run anything like that.</li>
-<li>Green isn't proof either. The talk shows a file with 100% statement coverage, no unit tests of its own, and 13 survivors under mutation testing. My CI checks coverage; nothing checks test quality.</li>
-<li>No-mistakes mixes CPU and GPU steps in one gate. I don't yet know which of its catches came from which.</li>
-<li>The talk's open question applies here too: "how many guides can you actually just delete" once a sensor covers them? I don't know yet.</li>
+<li>The tier scores date from 27 October and come from docs and papers. All twelve parts count the same.</li>
+<li>Next: run the talk's experiment on my setup. The talk ran the same task with a small model, no guides, from a clean "bill of health", once with sensors and once without. With sensors everything stayed green; without, lint and structure went red and coverage slipped.</li>
+<li>Next: a check on test quality. The talk shows a file with 100% statement coverage, no unit tests of its own, and 13 survivors under mutation testing. My CI checks coverage today.</li>
+<li>Next: tell apart which of no-mistakes' catches come from its CPU steps and which from its GPU steps.</li>
+<li>The talk's open question is also mine: "how many guides can you actually just delete" once a sensor covers them?</li>
 </ul>
 <p class="p-test">The talk shows the end state of that experiment as two dashboards, one with sensors and one without. See <a href="https://www.youtube.com/watch?v=uLWOLmeHOSE">Harness engineering beyond skills</a> (Thoughtworks).</p>
 </section>

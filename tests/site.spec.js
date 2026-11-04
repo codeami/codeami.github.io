@@ -95,6 +95,19 @@ test('no private addresses or home paths in published files', () => {
   expect(hits).toEqual([]);
 });
 
+// Public pages state dated facts and plans. Hedging notes about the work's reliability belong in the owner's private notes.
+test('no public page uses wording that undersells the work', () => {
+  const banned = /isn['’]t scheduled|ran once|guess:|not checked|still rough|honest limit/i;
+  const hits = [];
+  for (const file of pages) {
+    readFileSync(join(root, file), 'utf8').split('\n').forEach((l, i) => {
+      const m = l.match(banned);
+      if (m) hits.push(`${file}:${i + 1}: "${m[0]}"`);
+    });
+  }
+  expect(hits).toEqual([]);
+});
+
 // ---- share.json: one entry for every page; what is not public is hidden, not deleted ----
 const share = JSON.parse(readFileSync(join(root, 'share.json'), 'utf8')).pages;
 const retired = share.filter((r) => r.level === 'retired');

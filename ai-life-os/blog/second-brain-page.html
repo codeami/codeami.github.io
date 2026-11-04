@@ -34,7 +34,7 @@
 <li><a href="#p1">The problem</a></li>
 <li><a href="#p2">The idea: one page that draws the lot</a></li>
 <li><a href="#p3">Rooms and skills, as rings</a></li>
-<li><a href="#p4">Routines and apps, with honest status</a></li>
+<li><a href="#p4">Routines and apps, with status</a></li>
 <li><a href="#p5">How the data is built, and the design rule</a></li>
 <li><a href="#p6">What's next</a></li>
 <li><a href="#p7">Why it matters</a></li>
@@ -84,7 +84,7 @@
 </section>
 
 <section class="p-panel" id="p4" aria-labelledby="p4-t">
-<header class="p-panel-h"><span class="p-num">04</span><h2 id="p4-t">Routines and apps, with honest status</h2></header>
+<header class="p-panel-h"><span class="p-num">04</span><h2 id="p4-t">Routines and apps, with status</h2></header>
 <div class="p-box"><h3 class="p-lab">Six routines</h3><p>The map shows what exists. Routines show what runs while I am away. Five are scheduled or running. One, the nightly backpass, shows in red as not running.</p></div>
 <div class="p-box"><h3 class="p-lab">Ten apps, eight projects, six pages</h3><p>Each row has one status word, and the word means something.</p></div>
 <div class="p-box"><h3 class="p-lab">"Live" is a word, not a heartbeat</h3><p>The page does not ping anything. The build writes each status into the data, and the data carries a date.</p></div>
@@ -295,7 +295,7 @@
 <li><strong>Projects:</strong> two live on the web, one public repo, three private, one local, one paused.</li>
 <li><strong>Pages:</strong> learn pages, a blog draft, and three pages about FirstMate.</li>
 </ul>
-<div class="p-callout"><strong>"Live" is a word, not a heartbeat.</strong> The page does not ping anything. The build writes each status into the data, and the data carries a date (2026-11-01). My reading: that is the honest level for now. A real ping would be a good next step.</div>
+<div class="p-callout"><strong>"Live" is a word, not a heartbeat.</strong> The page does not ping anything. The build writes each status into the data, and the data carries a date (2026-11-01). A live ping is the next step.</div>
 <p class="p-test">Test: <code>jq '.apps|length, (.projects|length), (.pages|length)' brain-data.json</code> prints 10, 8, 6.</p>
 </section>
 
