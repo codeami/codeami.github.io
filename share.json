@@ -18,6 +18,7 @@
   {"path": "ai-life-os/blog/everything-is-a-file.html", "level": "public"},
   {"path": "ai-life-os/blog/guides-and-sensors.html", "level": "public"},
   {"path": "ai-life-os/blog/how-it-fits-together.html", "level": "public"},
+  {"path": "ai-life-os/blog/one-harness-for-every-agent.html", "level": "public"},
   {"path": "ai-life-os/blog/rules-from-chat-history.html", "level": "public"},
   {"path": "ai-life-os/blog/second-brain-page.html", "level": "public"},
   {"path": "ai-life-os/story.html", "level": "retired", "into": "ai-life-os/index.html", "label": "the Chart Room chat", "why": "merged into", "since": "2026-11-03"},

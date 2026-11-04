@@ -88,7 +88,7 @@
     if (calm) {
       var kept = null;
       try { kept = localStorage.getItem("landing-page"); } catch (e) { /* storage blocked: calm by default */ }
-      state = /^#(step-|explain|whoami)/.test(location.hash) || kept === "open" ? "open" : "closed";
+      state = /^#(step-|explain|whoami|working)/.test(location.hash) || kept === "open" ? "open" : "closed";
     }
     function phone() { return window.innerWidth <= 760; }
     function layout() {

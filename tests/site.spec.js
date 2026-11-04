@@ -309,6 +309,7 @@ const convertedPosts = [
   { slug: 'everything-is-a-file', series: 'Signal from noise', panels: 8 },
   { slug: 'second-brain-page', series: 'Signal from noise', panels: 7 },
   { slug: 'rules-from-chat-history', series: 'Customize everything, including yourself', panels: 7 },
+  { slug: 'one-harness-for-every-agent', series: 'Customize everything, including yourself', panels: 6 },
   { slug: 'how-it-fits-together', series: 'Safe AI crews', panels: 7 },
   { slug: 'guides-and-sensors', series: 'Safe AI crews', panels: 6 },
 ];
@@ -500,21 +501,36 @@ test('landing: the visitor\'s choice to show or hide the page is remembered', as
   await expect(page.locator('#pageov')).toBeHidden();
 });
 
-test('landing: Explain this goes problems, then solutions, then the four values, then the walk', async ({ page }) => {
+// The Explain this script is a short, warm conversation in plain prose: no lists, numbers or labels, a few short sentences per turn.
+test('landing: Explain this is a short conversation in plain prose, then the walk', async ({ page }) => {
   await page.goto('/');
   await explainBtn(page).click();
   const chat = page.locator('#journeyChat');
   const shot = (n) => expect(page).toHaveScreenshot(`landing-journey-${n}.png`, { mask: [page.locator('canvas')] });
-  for (const p of ['Too much noise', 'Scattered notes and goals', 'AI that guesses what you want', 'Agents nobody can trust']) await expect(chat).toContainText(p);
-  await expect(chat).not.toContainText('Signal from noise');
+  await expect(chat).toContainText("Hi, I'm EA-bot");
+  await expect(chat).toContainText("we can't tell progress from motion");
   await shot(1);
-  await chat.getByRole('button', { name: 'How do you solve them?' }).click();
-  await expect(chat).toContainText('One written intent, one place for it all, and a crew you can check.');
-  await expect(chat).not.toContainText('Signal from noise');
+  await chat.getByRole('button', { name: 'What goes wrong without that?' }).click();
+  for (const p of ['Too much noise', 'separate piles', 'confident guess', "can't see what they did"]) await expect(chat).toContainText(p);
   await shot(2);
-  await chat.getByRole('button', { name: 'What do you stand for?' }).click();
-  for (const v of ['Signal from noise.', 'Customize everything, including yourself.', 'Self-learning, evolving, powerful yet safe AI bot-swarm managers that work toward your needs.', 'Smart goal tracking that harmonises your wants.']) await expect(chat).toContainText(v);
+  await chat.getByRole('button', { name: 'How do you fix that?' }).click();
+  await expect(chat).toContainText('Write the target down first, then let the tool work toward it.');
   await shot(3);
+  await chat.getByRole('button', { name: 'What do you stand for?' }).click();
+  await expect(chat).toContainText('Signal over noise');
+  await chat.getByRole('button', { name: 'Who is it for?' }).click();
+  for (const l of ['a life pointed at something they chose', 'one agreed goal', 'sorted by quality instead of popularity', 'AI explained without the panic']) await expect(chat).toContainText(l);
+  await shot(4);
+  // plain prose: no list, no numbering, no "Label:" openers, no leftover caveat line, at most three short sentences a turn
+  await expect(chat.locator('li, ol, ul')).toHaveCount(0);
+  await expect(chat).not.toContainText('Some of this is built');
+  const turns = await chat.locator('.k-row:not(:has(.me)) .k-bubble').evaluateAll((bs) => bs.map((b) => b.innerText));
+  expect(turns).toHaveLength(5);
+  for (const t of turns) {
+    expect(t, 'no "Label:" opener').not.toMatch(/^\s*[A-Z][a-z]+:/m);
+    expect(t, 'no numbering').not.toMatch(/^\s*\d+[.)]/m);
+    expect(t.split(/(?<=[.!?])\s+/).length, `short turn: ${t}`).toBeLessThanOrEqual(3);
+  }
   await chat.getByRole('button', { name: 'Show me how it works' }).click();
   await expect(page.locator('#explain')).toBeHidden();
   await expect(page.locator('#flowN')).toHaveText('1');
@@ -551,7 +567,7 @@ const stays = (page) => page.evaluate(() => { window.__stay = true; });
 const stayed = (page) => page.evaluate(() => window.__stay === true);
 
 test('landing: the chart lights one node, whoami, whichever view the reader is in', async ({ page }) => {
-  const views = ['/', '/#whoami', '/#explain', '/#step-3', '/#step-8'];
+  const views = ['/', '/#whoami', '/#working', '/#explain', '/#step-3', '/#step-8'];
   for (const url of views) {
     await page.goto('about:blank');
     await page.goto(url);
@@ -580,15 +596,84 @@ test('landing: Skip to the AI problems continues the journey, and Show me how it
   await page.getByRole('link', { name: 'Skip to the AI problems' }).click();
   await expect(page.locator('#whoami')).toBeHidden();
   const chat = page.locator('#journeyChat');
-  for (const p of ['Too much noise', 'Scattered notes and goals', 'AI that guesses what you want', 'Agents nobody can trust']) await expect(chat).toContainText(p);
+  await expect(chat).toContainText("we can't tell progress from motion");
   await expect(page).toHaveURL(/#explain$/);
   expect(await mapState(page)).toEqual({ here: 'whoami', lit: ['whoami'] });
   await settle(page);
   await expect(page.locator('#pageov')).toHaveScreenshot('landing-skip.png');
-  await chat.getByRole('button', { name: 'How do you solve them?' }).click();
-  await chat.getByRole('button', { name: 'What do you stand for?' }).click();
+  for (const q of ['What goes wrong without that?', 'How do you fix that?', 'What do you stand for?', 'Who is it for?']) await chat.getByRole('button', { name: q }).click();
   await chat.getByRole('button', { name: 'Show me how it works' }).click();
   await expect(page.locator('#flowN')).toHaveText('1');
+});
+
+// ---- the path: who I am, what I'm working on, the rest. Next and Skip on every step; a chip jumps anywhere ----
+const pathStep = async (page, n, name) => {
+  await expect(page.locator('#pathN')).toHaveText(String(n));
+  await expect(page.locator('#path').getByRole('link', { name })).toHaveAttribute('aria-current', 'step');
+  await expect(page.locator('#path a[aria-current="step"]')).toHaveCount(1);
+};
+
+test('landing: whoami carries a short manifesto that names the causes and the one-liners', async ({ page }) => {
+  await page.goto('/#whoami');
+  const lines = page.locator('#manifesto li');
+  expect(await lines.count(), 'five to seven lines').toBeGreaterThanOrEqual(5);
+  expect(await lines.count(), 'five to seven lines').toBeLessThanOrEqual(7);
+  const text = await page.locator('#manifesto').innerText();
+  for (const t of ['effective altruism', '80,000 Hours', 'AI safety', 'AI-Life-OS', 'harnesses and validators', "can't tell progress from motion", 'write the target down first']) expect(text, t).toContain(t);
+  for (const l of ['Your life, pointed at something you chose.', 'Your company, pointed at one agreed goal.', 'The internet, sorted by quality instead of popularity.', 'AI, explained without the panic.']) expect(text, l).toContain(l);
+});
+
+test('landing: the path runs who I am, what I am working on, then the rest; Next and Skip on every step', async ({ page }) => {
+  await page.goto('/#whoami');
+  const card = page.locator('#pageov');
+  const shot = (name) => settle(page).then(() => expect(card).toHaveScreenshot(`landing-path-${name}.png`));
+  // step 1: Who I am
+  await pathStep(page, 1, /Who I am/);
+  await expect(page.locator('#path .path-steps li')).toHaveCount(3);
+  await shot('1-who');
+  await page.getByRole('link', { name: 'Next: what I\'m working on' }).click();
+  // step 2: the latest posts, the new one first
+  await expect(page.locator('#working')).toBeVisible();
+  await expect(page.locator('#whoami')).toBeHidden();
+  await expect(page).toHaveURL(/#working$/);
+  await pathStep(page, 2, /What I'm working on/);
+  const posts = await page.locator('#working a[href*="/blog/"]').evaluateAll((as) => as.map((a) => a.getAttribute('href')));
+  expect(posts[0]).toBe('ai-life-os/blog/one-harness-for-every-agent.html');
+  expect(posts.length, 'the newest posts, not the whole blog').toBeGreaterThanOrEqual(4);
+  await shot('2-working');
+  await page.getByRole('link', { name: 'Next: the AI problems' }).click();
+  // step 3: the rest of the site
+  await expect(page.locator('#explain')).toBeVisible();
+  await expect(page.locator('#working')).toBeHidden();
+  await pathStep(page, 3, /The rest of the site/);
+  await expect(page.getByRole('link', { name: 'Start the eight-step walk' })).toBeVisible();
+  await shot('3-rest');
+  await page.getByRole('link', { name: 'Start the eight-step walk' }).click();
+  await expect(page.locator('#flowN')).toHaveText('1');
+  await pathStep(page, 3, /The rest of the site/);
+});
+
+test('landing: Skip leaves each step, and a chip jumps to any step without a reload', async ({ page }) => {
+  await page.goto('about:blank');
+  await page.goto('/#working');
+  await stays(page);
+  // step 1 Skip lands on step 3, past step 2
+  await page.locator('#path').getByRole('link', { name: /Who I am/ }).click();
+  await page.getByRole('link', { name: 'Skip to the AI problems' }).click();
+  await expect(page.locator('#explain')).toBeVisible();
+  await expect(page.locator('#working')).toBeHidden();
+  await pathStep(page, 3, /The rest of the site/);
+  // steps 2 and 3 offer a Skip to the blog, which is a plain link to the blog index
+  for (const chip of [/What I'm working on/, /The rest of the site/]) {
+    await page.locator('#path').getByRole('link', { name: chip }).click();
+    const skip = page.locator('section:visible').getByRole('link', { name: 'Skip to the blog' });
+    await expect(skip).toHaveAttribute('href', 'ai-life-os/blog/index.html');
+  }
+  // a chip reaches any step from any step, in the same document
+  await page.locator('#path').getByRole('link', { name: /Who I am/ }).click();
+  await expect(page.locator('#whoami')).toBeVisible();
+  await pathStep(page, 1, /Who I am/);
+  expect(await stayed(page), 'same document').toBe(true);
 });
 
 test('landing: a click on the whoami node, the logo or the page card never reloads the page', async ({ page }) => {
@@ -639,7 +724,7 @@ test('cv.html: the plain web CV is the v5 text without a phone number, an email,
   // the way back into the journey
   await page.getByRole('link', { name: 'Continue to the AI problems' }).first().click();
   await expect(page).toHaveURL(/#explain$/);
-  await expect(page.locator('#journeyChat')).toContainText('Too much noise');
+  await expect(page.locator('#journeyChat')).toContainText("Hi, I'm EA-bot");
 });
 
 test('Chart Room chat holds the story and tour branches', () => {

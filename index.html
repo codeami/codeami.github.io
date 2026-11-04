@@ -21,6 +21,27 @@
 .whoami h1:focus { outline: none; }
 .whoami .outcomes { color: var(--mute); }
 .whoami .next-links { margin-top: var(--space-4, 24px); }
+/* The path: three steps for a first visit. Every chip is a link, so a returning reader can jump to any step. */
+.path { margin: 0 0 var(--space-4, 24px); }
+.path .meter i { width: 33.34%; }
+.path .path-steps { display: flex; flex-wrap: wrap; gap: 6px; max-width: none; margin: 0 0 8px; padding: 0; list-style: none; }
+.path-steps li { margin: 0; }
+.path-steps a { display: inline-flex; gap: 8px; align-items: baseline; padding: 6px 12px; font-size: 14px; color: var(--mute); text-decoration: none; border: 1px solid var(--line); border-radius: 999px; }
+.path-steps a b { color: var(--ink); }
+.path-steps a[aria-current="step"] { color: var(--ink); border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.path-steps a:hover, .path-steps a:focus-visible { border-color: var(--accent); outline: none; }
+.whoami .manifesto { margin: 0 0 var(--space-3, 16px); }
+.manifesto li { margin: 0 0 8px; }
+/* Explain this: a quiet heading and note, and a chat that reads like a conversation. */
+.explain h2, .working h2 { margin: 0 0 8px; padding-top: 0; border-top: 0; }
+.explain .scripted { margin: 0 0 var(--space-3, 16px); padding: 0; font-size: 13px; border: 0; }
+.explain .k-chat { padding: 0; gap: 12px; }
+.explain .k-bubble { max-width: 92%; font-size: 1.05rem; line-height: 1.5; }
+.explain .k-bubble p + p { margin-top: 10px; }
+.explain .next-links { margin-top: var(--space-4, 24px); }
+.working .lead-post { margin: var(--space-3, 16px) 0; }
+.working .lead-post .k-kicker { color: var(--accent-text, var(--accent)); }
+.working .post-list { margin: 0 0 var(--space-3, 16px); }
 .demos { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin: var(--space-4, 24px) 0; }
 .demo { display: block; padding: 20px 22px; color: var(--ink); text-decoration: none;
   border: 1px solid var(--line); border-left: 4px solid var(--accent); background: var(--panel, var(--surface)); border-radius: 2px; }
@@ -134,16 +155,29 @@
 </header>
 <main class="page">
 <article class="k-article">
+<!-- The path: who I am, what I'm working on, the rest. The default order is clear; every chip and every Skip is a plain link. -->
+<nav class="path" id="path" aria-label="Your path through the site">
+<p class="flow-bar"><span>Step <b id="pathN">1</b> of 3</span><span id="pathName">Who I am</span></p>
+<ol class="path-steps">
+<li><a href="#whoami" data-path="1" aria-current="step"><b>1</b> Who I am</a></li>
+<li><a href="#working" data-path="2"><b>2</b> What I'm working on</a></li>
+<li><a href="#explain" data-path="3"><b>3</b> The rest of the site</a></li>
+</ol>
+<div class="meter" aria-hidden="true"><i id="pathFill"></i></div>
+</nav>
 <!-- "Explain this" (the one button on the calm landing): the journey is problems, then how they are solved, then the four values, then the walk below. -->
 <section class="explain" id="explain" aria-labelledby="explain-h">
 <p class="k-kicker">Explain this</p>
-<h2 id="explain-h" tabindex="-1">The problems, and how we solve them</h2>
+<h2 id="explain-h" tabindex="-1">Why this site exists</h2>
 <p class="scripted">Scripted. EA-bot reads a fixed script. No AI model answers on this page.</p>
 <div class="chat" id="journeyChat" data-start="j1"><noscript>
-<p>Four problems: too much noise; scattered notes and goals; AI that guesses what you want; agents nobody can trust.</p>
-<p>The answer: one written intent, one place for it all, and a crew you can check.</p>
-<p>Four values: signal from noise; customize everything, including yourself; self-learning, evolving, powerful yet safe AI bot-swarm managers that work toward your needs; smart goal tracking that harmonises your wants.</p>
+<p>Most of us never write down what we actually want, so we can't tell progress from motion. Too much noise buries the thing you need, notes and goals sit in separate piles, AI fills gaps with confident guesses, and agents run where you can't see them.</p>
+<p>The fix is to write the target down first, then let the tool work toward it. I stand for signal over noise, a setup you can bend to fit you, safe AI helpers that keep learning, and goals that sit together instead of fighting.</p>
 </noscript></div>
+<div class="next-links">
+<a class="k-btn primary" id="startWalk" href="#step-1">Start the eight-step walk</a>
+<a class="k-btn secondary" href="ai-life-os/blog/index.html">Skip to the blog</a>
+</div>
 </section>
 <!-- whoami: the first stop. A short CV, a link to the full one, and a way past it to the AI problems. -->
 <section class="whoami" id="whoami" aria-labelledby="whoami-h">
@@ -152,11 +186,43 @@
 <p class="k-dek who">Technical Program Manager · AI-native delivery</p>
 <h2>Profile</h2>
 <p>Technical program lead with 20 years in software, the last six on a global B2B wholesale platform (Salesforce, S/4HANA), where I grew from leading to directing QA teams and practices, and also worked as Product Owner, on release and branching strategies, and in technical program management across four regions. I surface hidden dependencies while they are cheap to fix. I now run an AI meta-factory: a one-person agentic harness, run Chief-of-Staff style, with a human gate on every merge.</p>
+<h2>What I'm trying to solve</h2>
+<ol class="manifesto" id="manifesto">
+<li>Most people and companies never write down what they actually want, so they can't tell progress from motion.</li>
+<li>I help them write it down. Then I build the software that closes the gap between where they are and that written goal.</li>
+<li>Every project is the same move: write the target down first, then let the tool work toward it.</li>
+<li>The causes I care about are effective altruism and 80,000 Hours, and AI safety.</li>
+<li>What I build for them is an intent-mapped AI-Life-OS, with harnesses and validators, so a crew of agents can be trusted with real work.</li>
+<li>For a person: “Your life, pointed at something you chose.” For a company: “Your company, pointed at one agreed goal.”</li>
+<li>For a reader: “The internet, sorted by quality instead of popularity.” For a beginner: “AI, explained without the panic.”</li>
+</ol>
 <h2>Selected outcomes</h2>
 <p class="outcomes">~3,000 wholesale accounts onboarded · 4 regions · catalogue import 12 h → 4 h · catalogue tweak 4 h → 10–20 min · peak catalogue 40,000 → 120,000 articles · cart 400 → 2,000 articles · script design 4 h → 30 min · satisfaction (internal NPS) 5 → 7 / 10</p>
 <div class="next-links">
-<a class="k-btn primary" href="cv.html">Full CV</a>
+<a class="k-btn primary" id="nextWork" href="#working">Next: what I'm working on</a>
+<a class="k-btn secondary" href="cv.html">Full CV</a>
 <a class="k-btn secondary" id="skipCv" href="#explain">Skip to the AI problems</a>
+</div>
+</section>
+<!-- Step 2: the latest posts, the newest first. -->
+<section class="working" id="working" aria-labelledby="working-h">
+<p class="k-kicker">What I'm working on</p>
+<h2 id="working-h" tabindex="-1">The latest from the blog</h2>
+<p class="lead">Each post starts with a problem people hit with AI, then the idea that helps. Newest first.</p>
+<a class="demo lead-post" href="ai-life-os/blog/one-harness-for-every-agent.html">
+  <p class="k-kicker">New · 4 Nov 2026 · 7 min read</p>
+  <h3>One harness for every agent, model and machine</h3>
+  <p>Every AI tool keeps its own rules and memory, so a new tool or a new laptop loses your setup. One base map every tool loads first, and Nix to rebuild it on each Mac. Lifetime sync warranty ;)</p>
+  <p class="go">Read the post</p>
+</a>
+<ol class="post-list">
+<li><p class="k-kicker">Harness engineering</p><h3><a href="ai-life-os/blog/guides-and-sensors.html">Guides, sensors, and the rules I'm still begging for</a></h3><p class="k-meta"><time datetime="2026-11-02">2 Nov 2026</time><span>21 min read</span></p></li>
+<li><p class="k-kicker">Alignment</p><h3><a href="ai-life-os/blog/rules-from-chat-history.html">Your corrections are your next rules</a></h3><p class="k-meta"><time datetime="2026-11-02">2 Nov 2026</time><span>6 min read</span></p></li>
+<li><p class="k-kicker">Context</p><h3><a href="ai-life-os/blog/everything-is-a-file.html">In AI, everything is a file (or a folder)</a></h3><p class="k-meta"><time datetime="2026-11-02">2 Nov 2026</time><span>12 min read</span></p></li>
+</ol>
+<div class="next-links">
+<a class="k-btn primary" id="nextRest" href="#explain">Next: the AI problems</a>
+<a class="k-btn secondary" href="ai-life-os/blog/index.html">Skip to the blog</a>
 </div>
 </section>
 <div id="intro">
@@ -428,6 +494,7 @@
 <li><a href="ai-life-os/blog/second-brain-page.html">My second brain on one page</a></li>
 </ul></div>
 <div class="card"><p class="k-kicker">Customize everything, including yourself</p><ul>
+<li><a href="ai-life-os/blog/one-harness-for-every-agent.html">One harness for every agent, model and machine</a></li>
 <li><a href="ai-life-os/blog/rules-from-chat-history.html">Turn your corrections into rules your AI follows</a></li>
 </ul></div>
 <div class="card"><p class="k-kicker">Safe AI crews</p><ul>
@@ -440,6 +507,7 @@
 <p><a href="ai-life-os/about.html#vendors">The vendor practices, in a table</a>. Code and notes: <a href="https://github.com/codeami">github.com/codeami</a>.</p>
 <h3>Work you can read</h3>
 <ol class="post-list">
+<li><p class="k-kicker">Harness</p><h3><a href="ai-life-os/blog/one-harness-for-every-agent.html">One harness for every agent, model and machine</a></h3><p>One base map every tool loads first, a link in each tool's folder, and Nix to rebuild the setup on each Mac</p><p class="k-meta"><time datetime="2026-11-04">4 Nov 2026</time><span>7 min read</span></p></li>
 <li><p class="k-kicker">Harness engineering</p><h3><a href="ai-life-os/blog/guides-and-sensors.html">Guides, sensors, and the rules I'm still begging for</a></h3><p>Mapping my agent setup onto the harness engineering frame, and picking the next three sensors</p><p class="k-meta"><time datetime="2026-11-02">2 Nov 2026</time><span>21 min read</span></p></li>
 <li><p class="k-kicker">Alignment</p><h3><a href="ai-life-os/blog/rules-from-chat-history.html">Your corrections are your next rules</a></h3><p>How I turn a week of "no, not like that" into rules my agents read, without letting them edit their own rules</p><p class="k-meta"><time datetime="2026-11-02">2 Nov 2026</time><span>6 min read</span></p></li>
 <li><p class="k-kicker">Context</p><h3><a href="ai-life-os/blog/everything-is-a-file.html">Write it down once: a folder your AI can read</a></h3><p>Your folders are a library and the AI is the librarian. Write down who you are and what you do once, in plain files, and every chat stops starting from zero</p><p class="k-meta"><time datetime="2026-11-02">2 Nov 2026</time><span>8 min read</span></p></li>
@@ -522,10 +590,19 @@
   // Three views, one at a time: whoami (a short CV, the first stop), the journey ("Explain this": the AI
   // problems and how they are solved) and the walk (the eight steps). Each has its own address, so a
   // click on the whoami node, the logo or "Skip to the AI problems" always lands somewhere that is not the same view.
-  var who = $("whoami"), explain = $("explain"), intro = $("intro"), jbox = $("journeyChat");
-  explain.hidden = true;
+  var who = $("whoami"), working = $("working"), explain = $("explain"), intro = $("intro"), jbox = $("journeyChat");
+  explain.hidden = working.hidden = true;
   var failed = false;
-  function view(v) { who.hidden = v !== "who"; explain.hidden = v !== "journey"; intro.hidden = flow.hidden = v !== "walk"; }
+  // The path above the views: who I am (1), what I'm working on (2), the rest of the site (3: the problems and the walk).
+  var PATH = { who: [1, "Who I am"], working: [2, "What I'm working on"], journey: [3, "The rest of the site"], walk: [3, "The rest of the site: the walk"] };
+  function view(v) {
+    who.hidden = v !== "who"; working.hidden = v !== "working"; explain.hidden = v !== "journey"; intro.hidden = flow.hidden = v !== "walk";
+    $("pathN").textContent = PATH[v][0]; $("pathName").textContent = PATH[v][1];
+    $("pathFill").style.width = (PATH[v][0] * 100 / 3) + "%";
+    [].forEach.call($("path").querySelectorAll("a[data-path]"), function (a) {
+      if (+a.dataset.path === PATH[v][0]) a.setAttribute("aria-current", "step"); else a.removeAttribute("aria-current");
+    });
+  }
   function mark(hash) { try { history.replaceState(null, "", hash); } catch (e) { /* sandbox may refuse */ } }
   function whoView(user) {
     view("who");
@@ -533,6 +610,13 @@
     mark("#whoami");
     who.querySelector("h1").focus({ preventScroll: true });
     who.scrollIntoView({ block: "start" });
+  }
+  function workingView(user) {
+    view("working");
+    if (!user) return;
+    mark("#working");
+    $("working-h").focus({ preventScroll: true });
+    working.scrollIntoView({ block: "start" });
   }
   function journey() {
     if (failed) { view("walk"); return; } // no script to read: the written steps are the fallback
@@ -551,12 +635,20 @@
     var s = /^#step-([1-8])$/.exec(hash);
     if (s) { view("walk"); go(+s[1], !first); }
     else if (hash === "#explain") journey();
+    else if (hash === "#working") workingView(!first);
     else whoView(!first);
   }
   window.addEventListener("explain", journey);
   window.addEventListener("samepage", function () { route("#whoami", false); }); // hud.js: a link to this very page
   window.addEventListener("hashchange", function () { route(location.hash, false); });
+  // Next and Skip are plain links to a step: the script only keeps the page from reloading.
   $("skipCv").addEventListener("click", function (e) { e.preventDefault(); journey(); });
+  $("nextWork").addEventListener("click", function (e) { e.preventDefault(); workingView(true); });
+  $("nextRest").addEventListener("click", function (e) { e.preventDefault(); journey(); });
+  $("startWalk").addEventListener("click", function (e) { e.preventDefault(); route("#step-1", false); });
+  [].forEach.call($("path").querySelectorAll("a[data-path]"), function (a) {
+    a.addEventListener("click", function (e) { e.preventDefault(); route(a.getAttribute("href"), false); });
+  });
 
   var m = /^#step-([1-8])$/.exec(location.hash);
   go(m ? +m[1] : 1, false);
