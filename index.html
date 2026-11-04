@@ -17,6 +17,10 @@
 <style>
 /* The whoami landing: who I am, then a guided walk in eight steps (intent first), then the work. */
 .who { font-size: 1.15rem; }
+.whoami h2 { margin: var(--space-3, 16px) 0 6px; font-size: 1.1rem; }
+.whoami h1:focus { outline: none; }
+.whoami .outcomes { color: var(--mute); }
+.whoami .next-links { margin-top: var(--space-4, 24px); }
 .demos { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin: var(--space-4, 24px) 0; }
 .demo { display: block; padding: 20px 22px; color: var(--ink); text-decoration: none;
   border: 1px solid var(--line); border-left: 4px solid var(--accent); background: var(--panel, var(--surface)); border-radius: 2px; }
@@ -141,6 +145,20 @@
 <p>Four values: signal from noise; customize everything, including yourself; self-learning, evolving, powerful yet safe AI bot-swarm managers that work toward your needs; smart goal tracking that harmonises your wants.</p>
 </noscript></div>
 </section>
+<!-- whoami: the first stop. A short CV, a link to the full one, and a way past it to the AI problems. -->
+<section class="whoami" id="whoami" aria-labelledby="whoami-h">
+<p class="k-kicker">whoami</p>
+<h1 class="k-title" id="whoami-h" tabindex="-1">Ashish Raina</h1>
+<p class="k-dek who">Technical Program Manager · AI-native delivery</p>
+<h2>Profile</h2>
+<p>Technical program lead with 20 years in software, the last six on a global B2B wholesale platform (Salesforce, S/4HANA), where I grew from leading to directing QA teams and practices, and also worked as Product Owner, on release and branching strategies, and in technical program management across four regions. I surface hidden dependencies while they are cheap to fix. I now run an AI meta-factory: a one-person agentic harness, run Chief-of-Staff style, with a human gate on every merge.</p>
+<h2>Selected outcomes</h2>
+<p class="outcomes">~3,000 wholesale accounts onboarded · 4 regions · catalogue import 12 h → 4 h · catalogue tweak 4 h → 10–20 min · peak catalogue 40,000 → 120,000 articles · cart 400 → 2,000 articles · script design 4 h → 30 min · satisfaction (internal NPS) 5 → 7 / 10</p>
+<div class="next-links">
+<a class="k-btn primary" href="cv.html">Full CV</a>
+<a class="k-btn secondary" id="skipCv" href="#explain">Skip to the AI problems</a>
+</div>
+</section>
 <div id="intro">
 <aside class="law" aria-label="How we expect you to use AI">
 <p class="k-kicker">How we expect you to use AI</p>
@@ -148,9 +166,6 @@
 <p>This is how we expect you to use AI: give the work a short, fixed time box and let the AI crew help it contract to fit.</p>
 <p class="src">Parkinson's Law: C. Northcote Parkinson, <a href="https://en.wikipedia.org/wiki/Parkinson%27s_law">The Economist, 1955</a>. Horstman's Law: listed as “Horstman's Corollary to Parkinson's Law” among the <a href="https://en.wikipedia.org/wiki/Manager_Tools_Podcast">Manager Tools podcast's principles</a> (Mark Horstman).</p>
 </aside>
-<p class="k-kicker">whoami</p>
-<h1 class="k-title">Ashish Raina</h1>
-<p class="k-dek who">Program manager turned AI-crew operator. I run a crew of AI coding agents from one chat, and I write down how I steer them, check their work and keep them doing what I meant.</p>
 </div>
 
 <section class="flow" id="flow" aria-label="A guided walk in eight steps">
@@ -504,15 +519,25 @@
   });
   $("watchDemo").addEventListener("click", function () { ctx.path = "evaluator"; go(3, true); });
 
-  // "Explain this": the journey replaces the page until it hands over to the walk below.
-  var explain = $("explain"), intro = $("intro"), jbox = $("journeyChat");
+  // Three views, one at a time: whoami (a short CV, the first stop), the journey ("Explain this": the AI
+  // problems and how they are solved) and the walk (the eight steps). Each has its own address, so a
+  // click on the whoami node, the logo or "Skip to the AI problems" always lands somewhere that is not the same view.
+  var who = $("whoami"), explain = $("explain"), intro = $("intro"), jbox = $("journeyChat");
   explain.hidden = true;
   var failed = false;
-  function journey(on) {
-    if (on && failed) return;
-    explain.hidden = !on; intro.hidden = on; flow.hidden = on;
-    if (!on) return;
-    try { history.replaceState(null, "", "#explain"); } catch (e) { /* sandbox may refuse */ }
+  function view(v) { who.hidden = v !== "who"; explain.hidden = v !== "journey"; intro.hidden = flow.hidden = v !== "walk"; }
+  function mark(hash) { try { history.replaceState(null, "", hash); } catch (e) { /* sandbox may refuse */ } }
+  function whoView(user) {
+    view("who");
+    if (!user) return; // the first draw leaves the address alone: the calm landing is "/", and a hash would open the page card
+    mark("#whoami");
+    who.querySelector("h1").focus({ preventScroll: true });
+    who.scrollIntoView({ block: "start" });
+  }
+  function journey() {
+    if (failed) { view("walk"); return; } // no script to read: the written steps are the fallback
+    view("journey");
+    mark("#explain");
     mountJourney();
     $("explain-h").focus({ preventScroll: true });
     explain.scrollIntoView({ block: "start" });
@@ -520,17 +545,26 @@
   function mountJourney() {
     if (explain.hidden || !script || !window.EAChat) return;
     jbox.textContent = ""; jbox.className = "chat";
-    EAChat.mount(jbox, { nodes: script.nodes, start: jbox.dataset.start, avatar: "ai-life-os/kit/bosun.svg", ctx: ctx, onStep: function (to, path) { if (path) ctx.path = path; journey(false); go(to, true); } });
+    EAChat.mount(jbox, { nodes: script.nodes, start: jbox.dataset.start, avatar: "ai-life-os/kit/bosun.svg", ctx: ctx, onStep: function (to, path) { if (path) ctx.path = path; view("walk"); go(to, true); } });
   }
-  window.addEventListener("explain", function () { journey(true); });
+  function route(hash, first) {
+    var s = /^#step-([1-8])$/.exec(hash);
+    if (s) { view("walk"); go(+s[1], !first); }
+    else if (hash === "#explain") journey();
+    else whoView(!first);
+  }
+  window.addEventListener("explain", journey);
+  window.addEventListener("samepage", function () { route("#whoami", false); }); // hud.js: a link to this very page
+  window.addEventListener("hashchange", function () { route(location.hash, false); });
+  $("skipCv").addEventListener("click", function (e) { e.preventDefault(); journey(); });
 
   var m = /^#step-([1-8])$/.exec(location.hash);
   go(m ? +m[1] : 1, false);
-  if (location.hash === "#explain") journey(true);
+  route(location.hash, true);
 
   fetch("ai-life-os/tour/tour.json").then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
     .then(function (t) { script = t.landing; mount(cur); mountJourney(); })
-    .catch(function () { failed = true; if (!explain.hidden) journey(false); });
+    .catch(function () { failed = true; if (!explain.hidden) view("walk"); });
 })();
 </script>
 </body>
