@@ -99,7 +99,8 @@ test('no private addresses or home paths in published files', () => {
 test('no public page uses wording that undersells the work', () => {
   const banned = /isn['’]t scheduled|ran once|guess:|not checked|still rough|honest limit|haven['’]t verified|haven['’]t tried|my guess|did not test/i;
   const hits = [];
-  for (const file of pages) {
+  const dataFiles = ['ai-life-os/brain/brain-data.json', 'ai-life-os/brain/src/extra.json', 'ai-life-os/brain/src/site.json'];
+  for (const file of [...pages, ...dataFiles]) {
     readFileSync(join(root, file), 'utf8').split('\n').forEach((l, i) => {
       const m = l.match(banned);
       if (m) hits.push(`${file}:${i + 1}: "${m[0]}"`);
