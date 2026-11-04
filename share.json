@@ -22,6 +22,7 @@
   {"path": "ai-life-os/blog/one-harness-for-every-agent.html", "level": "public"},
   {"path": "ai-life-os/blog/rules-from-chat-history.html", "level": "public"},
   {"path": "ai-life-os/blog/second-brain-page.html", "level": "public"},
+  {"path": "ai-life-os/blog/when-the-notes-are-wrong.html", "level": "public"},
   {"path": "ai-life-os/story.html", "level": "retired", "into": "ai-life-os/index.html", "label": "the Chart Room chat", "why": "merged into", "since": "2026-11-03"},
   {"path": "ai-life-os/tour/index.html", "level": "retired", "into": "ai-life-os/index.html", "label": "the Chart Room chat", "why": "merged into", "since": "2026-11-03"},
   {"path": "ai-life-os/blog/progress-three-weeks.html", "level": "retired", "into": "ai-life-os/changelog.html", "label": "the changelog", "why": "merged into", "since": "2026-11-03"},
