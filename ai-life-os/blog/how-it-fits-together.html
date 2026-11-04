@@ -1,49 +1,148 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-skin="calm">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="color-scheme" content="light dark">
-<title>One captain, many crews, one chart room · The Chart Room</title>
+<meta name="color-scheme" content="light">
+<title>How one person runs a crew of AI agents, safely · The Chart Room</title>
 <meta name="description" content="How I fit Kun Chen&#x27;s agent factory together with plain-file context, and how I keep the agents doing what I actually meant">
 <link rel="stylesheet" href="../hud.css">
-<script src="../article.js"></script>
 <link rel="icon" href="../kit/bosun.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../kit/kit.css">
-<link rel="stylesheet" href="../article.css">
-<style>
-.q{font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin:0 0 6px}
-.callout{background:var(--warn-soft);border-left:3px solid var(--warn);padding:10px 14px;border-radius:6px;margin:1.2em 0}
-svg .box{fill:var(--paper);stroke:var(--line);stroke-width:1.5}
-svg .box.hi{fill:var(--accent-soft);stroke:var(--accent)}
-svg .box.warn{fill:var(--warn-soft);stroke:var(--warn)}
-svg .box.ok{fill:var(--ok-soft);stroke:var(--ok)}
-svg .t{fill:var(--ink);font-family:var(--sans);font-size:15px;font-weight:600}
-svg .s{fill:var(--muted);font-family:var(--sans);font-size:12.5px}
-svg .m{fill:var(--muted);font-family:var(--mono);font-size:12px}
-svg .edge{stroke:var(--muted);stroke-width:1.5;fill:none}
-svg .edge.hi{stroke:var(--accent)}
-svg .edge.dash{stroke-dasharray:5 4}
-svg .lbl{fill:var(--muted);font-family:var(--sans);font-size:12px}
-svg .arrowhead{fill:var(--muted)}
-svg .arrowhead.hi{fill:var(--accent)}
-</style>
+<link rel="stylesheet" href="../panel.css">
 </head>
 <body>
-<header class="k-nav">
-  <a class="k-home" href="../index.html"><img class="k-mark" src="../kit/bosun.svg" alt=""><span class="k-logo">The Chart Room<small>How one captain runs a crew of AI agents, safely.</small></span></a>
-  <nav aria-label="Site"><a href="../blog/index.html" aria-current="page">Blog</a><a href="../arena.html">Arena</a><a href="../safety.html">Safety</a><button class="theme" id="theme" type="button">Night</button></nav>
+<header class="p-nav">
+  <a class="p-brand" href="../index.html"><img src="../kit/bosun.svg" alt=""><span>The Chart Room</span></a>
+  <nav aria-label="Site"><a href="index.html" aria-current="page">Blog</a><a href="../arena.html">Arena</a><a href="../safety.html">Safety</a></nav>
 </header>
-<main class="page">
-<article class="k-article">
-<p class="k-kicker"><a href="index.html">Blog</a> · Alignment</p>
-<h1 class="k-title">One captain, many crews, one chart room</h1>
-<p class="k-dek">How I fit Kun Chen's agent factory together with plain-file context, and how I keep the agents doing what I actually meant</p>
-<p class="k-meta"><span>Ashish Raina</span><time datetime="2026-10-07">7 Oct 2026</time><span>11 min read</span></p>
+<main class="p-page">
 
+<header class="p-head">
+<p class="p-kicker"><a href="index.html">Blog</a><span>Safe AI crews</span></p>
+<h1 class="p-title">How one person runs <mark class="p-hl">a crew of AI agents</mark>, safely</h1>
+<p class="p-sub">One captain, many crews, one chart room</p>
+<p class="p-byline"><span>Ashish Raina</span><time datetime="2026-10-07">7 Oct 2026</time><span>11 min read</span></p>
+<ul class="p-tags" aria-label="Topics"><li>FirstMate</li><li>Crews</li><li>Intent</li><li>backpass</li><li>7 panels</li></ul>
+</header>
+<p class="p-intro">How I fit Kun Chen's agent factory together with plain-file context, and how I keep the agents doing what I actually meant.</p>
+
+<div class="p-top">
+<nav class="p-index" aria-label="In this post">
+<h2>In this post</h2>
+<ol>
+<li><a href="#p1">The problem</a></li>
+<li><a href="#p2">The idea: two halves, doing and knowing</a></li>
+<li><a href="#p3">The crew and who does what</a></li>
+<li><a href="#p4">Who sees how much</a></li>
+<li><a href="#p5">Keeping the model's intent aligned with mine</a></li>
+<li><a href="#p6">Other tools, and the whole loop</a></li>
+<li><a href="#p7">Why it matters</a></li>
+</ol>
+</nav>
+<aside class="p-side" aria-label="At a glance">
+<blockquote class="p-quote"><p class="p-lab">In the post's own words</p><p>A subagent is a quick question to a colleague at the next desk; a crewmate is a job ticket with a name on it.</p></blockquote>
+<div class="p-card core"><h2 class="p-lab">The core idea</h2><p>One agent you talk to hands work to a crew. Plain files say what every agent knows, and small separate checks keep the work close to what you meant.</p></div>
+<div class="p-card"><h2 class="p-lab">Different from one big agent</h2><p>Each crewmate works in its own clean copy, with a narrow view, and leaves a file you can read.</p></div>
+</aside>
+</div>
+
+<div class="p-grid">
+
+<section class="p-panel" id="p1" aria-labelledby="p1-t">
+<header class="p-panel-h"><span class="p-num">01</span><h2 id="p1-t">The problem</h2></header>
+<div class="p-box"><h3 class="p-lab">Many agents at once</h3><p>Once several agents run at the same time, it is hard to see who is doing what, and where.</p></div>
+<div class="p-box"><h3 class="p-lab">Quiet drift</h3><p>An agent can quietly drift from what you asked. "Keep it under ₹50k" can become "keep it cheap" (a made-up example) without anyone noticing.</p></div>
+<div class="p-box"><h3 class="p-lab">A busy kitchen, different recipes</h3><p>A crew without shared context is a busy kitchen where every cook has a different recipe.</p></div>
+<div class="p-box"><h3 class="p-lab">Newcomers think they need a fleet</h3><p>If you are just starting, running a crew of agents sounds like a job for a company. Most people only need better habits first.</p></div>
+<p class="p-principle"><span class="p-lab">My view, not a study</span>All four get easier when work is handed out from one place, in files you can read.</p>
+<a class="p-more" href="#s-problem">Read the problem</a>
+</section>
+
+<section class="p-panel" id="p2" aria-labelledby="p2-t">
+<header class="p-panel-h"><span class="p-num">02</span><h2 id="p2-t">The idea: two halves, doing and knowing</h2></header>
+<div class="p-box"><h3 class="p-lab">Doing</h3><p>Kun Chen's stack answers: who does the work, where, and is it safe to ship? FirstMate, treehouse, no-mistakes, gnhf and AXI tools.</p></div>
+<div class="p-box"><h3 class="p-lab">Knowing</h3><p>Folder context, ICM-style, answers: what does every agent need to know before it starts? One map file, one folder per kind of work, session notes.</p></div>
+<p class="p-principle"><span class="p-lab">Principle</span>Neither half is enough alone. Context without a crew is a well-labelled empty kitchen.</p>
+<a class="p-more" href="#s1">Read section 1</a>
+</section>
+
+<section class="p-panel" id="p3" aria-labelledby="p3-t">
+<header class="p-panel-h"><span class="p-num">03</span><h2 id="p3-t">The crew and who does what</h2></header>
+<div class="p-box"><h3 class="p-lab">You talk to one agent</h3><p>The first mate. You never juggle tabs.</p></div>
+<div class="p-box"><h3 class="p-lab">Three kinds of crew</h3>
+<ul><li><strong>Ships</strong> change code, each in its own isolated copy of the repo.</li><li><strong>Scouts</strong> do research. Their output is a report file, never code.</li><li><strong>Secondmates</strong> are longer-lived teams for one domain, each with their own memory folder.</li></ul></div>
+<div class="p-box"><h3 class="p-lab">Treehouse: a pool of clean copies</h3><p>Think of a tool library rather than a shop: you borrow a clean, fully set-up copy of the repo, work in it, and hand it back.</p></div>
+<p class="p-principle"><span class="p-lab">Principle</span>Every one of those roles reads the same map file at startup. Claude, Codex or Pi: same map, same rules.</p>
+<a class="p-more" href="#s2">Read section 2</a>
+</section>
+
+<section class="p-panel" id="p4" aria-labelledby="p4-t">
+<header class="p-panel-h"><span class="p-num">04</span><h2 id="p4-t">Who sees how much</h2></header>
+<div class="p-box"><h3 class="p-lab">Wide for the first mate, narrow for the crew</h3><p>The orchestrator holds the wide view; each worker gets a narrow one. A crewmate fixing one bug doesn't need your other five projects.</p></div>
+<div class="p-box"><h3 class="p-lab">Subagent or crewmate</h3>
+<table class="p-table"><thead><tr><th></th><th>Subagent</th><th>Crewmate</th></tr></thead><tbody>
+<tr><td>Runs</td><td>Inside the main session</td><td>Its own window</td></tr>
+<tr><td>Leaves a record</td><td>No</td><td>A brief, a status file, a report or a pull request</td></tr>
+</tbody></table></div>
+<div class="p-box"><h3 class="p-lab">The catch</h3><p>Intent passes through a middleman. It is the old telephone game, but the brief is a file, so you can read exactly what was handed on.</p></div>
+<p class="p-principle"><span class="p-lab">Principle</span>Everything FirstMate knows is a file too, so a crash or restart costs nothing.</p>
+<a class="p-more" href="#s3">Read section 3</a>
+<a class="p-more" href="#s4">Read section 4</a>
+</section>
+
+<section class="p-panel" id="p5" aria-labelledby="p5-t">
+<header class="p-panel-h"><span class="p-num">05</span><h2 id="p5-t">Keeping the model's intent aligned with mine</h2></header>
+<div class="p-box"><h3 class="p-lab">Four checks at four time scales</h3>
+<ol class="p-steps"><li>The brief, before work</li><li>no-mistakes, before push</li><li>/stow, at the end of a block</li><li>backpass, over weeks</li></ol></div>
+<div class="p-box"><h3 class="p-lab">Five kinds of drift</h3>
+<ul><li><strong>dropped</strong>: asked for, never happened</li><li><strong>weakened</strong>: a hard limit treated as a wish</li><li><strong>added</strong>: nobody asked for it</li><li><strong>drifted</strong>: the meaning changed</li><li><strong>violated</strong>: an action broke a stated limit</li></ul></div>
+<p class="p-principle"><span class="p-lab">Principle</span>Keep the checks separate, so a model's guess never gets the authority of something you said.</p>
+<a class="p-more" href="#s5">Read section 5</a>
+<a class="p-more" href="#s5a">Read section 5a</a>
+</section>
+
+<section class="p-panel" id="p6" aria-labelledby="p6-t">
+<header class="p-panel-h"><span class="p-num">06</span><h2 id="p6-t">Other tools, and the whole loop</h2></header>
+<div class="p-box"><h3 class="p-lab">Not everyone needs a fleet</h3><p>Matt Pocock's skills give one agent better habits instead. The one I'd try first is <code>/grill-me</code>: it catches intent drift before work starts, when it's cheapest.</p></div>
+<div class="p-box"><h3 class="p-lab">Two loops</h3><p>Rules go through backpass and my approval. My own words go through <code>/stow</code>. Both end in files the next session reads.</p></div>
+<p class="p-principle"><span class="p-lab">Principle</span>Don't pay twice: pick deliberately between tools that do the same job.</p>
+<a class="p-more" href="#s6">Read section 6</a>
+<a class="p-more" href="#s7">Read section 7</a>
+</section>
+
+<section class="p-panel" id="p7" aria-labelledby="p7-t">
+<header class="p-panel-h"><span class="p-num">07</span><h2 id="p7-t">Why it matters</h2></header>
+<div class="p-box"><h3 class="p-lab">It helps you first</h3><p>A brief, a status file and a report are a plain record of the day's work. Writing them down is a kind of note-taking, and it keeps you in charge.</p></div>
+<div class="p-box"><h3 class="p-lab">It helps the crew work your way</h3><p>Every agent reads the same map and the same brief, so what you meant is what they start from.</p></div>
+<div class="p-box"><h3 class="p-lab">It helps newcomers</h3><p>I think files you can read are an easier way to learn how agents work than a black box. Beginners can follow what happened, and share what they find.</p></div>
+<div class="p-box"><h3 class="p-lab">Try it yourself</h3>
+<ol class="p-steps"><li>Before you hand a task to an agent, write a short brief file: the goal, the hard limits, and what done means.</li><li>Ask the agent to leave a report file, not just a chat reply.</li><li>Read the report against your brief, and note any place it went its own way.</li></ol></div>
+<p class="p-principle"><span class="p-lab">Principle</span>One brief in, one report out, both plain files.</p>
+<a class="p-more" href="#s-why">Read why it matters</a>
+<a class="p-more" href="#s-try">Read try it yourself</a>
+</section>
+
+</div>
+
+<article class="p-full p-prose" id="full">
+<h2>The full post</h2>
+<p class="p-lab">For readers who want the whole argument</p>
 
 <p>In <a href="everything-is-a-file.html">an earlier post</a> I argued that, in AI, everything is a file: write your goals, rules and context down once, in folders, and every tool reads the same thing. That covers what the agents <em>know</em>. It says nothing about how work actually gets <em>done</em> when several agents run at once, or how you notice when one of them quietly drifts from what you asked.</p>
 <p>For that I use <a href="https://github.com/kunchenguid">Kun Chen</a>'s open-source stack, built around a tool called <a href="https://github.com/kunchenguid/firstmate">FirstMate</a>. This post is about how the two halves fit together, and how I check that the agents' intent still matches mine.</p>
+
+<section id="s-problem">
+<h2>The problem</h2>
+<p>Picture a kitchen where five cooks work at once, each with a different recipe and none telling you what they have started. The food might be fine. You would not know. This is my view from running a crew every day, not a survey.</p>
+<ul>
+<li><strong>Many agents at once.</strong> Once several agents run at the same time, it is hard to see who is doing what, and where.</li>
+<li><strong>Quiet drift.</strong> An agent can quietly drift from what you asked. "Keep it under ₹50k" can become "keep it cheap" (a made-up example) without anyone noticing.</li>
+<li><strong>A busy kitchen, different recipes.</strong> A crew without shared context is a busy kitchen where every cook has a different recipe.</li>
+<li><strong>Newcomers think they need a fleet.</strong> If you are just starting, running a crew of agents sounds like a job for a company. Most people only need better habits first.</li>
+</ul>
+<p>All four get easier when work is handed out from one place, in files you can read.</p>
+</section>
 
 <section id="s1">
 <h2>1. Two halves: doing and knowing</h2>
@@ -57,8 +156,8 @@ svg .arrowhead.hi{fill:var(--accent)}
 </section>
 
 <section id="s2">
-<h2>2. The ship</h2>
-<p class="q">Who does what?</p>
+<h2>2. The crew and who does what</h2>
+<p class="p-lab">Who does what?</p>
 <p>FirstMate leans into a nautical theme, and it's a useful picture.</p>
 <figure id="fig-ship">
 <svg viewBox="0 0 640 270" role="img" aria-labelledby="fig-ship-title">
@@ -84,7 +183,7 @@ svg .arrowhead.hi{fill:var(--accent)}
 <p>Every one of those roles reads the same map file at startup, through its own tool's link. Claude, Codex or Pi: same map, same rules.</p>
 
 <h3 id="s2a">2a. The layers underneath</h3>
-<p class="q">What happens between "do this" and a pull request?</p>
+<p class="p-lab">What happens between "do this" and a pull request?</p>
 <figure id="fig-layers">
 <svg viewBox="0 0 640 430" role="img" aria-labelledby="fig-layers-title">
 <title id="fig-layers-title">FirstMate's layers, top to bottom</title>
@@ -108,7 +207,7 @@ svg .arrowhead.hi{fill:var(--accent)}
 <p>Two layers are worth calling out. The <strong>watcher</strong> is a plain bash loop, so watching the fleet costs no model tokens while nothing is happening; it wakes the first mate only for things like a finished task, a stuck window or a pull request ready to merge. The <strong>dispatch</strong> step is the only thing that writes a task's status record, which is why work started any other way is invisible to the fleet (section 3).</p>
 
 <h3 id="s2b">2b. Treehouse: a pool of clean copies</h3>
-<p class="q">How do several agents work on one repo without stepping on each other?</p>
+<p class="p-lab">How do several agents work on one repo without stepping on each other?</p>
 <figure id="fig-treehouse">
 <svg viewBox="0 0 640 250" role="img" aria-labelledby="fig-tree-title">
 <title id="fig-tree-title">Treehouse leases worktrees from a pool and takes them back with their caches intact</title>
@@ -130,7 +229,7 @@ svg .arrowhead.hi{fill:var(--accent)}
 <p>Think of a tool library rather than a shop: you borrow a clean, fully set-up copy of the repo, work in it, and hand it back. The next task starts in seconds because the dependencies and build cache are still there. A ship's brief even tells the crewmate to check where it landed and stop if it's sitting in your own checkout.</p>
 
 <h3 id="s2c">2c. Scouts: the research layer</h3>
-<p class="q">How does research happen without anyone writing code too early?</p>
+<p class="p-lab">How does research happen without anyone writing code too early?</p>
 <figure id="fig-scout">
 <svg viewBox="0 0 640 216" role="img" aria-labelledby="fig-scout-title">
 <title id="fig-scout-title">A scout turns an open question into a report; you decide whether anything gets built</title>
@@ -152,7 +251,7 @@ svg .arrowhead.hi{fill:var(--accent)}
 
 <section id="s3">
 <h2>3. Who sees how much</h2>
-<p class="q">How much context does each agent get?</p>
+<p class="p-lab">How much context does each agent get?</p>
 <p>Jake Van Clief's rule for folders is: read only what the task needs. FirstMate applies the same rule to agents. The orchestrator holds the wide view; each worker gets a narrow one.</p>
 <figure id="fig-context">
 <svg viewBox="0 0 640 250" role="img" aria-labelledby="fig-ctx-title">
@@ -200,7 +299,7 @@ svg .arrowhead.hi{fill:var(--accent)}
 
 <section id="s5">
 <h2>5. Keeping the model's intent aligned with mine</h2>
-<p class="q">Did the agent do what I meant, not just what it heard?</p>
+<p class="p-lab">Did the agent do what I meant, not just what it heard?</p>
 <p>No single tool answers that. Four checks at four time scales do.</p>
 <figure id="fig-checks">
 <svg viewBox="0 0 640 140" role="img" aria-labelledby="fig-checks-title">
@@ -227,7 +326,7 @@ svg .arrowhead.hi{fill:var(--accent)}
 
 <section id="s5a" data-lavish-revision="r1">
 <h3>5a. The drift check: two graphs, one gap</h3>
-<p class="q">Where exactly did the agent stop doing what I meant?</p>
+<p class="p-lab">Where exactly did the agent stop doing what I meant?</p>
 <p>This idea comes from <strong>Substrate</strong>, a research tool by Kay Kumar that Jake Van Clief (author of the ICM paper) demonstrates in <a href="https://www.youtube.com/watch?v=956DPSPX4wg">"You're Automating The Wrong Layer"</a>. It reads a chat turn by turn and draws <strong>two graphs</strong> from the same small set of building blocks (goal, constraint, assumption, decision, entity, example): one for what the person meant, one for what the model decided. Then it lines them up and lists the gaps, which is the drift, alongside the moments where the two got back in sync.</p>
 <figure id="fig-drift">
 <svg viewBox="0 0 640 330" role="img" aria-labelledby="fig-drift-title">
@@ -241,9 +340,9 @@ svg .arrowhead.hi{fill:var(--accent)}
 <g id="drift-m-short"><title>Decision: cut the length in half</title><rect class="box" x="376" y="48" width="238" height="40" rx="6"/><text class="s" x="495" y="73" text-anchor="middle">DECISION · cut length in half</text></g>
 <g id="drift-m-formal"><title>Decision: switched to a formal register nobody asked for</title><rect class="box warn" x="376" y="102" width="238" height="40" rx="6"/><text class="s" x="495" y="127" text-anchor="middle">DECISION · went formal</text></g>
 <g id="drift-m-rewrite"><title>Action: rewrote "lags the headline numbers" as "lags stated targets"</title><rect class="box warn" x="376" y="156" width="238" height="40" rx="6"/><text class="s" x="495" y="181" text-anchor="middle">ACTION · reworded a claim</text></g>
-<g id="drift-gap-ok"><title>Match: the goal was met</title><path class="edge" d="M264 68 H376" style="stroke:var(--ok)"/><text class="lbl" x="320" y="62" text-anchor="middle">match</text></g>
-<g id="drift-gap-added"><title>Gap type "added": the model added something nobody asked for</title><path class="edge dash" d="M264 122 H376" style="stroke:var(--warn)"/><text class="lbl" x="320" y="116" text-anchor="middle">added</text></g>
-<g id="drift-gap-drifted"><title>Gap type "drifted": the meaning changed while restating</title><path class="edge dash" d="M264 176 H376" style="stroke:var(--warn)"/><text class="lbl" x="320" y="170" text-anchor="middle">drifted</text></g>
+<g id="drift-gap-ok"><title>Match: the goal was met</title><path class="edge ok" d="M264 68 H376"/><text class="lbl" x="320" y="62" text-anchor="middle">match</text></g>
+<g id="drift-gap-added"><title>Gap type "added": the model added something nobody asked for</title><path class="edge dash warn" d="M264 122 H376"/><text class="lbl" x="320" y="116" text-anchor="middle">added</text></g>
+<g id="drift-gap-drifted"><title>Gap type "drifted": the meaning changed while restating</title><path class="edge dash warn" d="M264 176 H376"/><text class="lbl" x="320" y="170" text-anchor="middle">drifted</text></g>
 <g id="drift-out"><title>What happens to the gaps</title><path class="edge" d="M320 210 V236"/><path class="edge" d="M160 236 H480"/><path class="edge" d="M160 236 V256" marker-end="url(#ah8)"/><path class="edge" d="M480 236 V256" marker-end="url(#ah8)"/></g>
 <g id="drift-rules"><title>Gaps that repeat across sessions become proposed rules for AGENTS.md, which you approve</title><rect class="box ok" x="30" y="260" width="260" height="58" rx="8"/><text class="t" x="160" y="284" text-anchor="middle">Rules → AGENTS.md</text><text class="s" x="160" y="303" text-anchor="middle">repeated gaps, you approve</text></g>
 <g id="drift-now"><title>Goals, constraints and decisions go to the "Now" section of the room's or project's CONTEXT.md, which you approve</title><rect class="box ok" x="350" y="260" width="260" height="58" rx="8"/><text class="t" x="480" y="284" text-anchor="middle">Goals → CONTEXT.md "Now"</text><text class="s" x="480" y="303" text-anchor="middle">current state, you approve</text></g>
@@ -311,7 +410,18 @@ svg .arrowhead.hi{fill:var(--accent)}
 </section>
 
 <section id="s8">
-<h2>8. What's still rough (honestly)</h2>
+<h2>8. The takeaway</h2>
+<p>Kun Chen's stack decides <strong>who does the work and whether it's safe to ship</strong>. Plain files decide <strong>what every agent knows</strong>. Small, separate reviews (the brief, the pre-push gate, <code>/stow</code>, backpass) keep <strong>what the agents do</strong> close to <strong>what I meant</strong>, and every one of them leaves a file I can read.</p>
+</section>
+
+<section id="s-why">
+<h2>Why it matters</h2>
+<p>A ship's log does two jobs. It tells the next watch what happened, and it is the record you read when something goes wrong. A brief, a status file and a report do the same for a crew of agents.</p>
+<p>Writing things down in plain files is note-taking that keeps you in charge, and a way to say what you actually meant. The same files mean every agent starts from your words, not a guess. I also think readable files are an easier way for newcomers to learn how agents work than a black box: they can follow what happened, and go on to share what they find, for the bigger good.</p>
+</section>
+
+<section id="s9">
+<h2>9. What's still rough (honestly)</h2>
 <ul>
 <li><code>/stow</code> only runs when I ask for it.</li>
 <li>backpass is installed but, last I checked, not yet working against my Claude and Codex logins, so the weekly rule loop is manual.</li>
@@ -321,9 +431,14 @@ svg .arrowhead.hi{fill:var(--accent)}
 </ul>
 </section>
 
-<section id="s9">
-<h2>9. The takeaway</h2>
-<p>Kun Chen's stack decides <strong>who does the work and whether it's safe to ship</strong>. Plain files decide <strong>what every agent knows</strong>. Small, separate reviews (the brief, the pre-push gate, <code>/stow</code>, backpass) keep <strong>what the agents do</strong> close to <strong>what I meant</strong>, and every one of them leaves a file I can read.</p>
+<section id="s-try">
+<h2>Try it yourself</h2>
+<ol>
+<li>Before you hand a task to an agent, write a short brief file: the goal, the hard limits, and what done means.</li>
+<li>Ask the agent to leave a report file, not just a chat reply.</li>
+<li>Read the report against your brief, and note any place it went its own way.</li>
+</ol>
+<p>Start small. One brief and one report is enough to begin.</p>
 </section>
 
 <section id="credits">
@@ -338,10 +453,10 @@ svg .arrowhead.hi{fill:var(--accent)}
 </ul>
 </section>
 
-
+<nav class="p-pager" aria-label="Previous and next"><a href="rules-from-chat-history.html" rel="prev">← Turn your corrections into rules your AI follows</a><a href="guides-and-sensors.html" rel="next">Guides and sensors: steering AI agents before and after they act →</a></nav>
 </article>
-<nav class="pager" aria-label="Previous and next"><a href="rules-from-chat-history.html" rel="prev">← Your corrections are your next rules</a><a href="everything-is-a-file.html" rel="next">In AI, everything is a file (or a folder) →</a></nav>
+
 </main>
-<footer class="k-foot"><p>by Ashish Raina – program manager turned AI-crew operator</p><p><a href="../about.html">About</a> · <a href="../index.html">Chat with EA-bot</a> · <a href="../index.html#pages">All pages</a> · <a href="https://github.com/codeami">GitHub</a></p></footer>
+<footer class="p-foot"><p>by Ashish Raina – program manager turned AI-crew operator</p><ul><li><a href="../about.html">About</a></li><li><a href="../index.html">Chat with EA-bot</a></li><li><a href="../index.html#pages">All pages</a></li><li><a href="https://github.com/codeami">GitHub</a></li></ul></footer>
 </body>
 </html>
