@@ -15,12 +15,13 @@ var CSS=
 "#drawer .db{flex:1;overflow:auto;padding:16px 18px 28px;overscroll-behavior:contain}"+
 "#drawer h2.t{margin:0 0 4px;font-size:16px;font-weight:600;letter-spacing:.04em}"+
 "#drawer .ln{color:var(--mute,#7d7a74);font-size:11px;margin-bottom:8px}"+
-"#drawer .stt{display:inline-block;font-size:11px;border:1px solid currentColor;padding:1px 8px;margin-bottom:10px}"+
+"#drawer .stt{font-size:11px;margin-bottom:10px;color:var(--mute,#7d7a74)}#drawer .stt::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:currentColor;margin-right:6px;vertical-align:1px}"+
 "#drawer .stt.ok{color:var(--ok,#5ec27a)}#drawer .stt.warn{color:var(--warn,#e0554a)}#drawer .stt.a{color:var(--accent,#ff7a1a)}"+
 "#drawer h3.s{margin:16px 0 6px;font-size:10px;font-weight:400;letter-spacing:.3em;text-transform:uppercase;color:var(--mute,#7d7a74)}"+
 "#drawer h3.s::before{content:'';display:inline-block;width:6px;height:6px;background:var(--accent,#ff7a1a);margin-right:8px}"+
 "#drawer .rel{display:flex;flex-wrap:wrap;gap:6px}"+
 "#drawer .rel button,#drawer .lnk a,#drawer .lnk button{background:#07080a;color:var(--ink,#e9e6e0);border:1px solid var(--line,#23262b);font:inherit;font-size:11px;padding:4px 10px;cursor:pointer;text-decoration:none;display:inline-block}"+
+"#drawer .rel button{max-width:min(100%,28ch);height:26px;box-sizing:border-box;padding-top:0;padding-bottom:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}"+
 "#drawer .rel button:hover,#drawer .rel button:focus-visible,#drawer .lnk a:hover,#drawer .lnk a:focus-visible,#drawer .lnk button:hover,#drawer .lnk button:focus-visible{border-color:var(--accent,#ff7a1a);color:var(--accent,#ff7a1a);outline:none}"+
 "#drawer .lnk{display:flex;flex-direction:column;align-items:flex-start;gap:6px}"+
 "#drawer .none{color:var(--mute,#7d7a74);font-style:italic}"+
@@ -94,7 +95,7 @@ window.AIODrawer=function(o){
     }
     if(c.related&&c.related.length){
       var rel=el("div","rel");section("Related").appendChild(rel);
-      c.related.forEach(function(r){var b=el("button",null,r.label);b.type="button";b.addEventListener("click",r.go);rel.appendChild(b)});
+      c.related.forEach(function(r){var b=el("button",null,r.label);b.type="button";b.title=r.label;b.addEventListener("click",r.go);rel.appendChild(b)});
     }
     if(tabbed&&panes.length>1){
       var tl=el("div","tabs");tl.setAttribute("role","tablist");body.appendChild(tl);
