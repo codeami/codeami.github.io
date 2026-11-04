@@ -57,7 +57,12 @@ for (const file of pages) {
     // Scroll anchoring can leave an inner scroll area at a different offset depending on load timing; start every capture from the top.
     await page.evaluate(() => document.querySelectorAll('*').forEach((e) => { e.scrollTop = 0; }));
 
+    // The long panel post can still be settling its layout on a slow runner (two captures 68px apart); wait for fonts and the network, and allow more time for the stable pair.
+    await page.evaluate(() => document.fonts.ready);
+    await page.waitForLoadState('networkidle');
+
     await expect(page).toHaveScreenshot(`${file.replace(/\//g, '__')}.png`, {
+      timeout: 15000,
       fullPage: true,
       // The chart canvas is a live animation (random starts, real clock), so it is masked; the page around it is compared.
       mask: [page.locator('canvas')],
@@ -159,6 +164,87 @@ test('build: a link-only page gets a static noindex and no robots.txt line, a re
   } finally {
     rmSync(tmp, { recursive: true, force: true });
   }
+});
+
+// ---- the blog: index cards from share.json, and the Calm panel post ----
+test('blog index: lists exactly the public posts, newest first inside each group, no hidden post', async ({ page }) => {
+  const posts = share
+    .filter((r) => /^ai-life-os\/blog\/(?!index\.html)[^/]+\.html$/.test(r.path))
+    .map((r) => ({ ...r, file: r.path.split('/').pop() }));
+  await page.goto('/ai-life-os/blog/index.html');
+  const listed = await page.$$eval('.p-post h3 a', (as) => as.map((a) => a.getAttribute('href')));
+  expect([...listed].sort()).toEqual(posts.filter((p) => p.level === 'public').map((p) => p.file).sort());
+  expect(listed.filter((h) => posts.some((p) => p.level !== 'public' && p.file === h)), 'hidden posts listed').toEqual([]);
+  const groups = await page.$$eval('.p-group', (gs) => gs.map((g) => [...g.querySelectorAll('.p-post time')].map((t) => t.getAttribute('datetime'))));
+  for (const dates of groups) expect(dates, 'newest first').toEqual([...dates].sort().reverse());
+  for (const c of await page.locator('.p-post').all()) {
+    await expect(c.locator('.p-kicker')).not.toBeEmpty();
+    await expect(c.locator('time')).toHaveCount(1);
+    await expect(c.locator('.p-byline')).toContainText('min read');
+  }
+});
+
+test('panel post: header, index, side cards, numbered panels; columns follow the width; no inline styles', async ({ page }) => {
+  await page.goto('/ai-life-os/blog/everything-is-a-file.html');
+  await expect(page.locator('html')).toHaveAttribute('data-skin', 'calm');
+  await expect(page.locator('.p-kicker')).toBeVisible();
+  await expect(page.locator('.p-title .p-hl')).toHaveCount(1);
+  await expect(page.locator('.p-sub')).toBeVisible();
+  expect(await page.locator('.p-tags li').count()).toBeGreaterThan(0);
+  const side = await page.locator('.p-side > *').count();
+  expect(side).toBeGreaterThanOrEqual(1);
+  expect(side).toBeLessThanOrEqual(3);
+  const panels = page.locator('.p-grid > .p-panel');
+  expect(await panels.count(), 'panels capped near 7').toBe(8);
+  await expect(panels.locator('.p-principle')).toHaveCount(8);
+  await expect(page.locator('.p-panel .p-num')).toHaveText(['01', '02', '03', '04', '05', '06', '07', '08']);
+  await expect(page.locator('.p-panel h2').first()).toHaveText('The problem');
+  await expect(page.locator('.p-panel h2').nth(1)).toContainText('The idea');
+  await expect(page.locator('.p-panel h2').last()).toHaveText('Why it matters');
+  await expect(page.locator('.p-head + .p-intro')).toHaveText('This simple file-and-folder method is good enough to start.');
+  await expect(page.locator('#p2')).toContainText('retrieval (RAG, a search index)');
+  await expect(page.locator('#p1 .p-box'), 'four problems').toHaveCount(4);
+  await expect(page.locator('#p8 .p-steps li'), 'try it yourself: three steps').toHaveCount(3);
+  const targets = await page.$$eval('.p-index a', (as) => as.map((a) => a.getAttribute('href')));
+  expect(targets.length).toBe(8);
+  for (const t of [...targets, ...(await page.$$eval('.p-more', (as) => as.map((a) => a.getAttribute('href'))))]) {
+    await expect(page.locator(t), t).toHaveCount(1);
+  }
+  await expect(page.locator('.p-full .p-prose, .p-full.p-prose')).toHaveCount(1);
+  const cols = await page.$eval('.p-grid', (g) => getComputedStyle(g).gridTemplateColumns.split(' ').length);
+  if (test.info().project.name === 'mobile-390') expect(cols, 'panels stack at 390').toBe(1);
+  else expect(cols, 'panels use 2 or 3 columns at 1280').toBeGreaterThanOrEqual(2);
+  expect(await page.locator('[style], style').count(), 'no inline style').toBe(0);
+});
+
+test('panel post: the folder diagram is a labelled SVG that fits the width and shows six folders of three files', async ({ page }) => {
+  await page.goto('/ai-life-os/blog/everything-is-a-file.html');
+  const svg = page.locator('.p-fig svg');
+  await expect(svg).toHaveAttribute('role', 'img');
+  await expect(svg.locator('title')).not.toBeEmpty();
+  await expect(svg.locator('desc')).not.toBeEmpty();
+  await expect(svg.locator('.p-svg-folder')).toHaveCount(6);
+  await expect(svg.locator('text.p-svg-file')).toHaveCount(19);
+  const box = await svg.boundingBox();
+  const vw = page.viewportSize().width;
+  expect(box.x, 'inside the page').toBeGreaterThanOrEqual(0);
+  expect(box.x + box.width, 'inside the page').toBeLessThanOrEqual(vw);
+  // every label stays inside its folder: no text runs past the drawing
+  const out = await svg.evaluate((s) => {
+    const r = s.getBoundingClientRect();
+    return [...s.querySelectorAll('text')].filter((t) => { const b = t.getBoundingClientRect(); return b.left < r.left - 1 || b.right > r.right + 1; }).map((t) => t.textContent);
+  });
+  expect(out).toEqual([]);
+  // and inside its own folder card, not just inside the drawing
+  const spill = await svg.evaluate((s) => {
+    const rects = [...s.querySelectorAll('.p-svg-folder')].map((r) => r.getBoundingClientRect());
+    return [...s.querySelectorAll('text')].filter((t) => {
+      const b = t.getBoundingClientRect();
+      const home = rects.find((r) => b.left >= r.left - 1 && b.left < r.right && b.top >= r.top - 1 && b.top <= r.bottom);
+      return home && b.right > home.right - 2;
+    }).map((t) => t.textContent);
+  });
+  expect(spill, 'label runs past its folder').toEqual([]);
 });
 
 // ---- the landing at / ----

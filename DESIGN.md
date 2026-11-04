@@ -36,6 +36,7 @@ colors:
   calm-line: "#e4dccb"
   calm-line-strong: "#cfc3ab"
   calm-on-accent: "#ffffff"
+  calm-accent-dim: "#efe3d2"
   calm-ok: "#4d7a4d"
   calm-warn: "#b0452f"
   calm-info: "#3d6a8a"
@@ -102,6 +103,17 @@ typography:
     fontWeight: 400
     lineHeight: 1.2
     letterSpacing: 0.12em
+  calm-display:
+    fontFamily: Georgia, serif
+    fontSize: clamp(2rem, 7vw, 3.4rem)
+    fontWeight: 500
+    lineHeight: 1.08
+    letterSpacing: -0.01em
+  calm-subtitle:
+    fontFamily: Georgia, serif
+    fontSize: 1.15rem
+    fontWeight: 400
+    lineHeight: 1.45
 rounded:
   none: 0px
   calm: 8px
@@ -116,6 +128,8 @@ spacing:
   card-max: 46rem
   panel-w: 340px
   sheet-max: 70vh
+  page-max: 74rem
+  panel-gap: 16px
 components:
   card:
     backgroundColor: "{colors.surface-glass}"
@@ -188,6 +202,53 @@ components:
     backgroundColor: "{colors.tertiary}"
     rounded: "{rounded.dot}"
     size: 10px
+  kicker:
+    textColor: "{colors.calm-secondary}"
+    typography: "{typography.calm-label}"
+  editorial-title:
+    textColor: "{colors.calm-primary}"
+    typography: "{typography.calm-display}"
+  title-highlight:
+    backgroundColor: "{colors.calm-accent-dim}"
+    textColor: "{colors.calm-tertiary}"
+  tag-chip:
+    backgroundColor: "{colors.calm-surface}"
+    textColor: "{colors.calm-secondary}"
+    rounded: "{rounded.dot}"
+    padding: 4px
+  series-index:
+    textColor: "{colors.calm-primary}"
+    typography: "{typography.reading}"
+  quote-card:
+    backgroundColor: "{colors.calm-accent-dim}"
+    textColor: "{colors.calm-primary}"
+    typography: "{typography.calm-subtitle}"
+    rounded: "{rounded.calm}"
+    padding: 16px
+  side-card:
+    backgroundColor: "{colors.calm-surface}"
+    textColor: "{colors.calm-primary}"
+    rounded: "{rounded.calm}"
+    padding: 16px
+  panel:
+    backgroundColor: "{colors.calm-neutral}"
+    textColor: "{colors.calm-primary}"
+    rounded: "{rounded.calm}"
+    padding: 16px
+  panel-box:
+    backgroundColor: "{colors.calm-surface}"
+    rounded: "{rounded.calm}"
+    padding: 12px
+  principle-box:
+    backgroundColor: "{colors.calm-accent-dim}"
+    textColor: "{colors.calm-primary}"
+    rounded: "{rounded.calm}"
+    padding: 12px
+  post-card:
+    backgroundColor: "{colors.calm-surface}"
+    textColor: "{colors.calm-primary}"
+    rounded: "{rounded.calm}"
+    padding: 16px
 ---
 
 # AIO Chart & Cards
@@ -300,6 +361,12 @@ One centred reading column, max 46rem, on plain paper. No base-layer graph.
 Detail panels still use the right panel or bottom sheet. Graphs and ladders
 appear inline: a graph in a framed figure, a course ladder as a stepper.
 
+A **panel post** and the blog index are wider: the page is at most `page-max`
+(74rem). Under 760px every grid is one column. From 760px the panel grid and the
+post-card grid are two columns, and from 1100px three. The series index and the
+side cards sit in one row from 900px. The full prose of a post stays in the
+46rem column below the panels.
+
 ### Spacing
 
 Steps are 3, 6, 12, 16 and 24px. Gutter 16px on every edge. No horizontal page
@@ -362,6 +429,39 @@ stays).
 - **Bottom sheet:** handle, title, close button; content scrolls inside it.
 - **Table:** 1px row rules, secondary header, a sort mark on the sorted column,
   status as badges.
+- **Calm panel post:** the reusable blog layout, in `ai-life-os/panel.css`
+  (link it after `hud.css` and `kit/kit.css`, with `data-skin="calm"` on
+  `<html>` in the markup; load no `article.js` or `hud.js`). Pages use the
+  classes only; no inline style. Top to bottom:
+  - **Kicker** (`.p-kicker`): the series or topic, in `calm-label`, parts split
+    by a 1px rule.
+  - **Editorial title** (`.p-title`, `calm-display`) with at most one highlighted
+    phrase (`.p-hl`: accent text on `accent-dim`). Then the **subtitle**
+    (`.p-sub`, italic Georgia, one line), the byline (`.p-byline`) and the
+    **tag chips** (`.p-tags`, pill, `secondary` text, 1px line).
+  - **Series index** (`.p-index`): "In this post", a numbered list `01`, `02`
+    in the accent, each a link to its panel.
+  - **Side cards** (`.p-side`): the quote card (`.p-quote`, accent-dim fill,
+    accent left rule, italic: one line in the post's own words), then
+    `.p-card` for the core idea (`.core` adds an accent border) and for how
+    the post differs from the usual way. One to three cards.
+  - **Numbered panel grid** (`.p-grid` of `.p-panel`): a header with the number
+    (`.p-num`) and title, then labelled boxes (`.p-box` with a `.p-lab` label)
+    holding a short list, a numbered list (`.p-steps`) or a small comparison
+    table (`.p-table`), then one **principle box** (`.p-principle`: the single
+    sentence to keep) and a link to the full section. Panels use the post's
+    own words, shortened; never new claims.
+  - **Wide panel and figure** (`.p-wide`, `.p-fig`): a panel that spans every
+    column, for a diagram. The figure is an inline SVG with `viewBox` and no
+    fixed width, drawn only with the role tokens through `.p-svg-*` classes
+    (folder, root, line, name, file), max 30rem, with a `<title>`, a `<desc>`
+    and a caption that says when the example is made up.
+  - **Full prose** (`.p-full.p-prose`): the whole post below the panels, with
+    `.p-test` for a test note and `.p-callout` for an honest note.
+  - **Post card** (`.p-post` in `.p-posts`, under a `.p-group` heading): kicker,
+    title link, one-line summary, date and reading time. The whole card is the
+    link. Groups by series or topic, newest first; list only pages that are
+    `public` in `share.json`.
 - **Empty state:** says what is empty and why, and offers one next step.
 - **Error state:** says what failed in plain words, a Retry button, and the
   technical detail in secondary text.
