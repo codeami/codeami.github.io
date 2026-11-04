@@ -495,7 +495,15 @@ const mapState = async (page) => {
 // A real mouse click on the node, found through the chart's own coordinates.
 const clickNode = async (page, label) => {
   await mapState(page);
-  const at = await page.evaluate((l) => window.AIOMap.screenOf(l), label);
+  // wait until the node stops moving: two consecutive frames report the same position
+  const at = await page.evaluate((l) => new Promise((resolve) => {
+    const frame = (prev) => requestAnimationFrame(() => {
+      const now = window.AIOMap.screenOf(l);
+      if (prev && prev[0] === now[0] && prev[1] === now[1]) resolve(now);
+      else frame(now);
+    });
+    frame(null);
+  }), label);
   const box = await page.locator('canvas').first().boundingBox();
   await page.mouse.click(box.x + at[0], box.y + at[1]);
 };
