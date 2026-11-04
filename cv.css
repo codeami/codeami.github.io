@@ -1,0 +1,18 @@
+/* The plain web CV (cv.html): one readable column on the Calm skin. Link after hud.css, kit/kit.css and
+   ai-life-os/panel.css; it reads only their role tokens. */
+.cv { max-width: 46rem; margin: 0 auto; }
+.cv-name { margin: var(--s-md) 0 var(--s-sm); font: 500 clamp(2rem, 7vw, 3rem)/1.08 var(--f-head); letter-spacing: -.01em; }
+.cv-role { margin: 0 0 var(--s-md); font: italic 1.15rem/1.45 var(--f-head); color: var(--mute); }
+.cv-links { display: flex; flex-wrap: wrap; gap: 4px var(--s-lg); margin: 0 0 var(--s-lg); padding: 0; list-style: none; font-size: 15px; color: var(--mute); }
+.cv-next { margin: 0 0 var(--s-xl); }
+.cv section { margin: 0 0 var(--s-xl); padding-top: var(--s-md); border-top: 1px solid var(--line); }
+.cv h2 { margin: 0 0 var(--s-md); font: 11px/1.2 var(--f-read); font-variant: small-caps; letter-spacing: .12em; color: var(--mute); }
+.cv-job { margin: 0 0 var(--s-lg); }
+.cv-job h3 { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px var(--s-lg); margin: 0 0 var(--s-sm); font: 700 1.05rem/1.3 var(--f-head); }
+.cv-job h3 time, .cv-job h3 .cv-note { font: 400 14px/1.4 var(--f-read); color: var(--mute); }
+.cv p { margin: 0 0 var(--s-md); }
+.cv-skills { margin: 0; }
+.cv-skills dt { margin: var(--s-md) 0 2px; font-weight: 700; }
+.cv-skills dd { margin: 0; }
+.cv-foot { padding-top: var(--s-md); border-top: 1px solid var(--line); font-size: 15px; }
+@media print { .p-nav, .cv-next, .cv-foot { display: none; } }

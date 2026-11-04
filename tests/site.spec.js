@@ -487,6 +487,127 @@ test('landing: Explain this goes problems, then solutions, then the four values,
   await expect(page.locator('#step-1')).toContainText("I'm EA-bot");
 });
 
+// ---- whoami first: one lit node, a short CV, a way past it, and no click that only reloads ----
+const mapState = async (page) => {
+  await page.waitForFunction(() => window.AIOMap && window.AIOMap.state().here); // set once the chart's data has loaded
+  return page.evaluate(() => window.AIOMap.state());
+};
+// A real mouse click on the node, found through the chart's own coordinates.
+const clickNode = async (page, label) => {
+  await mapState(page);
+  // wait until the node stops moving: two consecutive frames report the same position
+  const at = await page.evaluate((l) => new Promise((resolve) => {
+    const frame = (prev) => requestAnimationFrame(() => {
+      const now = window.AIOMap.screenOf(l);
+      if (prev && prev[0] === now[0] && prev[1] === now[1]) resolve(now);
+      else frame(now);
+    });
+    frame(null);
+  }), label);
+  const box = await page.locator('canvas').first().boundingBox();
+  await page.mouse.click(box.x + at[0], box.y + at[1]);
+};
+// The card is a scrolling box: wait for fonts, then start the capture from its top, as the page loop does.
+const settle = async (page) => {
+  await page.evaluate(() => document.fonts.ready);
+  await page.waitForLoadState('networkidle');
+  await page.evaluate(() => document.querySelectorAll('*').forEach((e) => { e.scrollTop = 0; }));
+};
+const stays = (page) => page.evaluate(() => { window.__stay = true; });
+const stayed = (page) => page.evaluate(() => window.__stay === true);
+
+test('landing: the chart lights one node, whoami, whichever view the reader is in', async ({ page }) => {
+  const views = ['/', '/#whoami', '/#explain', '/#step-3', '/#step-8'];
+  for (const url of views) {
+    await page.goto('about:blank');
+    await page.goto(url);
+    expect(await mapState(page), url).toEqual({ here: 'whoami', lit: ['whoami'] });
+  }
+});
+
+test('landing: whoami opens a short CV with the full CV and a skip', async ({ page }) => {
+  await page.goto('/#whoami');
+  const who = page.locator('#whoami');
+  await expect(who).toBeVisible();
+  await expect(who.locator('h1')).toHaveText('Ashish Raina');
+  await expect(who.locator('.k-dek')).toHaveText('Technical Program Manager · AI-native delivery');
+  await expect(who.getByText('Technical program lead with 20 years in software')).toBeVisible();
+  await expect(who.locator('.outcomes')).toHaveText(/^~3,000 wholesale accounts onboarded · 4 regions · .* satisfaction \(internal NPS\) 5 → 7 \/ 10$/);
+  await expect(who.getByRole('link', { name: 'Full CV' })).toHaveAttribute('href', 'cv.html');
+  await expect(who.getByRole('link', { name: 'Skip to the AI problems' })).toBeVisible();
+  for (const hidden of ['#explain', '#flow', '#intro']) await expect(page.locator(hidden), hidden).toBeHidden();
+  await settle(page);
+  // the card alone: on a phone the chart canvas fills the screen behind it, so a canvas mask would hide the card
+  await expect(page.locator('#pageov')).toHaveScreenshot('landing-whoami.png');
+});
+
+test('landing: Skip to the AI problems continues the journey, and Show me how it works reaches the walk', async ({ page }) => {
+  await page.goto('/#whoami');
+  await page.getByRole('link', { name: 'Skip to the AI problems' }).click();
+  await expect(page.locator('#whoami')).toBeHidden();
+  const chat = page.locator('#journeyChat');
+  for (const p of ['Too much noise', 'Scattered notes and goals', 'AI that guesses what you want', 'Agents nobody can trust']) await expect(chat).toContainText(p);
+  await expect(page).toHaveURL(/#explain$/);
+  expect(await mapState(page)).toEqual({ here: 'whoami', lit: ['whoami'] });
+  await settle(page);
+  await expect(page.locator('#pageov')).toHaveScreenshot('landing-skip.png');
+  await chat.getByRole('button', { name: 'How do you solve them?' }).click();
+  await chat.getByRole('button', { name: 'What do you stand for?' }).click();
+  await chat.getByRole('button', { name: 'Show me how it works' }).click();
+  await expect(page.locator('#flowN')).toHaveText('1');
+});
+
+test('landing: a click on the whoami node, the logo or the page card never reloads the page', async ({ page }) => {
+  // from the calm chart: the node opens the whoami section
+  await page.goto('/');
+  await expect(page.locator('#pageov')).toBeHidden();
+  await stays(page);
+  await clickNode(page, 'whoami');
+  await expect(page.locator('#pageov')).toBeVisible();
+  await expect(page.locator('#whoami')).toBeVisible();
+  expect(await mapState(page)).toEqual({ here: 'whoami', lit: ['whoami'] });
+  // a second click on the same node does not switch it off
+  await clickNode(page, 'whoami');
+  await expect(page.locator('#whoami')).toBeVisible();
+  expect(await mapState(page)).toEqual({ here: 'whoami', lit: ['whoami'] });
+  // from the journey: the node and the logo both lead back to whoami
+  for (const back of ['node', 'logo']) {
+    await page.getByRole('link', { name: 'Skip to the AI problems' }).click();
+    await expect(page.locator('#explain')).toBeVisible();
+    if (back === 'node') await clickNode(page, 'whoami');
+    else await page.locator('.k-nav .k-home').click();
+    await expect(page.locator('#whoami'), back).toBeVisible();
+    await expect(page.locator('#explain'), back).toBeHidden();
+    expect(await stayed(page), `${back}: same document`).toBe(true);
+  }
+  // from the walk (a typed address with a new hash reloads the page by design, so start from a blank one)
+  await page.goto('about:blank');
+  await page.goto('/#step-4');
+  await stays(page);
+  await page.locator('.k-nav .k-home').click();
+  await expect(page.locator('#whoami')).toBeVisible();
+  await expect(page.locator('#flow')).toBeHidden();
+  expect(await stayed(page)).toBe(true);
+});
+
+test('cv.html: the plain web CV is the v5 text without a phone number, an email, the employer name or a file to download', async ({ page }) => {
+  await page.goto('/cv.html');
+  await expect(page.locator('h1')).toHaveText('Ashish Raina');
+  await expect(page.locator('.cv-role')).toHaveText('Technical Program Manager · AI-native delivery');
+  await expect(page.locator('main h2')).toHaveText(['Profile', 'Selected outcomes', 'Experience', 'AI-native delivery', 'Earlier career', 'Skills and education']);
+  const links = await page.$$eval('.cv-links a', (as) => as.map((a) => a.getAttribute('href')));
+  expect(links).toEqual(['https://www.linkedin.com/in/ashish-raina-6308a28', 'https://github.com/codeami', 'index.html']);
+  const text = await page.locator('body').innerText();
+  expect(text).not.toMatch(/\+\d[\d\s-]{8,}|@[a-z0-9-]+\.[a-z]|rainaash|adidas/i);
+  const hrefs = await page.$$eval('a[href]', (as) => as.map((a) => a.getAttribute('href')));
+  expect(hrefs.filter((h) => /\.(docx?|pdf)$/i.test(h)), 'no file downloads').toEqual([]);
+  expect(readdirSync(root).filter((f) => /\.(docx?|pdf)$/i.test(f)), 'no CV file in the repo').toEqual([]);
+  // the way back into the journey
+  await page.getByRole('link', { name: 'Continue to the AI problems' }).first().click();
+  await expect(page).toHaveURL(/#explain$/);
+  await expect(page.locator('#journeyChat')).toContainText('Too much noise');
+});
+
 test('Chart Room chat holds the story and tour branches', () => {
   const t = JSON.parse(readFileSync(join(root, 'ai-life-os/tour/tour.json'), 'utf8')).chat;
   const folders = new Set(t.nodes.map((n) => n.folder));

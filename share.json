@@ -2,6 +2,7 @@
  "about": "What is shared, one entry for every published HTML page (a test fails when a page has none). 'path' is relative to the site root. 'level': public = in the nav, the chart and the lists; link-only = published and reachable by URL but left out of the nav, the chart and the lists, with a static noindex meta in its HTML (written by the build) and no robots.txt line, so crawlers can read the meta; retired = hidden like link-only, has a robots.txt Disallow line, shows a one-line notice, and every link to it is sent to 'into'. Retired entries also carry 'into' (a site-root path or an https link), 'label' (names it in the notice), 'why' and 'since'. The files stay; change a level to republish. Read by ai-life-os/nav.js, ai-life-os/hud.js and ai-life-os/brain/build_data.py (which also writes robots.txt).",
  "pages": [
   {"path": "index.html", "level": "public"},
+  {"path": "cv.html", "level": "public"},
   {"path": "blog/index.html", "level": "public"},
   {"path": "ai-life-os/index.html", "level": "public"},
   {"path": "ai-life-os/about.html", "level": "public"},

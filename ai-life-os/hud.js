@@ -88,7 +88,7 @@
     if (calm) {
       var kept = null;
       try { kept = localStorage.getItem("landing-page"); } catch (e) { /* storage blocked: calm by default */ }
-      state = /^#(step-|explain)/.test(location.hash) || kept === "open" ? "open" : "closed";
+      state = /^#(step-|explain|whoami)/.test(location.hash) || kept === "open" ? "open" : "closed";
     }
     function phone() { return window.innerWidth <= 760; }
     function layout() {
@@ -154,7 +154,13 @@
     function go(url) {
       var u = new URL(url, location.href);
       if (u.origin !== location.origin) return false; // public projects open from their card
-      if (u.pathname === location.pathname && u.hash) { location.hash = u.hash; set("open"); return true; }
+      // A link to the page the reader is already on never reloads it: it opens the card, and a page that listens
+      // for "samepage" (the landing) shows its own first section.
+      if (pathOf(u) === pathOf(location)) {
+        if (u.hash) location.hash = u.hash; else { body.scrollTop = 0; window.dispatchEvent(new Event("samepage")); }
+        set("open"); if (calm) remember("open"); if (G) G.select(u.href);
+        return true;
+      }
       fetch(u.href).then(function (r) { if (!r.ok) throw 0; return r.text(); }).then(function (html) {
         var doc = new DOMParser().parseFromString(html, "text/html");
         if (!framed(doc) || !swappable) { location.href = u.href; return; }

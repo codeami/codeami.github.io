@@ -2,7 +2,7 @@
    It is the chart of Chart & Cards, the base layer of the whole site. brain/index.html shows it alone; on every other
    page hud.js mounts it behind the page, which then reads as an overlay on top of it.
    var g=AIOBrain({base:"<url of brain/>", framed:bool, onPage:fn(url)->bool});
-   g.select(url) highlights a page's node; g.setInsets(bottom) keeps the map clear of a bottom sheet;
+   g.select(url) marks a page's node as "you are here" (that node alone is lit, with a ring); g.state() and g.screenOf(label) are for the tests; g.setInsets(bottom) keeps the map clear of a bottom sheet;
    g.overlay(on) hides the right skills deck while a page overlay covers it.
    The map lives in a shadow root, so the site's CSS and its own names never clash. */
 window.AIOBrain=function(opts){
@@ -77,7 +77,7 @@ function boot(){
 
 /* ---------- state ---------- */
 var S={layout:"rings",view:"departments",spin:0.05,motion:savedMotion()!=null?savedMotion():!mq.matches,names:false,spring:0.5,size:0.6,
-  q:"",hover:null,sel:null,angle:0,legend:false};
+  q:"",hover:null,sel:null,here:false,angle:0,legend:false}; // here: sel is the page the reader is on, shown alone
 var nodes=[],rooms=[],hubs=[],skills=[],routines=[],apps=[],root=null,data=null;
 var cv=$("cv"),ctx=cv.getContext("2d"),W=0,H=0,DPR=1;
 var view={k:.6,x:0,y:0,tk:.6,tx:0,ty:0,user:false};
@@ -107,8 +107,11 @@ var API={
     if(!nodes.length){pending=url;return}
     var u=bare(url),hit=null;
     nodes.forEach(function(n){if(n.info&&n.info.url&&bare(n.info.url)===u)hit=n});
-    S.sel=hit;applyFocus();dirty=true;return hit;
+    S.sel=hit;S.here=!!hit;applyFocus();dirty=true;return hit;
   },
+  // the tests read what is lit and where a node sits on the canvas
+  state:function(){return{here:S.here&&S.sel?S.sel.label:null,lit:flagMode?nodes.filter(function(n){return flags[n.i]}).map(function(n){return n.label}):[]}},
+  screenOf:function(label){var n=nodes.filter(function(m){return m.label===label&&m.type==="app"})[0];return n?w2s(n.x,n.y):null},
   setInsets:function(bottom){INS.bottom=bottom||0;if(!view.user)fitView();dirty=true},
   overlay:function(on){host.classList.toggle("ov",!!on);setTimeout(resize,0)},
   lit:readLit, // the course page calls this after a lesson is done
@@ -404,9 +407,9 @@ function renderSides(){
 /* ---------- open a node: its card in the right-side drawer; a reading page opens its text there ---------- */
 var drawer=null;
 function openNode(n){
-  S.sel=n;hideCard();applyFocus();dirty=true;say(n.label||"file");
+  S.sel=n;S.here=false;hideCard();applyFocus();dirty=true;say(n.label||"file");
   // a page or post of this site: on a framed page it opens in the page overlay instead of the drawer
-  if(n.info&&n.info.url&&opts.onPage&&opts.onPage(n.info.url)){drawer.close();S.sel=n;applyFocus();return}
+  if(n.info&&n.info.url&&opts.onPage&&opts.onPage(n.info.url)){drawer.close();S.sel=n;S.here=true;applyFocus();return}
   var c=nodeCard(n),i=n.info&&n.info.url?drawer.readIndex(n.info.url):-1;
   if(i>=0)drawer.read(i,{status:c.status,statusCls:c.statusCls,related:c.related});else drawer.card(c);
 }
@@ -533,7 +536,8 @@ function onUp(e){
   var d=drag;drag=null;if(!d)return;
   if(!d.moved){
     var n=pick(e.offsetX,e.offsetY);
-    if(n&&n!==S.sel)openNode(n);
+    // the page the reader is on opens again (its page card), it is not switched off
+    if(n&&(n!==S.sel||S.here))openNode(n);
     else{S.sel=null;hideCard();drawer.close();applyFocus();dirty=true}
   }
 }
@@ -553,7 +557,9 @@ function setHover(n){
 function applyFocus(){
   var f=S.hover||S.sel;focusLinks=[];flags.fill(0);flagMode=false;matchCount=0;
   if(f){
-    flagMode=true;flags[f.i]=1;flags[root.i]=1;
+    flagMode=true;flags[f.i]=1;
+    if(f===S.sel&&S.here)return; // the page the reader is on is the one lit node: no centre node, no links
+    flags[root.i]=1;
     var add=function(n){flags[n.i]=1};
     if(f.type==="dot"){add(f.hub);focusLinks.push([f,f.hub],[f.hub,root])}
     else if(f.type==="hub"){rooms[f.room].dots.forEach(function(d){add(d);focusLinks.push([f,d])});focusLinks.push([f,root])}
@@ -777,9 +783,12 @@ function draw(t){
     ctx.fillStyle=p.color;ctx.font="bold "+(p.r*.95)+"px ui-monospace,monospace";ctx.textAlign="center";ctx.textBaseline="middle";
     ctx.fillText((p.label[0]||"?").toUpperCase(),p.x,p.y+.5);
   });
+  // the page the reader is on: one ring round its node
+  if(S.sel&&S.here){ctx.globalAlpha=1;ctx.strokeStyle=S.sel.color;ctx.lineWidth=2/k;ctx.beginPath();ctx.arc(S.sel.x,S.sel.y,Math.max(S.sel.r*1.9,7/k),0,TAU);ctx.stroke()}
   // root
   (function(){
-    var a=1;ctx.globalCompositeOperation="lighter";ctx.globalAlpha=.9;
+    var a=flagMode&&!flags[root.i]?.25:1; // dimmed like any node that is not lit
+    ctx.globalCompositeOperation="lighter";ctx.globalAlpha=.9*a;
     ctx.drawImage(sprite("#ff7a1a"),root.x-root.r*3,root.y-root.r*3,root.r*6,root.r*6);
     ctx.globalCompositeOperation="source-over";ctx.globalAlpha=a;
     ctx.fillStyle="#150b04";ctx.strokeStyle="#ff7a1a";ctx.lineWidth=2/k;
@@ -793,14 +802,14 @@ function draw(t){
     var x=view.x+wx*k,y=view.y+wy*k+dy;if(x<-80||x>W+80||y<-20||y>H+20)return;
     ctx.globalAlpha=al;ctx.fillStyle=color;ctx.font=size+"px ui-monospace,monospace";ctx.fillText(txt,x,y);
   }
-  label(root.label,root.x,root.y,"#e9e6e0",11,root.r*k+16,1);
+  label(root.label,root.x,root.y,"#e9e6e0",11,root.r*k+16,flagMode&&!flags[root.i]?.25:1);
   hubs.forEach(function(h){
     var R=rooms[h.room];
     label(R.label.toUpperCase()+(R.collapsed?" · "+R.count:""),h.x,h.y,h.color,10,-h.r*k-8,flagMode?(flags[h.i]?1:.3):.95);
   });
   if(guideA>.05)L.guides.forEach(function(gd){label(gd.label,0,gd.ly,gd.lc,12,0,guideA*(flagMode?.4:.9))});
   if(S.hover&&S.hover.type!=="dot"&&S.hover.type!=="hub"&&S.hover.type!=="root")label(S.hover.label,S.hover.x,S.hover.y,"#e9e6e0",11,-S.hover.r*k-8,1);
-  else if(S.sel&&S.sel!==S.hover&&S.sel.type!=="dot"&&S.sel.type!=="hub"&&S.sel.type!=="root")label(S.sel.label,S.sel.x,S.sel.y,"#e9e6e0",11,-S.sel.r*k-8,1);
+  else if(S.sel&&S.sel!==S.hover&&S.sel.type!=="dot"&&S.sel.type!=="hub"&&S.sel.type!=="root")label(S.sel.label+(S.here?" · you are here":""),S.sel.x,S.sel.y,"#e9e6e0",11,-S.sel.r*k-8,1);
   if(S.names||(S.q&&matchCount>0&&matchCount<=40)){
     var cnt=0;
     for(var i2=0;i2<nodes.length&&cnt<260;i2++){
