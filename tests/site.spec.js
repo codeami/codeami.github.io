@@ -615,3 +615,21 @@ test('Chart Room chat holds the story and tour branches', () => {
   const ids = new Set(t.nodes.map((n) => n.id));
   for (const n of t.nodes) for (const x of n.next) expect(ids.has(x), `${n.id} -> ${x}`).toBe(true);
 });
+
+test('room drawer: every Related chip is one line, at most 28 px tall, with its full text in the title', async ({ page }) => {
+  await page.goto('/ai-life-os/brain/index.html#pocock-steers-with-skills-kun-builds-machinery');
+  const drawer = page.locator('#drawer');
+  await expect(drawer).toBeVisible();
+  await drawer.getByRole('tab', { name: 'Related' }).click();
+  await drawer.locator('.rel button', { hasText: 'Wiki notes' }).click();
+  await expect(drawer.locator('h2.t')).toHaveText('Wiki notes');
+  await drawer.getByRole('tab', { name: 'Related' }).click();
+  const chips = await drawer.locator('.rel button').evaluateAll((bs) => bs.map((b) => ({ h: b.getBoundingClientRect().height, title: b.title, text: b.textContent })));
+  expect(chips.length, 'the room lists its notes').toBeGreaterThan(5);
+  for (const c of chips) {
+    expect(c.h, `${c.text} is one line`).toBeLessThanOrEqual(28);
+    expect(c.title, 'full text in title').toBe(c.text);
+  }
+  expect(await drawer.locator('.stt').evaluate((e) => getComputedStyle(e).borderTopWidth), 'status is a dot and text, not a box').toBe('0px');
+  await expect(drawer).toHaveScreenshot('wiki-notes-related.png');
+});
