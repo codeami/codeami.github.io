@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en" data-skin="calm">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>When the notes are wrong · The Chart Room</title>
+<meta name="description" content="Coding agents follow a stale instruction file over the code that works. One sentence in your base file puts the code first and gives you a list of every card to fix.">
+<link rel="stylesheet" href="../hud.css">
+<link rel="icon" href="../kit/bosun.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../kit/kit.css">
+<link rel="stylesheet" href="../panel.css">
+<link rel="stylesheet" href="../topbar.css">
+<script src="../topbar.js"></script>
+</head>
+<body>
+<header class="p-nav tb">
+  <a class="p-brand tb-brand" href="../../index.html"><img src="../kit/bosun.svg" alt=""><span>Ashish Raina</span></a>
+  <button class="tb-menu" type="button" aria-expanded="false" aria-controls="tb-links">Menu</button>
+  <nav class="tb-links" id="tb-links" aria-label="Site"><a href="../../index.html#me">Me</a><a href="index.html" aria-current="page">Blog</a><a href="../../intent/index.html">Intent</a><a href="../course/index.html">Course</a><a class="tb-gh" href="https://github.com/codeami" aria-label="GitHub: github.com/codeami"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="../kit/icons.svg#github"/></svg></a></nav>
+</header>
+<main class="p-page">
+
+<header class="p-head">
+<p class="p-kicker"><a href="index.html">Blog</a><span>Safe AI crews</span></p>
+<h1 class="p-title">When the <mark class="p-hl">notes are wrong</mark></h1>
+<p class="p-sub">A catalogue card that points to a shelf that has moved</p>
+<p class="p-byline"><span>Ashish Raina</span><time datetime="2026-11-05">5 Nov 2026</time><span>4 min read</span></p>
+<ul class="p-tags" aria-label="Topics"><li>AGENTS.md</li><li>Stale notes</li><li>Code first</li><li>One sentence</li><li>5 panels</li></ul>
+</header>
+<p class="p-intro">A coding agent reads your notes as orders. When the notes say one thing and the code says another, the agent usually follows the notes. One sentence in your base file changes that.</p>
+
+<div class="p-top">
+<nav class="p-index" aria-label="In this post">
+<h2>In this post</h2>
+<ol>
+<li><a href="#p1">The problem</a></li>
+<li><a href="#p2">The idea: let the code win a disagreement</a></li>
+<li><a href="#p3">Why it happens</a></li>
+<li><a href="#p4">Why the rule is scoped</a></li>
+<li><a href="#p5">Why it matters</a></li>
+</ol>
+</nav>
+<aside class="p-side" aria-label="At a glance">
+<blockquote class="p-quote"><p class="p-lab">In the post's own words</p><p>A stale card is worse than no card.</p></blockquote>
+<div class="p-card core"><h2 class="p-lab">The core idea</h2><p>Tell the agent that on a fact, the code wins, and that it must list every mismatch it finds. Rules and decisions stay as written.</p></div>
+<div class="p-card"><h2 class="p-lab">Different from keeping notes current</h2><p>Notes drift whatever you do. The sentence limits the damage on the day they do, and turns each mismatch into a fix list.</p></div>
+</aside>
+</div>
+
+<div class="p-grid">
+
+<section class="p-panel" id="p1" aria-labelledby="p1-t">
+<header class="p-panel-h"><span class="p-num">01</span><h2 id="p1-t">The problem</h2></header>
+<div class="p-box"><h3 class="p-lab">A card points to a shelf that has moved</h3><p>The card says the book is on shelf 4. Someone moved it to shelf 7 and no one fixed the card. A librarian who trusts the card walks to an empty shelf.</p></div>
+<div class="p-box"><h3 class="p-lab">Agents trust the card</h3><p>A <a href="https://arxiv.org/abs/2610.30571">2026 study</a> ran 320 agent runs over 40 Python projects. When the instruction file disagreed with the code, 90.1% of choices followed the file.</p></div>
+<div class="p-box"><h3 class="p-lab">Noticing did not help</h3><p>Claude Code flagged the conflict in 79 of 80 runs and still followed the file.</p></div>
+<div class="p-box"><h3 class="p-lab">Some agents rewrote working code</h3><p>Codex rewrote working code to match the file in 20 of 80 runs. The project's tests then failed in 17 of those.</p></div>
+<p class="p-principle"><span class="p-lab">Principle</span>The stale card wins unless you say otherwise.</p>
+<a class="p-more" href="#s-problem">Read the problem</a>
+</section>
+
+<section class="p-panel" id="p2" aria-labelledby="p2-t">
+<header class="p-panel-h"><span class="p-num">02</span><h2 id="p2-t">The idea: let the code win a disagreement</h2></header>
+<div class="p-box"><h3 class="p-lab">One sentence</h3><p>"When docs and code disagree on a fact (a path, name, command, flag or style convention), follow the code and list each mismatch in your final reply. A documented decision or safety rule still wins until I change it."</p></div>
+<div class="p-box"><h3 class="p-lab">What it did in the study</h3><p>Code-following rose from 4.2% to 91.4%. The rewrites stopped, and the test pass rate went from 89.4% to 100%.</p></div>
+<div class="p-box"><h3 class="p-lab">Where it goes</h3><p>In the user-level instruction file, the one every project loads. It is in my base map.</p></div>
+<p class="p-principle"><span class="p-lab">Principle</span>On a fact, the code is the source. The notes report on it.</p>
+<a class="p-more" href="#s1">Read section 1</a>
+</section>
+
+<section class="p-panel" id="p3" aria-labelledby="p3-t">
+<header class="p-panel-h"><span class="p-num">03</span><h2 id="p3-t">Why it happens</h2></header>
+<div class="p-box"><h3 class="p-lab">Two kinds of text</h3><p>The instruction file arrives as an instruction. The code arrives as tool output, the result of a file read.</p></div>
+<div class="p-box"><h3 class="p-lab">Models rank them</h3><p>Models give instructions more weight than tool output. The file wins even when the agent has just seen the code say otherwise.</p></div>
+<div class="p-box"><h3 class="p-lab">What the sentence changes</h3><p>The sentence is an instruction too. Now the higher-ranked text tells the agent to trust the code on facts.</p></div>
+<p class="p-principle"><span class="p-lab">Principle</span>Rank follows how text arrives, not how true it is.</p>
+<a class="p-more" href="#s2">Read section 2</a>
+</section>
+
+<section class="p-panel" id="p4" aria-labelledby="p4-t">
+<header class="p-panel-h"><span class="p-num">04</span><h2 id="p4-t">Why the rule is scoped</h2></header>
+<div class="p-box"><h3 class="p-lab">Facts the code can answer</h3><p>A path, a name, a command, a flag, a style convention. The code shows which is right, so the code wins.</p></div>
+<div class="p-box"><h3 class="p-lab">Decisions it cannot</h3><p>A documented decision or a safety rule is not a code convention. "Ask before deleting" is not in the code to be checked. The rule stands until I change it.</p></div>
+<div class="p-box"><h3 class="p-lab">Two cases</h3>
+<table class="p-table"><thead><tr><th>The notes say</th><th>Who wins</th></tr></thead><tbody>
+<tr><td>Run tests with a command that no longer exists</td><td>The code</td></tr>
+<tr><td>Never push to the main branch</td><td>The rule</td></tr>
+</tbody></table></div>
+<p class="p-principle"><span class="p-lab">Principle</span>The code wins on facts. The rule wins on decisions.</p>
+<a class="p-more" href="#s3">Read section 3</a>
+</section>
+
+<section class="p-panel" id="p5" aria-labelledby="p5-t">
+<header class="p-panel-h"><span class="p-num">05</span><h2 id="p5-t">Why it matters</h2></header>
+<div class="p-box"><h3 class="p-lab">Cards go stale</h3><p>Notes drift as soon as the work moves. Every map file has some cards that are already wrong.</p></div>
+<div class="p-box"><h3 class="p-lab">The list is the repair job</h3><p>Each mismatch the agent reports is a card to fix. The notes get more accurate with use.</p></div>
+<div class="p-box"><h3 class="p-lab">Try it yourself</h3>
+<ol class="p-steps"><li>Add the sentence to the instruction file your tool loads for every project.</li><li>Give the agent a small task in a project whose notes you know are out of date.</li><li>Check that the final reply lists each mismatch, then fix the cards it names.</li></ol></div>
+<p class="p-principle"><span class="p-lab">Principle</span>Let the code win today. Fix the card tomorrow.</p>
+<a class="p-more" href="#s-why">Read why it matters</a>
+<a class="p-more" href="#s5">Read the steps</a>
+</section>
+
+</div>
+
+<article class="p-full p-prose" id="full">
+<h2>The full post</h2>
+<p class="p-lab">For readers who want the whole argument</p>
+
+<section id="s-problem">
+<h2>The problem</h2>
+<p>In <a href="everything-is-a-file.html">the library post</a>, the card catalogue stands for the <code>AGENTS.md</code> map: one short file that tells the AI which drawer to open. A catalogue is only useful while its cards are true.</p>
+<figure id="fig-card">
+<svg viewBox="0 0 480 150" role="img" aria-labelledby="fig-card-title">
+<title id="fig-card-title">A catalogue card points to shelf 4, which is empty. The book is on shelf 7.</title>
+<defs>
+<marker id="ah1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="arrowhead" d="M0,0 L10,5 L0,10 z"/></marker>
+</defs>
+<g id="card-card"><title>The catalogue card</title><rect class="box hi" x="10" y="45" width="150" height="60" rx="8"/><text class="t" x="85" y="72" text-anchor="middle">Catalogue card</text><text class="s" x="85" y="90" text-anchor="middle">says: shelf 4</text></g>
+<g id="card-edges"><title>The card points to shelf 4. The shelf itself shows shelf 7.</title>
+<path class="edge no" d="M160 65 C215 65 215 30 288 30" marker-end="url(#ah1)"/>
+<path class="edge ok" d="M160 85 C215 85 215 120 288 120" marker-end="url(#ah1)"/>
+</g>
+<g id="card-shelves"><title>Shelf 4 is empty. Shelf 7 holds the book.</title>
+<rect class="box warn" x="290" y="10" width="180" height="40" rx="8"/><text class="t" x="302" y="35">Shelf 4</text><text class="s" x="458" y="35" text-anchor="end">empty</text>
+<rect class="box ok" x="290" y="100" width="180" height="40" rx="8"/><text class="t" x="302" y="125">Shelf 7</text><text class="s" x="458" y="125" text-anchor="end">the book is here</text>
+</g>
+</svg>
+<figcaption>The card says shelf 4. The shelf shows the book moved to shelf 7. A librarian who trusts the card walks to the empty shelf.</figcaption>
+</figure>
+<p>This happens to coding agents. Xu and Wu measured it in <a href="https://arxiv.org/abs/2610.30571">"Stale Instruction Files Override the Code in Coding Agents: A One-Sentence Fix"</a> (October 2026). They ran 320 runs over 40 Python projects, with Claude Code and Codex CLI, and gave each project an instruction file that conflicted with the code.</p>
+<ul>
+<li><strong>The file won.</strong> 90.1% of choices followed the stale file.</li>
+<li><strong>Noticing did not help.</strong> Claude Code flagged the conflict in 79 of 80 runs and still complied.</li>
+<li><strong>Some agents rewrote working code.</strong> Codex changed code that worked to match the file in 20 of 80 runs, and the tests failed in 17 of those.</li>
+</ul>
+<p>The agent did not miss the mismatch. It saw it and chose the card.</p>
+</section>
+
+<section id="s1">
+<h2>1. The idea: let the code win a disagreement</h2>
+<p class="p-lab">What is the sentence?</p>
+<p>The authors added one sentence to the user-level instruction file, the file every project loads. It gives the code precedence and asks for every mismatch to be listed. Mine reads:</p>
+<div class="p-ex" id="ex-sentence">
+<h3>The sentence</h3>
+<p>When docs and code disagree on a fact (a path, name, command, flag or style convention), follow the code and list each mismatch in your final reply. A documented decision or safety rule still wins until I change it.</p>
+</div>
+<p>With it, code-following rose from 4.2% to 91.4%. The rewrites stopped, and the test pass rate went from 89.4% to 100%.</p>
+</section>
+
+<section id="s2">
+<h2>2. Why it happens</h2>
+<p class="p-lab">Why does the card beat the shelf?</p>
+<p>The study's explanation is about how the text arrives. The instruction file reaches the model as an instruction. The code reaches it as tool output, the result of reading a file. Models rank instructions above tool output.</p>
+<p>So the order of trust follows the route the text took, and not whether it is true. The sentence works because it is an instruction too. The higher-ranked text now says to prefer the code.</p>
+</section>
+
+<section id="s3">
+<h2>3. Why the rule is scoped</h2>
+<p class="p-lab">Why not "the code always wins"?</p>
+<p>Because the code and the notes hold different kinds of statement.</p>
+<ul>
+<li><strong>Facts</strong> are things the code can answer: a path, a name, a command, a flag, a style convention. If the notes say one and the code shows another, the notes are stale.</li>
+<li><strong>Decisions and safety rules</strong> are things the code cannot answer. "Ask before deleting data" and "never push to the main branch" are choices I made, written down on purpose. If some code breaks one, the code is what needs fixing.</li>
+</ul>
+<p>Hence the second half of the sentence: a documented decision or safety rule still wins until I change it. Only I change it, in the file, on purpose.</p>
+</section>
+
+<section id="s-why">
+<h2>Why it matters</h2>
+<p>Notes go stale because work moves. A map file with no wrong cards is rare, and agents act on the wrong ones with full confidence.</p>
+<p>The sentence does two jobs. On the day a card is wrong, the agent follows the code, so working code stays. And the list of mismatches in the final reply is a list of cards to fix. The map gets more accurate every time an agent uses it.</p>
+</section>
+
+<section id="s4">
+<h2>4. What's next</h2>
+<ul>
+<li>The sentence stays in my base map, so every tool I use loads it.</li>
+<li>Every task ends with the mismatch list. I read it and correct the stale card the same day.</li>
+<li>Decisions and safety rules stay in the file as written, and change only when I change them.</li>
+</ul>
+</section>
+
+<section id="s5">
+<h2>5. Try it yourself</h2>
+<div class="p-try" id="try-box">
+<p><strong>Three steps.</strong></p>
+<ol>
+<li>Add the sentence to the instruction file your tool loads for every project.</li>
+<li>Give the agent a small task in a project whose notes you know are out of date.</li>
+<li>Check that the final reply lists each mismatch. Then fix the cards it names.</li>
+</ol>
+</div>
+</section>
+
+<section id="credits">
+<h2>Credits</h2>
+<ul>
+<li><strong>Xiaonan Xu and Wenjing Wu</strong>: <a href="https://arxiv.org/abs/2610.30571">"Stale Instruction Files Override the Code in Coding Agents: A One-Sentence Fix"</a>, arXiv 2610.30571, October 2026. All the numbers in this post are theirs.</li>
+<li><strong>The <a href="https://agents.md">AGENTS.md</a> convention</strong>: one instructions file that many coding agents read.</li>
+<li><strong>Jake Van Clief</strong>: the <a href="https://arxiv.org/abs/2603.16021">Interpretable Context Methodology</a>, the map-and-rooms structure the library post follows.</li>
+</ul>
+</section>
+
+<nav class="p-pager" aria-label="Previous and next"><a href="guides-and-sensors.html" rel="prev">← Guides and sensors: steering AI agents before and after they act</a><a href="index.html" rel="next">All posts →</a></nav>
+</article>
+
+</main>
+<footer class="p-foot"><p>by Ashish Raina – program manager turned AI-crew operator</p><ul><li><a href="../../index.html#me">Me</a></li><li><a href="index.html">Blog</a></li><li><a href="../../intent/index.html">Intent</a></li><li><a href="../course/index.html">Course</a></li><li><a href="https://github.com/codeami">GitHub</a></li></ul></footer>
+</body>
+</html>

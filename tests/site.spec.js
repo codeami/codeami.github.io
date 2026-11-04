@@ -312,6 +312,7 @@ const convertedPosts = [
   { slug: 'one-harness-for-every-agent', series: 'Customize everything, including yourself', panels: 6 },
   { slug: 'how-it-fits-together', series: 'Safe AI crews', panels: 7 },
   { slug: 'guides-and-sensors', series: 'Safe AI crews', panels: 6 },
+  { slug: 'when-the-notes-are-wrong', series: 'Safe AI crews', panels: 5 },
 ];
 
 test('converted posts: each one is a covered page, public in share.json and listed on the blog index under its series', async ({ page }) => {

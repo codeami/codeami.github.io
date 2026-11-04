@@ -23,7 +23,7 @@ The two maps, `ai-life-os/maps/skills.html` and `flow.html`, are built files. Ed
     python3 -I ai-life-os/maps/_shared/build.py ai-life-os/maps/src/skills/map.json ai-life-os/maps/skills.html
     python3 -I ai-life-os/maps/_shared/build.py ai-life-os/maps/src/flow/map.json ai-life-os/maps/flow.html
 
-The Blog posts and `ai-life-os/arena.html` are built from the owner's private drafts by a script kept outside this repo. `ai-life-os/blog/index.html` and the six public posts (`everything-is-a-file`, `second-brain-page`, `rules-from-chat-history`, `how-it-fits-together`, `guides-and-sensors`, `one-harness-for-every-agent`) are the exception: they use the calm panel post layout (`ai-life-os/panel.css`, described in `DESIGN.md`), and the index groups them by series. `progress-three-weeks.html` is retired and keeps the older article layout. Their links to the retired pages were repointed here by hand, so the next rebuild needs the same mapping (for example `overview.html` becomes `index.html#pages`).
+The Blog posts and `ai-life-os/arena.html` are built from the owner's private drafts by a script kept outside this repo. `ai-life-os/blog/index.html` and the seven public posts (`everything-is-a-file`, `second-brain-page`, `rules-from-chat-history`, `how-it-fits-together`, `guides-and-sensors`, `one-harness-for-every-agent`, `when-the-notes-are-wrong`) are the exception: they use the calm panel post layout (`ai-life-os/panel.css`, described in `DESIGN.md`), and the index groups them by series. `progress-three-weeks.html` is retired and keeps the older article layout. Their links to the retired pages were repointed here by hand, so the next rebuild needs the same mapping (for example `overview.html` becomes `index.html#pages`).
 
 ## Tests
 
