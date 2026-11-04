@@ -1,0 +1,23 @@
+/* The one top bar: logo, Me, Blog, Intent, Course, GitHub. Same list and look on every page.
+   The page's own stylesheet sets the colours; this file sets the layout. On a phone the links sit behind Menu
+   (topbar.js adds .tb-js; without it the links stay in view and wrap). */
+header.tb { position: relative; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; padding: 10px var(--gutter, 20px); background: var(--panel, var(--surface, transparent)); border-bottom: 1px solid var(--line); }
+header.tb .tb-brand { display: flex; align-items: center; gap: 10px; min-width: 0; margin-right: auto; color: var(--ink); text-decoration: none; font: 700 18px/1 var(--font-display, var(--f-head, inherit)); letter-spacing: -.02em; }
+header.tb .tb-brand img { width: 30px; height: 30px; flex: none; }
+header.tb .tb-links { display: flex; align-items: center; gap: 18px; margin-left: 0; font-size: 15px; }
+header.tb .tb-links a { padding: 6px 0; color: var(--mute); text-decoration: none; white-space: nowrap; }
+header.tb .tb-links a[aria-current] { color: var(--ink); font-weight: 700; box-shadow: inset 0 -2px 0 var(--accent); }
+header.tb .tb-links .tb-gh { display: inline-flex; align-items: center; }
+header.tb .tb-links .tb-gh svg { width: 20px; height: 20px; }
+header.tb .tb-menu { display: none; min-height: 40px; padding: 0 14px; font: 600 14px/1 var(--font-body, var(--f-ui, inherit)); color: var(--ink); background: transparent; border: 1px solid var(--line-2, var(--line)); border-radius: 6px; cursor: pointer; }
+/* The last line of a page hands the reader on to the next page in the bar order. */
+.handoff { margin: 32px 0 8px; font-size: 1.1rem; font-weight: 700; }
+.handoff a { color: var(--accent-text, var(--accent)); text-decoration: none; }
+.handoff a:hover, .handoff a:focus-visible { text-decoration: underline; }
+@media (max-width: 760px) {
+  .tb-js header.tb .tb-menu { display: inline-block; }
+  .tb-js header.tb .tb-links { display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 5; flex-direction: column; align-items: stretch; gap: 0; padding: 4px var(--gutter, 20px) 10px; background: var(--panel, var(--surface, Canvas)); border-bottom: 1px solid var(--line); }
+  .tb-js header.tb.tb-open .tb-links { display: flex; }
+  .tb-js header.tb .tb-links a { padding: 12px 0; }
+  .tb-js header.tb .tb-links .tb-gh svg { width: 22px; height: 22px; }
+}

@@ -267,36 +267,32 @@
     "nodes": [
       {
         "id": "j1",
-        "fact": "Four problems, in plain words.",
-        "more": [
-          "Too much noise. Everything is loud, and the thing you need is buried.",
-          "Scattered notes and goals. Home, work and a passion each keep their own pile.",
-          "AI that guesses what you want. Say it loosely and it fills the gap with a confident guess.",
-          "Agents nobody can trust. They run fast, and you cannot tell what they did or why."
-        ],
+        "fact": "Hi, I'm EA-bot, and this is the short version of why this site exists.",
+        "more": ["Most of us never write down what we actually want, so we can't tell progress from motion. Everything here starts by fixing that."],
         "next": ["j2"]
       },
       {
-        "id": "j2", "chip": "How do you solve them?",
-        "fact": "One written intent, one place for it all, and a crew you can check.",
-        "more": [
-          "Noise: a second brain holds only what you chose to keep, as plain linked files.",
-          "Scatter: your goals sit in one life file, with the notes that serve them beside it.",
-          "Guessing: an interview comes first. It turns a want into a goal and a check anyone can run.",
-          "Trust: each agent works in its own copy, and a gate checks its work before you see it."
-        ],
+        "id": "j2", "chip": "What goes wrong without that?",
+        "fact": "Too much noise buries the thing you need, and your notes and goals sit in separate piles.",
+        "more": ["Tell an AI something loosely and it fills the gap with a confident guess. Let agents run fast and you can't see what they did, or why."],
         "next": ["j3"]
       },
       {
-        "id": "j3", "chip": "What do you stand for?",
-        "fact": "Four values.",
-        "more": [
-          "Signal from noise.",
-          "Customize everything, including yourself.",
-          "Self-learning, evolving, powerful yet safe AI bot-swarm managers that work toward your needs.",
-          "Smart goal tracking that harmonises your wants.",
-          "Some of this is built and some is still a plan. Each page says which."
-        ],
+        "id": "j3", "chip": "How do you fix that?",
+        "fact": "Write the target down first, then let the tool work toward it.",
+        "more": ["A second brain keeps only what you chose, and an interview turns a loose want into a goal anyone can check. Each agent works in its own copy, and a gate checks its work before you see it."],
+        "next": ["j4"]
+      },
+      {
+        "id": "j4", "chip": "What do you stand for?",
+        "fact": "Signal over noise, and a setup you can bend to fit you, right down to your own habits.",
+        "more": ["Safe AI helpers that keep learning and work toward what you need, and goals that sit together instead of fighting."],
+        "next": ["j5"]
+      },
+      {
+        "id": "j5", "chip": "Who is it for?",
+        "fact": "A person gets a life pointed at something they chose, and a company gets one agreed goal.",
+        "more": ["A reader gets the internet sorted by quality instead of popularity, and a beginner gets AI explained without the panic."],
         "next": [{ "label": "Show me how it works", "step": 1, "path": "learner" }, { "label": "Start the free course", "href": "ai-life-os/course/index.html" }]
       },
       {

@@ -10,6 +10,8 @@
 <script src="../article.js"></script>
 <link rel="icon" href="../kit/bosun.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../kit/kit.css">
+<link rel="stylesheet" href="../topbar.css">
+<script src="../topbar.js"></script>
 <style>
 /* The course: the same chat as the landing (bubbles, option chips, a save-for-later
    list), but the script is a fixed reading order from course.json. */
@@ -104,14 +106,16 @@
   </symbol>
 </svg>
 
-<header class="k-nav">
-  <a class="k-home" href="../index.html"><svg class="k-mark" role="img" aria-label="Bosun, the EA-bot mascot"><use href="#bosun"/></svg>
-  <span class="k-logo">The Chart Room<small>How one captain runs a crew of AI agents, safely.</small></span></a>
-  <nav aria-label="Site">
+<header class="k-nav tb">
+  <a class="k-home tb-brand" href="../../index.html"><svg class="k-mark" role="img" aria-label="Bosun, the EA-bot mascot"><use href="#bosun"/></svg>
+  <span class="k-logo">Ashish Raina</span></a>
+  <button class="tb-menu" type="button" aria-expanded="false" aria-controls="tb-links">Menu</button>
+  <nav class="tb-links" id="tb-links" aria-label="Site">
+    <a href="../../index.html#me">Me</a>
     <a href="../blog/index.html">Blog</a>
+    <a href="../../intent/index.html">Intent</a>
     <a href="index.html" aria-current="page">Course</a>
-    <a href="../arena.html">Arena</a>
-    <a href="../safety.html">Safety</a>
+    <a class="tb-gh" href="https://github.com/codeami" aria-label="GitHub: github.com/codeami"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="../kit/icons.svg#github"/></svg></a>
     <button class="theme" id="theme" type="button"></button>
   </nav>
 </header>
@@ -141,6 +145,8 @@
     </section>
   </aside>
 </div>
+
+<p class="handoff"><a href="https://github.com/codeami">Next: the code, and follow →</a></p>
 
 <footer class="foot">
   <p>Ashish's AI introductory course · modelled on <a href="https://bluedot.org/courses">BlueDot Impact's courses</a>. Progress stays in this browser only.</p>

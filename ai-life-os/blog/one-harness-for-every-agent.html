@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en" data-skin="calm">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>One harness for every agent, model and machine · The Chart Room</title>
+<meta name="description" content="Every AI tool keeps its own rules and memory, so a new tool or a new laptop loses your setup. One base map every tool loads first, and Nix to rebuild it on each Mac.">
+<link rel="stylesheet" href="../hud.css">
+<link rel="icon" href="../kit/bosun.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../kit/kit.css">
+<link rel="stylesheet" href="../panel.css">
+<link rel="stylesheet" href="../topbar.css">
+<script src="../topbar.js"></script>
+</head>
+<body>
+<header class="p-nav tb">
+  <a class="p-brand tb-brand" href="../../index.html"><img src="../kit/bosun.svg" alt=""><span>Ashish Raina</span></a>
+  <button class="tb-menu" type="button" aria-expanded="false" aria-controls="tb-links">Menu</button>
+  <nav class="tb-links" id="tb-links" aria-label="Site"><a href="../../index.html#me">Me</a><a href="index.html" aria-current="page">Blog</a><a href="../../intent/index.html">Intent</a><a href="../course/index.html">Course</a><a class="tb-gh" href="https://github.com/codeami" aria-label="GitHub: github.com/codeami"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="../kit/icons.svg#github"/></svg></a></nav>
+</header>
+<main class="p-page">
+
+<header class="p-head">
+<p class="p-kicker"><a href="index.html">Blog</a><span>Customize everything, including yourself</span></p>
+<h1 class="p-title">One harness for <mark class="p-hl">every agent, model and machine</mark></h1>
+<p class="p-sub">One base map, a link in each tool, and Nix to rebuild it</p>
+<p class="p-byline"><span>Ashish Raina</span><time datetime="2026-11-04">4 Nov 2026</time><span>7 min read</span></p>
+<ul class="p-tags" aria-label="Topics"><li>Harness</li><li>AGENTS.md</li><li>Nix</li><li>Vendor folders</li><li>6 panels</li></ul>
+</header>
+<p class="p-intro">Every AI tool keeps its own rules and memory, so switching tool or laptop loses your setup. Here is how I keep one set of rules for all of them.</p>
+
+<div class="p-top">
+<nav class="p-index" aria-label="In this post">
+<h2>In this post</h2>
+<ol>
+<li><a href="#p1">The problem</a></li>
+<li><a href="#p2">The idea: one map every tool loads first</a></li>
+<li><a href="#p3">How each tool finds it</a></li>
+<li><a href="#p4">The same setup on every machine</a></li>
+<li><a href="#p5">The lifetime sync warranty ;)</a></li>
+<li><a href="#p6">Why it matters</a></li>
+</ol>
+</nav>
+<aside class="p-side" aria-label="At a glance">
+<blockquote class="p-quote"><p class="p-lab">In the post's own words</p><p>Any agent, model or machine starts from the same rules.</p></blockquote>
+<div class="p-card core"><h2 class="p-lab">The core idea</h2><p>Write the rules once, in one short file. Every tool loads it first, and Nix rebuilds the same setup on each machine.</p></div>
+<div class="p-card"><h2 class="p-lab">Different from copying rules into each tool</h2><p>Each tool's folder holds a link to the base file and its own settings. Nothing is copied, so nothing drifts apart.</p></div>
+</aside>
+</div>
+
+<div class="p-grid">
+
+<section class="p-panel" id="p1" aria-labelledby="p1-t">
+<header class="p-panel-h"><span class="p-num">01</span><h2 id="p1-t">The problem</h2></header>
+<div class="p-box"><h3 class="p-lab">Every tool keeps its own rules</h3><p>Claude Code, Codex, Gemini CLI and the rest each read their own rules file from their own folder. The same rule gets written again in each one.</p></div>
+<div class="p-box"><h3 class="p-lab">Memory stays behind</h3><p>What one tool has learned about how you work does not travel to the next. Switch tool and you start again.</p></div>
+<div class="p-box"><h3 class="p-lab">A new laptop starts blank</h3><p>Move to another machine and the setup is rebuilt by hand, from memory.</p></div>
+<div class="p-box"><h3 class="p-lab">Newcomers cannot tell which copy is right</h3><p>When two copies of a rule differ, it is hard to know which one is current. That is a lot to carry when you are just starting.</p></div>
+<p class="p-principle"><span class="p-lab">My view, not a study</span>Rules you copy by hand drift apart. One copy cannot.</p>
+<a class="p-more" href="#s-problem">Read the problem</a>
+</section>
+
+<section class="p-panel" id="p2" aria-labelledby="p2-t">
+<header class="p-panel-h"><span class="p-num">02</span><h2 id="p2-t">The idea: one map every tool loads first</h2></header>
+<div class="p-box"><h3 class="p-lab">One base file</h3><p>A single <code>AGENTS.md</code> in my dotfiles: house rules, who does what, a routing table, the tools I have, and how I name things.</p></div>
+<div class="p-box"><h3 class="p-lab">Loaded first, by everyone</h3><p>Claude Code, Codex, OpenCode, Gemini CLI, Pi, DeepSeek Harness and the FirstMate workers all read it before anything else.</p></div>
+<div class="p-box"><h3 class="p-lab">Short on purpose</h3><p>Projects add their own <code>AGENTS.md</code> on top. Nothing in the base file is repeated there.</p></div>
+<p class="p-principle"><span class="p-lab">Principle</span>One written map. Every agent starts from it.</p>
+<a class="p-more" href="#s1">Read section 1</a>
+</section>
+
+<section class="p-panel" id="p3" aria-labelledby="p3-t">
+<header class="p-panel-h"><span class="p-num">03</span><h2 id="p3-t">How each tool finds it</h2></header>
+<div class="p-box"><h3 class="p-lab">A link, not a copy</h3><p>Each tool's folder holds a link to the base file, plus that tool's own settings. Nothing else.</p></div>
+<div class="p-box"><h3 class="p-lab">Three layers</h3>
+<table class="p-table"><thead><tr><th>Layer</th><th>Holds</th></tr></thead><tbody>
+<tr><td>Base map</td><td>The shared rules</td></tr>
+<tr><td>Vendor folder</td><td>A link, plus that vendor's settings</td></tr>
+<tr><td>Project</td><td>Its own <code>AGENTS.md</code> on top</td></tr>
+</tbody></table></div>
+<div class="p-box"><h3 class="p-lab">The routing table</h3><p>For each kind of task, the base file names the folder to open and the files to read first.</p></div>
+<p class="p-principle"><span class="p-lab">Principle</span>Change a rule once. Every tool reads the change the next time it starts.</p>
+<a class="p-more" href="#s2">Read section 2</a>
+</section>
+
+<section class="p-panel" id="p4" aria-labelledby="p4-t">
+<header class="p-panel-h"><span class="p-num">04</span><h2 id="p4-t">The same setup on every machine</h2></header>
+<div class="p-box"><h3 class="p-lab">Nix, in one line</h3><p>Nix builds a machine's setup from a written description, so the same description gives the same setup.</p></div>
+<div class="p-box"><h3 class="p-lab">Both of my Macs</h3><p>Nix rebuilds the same setup on both of them. The base map, the links and the tools come from one description.</p></div>
+<div class="p-box"><h3 class="p-lab">What this removes</h3><p>A new machine is a rebuild, not a hand-made copy of the old one.</p></div>
+<p class="p-principle"><span class="p-lab">Principle</span>Describe the setup once. Build it wherever you work.</p>
+<a class="p-more" href="#s3">Read section 3</a>
+</section>
+
+<section class="p-panel" id="p5" aria-labelledby="p5-t">
+<header class="p-panel-h"><span class="p-num">05</span><h2 id="p5-t">The lifetime sync warranty ;)</h2></header>
+<div class="p-box"><h3 class="p-lab">The terms</h3><p>Valid for the lifetime of the text file. Void if someone edits a vendor folder by hand.</p></div>
+<div class="p-box"><h3 class="p-lab">What it really is</h3><p>A joke, and not a promise. What I have is one place to fix a rule and a written description to rebuild from.</p></div>
+<div class="p-box"><h3 class="p-lab">What stays per tool</h3><p>Each vendor's own settings stay in its own folder. The base file shares the rules, not the settings.</p></div>
+<p class="p-principle"><span class="p-lab">Principle</span>Same rules everywhere. Settings stay with the tool.</p>
+<a class="p-more" href="#s4">Read section 4</a>
+</section>
+
+<section class="p-panel" id="p6" aria-labelledby="p6-t">
+<header class="p-panel-h"><span class="p-num">06</span><h2 id="p6-t">Why it matters</h2></header>
+<div class="p-box"><h3 class="p-lab">It helps you first</h3><p>You stop re-explaining yourself to each tool. You fix a rule once, in one place.</p></div>
+<div class="p-box"><h3 class="p-lab">It helps the AI work your way</h3><p>A new tool, a new model or a new machine starts from the same rules, so you are not retraining each one.</p></div>
+<div class="p-box"><h3 class="p-lab">It helps newcomers</h3><p>I think one short file is an easier first step than rules scattered across tools. Beginners can start with five lines and share what worked.</p></div>
+<div class="p-box"><h3 class="p-lab">Try it yourself</h3>
+<ol class="p-steps"><li>Write your five most repeated rules in one plain text file.</li><li>Make each tool's rules file point at it with a link.</li><li>Open a second tool and ask it to repeat the first rule back.</li></ol></div>
+<p class="p-principle"><span class="p-lab">Principle</span>One file, one link per tool, one rebuild per machine.</p>
+<a class="p-more" href="#s-why">Read why it matters</a>
+<a class="p-more" href="#s6">Read the steps</a>
+</section>
+
+</div>
+
+<article class="p-full p-prose" id="full">
+<h2>The full post</h2>
+<p class="p-lab">For readers who want the whole argument</p>
+
+<section id="s-problem">
+<h2>The problem</h2>
+<p>Picture three helpers who each keep their own notebook of how you like things done. You tell the first one a rule. The second one never hears it. The third one lives in another house. That is how I used AI tools for a long time. This is my view from using them every day, not a survey.</p>
+<ul>
+<li><strong>Every tool keeps its own rules.</strong> Claude Code, Codex, Gemini CLI and the rest each read their own rules file from their own folder. The same rule gets written again in each one.</li>
+<li><strong>Memory stays behind.</strong> What one tool has learned about how you work does not travel to the next. Switch tool and you start again.</li>
+<li><strong>A new laptop starts blank.</strong> Move to another machine and the setup is rebuilt by hand, from memory.</li>
+<li><strong>Newcomers cannot tell which copy is right.</strong> When two copies of a rule differ, it is hard to know which one is current.</li>
+</ul>
+<p>All four get easier when there is one copy of the rules and one way to rebuild the setup.</p>
+</section>
+
+<section id="s1">
+<h2>1. One map every tool loads first</h2>
+<p class="p-lab">What goes in the base file?</p>
+<p>Think of the sign at the entrance of a building: it does not hold the building, it tells you which door to use. My base file is that sign. It is one <code>AGENTS.md</code> (the plain text rules file that many coding agents read at the start of every session) kept in my dotfiles, the folder of configuration files I carry from machine to machine.</p>
+<p>It holds five things, and no more:</p>
+<ol>
+<li><strong>House rules.</strong> The rules I want every agent to follow, such as checking before reporting and asking before anything destructive.</li>
+<li><strong>Who does what.</strong> Which tool is for which kind of work.</li>
+<li><strong>A routing table.</strong> For each kind of task, the folder to open and the files to read first.</li>
+<li><strong>The tools I have.</strong> So no agent installs a second copy of one I already use.</li>
+<li><strong>Naming.</strong> How dates, drafts and decisions are named.</li>
+</ol>
+<p>Every one of these tools loads it first: Claude Code, Codex, OpenCode, Gemini CLI, Pi, DeepSeek Harness and the workers FirstMate launches. Any agent, model or machine starts from the same rules.</p>
+<p>The file is short on purpose. A project adds its own <code>AGENTS.md</code> on top, and nothing in the base file is repeated there. The routing idea comes from the Interpretable Context Methodology, listed in the credits.</p>
+</section>
+
+<section id="s2">
+<h2>2. How each tool finds it</h2>
+<p class="p-lab">A link, not a copy</p>
+<p>Each tool wants its rules in its own place. Rather than copy the base file into each place, the tool's folder holds a link to it. The folder keeps only that link and the tool's own settings.</p>
+<figure id="fig-map">
+<svg viewBox="0 0 480 280" role="img" aria-labelledby="fig-map-title">
+<title id="fig-map-title">One base map, linked from the folder of each of seven tools</title>
+<defs><marker id="ah1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="arrowhead" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<g id="map-base"><title>The base map: one AGENTS.md</title><rect class="box hi" x="10" y="100" width="150" height="80" rx="8"/><text class="t" x="85" y="136" text-anchor="middle">Base map</text><text class="s" x="85" y="156" text-anchor="middle">one AGENTS.md</text></g>
+<g id="map-edges"><title>A link from each tool's folder to the base map</title>
+<path class="edge hi" d="M160 140 C205 140 205 24 248 24" marker-end="url(#ah1)"/>
+<path class="edge hi" d="M160 140 C205 140 205 62 248 62" marker-end="url(#ah1)"/>
+<path class="edge hi" d="M160 140 C205 140 205 100 248 100" marker-end="url(#ah1)"/>
+<path class="edge hi" d="M160 140 H248" marker-end="url(#ah1)"/>
+<path class="edge hi" d="M160 140 C205 140 205 176 248 176" marker-end="url(#ah1)"/>
+<path class="edge hi" d="M160 140 C205 140 205 214 248 214" marker-end="url(#ah1)"/>
+<path class="edge hi" d="M160 140 C205 140 205 252 248 252" marker-end="url(#ah1)"/>
+</g>
+<g id="map-tools"><title>Seven tools, each with a link and its own settings</title>
+<rect class="box" x="250" y="10" width="220" height="28" rx="6"/><text class="t" x="262" y="29">Claude Code</text><text class="s" x="458" y="29" text-anchor="end">link + settings</text>
+<rect class="box" x="250" y="48" width="220" height="28" rx="6"/><text class="t" x="262" y="67">Codex</text><text class="s" x="458" y="67" text-anchor="end">link + settings</text>
+<rect class="box" x="250" y="86" width="220" height="28" rx="6"/><text class="t" x="262" y="105">OpenCode</text><text class="s" x="458" y="105" text-anchor="end">link + settings</text>
+<rect class="box" x="250" y="124" width="220" height="28" rx="6"/><text class="t" x="262" y="143">Gemini CLI</text><text class="s" x="458" y="143" text-anchor="end">link + settings</text>
+<rect class="box" x="250" y="162" width="220" height="28" rx="6"/><text class="t" x="262" y="181">Pi</text><text class="s" x="458" y="181" text-anchor="end">link + settings</text>
+<rect class="box" x="250" y="200" width="220" height="28" rx="6"/><text class="t" x="262" y="219">DeepSeek Harness</text><text class="s" x="458" y="219" text-anchor="end">link + settings</text>
+<rect class="box" x="250" y="238" width="220" height="28" rx="6"/><text class="t" x="262" y="257">FirstMate workers</text><text class="s" x="458" y="257" text-anchor="end">link + settings</text>
+</g>
+</svg>
+<figcaption>One map on the left. Each tool's folder on the right holds a link to it and that tool's own settings.</figcaption>
+</figure>
+<table>
+<tr><th>Layer</th><th>Holds</th></tr>
+<tr><td><strong>Base map</strong></td><td>the shared rules, written once</td></tr>
+<tr><td><strong>Vendor folder</strong></td><td>a link to the base map, plus that vendor's own settings</td></tr>
+<tr><td><strong>Project</strong></td><td>its own <code>AGENTS.md</code>, added on top</td></tr>
+</table>
+<p>Because the folder holds a link, there is nothing to keep in step. I change a rule in one place, and each tool reads the change the next time it starts. Adding a new tool means one link and its own settings.</p>
+</section>
+
+<section id="s3">
+<h2>3. The same setup on every machine</h2>
+<p class="p-lab">What does Nix do here?</p>
+<p>A recipe gives the same dish in any kitchen. <a href="https://nixos.org/">Nix</a> does that for a computer: you write down what the machine should have, and Nix builds it. The same description gives the same setup.</p>
+<figure id="fig-nix">
+<svg viewBox="0 0 480 120" role="img" aria-labelledby="fig-nix-title">
+<title id="fig-nix-title">One Nix description rebuilds the same setup on two Macs</title>
+<defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="arrowhead" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<g id="nix-src"><title>The written description of the setup</title><rect class="box hi" x="10" y="30" width="160" height="60" rx="8"/><text class="t" x="90" y="56" text-anchor="middle">Nix description</text><text class="s" x="90" y="76" text-anchor="middle">written once</text></g>
+<g id="nix-edges"><title>Rebuilt on each Mac</title><path class="edge hi" d="M170 60 C215 60 215 30 258 30" marker-end="url(#ah2)"/><path class="edge hi" d="M170 60 C215 60 215 90 258 90" marker-end="url(#ah2)"/></g>
+<g id="nix-macs"><title>Two Macs with the same setup</title>
+<rect class="box" x="260" y="10" width="210" height="40" rx="8"/><text class="t" x="275" y="35">Mac one</text><text class="s" x="458" y="35" text-anchor="end">same setup</text>
+<rect class="box" x="260" y="70" width="210" height="40" rx="8"/><text class="t" x="275" y="95">Mac two</text><text class="s" x="458" y="95" text-anchor="end">same setup</text>
+</g>
+</svg>
+<figcaption>One description, rebuilt on each Mac. The base map and the links come with it.</figcaption>
+</figure>
+<p>Nix rebuilds the same setup on both of my Macs. So the machine does not matter: any agent, model or machine starts from the same rules and the same tools. A new machine is a rebuild, not a hand-made copy of the old one.</p>
+</section>
+
+<section id="s4">
+<h2>4. The lifetime sync warranty ;)</h2>
+<p class="p-lab">What is promised?</p>
+<div class="p-ex" id="ex-warranty">
+<h3>Lifetime sync warranty ;)</h3>
+<p>Valid for the lifetime of the text file. Void if someone edits a vendor folder by hand. Not transferable to a tool that never loads the file.</p>
+</div>
+<p>That is a joke, and not a promise. A text file and a Nix description can break like anything else. What I do have is one place to fix a rule, and a written description to rebuild from.</p>
+<p>The base file shares the rules, not the settings. Each vendor's own settings stay in its own folder, and each tool still does its own work in its own way.</p>
+</section>
+
+<section id="s-why">
+<h2>Why it matters</h2>
+<p>A good assistant is one you do not have to brief twice. When the rules live in one place, a new tool, a new model or a new laptop does not mean starting the briefing again.</p>
+<p>It helps me first: I fix a rule once. It helps the AI work my way, because every agent starts from the same map. I also think it makes AI easier for newcomers: five lines in one file is a smaller first step than rules scattered across tools, and it is something you can share, for the bigger good.</p>
+</section>
+
+<section id="s5">
+<h2>5. What's next</h2>
+<ul>
+<li>A new tool gets one link and its own settings, nothing more.</li>
+<li>The base file stays short. Detail goes in a project's own <code>AGENTS.md</code>.</li>
+<li>The setup is rebuilt from the Nix description when I add a machine.</li>
+</ul>
+</section>
+
+<section id="s6">
+<h2>6. Try it yourself</h2>
+<div class="p-try" id="try-box">
+<p><strong>Three steps.</strong></p>
+<ol>
+<li>Write your five most repeated rules in one plain text file.</li>
+<li>Make each tool's rules file point at it with a link, so there is only one copy.</li>
+<li>Open a second tool and ask it to repeat the first rule back. If it can, the link works.</li>
+</ol>
+</div>
+</section>
+
+<section id="credits">
+<h2>Credits</h2>
+<ul>
+<li><strong>Kun Chen</strong>: <a href="https://github.com/kunchenguid/firstmate">FirstMate</a>, whose workers load the base map like every other tool.</li>
+<li><strong>Jake Van Clief</strong>: the <a href="https://arxiv.org/abs/2603.16021">Interpretable Context Methodology</a>, the rooms-and-routing structure the map follows.</li>
+<li><strong>The <a href="https://agents.md">AGENTS.md</a> convention</strong>: one instructions file that many coding agents read.</li>
+<li><strong><a href="https://nixos.org/">Nix</a></strong>: the tool that rebuilds the setup from a written description.</li>
+</ul>
+</section>
+
+<nav class="p-pager" aria-label="Previous and next"><a href="rules-from-chat-history.html" rel="prev">← Turn your corrections into rules your AI follows</a><a href="index.html" rel="next">All posts →</a></nav>
+</article>
+
+</main>
+<footer class="p-foot"><p>by Ashish Raina – program manager turned AI-crew operator</p><ul><li><a href="../../index.html#me">Me</a></li><li><a href="index.html">Blog</a></li><li><a href="../../intent/index.html">Intent</a></li><li><a href="../course/index.html">Course</a></li><li><a href="https://github.com/codeami">GitHub</a></li></ul></footer>
+</body>
+</html>

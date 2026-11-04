@@ -35,7 +35,7 @@
   var VERSION = "v1.0", REPO = "https://github.com/codeami/codeami.github.io";
   function chrome() {
     var bar = document.querySelector(".k-nav, header.top");
-    if (!bar || bar.querySelector(".vtag")) return;
+    if (!bar || bar.querySelector(".vtag") || bar.classList.contains("tb")) return; // the one top bar carries its own links
     var home = bar.querySelector(".k-home, .where");
     var v = document.createElement("span");
     v.className = "vtag"; v.textContent = VERSION; v.title = "AI-Life-OS " + VERSION;
@@ -88,7 +88,10 @@
     if (calm) {
       var kept = null;
       try { kept = localStorage.getItem("landing-page"); } catch (e) { /* storage blocked: calm by default */ }
-      state = /^#(step-|explain|whoami)/.test(location.hash) || kept === "open" ? "open" : "closed";
+      // A first visit (no "trip:v1" yet, no address hash) opens on the landing hook, so the card starts open.
+      var tripped = true;
+      try { tripped = !!localStorage.getItem("trip:v1"); } catch (e) { /* storage blocked: stay calm */ }
+      state = /^#(step-|explain|whoami|me|trip)/.test(location.hash) || kept === "open" || (!tripped && !location.hash) ? "open" : "closed";
     }
     function phone() { return window.innerWidth <= 760; }
     function layout() {

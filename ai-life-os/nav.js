@@ -44,6 +44,13 @@ var SITE = "The Chart Room";
   var js = document.createElement("script");
   js.src = base + "hud.js";
   document.head.appendChild(js);
+  // The one top bar (see buildShell): its layout and its Menu button.
+  var bar = document.createElement("link");
+  bar.rel = "stylesheet"; bar.href = base + "topbar.css";
+  document.head.appendChild(bar);
+  var menu = document.createElement("script");
+  menu.src = base + "topbar.js";
+  document.head.appendChild(menu);
 })();
 
 function meta(name) {
@@ -109,6 +116,15 @@ function buildShell() {
   if (DRAFT) col.appendChild(el("div", { "class": "banner", role: "note" },
     "Private draft. Not published. Do not share."));
 
+  // The one top bar, above the sidebar frame: the same list as every other page. These pages are the OS, opened, so Intent is current.
+  var site = root + "../";
+  var topbar = el("header", { "class": "k-nav tb" });
+  topbar.innerHTML = '<a class="k-home tb-brand" href="' + site + 'index.html"><img class="k-mark" src="' + root + 'kit/bosun.svg" alt=""><span class="k-logo">Ashish Raina</span></a>' +
+    '<button class="tb-menu" type="button" aria-expanded="false" aria-controls="tb-links">Menu</button>' +
+    '<nav class="tb-links" id="tb-links" aria-label="Site"><a href="' + site + 'index.html#me">Me</a><a href="' + root + 'blog/index.html">Blog</a>' +
+    '<a href="' + site + 'intent/index.html" aria-current="page">Intent</a><a href="' + root + 'course/index.html">Course</a>' +
+    '<a class="tb-gh" href="https://github.com/codeami" aria-label="GitHub: github.com/codeami"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="' + root + 'kit/icons.svg#github"/></svg></a></nav>';
+  main.parentNode.insertBefore(topbar, main);
   main.parentNode.insertBefore(app, main);
   app.appendChild(side);
   app.appendChild(col);

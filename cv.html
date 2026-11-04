@@ -11,17 +11,20 @@
 <link rel="stylesheet" href="ai-life-os/kit/kit.css">
 <link rel="stylesheet" href="ai-life-os/panel.css">
 <link rel="stylesheet" href="cv.css">
+<link rel="stylesheet" href="ai-life-os/topbar.css">
+<script src="ai-life-os/topbar.js"></script>
 </head>
 <body>
-<header class="p-nav">
-  <a class="p-brand" href="index.html#whoami"><img src="ai-life-os/kit/bosun.svg" alt=""><span>Ashish Raina</span></a>
-  <nav aria-label="Site"><a href="cv.html" aria-current="page">CV</a><a href="ai-life-os/blog/index.html">Blog</a><a href="ai-life-os/index.html">AI-Life-OS</a></nav>
+<header class="p-nav tb">
+  <a class="p-brand tb-brand" href="index.html"><img src="ai-life-os/kit/bosun.svg" alt=""><span>Ashish Raina</span></a>
+  <button class="tb-menu" type="button" aria-expanded="false" aria-controls="tb-links">Menu</button>
+  <nav class="tb-links" id="tb-links" aria-label="Site"><a href="index.html#me" aria-current="page">Me</a><a href="ai-life-os/blog/index.html">Blog</a><a href="intent/index.html">Intent</a><a href="ai-life-os/course/index.html">Course</a><a class="tb-gh" href="https://github.com/codeami" aria-label="GitHub: github.com/codeami"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="ai-life-os/kit/icons.svg#github"/></svg></a></nav>
 </header>
 <main class="p-page">
 <article class="cv">
 
 <header class="cv-head">
-<p class="p-kicker"><a href="index.html#whoami">whoami</a><span>CV</span></p>
+<p class="p-kicker"><a href="index.html#me">Me</a><span>CV</span></p>
 <h1 class="cv-name">Ashish Raina</h1>
 <p class="cv-role">Technical Program Manager · AI-native delivery</p>
 <ul class="cv-links" aria-label="Links">
@@ -30,7 +33,7 @@
 <li><a href="index.html">codeami.github.io</a> (how I work, blog)</li>
 <li>Gurgaon, India</li>
 </ul>
-<p class="cv-next"><a class="k-btn secondary" href="index.html#explain">Continue to the AI problems</a></p>
+<p class="cv-next"><a class="k-btn secondary" href="ai-life-os/blog/index.html">Next: what I write</a></p>
 </header>
 
 <section aria-labelledby="cv-profile">
@@ -124,7 +127,7 @@
 </dl>
 </section>
 
-<p class="cv-foot"><a href="index.html#whoami">Back to whoami</a> · <a href="index.html#explain">Continue to the AI problems</a></p>
+<p class="cv-foot"><a href="index.html#me">Back to Me</a> · <a href="ai-life-os/blog/index.html">Next: what I write</a></p>
 </article>
 </main>
 </body>
