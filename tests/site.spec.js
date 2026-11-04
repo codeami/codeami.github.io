@@ -60,6 +60,17 @@ for (const file of pages) {
     // The long panel post can still be settling its layout on a slow runner (two captures 68px apart); wait for fonts and the network, and allow more time for the stable pair.
     await page.evaluate(() => document.fonts.ready);
     await page.waitForLoadState('networkidle');
+    // Wait until the page height holds still for 10 animation frames, so a late reflow cannot change the capture size.
+    await page.evaluate(() => new Promise((resolve) => {
+      let last = -1, still = 0;
+      const tick = () => {
+        const h = document.documentElement.scrollHeight;
+        still = h === last ? still + 1 : 0;
+        last = h;
+        still >= 10 ? resolve() : requestAnimationFrame(tick);
+      };
+      tick();
+    }));
 
     await expect(page).toHaveScreenshot(`${file.replace(/\//g, '__')}.png`, {
       timeout: 15000,
