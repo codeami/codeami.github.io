@@ -24,7 +24,7 @@ The Blog posts and `ai-life-os/arena.html` are built from the owner's private dr
 
 ## Tests
 
-End-to-end tests (Playwright, in `tests/`) walk the repo for every HTML page, so new pages are covered without a list. Each page is opened at 390px and 1280px and must: load with no console errors, failed requests or broken internal links; not scroll sideways; and match its committed screenshot in `tests/__screenshots__/` (1 in 1000 pixels may differ; the live chart canvas is masked). One more test checks that no published file holds a loopback, tailnet or home-directory address (the patterns are in `tests/site.spec.js`). Build templates (files with `%%PLACEHOLDER%%`, such as `maps/_shared/shell.html`) are not pages and are skipped.
+End-to-end tests (Playwright, in `tests/`) walk the repo for every HTML page, so new pages are covered without a list. Each page is opened at 390px and 1280px and must: load with no console errors, failed requests or broken internal links; not scroll sideways; and match its committed screenshot in `tests/__screenshots__/` (1 in 1000 pixels may differ; the live chart canvas is masked). One more test checks that no published file holds a loopback, tailnet or home-directory address (the patterns are in `tests/site.spec.js`). Another fails when a page or brain data file uses wording that undersells the work (the phrase list is in the same file). Build templates (files with `%%PLACEHOLDER%%`, such as `maps/_shared/shell.html`) are not pages and are skipped.
 
     npm ci
     npm test              # run everything (needs Docker)

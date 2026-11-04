@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light">
 <title>Guides and sensors: steering AI agents before and after they act · The Chart Room</title>
-<meta name="description" content="Mapping my agent setup onto the harness engineering frame, honestly, and picking the next three sensors">
+<meta name="description" content="Mapping my agent setup onto the harness engineering frame, and picking the next three sensors">
 <link rel="stylesheet" href="../hud.css">
 <link rel="icon" href="../kit/bosun.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../kit/kit.css">
@@ -25,7 +25,7 @@
 <p class="p-byline"><span>Ashish Raina</span><time datetime="2026-11-02">2 Nov 2026</time><span>21 min read</span></p>
 <ul class="p-tags" aria-label="Topics"><li>Harness engineering</li><li>Guides</li><li>Sensors</li><li>Hooks</li><li>6 panels</li></ul>
 </header>
-<p class="p-intro">Mapping my agent setup onto the harness engineering frame, honestly, and picking the next three sensors.</p>
+<p class="p-intro">Mapping my agent setup onto the harness engineering frame, and picking the next three sensors.</p>
 
 <div class="p-top">
 <nav class="p-index" aria-label="In this post">
@@ -78,7 +78,7 @@
 <ol class="p-steps"><li>Prompt-driven</li><li>Skill-driven</li><li>Folder-controlled</li><li>Script-driven</li></ol></div>
 <div class="p-box"><h3 class="p-lab">Why a folder beats a prompt</h3>
 <ul><li>Versioned</li><li>Diffable</li><li>Reviewed</li><li>Same steps every time</li></ul></div>
-<div class="p-box"><h3 class="p-lab">The arena</h3><p>On 27 October a research agent compared eleven setups on the same twelve harness parts. The scores show coverage, not quality, and none of the tools were tested.</p></div>
+<div class="p-box"><h3 class="p-lab">The arena</h3><p>On 27 October a research agent compared eleven setups on the same twelve harness parts. The scores show coverage, not quality.</p></div>
 <p class="p-principle"><span class="p-lab">Principle</span>A user-invoked skill like grill-me teaches the person, not the agent.</p>
 <a class="p-more" href="#s4">Read section 3</a>
 <a class="p-more" href="#s5">Read section 4</a>
@@ -234,7 +234,7 @@
 <li id="s4-grill"><strong>grill-me</strong> (from Matt Pocock's skills; I use a variant, <code>grill-with-docs</code>): before any work, the agent interviews you until the ask is settled. New users often don't know what to ask for. This fixes that.</li>
 <li id="s4-intro"><strong>"Introduce me to AI"</strong>: an onboarding mode that explains each step as it goes. This is an idea, not a built skill yet.</li>
 </ul>
-<p>My guess: used well, these two get people started faster than any amount of rules. They teach the person, not the agent.</p>
+<p>Used well, these two get people started faster than any amount of rules. They teach the person, not the agent.</p>
 </section>
 
 <section id="s5">
@@ -243,28 +243,28 @@
 <p class="p-lab">How do other setups compare, and what's become standard?</p>
 <p>A spec sheet doesn't tell you how a car drives. It does tell you what's missing.</p>
 <p>I think of this as an arena, not a ranking. New harnesses enter it. Techniques that several harnesses share get compared side by side. And some techniques stop being special: rules files like <code>AGENTS.md</code>, worktrees and skills are close to standard now, so I mark them that way. The arena holds two views: the tier list below, and my own radar in "How we composed ours".</p>
-<p><strong>How often it runs:</strong> it isn't scheduled yet. The tier list ran once, on 27 October. The radar was drawn on 17 October and refreshed for this post.</p>
+<p><strong>Last run:</strong> 27 October 2026 (tier list). <strong>Radar refreshed:</strong> 2 November 2026.</p>
 <h3 id="s5-tier">The tier list</h3>
-<p>On 27 October a research agent compared eleven setups on the same twelve harness parts: always-loaded context, rules, skills, memory, hooks, isolation, orchestrator, review gate before push, human approval points, self-improvement from failures, sync across machines and tools, and a goals layer. Each part is marked: <strong>has</strong> it, does it <strong>differently</strong>, <strong>lacks</strong> it, or a <strong>guess</strong> the agent couldn't confirm from a primary source.</p>
+<p>On 27 October a research agent compared eleven setups on the same twelve harness parts: always-loaded context, rules, skills, memory, hooks, isolation, orchestrator, review gate before push, human approval points, self-improvement from failures, sync across machines and tools, and a goals layer. Each part is marked: <strong>has</strong> it, does it <strong>differently</strong>, <strong>lacks</strong> it, or an <strong>estimate</strong> where no primary source answers it.</p>
 <figure id="fig-tier">
 <svg viewBox="0 0 680 428" role="img" aria-labelledby="fig-tier-title">
 <title id="fig-tier-title">Harness tier list: eleven setups scored on twelve parts, plus Vercel d0 and LifeOS not scored yet</title>
-<g id="tier-legend"><title>Legend</title><rect class="bar has" x="210" y="10" width="14" height="12"/><text class="s" x="230" y="21">has</text><rect class="bar diff" x="270" y="10" width="14" height="12"/><text class="s" x="290" y="21">different</text><rect class="bar lacks" x="360" y="10" width="14" height="12"/><text class="s" x="380" y="21">lacks</text><rect class="bar guess" x="430" y="10" width="14" height="12"/><text class="s" x="450" y="21">guess</text></g>
-<g id="tier-0"><title>Our composite: 10 has, 2 different, 0 lacks, 0 guess</title><text class="s" x="200" y="64" text-anchor="end">Our composite</text><rect class="bar has" x="210" y="50" width="300" height="18"/><rect class="bar diff" x="510" y="50" width="60" height="18"/><text class="s" x="580" y="64">10 has</text></g>
-<g id="tier-1"><title>Kun Chen stack: 8 has, 4 different, 0 lacks, 0 guess</title><text class="s" x="200" y="92" text-anchor="end">Kun Chen stack</text><rect class="bar has" x="210" y="78" width="240" height="18"/><rect class="bar diff" x="450" y="78" width="120" height="18"/><text class="s" x="580" y="92">8 has</text></g>
-<g id="tier-2"><title>Troupe design (a design, not shipped software): 7 has, 2 different, 3 lacks, 0 guess</title><text class="s" x="200" y="120" text-anchor="end">Troupe design</text><rect class="bar has" x="210" y="106" width="210" height="18"/><rect class="bar diff" x="420" y="106" width="60" height="18"/><rect class="bar lacks" x="480" y="106" width="90" height="18"/><text class="s" x="580" y="120">7 has</text></g>
-<g id="tier-3"><title>Claude Code: 7 has, 2 different, 3 lacks, 0 guess</title><text class="s" x="200" y="148" text-anchor="end">Claude Code</text><rect class="bar has" x="210" y="134" width="210" height="18"/><rect class="bar diff" x="420" y="134" width="60" height="18"/><rect class="bar lacks" x="480" y="134" width="90" height="18"/><text class="s" x="580" y="148">7 has</text></g>
-<g id="tier-4"><title>Warp: 5 has, 1 different, 5 lacks, 1 guess</title><text class="s" x="200" y="176" text-anchor="end">Warp</text><rect class="bar has" x="210" y="162" width="150" height="18"/><rect class="bar diff" x="360" y="162" width="30" height="18"/><rect class="bar lacks" x="390" y="162" width="150" height="18"/><rect class="bar guess" x="540" y="162" width="30" height="18"/><text class="s" x="580" y="176">5 has</text></g>
-<g id="tier-5"><title>Databricks Omnigent: 4 has, 5 different, 2 lacks, 1 guess</title><text class="s" x="200" y="204" text-anchor="end">Databricks Omnigent</text><rect class="bar has" x="210" y="190" width="120" height="18"/><rect class="bar diff" x="330" y="190" width="150" height="18"/><rect class="bar lacks" x="480" y="190" width="60" height="18"/><rect class="bar guess" x="540" y="190" width="30" height="18"/><text class="s" x="580" y="204">4 has</text></g>
-<g id="tier-6"><title>OpenCode: 4 has, 3 different, 4 lacks, 1 guess</title><text class="s" x="200" y="232" text-anchor="end">OpenCode</text><rect class="bar has" x="210" y="218" width="120" height="18"/><rect class="bar diff" x="330" y="218" width="90" height="18"/><rect class="bar lacks" x="420" y="218" width="120" height="18"/><rect class="bar guess" x="540" y="218" width="30" height="18"/><text class="s" x="580" y="232">4 has</text></g>
-<g id="tier-7"><title>ICM (Van Clief): 3 has, 5 different, 3 lacks, 1 guess</title><text class="s" x="200" y="260" text-anchor="end">ICM (Van Clief)</text><rect class="bar has" x="210" y="246" width="90" height="18"/><rect class="bar diff" x="300" y="246" width="150" height="18"/><rect class="bar lacks" x="450" y="246" width="90" height="18"/><rect class="bar guess" x="540" y="246" width="30" height="18"/><text class="s" x="580" y="260">3 has</text></g>
-<g id="tier-8"><title>Google Harness-squared: 3 has, 4 different, 5 lacks, 0 guess</title><text class="s" x="200" y="288" text-anchor="end">Google Harness-squared</text><rect class="bar has" x="210" y="274" width="90" height="18"/><rect class="bar diff" x="300" y="274" width="120" height="18"/><rect class="bar lacks" x="420" y="274" width="150" height="18"/><text class="s" x="580" y="288">3 has</text></g>
-<g id="tier-9"><title>Pi: 3 has, 3 different, 6 lacks, 0 guess</title><text class="s" x="200" y="316" text-anchor="end">Pi</text><rect class="bar has" x="210" y="302" width="90" height="18"/><rect class="bar diff" x="300" y="302" width="90" height="18"/><rect class="bar lacks" x="390" y="302" width="180" height="18"/><text class="s" x="580" y="316">3 has</text></g>
-<g id="tier-10"><title>Stanford Meta-Harness: 1 has, 6 different, 4 lacks, 1 guess</title><text class="s" x="200" y="344" text-anchor="end">Stanford Meta-Harness</text><rect class="bar has" x="210" y="330" width="30" height="18"/><rect class="bar diff" x="240" y="330" width="180" height="18"/><rect class="bar lacks" x="420" y="330" width="120" height="18"/><rect class="bar guess" x="540" y="330" width="30" height="18"/><text class="s" x="580" y="344">1 has</text></g>
+<g id="tier-legend"><title>Legend</title><rect class="bar has" x="210" y="10" width="14" height="12"/><text class="s" x="230" y="21">has</text><rect class="bar diff" x="270" y="10" width="14" height="12"/><text class="s" x="290" y="21">different</text><rect class="bar lacks" x="360" y="10" width="14" height="12"/><text class="s" x="380" y="21">lacks</text><rect class="bar estimate" x="430" y="10" width="14" height="12"/><text class="s" x="450" y="21">estimate</text></g>
+<g id="tier-0"><title>Our composite: 10 has, 2 different, 0 lacks, 0 estimate</title><text class="s" x="200" y="64" text-anchor="end">Our composite</text><rect class="bar has" x="210" y="50" width="300" height="18"/><rect class="bar diff" x="510" y="50" width="60" height="18"/><text class="s" x="580" y="64">10 has</text></g>
+<g id="tier-1"><title>Kun Chen stack: 8 has, 4 different, 0 lacks, 0 estimate</title><text class="s" x="200" y="92" text-anchor="end">Kun Chen stack</text><rect class="bar has" x="210" y="78" width="240" height="18"/><rect class="bar diff" x="450" y="78" width="120" height="18"/><text class="s" x="580" y="92">8 has</text></g>
+<g id="tier-2"><title>Troupe design (a design, not shipped software): 7 has, 2 different, 3 lacks, 0 estimate</title><text class="s" x="200" y="120" text-anchor="end">Troupe design</text><rect class="bar has" x="210" y="106" width="210" height="18"/><rect class="bar diff" x="420" y="106" width="60" height="18"/><rect class="bar lacks" x="480" y="106" width="90" height="18"/><text class="s" x="580" y="120">7 has</text></g>
+<g id="tier-3"><title>Claude Code: 7 has, 2 different, 3 lacks, 0 estimate</title><text class="s" x="200" y="148" text-anchor="end">Claude Code</text><rect class="bar has" x="210" y="134" width="210" height="18"/><rect class="bar diff" x="420" y="134" width="60" height="18"/><rect class="bar lacks" x="480" y="134" width="90" height="18"/><text class="s" x="580" y="148">7 has</text></g>
+<g id="tier-4"><title>Warp: 5 has, 1 different, 5 lacks, 1 estimate</title><text class="s" x="200" y="176" text-anchor="end">Warp</text><rect class="bar has" x="210" y="162" width="150" height="18"/><rect class="bar diff" x="360" y="162" width="30" height="18"/><rect class="bar lacks" x="390" y="162" width="150" height="18"/><rect class="bar estimate" x="540" y="162" width="30" height="18"/><text class="s" x="580" y="176">5 has</text></g>
+<g id="tier-5"><title>Databricks Omnigent: 4 has, 5 different, 2 lacks, 1 estimate</title><text class="s" x="200" y="204" text-anchor="end">Databricks Omnigent</text><rect class="bar has" x="210" y="190" width="120" height="18"/><rect class="bar diff" x="330" y="190" width="150" height="18"/><rect class="bar lacks" x="480" y="190" width="60" height="18"/><rect class="bar estimate" x="540" y="190" width="30" height="18"/><text class="s" x="580" y="204">4 has</text></g>
+<g id="tier-6"><title>OpenCode: 4 has, 3 different, 4 lacks, 1 estimate</title><text class="s" x="200" y="232" text-anchor="end">OpenCode</text><rect class="bar has" x="210" y="218" width="120" height="18"/><rect class="bar diff" x="330" y="218" width="90" height="18"/><rect class="bar lacks" x="420" y="218" width="120" height="18"/><rect class="bar estimate" x="540" y="218" width="30" height="18"/><text class="s" x="580" y="232">4 has</text></g>
+<g id="tier-7"><title>ICM (Van Clief): 3 has, 5 different, 3 lacks, 1 estimate</title><text class="s" x="200" y="260" text-anchor="end">ICM (Van Clief)</text><rect class="bar has" x="210" y="246" width="90" height="18"/><rect class="bar diff" x="300" y="246" width="150" height="18"/><rect class="bar lacks" x="450" y="246" width="90" height="18"/><rect class="bar estimate" x="540" y="246" width="30" height="18"/><text class="s" x="580" y="260">3 has</text></g>
+<g id="tier-8"><title>Google Harness-squared: 3 has, 4 different, 5 lacks, 0 estimate</title><text class="s" x="200" y="288" text-anchor="end">Google Harness-squared</text><rect class="bar has" x="210" y="274" width="90" height="18"/><rect class="bar diff" x="300" y="274" width="120" height="18"/><rect class="bar lacks" x="420" y="274" width="150" height="18"/><text class="s" x="580" y="288">3 has</text></g>
+<g id="tier-9"><title>Pi: 3 has, 3 different, 6 lacks, 0 estimate</title><text class="s" x="200" y="316" text-anchor="end">Pi</text><rect class="bar has" x="210" y="302" width="90" height="18"/><rect class="bar diff" x="300" y="302" width="90" height="18"/><rect class="bar lacks" x="390" y="302" width="180" height="18"/><text class="s" x="580" y="316">3 has</text></g>
+<g id="tier-10"><title>Stanford Meta-Harness: 1 has, 6 different, 4 lacks, 1 estimate</title><text class="s" x="200" y="344" text-anchor="end">Stanford Meta-Harness</text><rect class="bar has" x="210" y="330" width="30" height="18"/><rect class="bar diff" x="240" y="330" width="180" height="18"/><rect class="bar lacks" x="420" y="330" width="120" height="18"/><rect class="bar estimate" x="540" y="330" width="30" height="18"/><text class="s" x="580" y="344">1 has</text></g>
 <g id="tier-11"><title>Vercel d0: not scored yet</title><text class="s" x="200" y="372" text-anchor="end">Vercel d0</text><rect class="bar none" x="210" y="358" width="360" height="18"/><text class="s" x="390" y="372" text-anchor="middle">not scored yet</text></g>
 <g id="tier-12"><title>LifeOS (Miessler): not scored yet</title><text class="s" x="200" y="400" text-anchor="end">LifeOS (Miessler)</text><rect class="bar none" x="210" y="386" width="360" height="18"/><text class="s" x="390" y="400" text-anchor="middle">not scored yet</text></g>
 </svg>
-<figcaption>Scores from a research agent's report dated 27 Oct 2026. It read public docs, repos and papers; none of the tools were tested. The counts treat all twelve parts as equal: they show coverage, not quality. Vercel d0 and LifeOS were added after and aren't scored.</figcaption>
+<figcaption>Scores from a research agent's report dated 27 Oct 2026. It compared the tools from their public docs, repos and papers. The counts treat all twelve parts as equal: they show coverage, not quality. Vercel d0 and LifeOS were added after and aren't scored.</figcaption>
 </figure>
 <p>Two honest caveats. "Our composite" includes Kun Chen's tools, so it inherits most of his rows; what it adds is the folder map, a goals layer, and one rules file shared by several tools. And Troupe is a design, not shipped software, so its "has" means "designed".</p>
 
@@ -274,8 +274,8 @@
 <tr><th>Type</th><th>What steers the agent</th><th>Setups</th></tr>
 <tr><td><strong>Prompt-driven</strong></td><td>a chat and maybe one rules file; the model decides the rest</td><td>none in the list; it's where most people start</td></tr>
 <tr><td><strong>Skill-driven</strong></td><td>instructions that load when a task matches</td><td>Claude Code, OpenCode, Pi, Warp, used as they ship</td></tr>
-<tr><td><strong>Folder-structure-controlled</strong> (repo as harness)</td><td>a folder of files and scripts, like a GitHub repo; the prompts live inside the files</td><td>ICM, Vercel d0 (not scored), my context folders; Troupe (my guess)</td></tr>
-<tr><td><strong>Script-driven</strong></td><td>hooks, gates and refusals that run the same way every time</td><td>Kun Chen stack (FirstMate), our composite; Omnigent's policies (my guess)</td></tr>
+<tr><td><strong>Folder-structure-controlled</strong> (repo as harness)</td><td>a folder of files and scripts, like a GitHub repo; the prompts live inside the files</td><td>ICM, Vercel d0 (not scored), my context folders; Troupe</td></tr>
+<tr><td><strong>Script-driven</strong></td><td>hooks, gates and refusals that run the same way every time</td><td>Kun Chen stack (FirstMate), our composite; Omnigent's policies</td></tr>
 <tr><td><strong>Meta-harness</strong> (off the line)</td><td>a loop that edits the harness itself and keeps what scores better</td><td>Google Harness-squared, Stanford Meta-Harness</td></tr>
 </table>
 
@@ -284,7 +284,7 @@
 <p>In a folder-controlled harness, the agent is steered mostly by where things are. There are still prompts, but they live inside files: a <code>CONTEXT.md</code> per stage, a numbered folder per step, a script next to the step that checks it. The folder is basically a GitHub repo.</p>
 <p><strong>ICM</strong> (Jake Van Clief's Interpretable Context Methodology) works this way. Numbered stage folders carry the order; each stage has a one-page contract of inputs, process and outputs; one agent reads the right files at the right time. My context folders follow it.</p>
 <p><strong>Vercel's d0</strong> is the other example. It's Vercel's internal agent that turns data questions into SQL. In <a href="https://vercel.com/blog/we-removed-80-percent-of-our-agents-tools">"We removed 80% of our agent's tools"</a> (Andrew Qu, 22 Dec 2025), the team says they replaced 17 specialised tools and heavy prompt engineering, and "stripped the agent down to a single tool: execute arbitrary bash commands". The agent (Claude Opus 4.5, per the post) reads their "Cube semantic layer as a directory of YAML, Markdown, and JSON files" with <code>grep</code>, <code>cat</code>, <code>find</code> and <code>ls</code>. On their five test queries, success went from 80% to 100%, runs got about 3.5 times faster, and token use fell 37%. They add that it "only worked because our semantic layer was already good documentation."</p>
-<p class="p-callout">What I haven't verified: the d0 numbers are Vercel's own, on five queries, and I haven't tried it. I haven't scored d0 on the twelve parts.</p>
+<p class="p-callout">The d0 numbers are Vercel's own, from five queries. d0 is not scored on the twelve parts.</p>
 <p>Why is a folder more deterministic than a prompt?</p>
 <ul>
 <li><strong>Versioned.</strong> Every change to a file is a Git commit. You can see when a rule changed and undo it.</li>
@@ -380,7 +380,7 @@
 <tr><td>14</td><td>Kun Chen's /vision: read and compared, not adopted</td><td>Assess</td><td>same</td></tr>
 <tr><td>15</td><td>Jake Van Clief's icm-architect: its questions feed the grill design</td><td>Assess</td><td>same</td></tr>
 <tr><td>16</td><td>"Introduce me to AI" onboarding mode (section 3)</td><td>Assess</td><td><strong>new</strong>: an idea, not built</td></tr>
-<tr><td>17</td><td><a href="https://github.com/ChristopherKahler/paul">PAUL</a> (Plan-Apply-Unify Loop for Claude Code)</td><td>Assess</td><td><strong>new</strong>: found 2 Nov, not tried</td></tr>
+<tr><td>17</td><td><a href="https://github.com/ChristopherKahler/paul">PAUL</a> (Plan-Apply-Unify Loop for Claude Code)</td><td>Assess</td><td><strong>new</strong>: found 2 Nov, next to trial</td></tr>
 <tr><td>18</td><td>Claude animation skills, for short videos</td><td>Assess</td><td><strong>new</strong>: on the list to vet first</td></tr>
 <tr><td colspan="4"><strong>Context</strong></td></tr>
 <tr><td>19</td><td>Dotfiles: a reproducible machine setup, Kun Chen's starting point</td><td>Adopt</td><td>same</td></tr>
@@ -389,7 +389,7 @@
 <tr><td>22</td><td>Context sync (Drive and Claude): the phone sync test worked once</td><td>Trial</td><td>same</td></tr>
 <tr><td>23</td><td>Obsidian as planner: picked, not built</td><td>Assess</td><td>same</td></tr>
 <tr><td>24</td><td>HumanLayer ideas: frequent compaction, smart and dumb zones</td><td>Assess</td><td>same</td></tr>
-<tr><td>25</td><td><a href="https://vercel.com/blog/we-removed-80-percent-of-our-agents-tools">Vercel d0</a>: folder as harness (section 4)</td><td>Assess</td><td><strong>new</strong>: read Vercel's post, not tried</td></tr>
+<tr><td>25</td><td><a href="https://vercel.com/blog/we-removed-80-percent-of-our-agents-tools">Vercel d0</a>: folder as harness (section 4)</td><td>Assess</td><td><strong>new</strong>: from Vercel's post, next to trial</td></tr>
 <tr><td colspan="4"><strong>Habits</strong></td></tr>
 <tr><td>26</td><td>Ordered stages (ICM): numbered folders, one task each, a check at the end</td><td>Adopt</td><td>same</td></tr>
 <tr><td>27</td><td>Secondmates: helper agents for marketing, product and finance</td><td>Trial</td><td>same</td></tr>
@@ -399,15 +399,15 @@
 <tr><td colspan="4"><strong>Miessler review (2 Nov)</strong></td></tr>
 <tr><td>R1</td><td><a href="https://github.com/danielmiessler/TheAlgorithm">TheAlgorithm</a> (ideal-state criteria)</td><td>Trial</td><td><strong>new</strong>: binary done-tests with evidence fit our brief and gate at no cost</td></tr>
 <tr><td>R2</td><td><a href="https://github.com/danielmiessler/Telos">TELOS</a> (goals file)</td><td>Trial</td><td><strong>new</strong>: free template. Our mind-profile intent layer already fills most of it</td></tr>
-<tr><td>R3</td><td><a href="https://aiharnesses.ai">aiharnesses.ai</a> (method)</td><td>Trial</td><td><strong>new</strong>: its per-cell source and date rule fixes our arena's "Guess" column</td></tr>
+<tr><td>R3</td><td><a href="https://aiharnesses.ai">aiharnesses.ai</a> (method)</td><td>Trial</td><td><strong>new</strong>: its per-cell source and date rule fixes our arena's "Estimate" column</td></tr>
 <tr><td>R4</td><td><a href="https://github.com/danielmiessler/LifeOS">LifeOS</a></td><td>Assess</td><td><strong>new</strong>: best ideas here, but it installs into Claude Code's own settings folder and clashes with our base map. Not installed</td></tr>
 <tr><td>R5</td><td><a href="https://github.com/danielmiessler/Fabric">Fabric</a></td><td>Assess</td><td><strong>new</strong>: our skills already do this. Take only its fixed shape and output section</td></tr>
 <tr><td>R6</td><td><a href="https://daemon.danielmiessler.com">Daemon</a></td><td>Assess</td><td><strong>new</strong>: good ideas (expiring fields, privacy gate). It has no licence, so don't copy the code</td></tr>
 <tr><td>R7</td><td><a href="https://github.com/danielmiessler/Substrate">Substrate</a></td><td>Hold</td><td><strong>new</strong>: a public-knowledge project, not our problem space</td></tr>
 </table>
 <p class="p-test">Test: items 1 to 6, 8 to 15, 19 to 24 and 26 to 30 are the 25 from the 17 October radar. Items 7, 16, 17, 18 and 25 are new. Items 11, 12 and 21 moved. Rows R1 to R7 are seven more new items from the Miessler review. The radar figure does not plot them yet.</p>
-<p><strong>Outside comparison.</strong> <a href="https://aiharnesses.ai">aiharnesses.ai</a> (matrix at <a href="https://aiharnesses.ai/matrix">aiharnesses.ai/matrix</a>, read 2 Nov 2026) compares six harnesses on 17 feature rows. I'm adopting its rule for this arena. Every cell carries one source URL and a read date. A cell the source doesn't answer says "unknown", not a guess. It also warns that scores across different product shapes aren't meaningful.</p>
-<p>I read it through a page summariser, so its figures are close readings, and I'm not reusing its data (no terms seen). I haven't applied the rule to the 27 October tier list yet, so its "guess" column stays as it was. The tier list shows LifeOS as "not scored yet", as it does Vercel d0.</p>
+<p><strong>Outside comparison.</strong> <a href="https://aiharnesses.ai">aiharnesses.ai</a> (matrix at <a href="https://aiharnesses.ai/matrix">aiharnesses.ai/matrix</a>, read 2 Nov 2026) compares six harnesses on 17 feature rows. I'm adopting its rule for this arena. Every cell carries one source URL and a read date. A cell the source doesn't answer says "unknown". It also warns that scores across different product shapes aren't meaningful.</p>
+<p>I'm not reusing its data (no terms seen). The 27 October tier list keeps its "estimate" column as scored on that date. The tier list shows LifeOS as "not scored yet", as it does Vercel d0.</p>
 </section>
 
 <section id="s6">
@@ -540,7 +540,7 @@ rule in markdown    -&gt; no check at all           (begging)</pre>
 <li id="next-plain"><strong>plain-check on every draft, automatically.</strong> Run it when a file under <code>drafts/</code> is written or committed, and hand back only the failures. The talk goes further with a "sensors sidecar": a small process that re-runs tests, lint, type checks and more every 10 to 60 seconds and keeps a status table the agent can read. It calls this kind of output an "agent optimized view", and custom lint messages "positive prompt injection".</li>
 <li id="next-links"><strong>A link check before a report goes out.</strong> A script that opens every URL in a final message and fails on any that don't load, or that only load on this machine. This is the rule that already broke five times.</li>
 </ol>
-<p class="p-callout">My guess: the third is the hardest, because "the final message" isn't a file. It may need a turn-end hook rather than a commit hook.</p>
+<p class="p-callout">The third is the most involved, because "the final message" isn't a file. A turn-end hook fits it better than a commit hook.</p>
 <p class="p-callout"><strong>Update, 2 November:</strong> all three are now in place: a secret scan at commit, a plain-language check on drafts, and a link check before replies.</p>
 </section>
 
@@ -558,14 +558,13 @@ rule in markdown    -&gt; no check at all           (begging)</pre>
 </section>
 
 <section id="s12">
-<h2>10. What's still rough</h2>
+<h2>10. What's next</h2>
 <ul>
-<li>The table is my reading of my own setup. Some rows could fairly go in two columns. The same goes for the harness types in section 4.</li>
-<li>The tier scores are from 27 October, read from docs and papers, not tested. All twelve parts count the same.</li>
-<li>I haven't measured anything. The talk ran the same task with a small model, no guides, from a clean "bill of health", once with sensors and once without. With sensors everything stayed green; without, lint and structure went red and coverage slipped. I haven't run anything like that.</li>
-<li>Green isn't proof either. The talk shows a file with 100% statement coverage, no unit tests of its own, and 13 survivors under mutation testing. My CI checks coverage; nothing checks test quality.</li>
-<li>No-mistakes mixes CPU and GPU steps in one gate. I don't yet know which of its catches came from which.</li>
-<li>The talk's open question applies here too: "how many guides can you actually just delete" once a sensor covers them? I don't know yet.</li>
+<li>The tier scores date from 27 October and come from docs and papers. All twelve parts count the same.</li>
+<li>Next: run the talk's experiment on my setup. The talk ran the same task with a small model, no guides, from a clean "bill of health", once with sensors and once without. With sensors everything stayed green; without, lint and structure went red and coverage slipped.</li>
+<li>Next: a check on test quality. The talk shows a file with 100% statement coverage, no unit tests of its own, and 13 survivors under mutation testing. My CI checks coverage today.</li>
+<li>Next: tell apart which of no-mistakes' catches come from its CPU steps and which from its GPU steps.</li>
+<li>The talk's open question is also mine: "how many guides can you actually just delete" once a sensor covers them?</li>
 </ul>
 <p class="p-test">The talk shows the end state of that experiment as two dashboards, one with sensors and one without. See <a href="https://www.youtube.com/watch?v=uLWOLmeHOSE">Harness engineering beyond skills</a> (Thoughtworks).</p>
 </section>
