@@ -478,11 +478,15 @@ test("landing: the dog interview ends on Sam's criterion", async ({ page }) => {
 // ---- the calm landing: chart first, one Explain this button, the journey ----
 const explainBtn = (page) => page.locator('#askBar').getByRole('button', { name: 'Explain this', exact: true });
 
-test('landing: opens on the chart alone, with the nav label Blog and one Explain this button', async ({ page }) => {
+// A first visit opens the page card on the landing hook; a return visit (trip:v1 set) opens on the chart alone.
+const returning = (page) => page.addInitScript(() => { try { localStorage.setItem('trip:v1', '1'); } catch (e) { /* blocked */ } });
+
+test('landing: a return visit opens on the chart alone, with the nav label Blog and one Explain this button', async ({ page }) => {
+  await returning(page);
   await page.goto('/');
   await expect(page.locator('#pageov')).toBeHidden();
   await expect(page.getByRole('button', { name: 'Show page' })).toBeVisible();
-  await expect(page.locator('.k-nav').getByRole('link', { name: 'Blog' })).toHaveAttribute('href', 'http://127.0.0.1:4173/ai-life-os/blog/index.html');
+  await expect(page.locator('.k-nav a[href$="ai-life-os/blog/index.html"]')).toHaveAttribute('href', 'http://127.0.0.1:4173/ai-life-os/blog/index.html');
   await expect(explainBtn(page)).toBeVisible();
   const others = ['Tour the map', 'What do the shapes mean?', 'How do I find something?', 'Show me the skill map'];
   for (const q of others) await expect(page.locator('#askBar').getByText(q)).toBeHidden();
@@ -491,6 +495,7 @@ test('landing: opens on the chart alone, with the nav label Blog and one Explain
 });
 
 test('landing: the visitor\'s choice to show or hide the page is remembered', async ({ page }) => {
+  await returning(page);
   await page.goto('/');
   await page.getByRole('button', { name: 'Show page' }).click();
   await expect(page.locator('#pageov')).toBeVisible();
@@ -503,6 +508,7 @@ test('landing: the visitor\'s choice to show or hide the page is remembered', as
 
 // The Explain this script is a short, warm conversation in plain prose: no lists, numbers or labels, a few short sentences per turn.
 test('landing: Explain this is a short conversation in plain prose, then the walk', async ({ page }) => {
+  await returning(page);
   await page.goto('/');
   await explainBtn(page).click();
   const chat = page.locator('#journeyChat');
@@ -567,7 +573,7 @@ const stays = (page) => page.evaluate(() => { window.__stay = true; });
 const stayed = (page) => page.evaluate(() => window.__stay === true);
 
 test('landing: the chart lights one node, whoami, whichever view the reader is in', async ({ page }) => {
-  const views = ['/', '/#whoami', '/#working', '/#explain', '/#step-3', '/#step-8'];
+  const views = ['/', '/#me', '/#trip', '/#explain', '/#step-3', '/#step-8'];
   for (const url of views) {
     await page.goto('about:blank');
     await page.goto(url);
@@ -575,127 +581,177 @@ test('landing: the chart lights one node, whoami, whichever view the reader is i
   }
 });
 
-test('landing: whoami opens a short CV with the full CV and a skip', async ({ page }) => {
-  await page.goto('/#whoami');
-  const who = page.locator('#whoami');
+test('landing: Me opens a short CV with the full CV, a Next to the Blog and a Skip', async ({ page }) => {
+  await page.goto('/#me');
+  const who = page.locator('#me');
   await expect(who).toBeVisible();
   await expect(who.locator('h1')).toHaveText('Ashish Raina');
   await expect(who.locator('.k-dek')).toHaveText('Technical Program Manager · AI-native delivery');
   await expect(who.getByText('Technical program lead with 20 years in software')).toBeVisible();
   await expect(who.locator('.outcomes')).toHaveText(/^~3,000 wholesale accounts onboarded · 4 regions · .* satisfaction \(internal NPS\) 5 → 7 \/ 10$/);
   await expect(who.getByRole('link', { name: 'Full CV' })).toHaveAttribute('href', 'cv.html');
-  await expect(who.getByRole('link', { name: 'Skip to the AI problems' })).toBeVisible();
-  for (const hidden of ['#explain', '#flow', '#intro']) await expect(page.locator(hidden), hidden).toBeHidden();
+  await expect(who.getByRole('link', { name: 'Next: what I write' })).toHaveAttribute('href', 'ai-life-os/blog/index.html');
+  await expect(who.getByRole('link', { name: 'Skip', exact: true })).toHaveAttribute('href', 'ai-life-os/blog/index.html');
+  for (const hidden of ['#hook', '#explain', '#flow', '#intro']) await expect(page.locator(hidden), hidden).toBeHidden();
   await settle(page);
   // the card alone: on a phone the chart canvas fills the screen behind it, so a canvas mask would hide the card
   await expect(page.locator('#pageov')).toHaveScreenshot('landing-whoami.png');
 });
 
-test('landing: Skip to the AI problems continues the journey, and Show me how it works reaches the walk', async ({ page }) => {
-  await page.goto('/#whoami');
-  await page.getByRole('link', { name: 'Skip to the AI problems' }).click();
-  await expect(page.locator('#whoami')).toBeHidden();
-  const chat = page.locator('#journeyChat');
-  await expect(chat).toContainText("we can't tell progress from motion");
-  await expect(page).toHaveURL(/#explain$/);
-  expect(await mapState(page)).toEqual({ here: 'whoami', lit: ['whoami'] });
+// ---- the first visit: hook, then Me; the hook is shown once, and "Replay the trip" brings it back ----
+test('landing: a first visit opens on the hook with a sample star-map; Next and Skip lead to Me', async ({ page }) => {
+  await page.goto('/');
+  const hook = page.locator('#hook');
+  await expect(page.locator('#pageov')).toBeVisible();
+  await expect(hook).toBeVisible();
+  await expect(hook.locator('h1')).toHaveText('Write down what you actually want.');
+  const radar = hook.locator('svg[role="img"]');
+  await expect(radar).toBeVisible();
+  await expect(radar.locator('.lbl text')).toHaveText(['Pace 12', 'Delegation 6', 'Curiosity 14', 'Structure 18', 'Quality review 16', 'Outside memory 5']);
+  await expect(radar.locator('.yours')).toHaveCount(1);
+  await expect(radar.locator('.mark text')).toHaveText('yours');
+  await expect(hook.locator('figcaption')).toContainText('Sam is made up');
+  await expect(hook.locator('figcaption')).toContainText('you get your own');
+  // no private score reaches the page: the radar carries only Sam's six work traits
+  await expect(hook).not.toContainText(/Openness|Extravert|Agreeable|Neurotic|Stress/);
+  await expect(hook.getByRole('link', { name: 'Skip', exact: true })).toHaveAttribute('href', '#me');
   await settle(page);
-  await expect(page.locator('#pageov')).toHaveScreenshot('landing-skip.png');
-  for (const q of ['What goes wrong without that?', 'How do you fix that?', 'What do you stand for?', 'Who is it for?']) await chat.getByRole('button', { name: q }).click();
-  await chat.getByRole('button', { name: 'Show me how it works' }).click();
-  await expect(page.locator('#flowN')).toHaveText('1');
-});
-
-// ---- the path: who I am, what I'm working on, the rest. Next and Skip on every step; a chip jumps anywhere ----
-const pathStep = async (page, n, name) => {
-  await expect(page.locator('#pathN')).toHaveText(String(n));
-  await expect(page.locator('#path').getByRole('link', { name })).toHaveAttribute('aria-current', 'step');
-  await expect(page.locator('#path a[aria-current="step"]')).toHaveCount(1);
-};
-
-test('landing: whoami carries a short manifesto that names the causes and the one-liners', async ({ page }) => {
-  await page.goto('/#whoami');
-  const lines = page.locator('#manifesto li');
-  expect(await lines.count(), 'five to seven lines').toBeGreaterThanOrEqual(5);
-  expect(await lines.count(), 'five to seven lines').toBeLessThanOrEqual(7);
-  const text = await page.locator('#manifesto').innerText();
-  for (const t of ['effective altruism', '80,000 Hours', 'AI safety', 'AI-Life-OS', 'harnesses and validators', "can't tell progress from motion", 'write the target down first']) expect(text, t).toContain(t);
-  for (const l of ['Your life, pointed at something you chose.', 'Your company, pointed at one agreed goal.', 'The internet, sorted by quality instead of popularity.', 'AI, explained without the panic.']) expect(text, l).toContain(l);
-});
-
-test('landing: the path runs who I am, what I am working on, then the rest; Next and Skip on every step', async ({ page }) => {
-  await page.goto('/#whoami');
-  const card = page.locator('#pageov');
-  const shot = (name) => settle(page).then(() => expect(card).toHaveScreenshot(`landing-path-${name}.png`));
-  // step 1: Who I am
-  await pathStep(page, 1, /Who I am/);
-  await expect(page.locator('#path .path-steps li')).toHaveCount(3);
-  await shot('1-who');
-  await page.getByRole('link', { name: 'Next: what I\'m working on' }).click();
-  // step 2: the latest posts, the new one first
-  await expect(page.locator('#working')).toBeVisible();
-  await expect(page.locator('#whoami')).toBeHidden();
-  await expect(page).toHaveURL(/#working$/);
-  await pathStep(page, 2, /What I'm working on/);
-  const posts = await page.locator('#working a[href*="/blog/"]').evaluateAll((as) => as.map((a) => a.getAttribute('href')));
-  expect(posts[0]).toBe('ai-life-os/blog/one-harness-for-every-agent.html');
-  expect(posts.length, 'the newest posts, not the whole blog').toBeGreaterThanOrEqual(4);
-  await shot('2-working');
-  await page.getByRole('link', { name: 'Next: the AI problems' }).click();
-  // step 3: the rest of the site
-  await expect(page.locator('#explain')).toBeVisible();
-  await expect(page.locator('#working')).toBeHidden();
-  await pathStep(page, 3, /The rest of the site/);
-  await expect(page.getByRole('link', { name: 'Start the eight-step walk' })).toBeVisible();
-  await shot('3-rest');
-  await page.getByRole('link', { name: 'Start the eight-step walk' }).click();
-  await expect(page.locator('#flowN')).toHaveText('1');
-  await pathStep(page, 3, /The rest of the site/);
-});
-
-test('landing: Skip leaves each step, and a chip jumps to any step without a reload', async ({ page }) => {
-  await page.goto('about:blank');
-  await page.goto('/#working');
+  await expect(page.locator('#pageov')).toHaveScreenshot('landing-hook.png');
   await stays(page);
-  // step 1 Skip lands on step 3, past step 2
-  await page.locator('#path').getByRole('link', { name: /Who I am/ }).click();
-  await page.getByRole('link', { name: 'Skip to the AI problems' }).click();
-  await expect(page.locator('#explain')).toBeVisible();
-  await expect(page.locator('#working')).toBeHidden();
-  await pathStep(page, 3, /The rest of the site/);
-  // steps 2 and 3 offer a Skip to the blog, which is a plain link to the blog index
-  for (const chip of [/What I'm working on/, /The rest of the site/]) {
-    await page.locator('#path').getByRole('link', { name: chip }).click();
-    const skip = page.locator('section:visible').getByRole('link', { name: 'Skip to the blog' });
-    await expect(skip).toHaveAttribute('href', 'ai-life-os/blog/index.html');
-  }
-  // a chip reaches any step from any step, in the same document
-  await page.locator('#path').getByRole('link', { name: /Who I am/ }).click();
-  await expect(page.locator('#whoami')).toBeVisible();
-  await pathStep(page, 1, /Who I am/);
+  await hook.getByRole('link', { name: /^Next: who I am/ }).click();
+  await expect(page.locator('#me')).toBeVisible();
+  await expect(hook).toBeHidden();
+  await expect(page).toHaveURL(/#me$/);
   expect(await stayed(page), 'same document').toBe(true);
+  expect(await page.evaluate(() => localStorage.getItem('trip:v1'))).toBe('1');
 });
 
-test('landing: a click on the whoami node, the logo or the page card never reloads the page', async ({ page }) => {
-  // from the calm chart: the node opens the whoami section
+test('landing: a return visit lands on Me, and Replay the trip shows the hook again', async ({ page }) => {
+  await returning(page);
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Show page' }).click();
+  await expect(page.locator('#me')).toBeVisible();
+  await expect(page.locator('#hook')).toBeHidden();
+  await page.getByRole('link', { name: 'Replay the trip' }).click();
+  await expect(page.locator('#hook')).toBeVisible();
+  await expect(page).toHaveURL(/#trip$/);
+  await page.locator('#hook').getByRole('link', { name: 'Skip', exact: true }).click();
+  await expect(page.locator('#me')).toBeVisible();
+});
+
+test('landing: the hook shows until the reader moves on; a typed #trip address shows it again', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('#hook')).toBeVisible();
+  await page.reload();
+  await expect(page.locator('#hook')).toBeVisible();
+  await page.locator('#hook').getByRole('link', { name: 'Skip', exact: true }).click();
+  await page.reload();
+  await expect(page.locator('#hook')).toBeHidden();
+  await page.goto('about:blank');
+  await page.goto('/#trip');
+  await expect(page.locator('#hook')).toBeVisible();
+});
+
+// ---- one top bar on every page, and a last-line hand-off to the next page in the bar order ----
+const barPages = () => pages.filter((f) => !/^ai-life-os\/(brain\/|maps\/|kit\/)/.test(f) && !share.some((r) => r.path === f && r.level !== 'public') && f !== 'blog/index.html');
+const barItems = ['Me', 'Blog', 'Intent', 'Course'];
+
+test('top bar: Me, Blog, Intent, Course and a GitHub icon on every public page, current page marked', async ({ page }) => {
+  expect(barPages().length, 'pages checked').toBeGreaterThanOrEqual(16);
+  for (const file of barPages()) {
+    await page.goto(`/${file}`);
+    const bar = page.locator('header.tb');
+    await expect(bar, file).toHaveCount(1);
+    const links = bar.locator('.tb-links > a');
+    await expect(links, file).toHaveCount(5);
+    expect(await links.evaluateAll((as) => as.slice(0, 4).map((a) => a.textContent.trim())), file).toEqual(barItems);
+    await expect(links.nth(4), file).toHaveAttribute('href', 'https://github.com/codeami');
+    await expect(links.nth(4), file).toHaveAttribute('aria-label', 'GitHub: github.com/codeami');
+    const paths = await links.evaluateAll((as) => as.slice(0, 4).map((a) => new URL(a.href).pathname));
+    expect(paths, file).toEqual(['/index.html', '/ai-life-os/blog/index.html', '/intent/index.html', '/ai-life-os/course/index.html']);
+    expect(await bar.locator('.tb-links > a[aria-current]').count(), `${file}: one current item at most`).toBeLessThanOrEqual(1);
+    expect(await bar.evaluate((b) => b.scrollWidth <= b.clientWidth + 1), `${file}: bar fits the width`).toBe(true);
+  }
+});
+
+test('top bar: on a phone the links sit behind Menu; on a wide screen they are in view', async ({ page }) => {
+  await page.goto('/intent/index.html');
+  const menu = page.locator('header.tb .tb-menu');
+  const links = page.locator('header.tb .tb-links');
+  if (page.viewportSize().width <= 760) {
+    await expect(menu).toBeVisible();
+    await expect(links).toBeHidden();
+    await menu.click();
+    await expect(links).toBeVisible();
+    await expect(menu).toHaveAttribute('aria-expanded', 'true');
+    for (const t of barItems) await expect(links.getByRole('link', { name: t, exact: true })).toBeVisible();
+    await expect(links.getByRole('link', { name: 'GitHub: github.com/codeami' })).toBeVisible();
+  } else {
+    await expect(menu).toBeHidden();
+    await expect(links).toBeVisible();
+  }
+});
+
+test('top bar: the current page is marked in each part of the bar', async ({ page }) => {
+  const current = { 'index.html': 'Me', 'cv.html': 'Me', 'ai-life-os/blog/index.html': 'Blog', 'ai-life-os/arena.html': 'Blog', 'intent/index.html': 'Intent', 'ai-life-os/about.html': 'Intent', 'ai-life-os/core.html': 'Intent', 'ai-life-os/course/index.html': 'Course' };
+  for (const [file, label] of Object.entries(current)) {
+    await page.goto(`/${file}`);
+    await expect(page.locator('header.tb .tb-links > a[aria-current]'), file).toHaveText(label);
+  }
+});
+
+test('hand-off: the last line of Me, Blog, Intent and Course leads to the next page in the bar order', async ({ page }) => {
+  const chain = [
+    ['index.html#me', '#me .k-btn.primary', /ai-life-os\/blog\/index\.html$/],
+    ['ai-life-os/blog/index.html', '.handoff a', /\/intent\/index\.html$/],
+    ['intent/index.html', '.handoff a', /\/ai-life-os\/course\/index\.html$/],
+    ['ai-life-os/course/index.html', '.handoff a', /^https:\/\/github\.com\/codeami$/],
+  ];
+  await returning(page);
+  for (const [file, sel, target] of chain) {
+    await page.goto(`/${file}`);
+    const link = page.locator(`${sel}:visible`).last();
+    await expect(link, file).toHaveAttribute('href', /.+/);
+    expect(new URL(await link.getAttribute('href'), page.url()).href, file).toMatch(target);
+  }
+});
+
+test('Intent: the four doors in his words, the causes, the dated harness line and the credits', async ({ page }) => {
+  await page.goto('/intent/index.html');
+  await expect(page.locator('h1')).toHaveText('Write down what you actually want.');
+  await expect(page.locator('.in-doors h3')).toHaveText(['Your life, pointed at something you chose.', 'Your company, pointed at one agreed goal.', 'The internet, sorted by quality instead of popularity.', 'AI, explained without the panic.']);
+  await expect(page.locator('#care')).toContainText('effective altruism and 80,000 Hours, and AI safety');
+  await expect(page.locator('#care')).toContainText('harnesses and validators');
+  await expect(page.locator('#harness')).toContainText('role-scoped and run in isolated copies, validators gate every push, and merges happen only on my word');
+  await expect(page.locator('#harness')).not.toContainText('RBAC');
+  await expect(page.locator('#credits a')).toHaveCount(7);
+  await expect(page.locator('#os a[href*="ai-life-os/index.html"]')).toHaveCount(1);
+  await expect(page.locator('#offer tbody tr')).toHaveCount(5);
+  // the page runs no script of its own and loads no frame script
+  expect(await page.locator('script[src*="hud.js"], script[src*="article.js"], script:not([src])').count()).toBe(0);
+});
+
+test('landing: a click on the Me node, the logo or the page card never reloads the page', async ({ page }) => {
+  // from the calm chart: the node opens the Me section
+  await returning(page);
   await page.goto('/');
   await expect(page.locator('#pageov')).toBeHidden();
   await stays(page);
   await clickNode(page, 'whoami');
   await expect(page.locator('#pageov')).toBeVisible();
-  await expect(page.locator('#whoami')).toBeVisible();
+  await expect(page.locator('#me')).toBeVisible();
   expect(await mapState(page)).toEqual({ here: 'whoami', lit: ['whoami'] });
   // a second click on the same node does not switch it off
   await clickNode(page, 'whoami');
-  await expect(page.locator('#whoami')).toBeVisible();
+  await expect(page.locator('#me')).toBeVisible();
   expect(await mapState(page)).toEqual({ here: 'whoami', lit: ['whoami'] });
-  // from the journey: the node and the logo both lead back to whoami
+  // from the journey: the node and the logo both lead back to Me
   for (const back of ['node', 'logo']) {
-    await page.getByRole('link', { name: 'Skip to the AI problems' }).click();
+    await page.evaluate(() => window.dispatchEvent(new Event('explain'))); // what the Explain this button sends
     await expect(page.locator('#explain')).toBeVisible();
     if (back === 'node') await clickNode(page, 'whoami');
     else await page.locator('.k-nav .k-home').click();
-    await expect(page.locator('#whoami'), back).toBeVisible();
+    await expect(page.locator('#me'), back).toBeVisible();
     await expect(page.locator('#explain'), back).toBeHidden();
     expect(await stayed(page), `${back}: same document`).toBe(true);
   }
@@ -704,7 +760,7 @@ test('landing: a click on the whoami node, the logo or the page card never reloa
   await page.goto('/#step-4');
   await stays(page);
   await page.locator('.k-nav .k-home').click();
-  await expect(page.locator('#whoami')).toBeVisible();
+  await expect(page.locator('#me')).toBeVisible();
   await expect(page.locator('#flow')).toBeHidden();
   expect(await stayed(page)).toBe(true);
 });
@@ -721,10 +777,9 @@ test('cv.html: the plain web CV is the v5 text without a phone number, an email,
   const hrefs = await page.$$eval('a[href]', (as) => as.map((a) => a.getAttribute('href')));
   expect(hrefs.filter((h) => /\.(docx?|pdf)$/i.test(h)), 'no file downloads').toEqual([]);
   expect(readdirSync(root).filter((f) => /\.(docx?|pdf)$/i.test(f)), 'no CV file in the repo').toEqual([]);
-  // the way back into the journey
-  await page.getByRole('link', { name: 'Continue to the AI problems' }).first().click();
-  await expect(page).toHaveURL(/#explain$/);
-  await expect(page.locator('#journeyChat')).toContainText("Hi, I'm EA-bot");
+  // the way on: the CV sits under Me, so its next stop is the Blog and its way back is Me
+  await expect(page.getByRole('link', { name: 'Next: what I write' }).first()).toHaveAttribute('href', 'ai-life-os/blog/index.html');
+  await expect(page.getByRole('link', { name: 'Back to Me' })).toHaveAttribute('href', 'index.html#me');
 });
 
 test('Chart Room chat holds the story and tour branches', () => {

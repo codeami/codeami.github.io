@@ -11,11 +11,14 @@
 <link rel="icon" href="kit/bosun.svg" type="image/svg+xml">
 <link rel="stylesheet" href="kit/kit.css">
 <link rel="stylesheet" href="article.css">
+<link rel="stylesheet" href="topbar.css">
+<script src="topbar.js"></script>
 </head>
 <body>
-<header class="k-nav">
-  <a class="k-home" href="index.html"><img class="k-mark" src="kit/bosun.svg" alt=""><span class="k-logo">The Chart Room<small>How one captain runs a crew of AI agents, safely.</small></span></a>
-  <nav aria-label="Site"><a href="blog/index.html">Blog</a><a href="arena.html">Arena</a><a href="safety.html">Safety</a><button class="theme" id="theme" type="button">Night</button></nav>
+<header class="k-nav tb">
+  <a class="k-home tb-brand" href="../index.html"><img class="k-mark" src="kit/bosun.svg" alt=""><span class="k-logo">Ashish Raina</span></a>
+  <button class="tb-menu" type="button" aria-expanded="false" aria-controls="tb-links">Menu</button>
+  <nav class="tb-links" id="tb-links" aria-label="Site"><a href="../index.html#me">Me</a><a href="blog/index.html">Blog</a><a href="../intent/index.html" aria-current="page">Intent</a><a href="course/index.html">Course</a><a class="tb-gh" href="https://github.com/codeami" aria-label="GitHub: github.com/codeami"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="kit/icons.svg#github"/></svg></a><button class="theme" id="theme" type="button">Night</button></nav>
 </header>
 <main class="page">
 <article class="k-article">

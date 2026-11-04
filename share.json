@@ -3,6 +3,7 @@
  "pages": [
   {"path": "index.html", "level": "public"},
   {"path": "cv.html", "level": "public"},
+  {"path": "intent/index.html", "level": "public"},
   {"path": "blog/index.html", "level": "public"},
   {"path": "ai-life-os/index.html", "level": "public"},
   {"path": "ai-life-os/about.html", "level": "public"},
