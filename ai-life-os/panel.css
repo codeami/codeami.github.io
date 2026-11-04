@@ -91,6 +91,33 @@ html[data-skin="calm"] :target { scroll-margin-top: 16px; }
 .p-svg-line { stroke: var(--line-2); stroke-width: 1; }
 .p-svg-name { font: 700 13px var(--f-read); fill: var(--ink); }
 .p-svg-file { font: 12px var(--font-mono); fill: var(--mute); }
+/* The library scene: shelves, filing cabinet, card catalogue, reading desk, librarian. Role tokens only. */
+.p-svg-wall { fill: var(--bg); stroke: var(--line); stroke-width: 1; }
+.p-svg-board, .p-svg-bk-e { fill: var(--line-2); }
+.p-svg-bk-a { fill: var(--accent); }
+.p-svg-bk-b { fill: var(--ok); }
+.p-svg-bk-c { fill: var(--info); }
+.p-svg-bk-d { fill: var(--warn); }
+.p-svg-cab { fill: var(--accent-dim); stroke: var(--accent); stroke-width: 1.5; }
+.p-svg-drawer { fill: var(--panel); stroke: var(--line-2); stroke-width: 1; }
+.p-svg-drawer.hi { fill: var(--accent-dim); stroke: var(--accent); stroke-width: 1.5; }
+.p-svg-card { fill: var(--panel); stroke: var(--line-2); stroke-width: 1; }
+.p-svg-handle { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linecap: round; }
+.p-svg-tab { font: 12px var(--f-read); fill: var(--ink); text-anchor: middle; }
+.p-svg-note { font: 12px var(--f-read); fill: var(--mute); }
+.p-svg-desk, .p-svg-leg { fill: var(--line-2); stroke: var(--mute); stroke-width: 1; }
+.p-svg-page { fill: var(--panel); stroke: var(--accent); stroke-width: 1.2; }
+.p-svg-cover, .p-svg-dot, .p-svg-ahead { fill: var(--accent); }
+.p-svg-arrow { fill: none; stroke: var(--accent); stroke-width: 1.8; stroke-dasharray: 4 3; }
+.p-svg-num { font: 700 11px var(--f-read); fill: var(--on-accent); text-anchor: middle; }
+.p-svg-head { fill: var(--accent-dim); stroke: var(--accent); stroke-width: 1.2; }
+.p-svg-hair { fill: var(--ink); }
+.p-svg-body { fill: var(--info); }
+.p-svg-arm { fill: none; stroke: var(--info); stroke-width: 7; stroke-linecap: round; }
+.p-svg-ai { font: 700 13px var(--f-read); fill: var(--on-accent); text-anchor: middle; }
+/* Panel marker icons: one hidden sprite per page, each panel header reuses a symbol. */
+.p-sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+.p-ico { flex: none; width: 26px; height: 26px; margin-left: auto; align-self: center; fill: none; stroke: var(--accent); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 
 /* The full prose, for readers who want it. */
 .p-full { max-width: 46rem; margin: 0 auto; padding-top: var(--s-xl); border-top: 1px solid var(--line-2); }

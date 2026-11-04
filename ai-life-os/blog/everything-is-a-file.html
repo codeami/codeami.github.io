@@ -4,14 +4,26 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light">
-<title>Everything is a file: an ordered folder harness for your AI · The Chart Room</title>
-<meta name="description" content="Your goals, your context and your rules, written down once in plain folders and read by every AI tool you use">
+<title>Write it down once: a folder your AI can read · The Chart Room</title>
+<meta name="description" content="Your folders are a library and the AI is the librarian. Write down who you are and what you do once, in plain files, and every chat stops starting from zero">
 <link rel="stylesheet" href="../hud.css">
 <link rel="icon" href="../kit/bosun.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../kit/kit.css">
 <link rel="stylesheet" href="../panel.css">
 </head>
 <body>
+<svg class="p-sprite" aria-hidden="true" focusable="false">
+<defs>
+<symbol id="i-zero" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/><circle cx="12" cy="10.5" r="2.5"/></symbol>
+<symbol id="i-library" viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M4 12h16M8 4v5M12 6v3M16 4v5M7 15v5M11 14v6M15 16v4"/></symbol>
+<symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
+<symbol id="i-cabinet" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M5 9h14M5 15h14M10 6h4M10 12h4M10 18h4"/></symbol>
+<symbol id="i-desk" viewBox="0 0 24 24"><path d="M12 6c-2-1.5-5-2-8-1.5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5v-13C17 4 14 4.5 12 6zM12 6v13"/></symbol>
+<symbol id="i-habits" viewBox="0 0 24 24"><path d="M4 7l2 2 3-3M4 15l2 2 3-3M12 8h8M12 16h8"/></symbol>
+<symbol id="i-catalogue" viewBox="0 0 24 24"><path d="M5 5h14v4H5zM5 11h14v4H5zM5 17h14v3H5z"/><path d="M10 7h4M10 13h4"/></symbol>
+<symbol id="i-mark" viewBox="0 0 24 24"><path d="M7 3h10v18l-5-4-5 4z"/></symbol>
+</defs>
+</svg>
 <header class="p-nav">
   <a class="p-brand" href="../index.html"><img src="../kit/bosun.svg" alt=""><span>The Chart Room</span></a>
   <nav aria-label="Site"><a href="index.html" aria-current="page">Blog</a><a href="../arena.html">Arena</a><a href="../safety.html">Safety</a></nav>
@@ -20,172 +32,177 @@
 
 <header class="p-head">
 <p class="p-kicker"><a href="index.html">Blog</a><span>Signal from noise</span></p>
-<h1 class="p-title">Everything is <mark class="p-hl">a file</mark>: an ordered folder harness for your AI</h1>
-<p class="p-sub">In AI, everything is a file (or a folder)</p>
-<p class="p-byline"><span>Ashish Raina</span><time datetime="2026-11-02">2 Nov 2026</time><span>12 min read</span></p>
-<ul class="p-tags" aria-label="Topics"><li>ICM</li><li>AGENTS.md</li><li>Dotfiles</li><li>Plain files</li><li>8 panels</li></ul>
+<h1 class="p-title">Write it down once: <mark class="p-hl">a folder your AI can read</mark></h1>
+<p class="p-sub">Think of your folders as a library, and your AI as the librarian</p>
+<p class="p-byline"><span>Ashish Raina</span><time datetime="2026-11-02">2 Nov 2026</time><span>8 min read</span></p>
+<ul class="p-tags" aria-label="Topics"><li>Plain files</li><li>Folders</li><li>Map file</li><li>Context</li><li>8 panels</li></ul>
 </header>
-<p class="p-intro">This simple file-and-folder method is good enough to start.</p>
+<p class="p-intro">Every chat with an AI starts from zero. Write down who you are and what you work on once, in plain folders, and every AI tool you use starts from your library instead.</p>
 
 <div class="p-top">
 <nav class="p-index" aria-label="In this post">
 <h2>In this post</h2>
 <ol>
-<li><a href="#p1">The problem</a></li>
-<li><a href="#p2">The idea: an ordered folder harness</a></li>
-<li><a href="#p3">Three levels of using AI</a></li>
-<li><a href="#p4">Map, rooms and tools</a></li>
-<li><a href="#p5">A file on disk is not something the AI knows</a></li>
-<li><a href="#p6">Conversations become rules, one fix at a time</a></li>
-<li><a href="#p7">The model is not the system</a></li>
+<li><a href="#p1">The problem: every chat starts from zero</a></li>
+<li><a href="#p2">The idea: a library for your AI</a></li>
+<li><a href="#p3">Your first five minutes</a></li>
+<li><a href="#p4">Drawers and the card catalogue</a></li>
+<li><a href="#p5">The reading desk</a></li>
+<li><a href="#p6">Three habits that keep it working</a></li>
+<li><a href="#p7">One map, any librarian</a></li>
 <li><a href="#p8">Why it matters</a></li>
 </ol>
 </nav>
 <aside class="p-side" aria-label="At a glance">
-<blockquote class="p-quote"><p class="p-lab">In the post's own words</p><p>Your folders are the library. The AI's context window is the desk.</p></blockquote>
-<div class="p-card core"><h2 class="p-lab">The core idea</h2><p>Stop pasting the same explanations into chats. Write them down as plain files in folders, and let the AI read the ones it needs.</p></div>
-<div class="p-card"><h2 class="p-lab">Different from a pasted prompt</h2><p>The AI reads only the files the task needs, instead of a giant prompt pasted every time.</p></div>
+<blockquote class="p-quote"><p class="p-lab">In the post's own words</p><p>Your folders are the library; the AI is the librarian, and only a few books reach its desk.</p></blockquote>
+<div class="p-card core"><h2 class="p-lab">The core idea</h2><p>Write down who you are, what you do and your rules once, as plain files in folders. Every AI tool reads the same files.</p></div>
+<div class="p-card"><h2 class="p-lab">Different from a pasted prompt</h2><p>The AI opens only the files the task needs, instead of a long prompt pasted into every chat.</p></div>
 </aside>
 </div>
 
 <div class="p-grid">
 
 <section class="p-panel" id="p1" aria-labelledby="p1-t">
-<header class="p-panel-h"><span class="p-num">01</span><h2 id="p1-t">The problem</h2></header>
-<div class="p-box"><h3 class="p-lab">Noise and overload</h3><p>There is more AI than anyone can follow. New tools and new advice arrive every week, and I think most of us end up skimming and saving links we never open.</p></div>
-<div class="p-box"><h3 class="p-lab">AI that guesses what you want</h3><p>I ask for one thing and get a confident answer to a different question, because the AI doesn't know what I meant. In my reading, that gap is why many people give up.</p></div>
-<div class="p-box"><h3 class="p-lab">Knowledge scattered everywhere</h3><p>What I know about my own life sits in notes apps, chats, email and my head. No AI can see it, so every chat starts from zero.</p></div>
-<div class="p-box"><h3 class="p-lab">Newcomers left behind</h3><p>If you are just starting, there is no obvious place to begin, and the people who already know how seem a long way ahead.</p></div>
-<p class="p-principle"><span class="p-lab">My view, not a study</span>All four get easier when what you know sits in one place the AI can read.</p>
-<a class="p-more" href="#s-problem">Read the problem</a>
+<header class="p-panel-h"><span class="p-num">01</span><h2 id="p1-t">The problem</h2><svg class="p-ico" aria-hidden="true" focusable="false"><use href="#i-zero"/></svg></header>
+<div class="p-box"><h3 class="p-lab">Every chat starts from zero</h3><p>You open a new chat and explain yourself again: who you are, what you work on, how you like things done. When the chat ends, the AI forgets. What you know sits in notes apps, email, old chats and your head, where no AI can see it.</p></div>
+<div class="p-box"><h3 class="p-lab">What it costs</h3><p>You retype the same background every time. The AI fills the gaps with guesses, so you ask for one thing and get a confident answer to another. A cleverer prompt does not fix that. A place to keep what you know does.</p></div>
+<p class="p-principle"><span class="p-lab">Principle</span>Write it down once, in a place the AI can read.</p>
+<a class="p-more" href="#s-problem">Read more: the problem</a>
 </section>
 
 <section class="p-panel p-wide" id="p2" aria-labelledby="p2-t">
-<header class="p-panel-h"><span class="p-num">02</span><h2 id="p2-t">The idea: an ordered folder harness</h2></header>
-<div class="p-box"><h3 class="p-lab">The idea in one line</h3><p>Every want and need becomes a folder the AI can read. Each folder holds a few plain files. Anyone, or any AI tool, can open the folder and see what you mean.</p></div>
+<header class="p-panel-h"><span class="p-num">02</span><h2 id="p2-t">The idea: a library for your AI</h2><svg class="p-ico" aria-hidden="true" focusable="false"><use href="#i-library"/></svg></header>
+<div class="p-box"><h3 class="p-lab">The idea in one line</h3><p>Turn what you know into folders of plain files. The AI then works like a librarian: it checks the index, fetches only the books a task needs, and reads them at its desk.</p></div>
 <figure class="p-fig">
-<svg class="p-svg" viewBox="0 0 340 450" role="img" aria-labelledby="fig-t fig-d">
-<title id="fig-t">Folders for everyday wants and needs</title>
-<desc id="fig-d">One folder called my-life holds a map file and six folders: money, health, work and career, personal brand, learning, and family and community. Each folder holds three example files.</desc>
-<line class="p-svg-line" x1="170" y1="44" x2="170" y2="400"/>
-<rect class="p-svg-root" x="80" y="6" width="180" height="38" rx="8"/>
-<text class="p-svg-name" x="170" y="22" text-anchor="middle">my-life/</text>
-<text class="p-svg-file" x="170" y="37" text-anchor="middle">AGENTS.md (the map)</text>
-<line class="p-svg-line" x1="160" y1="127" x2="170" y2="127"/><line class="p-svg-line" x1="170" y1="127" x2="180" y2="127"/>
-<line class="p-svg-line" x1="160" y1="257" x2="170" y2="257"/><line class="p-svg-line" x1="170" y1="257" x2="180" y2="257"/>
-<line class="p-svg-line" x1="160" y1="387" x2="170" y2="387"/><line class="p-svg-line" x1="170" y1="387" x2="180" y2="387"/>
-<rect class="p-svg-folder" x="6" y="70" width="154" height="114" rx="8"/>
-<text class="p-svg-name" x="18" y="94">money/</text>
-<text class="p-svg-file" x="18" y="120">budget.md</text><text class="p-svg-file" x="18" y="142">goals.md</text><text class="p-svg-file" x="18" y="164">bills-calendar.md</text>
-<rect class="p-svg-folder" x="180" y="70" width="154" height="114" rx="8"/>
-<text class="p-svg-name" x="192" y="94">health/</text>
-<text class="p-svg-file" x="192" y="120">sleep-notes.md</text><text class="p-svg-file" x="192" y="142">exercise-plan.md</text><text class="p-svg-file" x="192" y="164">appointments.md</text>
-<rect class="p-svg-folder" x="6" y="200" width="154" height="114" rx="8"/>
-<text class="p-svg-name" x="18" y="224">work-and-career/</text>
-<text class="p-svg-file" x="18" y="250">skills.md</text><text class="p-svg-file" x="18" y="272">wins-this-year.md</text><text class="p-svg-file" x="18" y="294">next-role.md</text>
-<rect class="p-svg-folder" x="180" y="200" width="154" height="114" rx="8"/>
-<text class="p-svg-name" x="192" y="224">personal-brand/</text>
-<text class="p-svg-file" x="192" y="250">about-me.md</text><text class="p-svg-file" x="192" y="272">writing-topics.md</text><text class="p-svg-file" x="192" y="294">draft-posts.md</text>
-<rect class="p-svg-folder" x="6" y="330" width="154" height="114" rx="8"/>
-<text class="p-svg-name" x="18" y="354">learning/</text>
-<text class="p-svg-file" x="18" y="380">reading-list.md</text><text class="p-svg-file" x="18" y="402">course-notes.md</text><text class="p-svg-file" x="18" y="424">questions.md</text>
-<rect class="p-svg-folder" x="180" y="330" width="154" height="114" rx="8"/>
-<text class="p-svg-name" x="192" y="354">family-community/</text>
-<text class="p-svg-file" x="192" y="380">birthdays.md</text><text class="p-svg-file" x="192" y="402">shared-plans.md</text><text class="p-svg-file" x="192" y="424">volunteering.md</text>
+<svg class="p-svg" viewBox="0 0 320 516" role="img" aria-labelledby="lib-t lib-d">
+<title id="lib-t">The library: shelves, a filing cabinet, a card catalogue and a reading desk</title>
+<desc id="lib-d">A library wall with two shelves of books stands for your folders. Below it, a filing cabinet with three drawers stands for one room, and a card catalogue with one drawer pulled out stands for the map file. A librarian, the AI tool, stands beside a reading desk with three open books, which stands for the context window. Numbers and arrows show the order: the librarian reads the catalogue first, opens one drawer of the cabinet, and puts a few books on the desk.</desc>
+<rect class="p-svg-wall" x="6" y="6" width="308" height="154" rx="8"/>
+<text class="p-svg-name" x="16" y="26">The library = your folders</text>
+<rect class="p-svg-bk-a" x="20" y="38" width="11" height="34" rx="1"/><rect class="p-svg-bk-b" x="33" y="42" width="9" height="30" rx="1"/><rect class="p-svg-bk-c" x="44" y="36" width="13" height="36" rx="1"/><rect class="p-svg-bk-d" x="59" y="44" width="10" height="28" rx="1"/><rect class="p-svg-bk-e" x="71" y="39" width="12" height="33" rx="1"/><rect class="p-svg-bk-a" x="85" y="41" width="9" height="31" rx="1"/><rect class="p-svg-bk-b" x="96" y="36" width="14" height="36" rx="1"/><rect class="p-svg-bk-c" x="112" y="43" width="10" height="29" rx="1"/><rect class="p-svg-bk-d" x="124" y="38" width="12" height="34" rx="1"/><rect class="p-svg-bk-e" x="138" y="42" width="9" height="30" rx="1"/><rect class="p-svg-bk-a" x="149" y="38" width="11" height="34" rx="1"/><rect class="p-svg-bk-b" x="162" y="42" width="9" height="30" rx="1"/><rect class="p-svg-bk-c" x="173" y="36" width="13" height="36" rx="1"/><rect class="p-svg-bk-d" x="188" y="44" width="10" height="28" rx="1"/><rect class="p-svg-bk-e" x="200" y="39" width="12" height="33" rx="1"/><rect class="p-svg-bk-a" x="214" y="41" width="9" height="31" rx="1"/><rect class="p-svg-bk-b" x="225" y="36" width="14" height="36" rx="1"/><rect class="p-svg-bk-c" x="241" y="43" width="10" height="29" rx="1"/><rect class="p-svg-bk-d" x="253" y="38" width="12" height="34" rx="1"/><rect class="p-svg-bk-e" x="267" y="42" width="9" height="30" rx="1"/><rect class="p-svg-bk-a" x="278" y="38" width="11" height="34" rx="1"/><rect class="p-svg-bk-b" x="291" y="42" width="9" height="30" rx="1"/>
+<rect class="p-svg-board" x="14" y="72" width="292" height="5" rx="1"/>
+<rect class="p-svg-bk-c" x="20" y="96" width="11" height="28" rx="1"/><rect class="p-svg-bk-d" x="33" y="91" width="9" height="33" rx="1"/><rect class="p-svg-bk-e" x="44" y="93" width="13" height="31" rx="1"/><rect class="p-svg-bk-a" x="59" y="88" width="10" height="36" rx="1"/><rect class="p-svg-bk-b" x="71" y="95" width="12" height="29" rx="1"/><rect class="p-svg-bk-c" x="85" y="90" width="9" height="34" rx="1"/><rect class="p-svg-bk-d" x="96" y="94" width="14" height="30" rx="1"/><rect class="p-svg-bk-e" x="112" y="90" width="10" height="34" rx="1"/><rect class="p-svg-bk-a" x="124" y="94" width="12" height="30" rx="1"/><rect class="p-svg-bk-b" x="138" y="88" width="9" height="36" rx="1"/><rect class="p-svg-bk-c" x="149" y="96" width="11" height="28" rx="1"/><rect class="p-svg-bk-d" x="162" y="91" width="9" height="33" rx="1"/><rect class="p-svg-bk-e" x="173" y="93" width="13" height="31" rx="1"/><rect class="p-svg-bk-a" x="188" y="88" width="10" height="36" rx="1"/><rect class="p-svg-bk-b" x="200" y="95" width="12" height="29" rx="1"/><rect class="p-svg-bk-c" x="214" y="90" width="9" height="34" rx="1"/><rect class="p-svg-bk-d" x="225" y="94" width="14" height="30" rx="1"/><rect class="p-svg-bk-e" x="241" y="90" width="10" height="34" rx="1"/><rect class="p-svg-bk-a" x="253" y="94" width="12" height="30" rx="1"/><rect class="p-svg-bk-b" x="267" y="88" width="9" height="36" rx="1"/><rect class="p-svg-bk-c" x="278" y="96" width="11" height="28" rx="1"/><rect class="p-svg-bk-d" x="291" y="91" width="9" height="33" rx="1"/>
+<rect class="p-svg-board" x="14" y="124" width="292" height="5" rx="1"/>
+<text class="p-svg-note" x="16" y="150">Thousands of books. Most stay closed.</text>
+
+<rect class="p-svg-cab" x="6" y="184" width="140" height="112" rx="6"/>
+<rect class="p-svg-drawer hi" x="14" y="192" width="124" height="28" rx="3"/><rect class="p-svg-card" x="22" y="198" width="54" height="16" rx="2"/><text class="p-svg-tab" x="49" y="210">money</text><path class="p-svg-handle" d="M96 206h24"/>
+<rect class="p-svg-drawer" x="14" y="224" width="124" height="28" rx="3"/><rect class="p-svg-card" x="22" y="230" width="54" height="16" rx="2"/><text class="p-svg-tab" x="49" y="242">health</text><path class="p-svg-handle" d="M96 238h24"/>
+<rect class="p-svg-drawer" x="14" y="256" width="124" height="28" rx="3"/><rect class="p-svg-card" x="22" y="262" width="54" height="16" rx="2"/><text class="p-svg-tab" x="49" y="274">writing</text><path class="p-svg-handle" d="M96 270h24"/>
+<circle class="p-svg-dot" cx="17" cy="178" r="9"/><text class="p-svg-num" x="17" y="182">2</text>
+<text class="p-svg-name" x="76" y="316" text-anchor="middle">Filing cabinet</text>
+<text class="p-svg-note" x="76" y="331" text-anchor="middle">= one room</text>
+<text class="p-svg-note" x="76" y="346" text-anchor="middle">folder + how-to file</text>
+
+<rect class="p-svg-card" x="231" y="183" width="26" height="22" rx="2"/><rect class="p-svg-card" x="236" y="186" width="26" height="22" rx="2"/><rect class="p-svg-card" x="241" y="189" width="26" height="22" rx="2"/>
+<rect class="p-svg-cab" x="174" y="192" width="140" height="104" rx="6"/>
+<rect class="p-svg-drawer" x="182" y="202" width="36" height="38" rx="3"/><rect class="p-svg-card" x="190" y="208" width="20" height="10" rx="1"/><path class="p-svg-handle" d="M192 228h16"/>
+<rect class="p-svg-drawer hi" x="228" y="202" width="36" height="38" rx="3"/><rect class="p-svg-card" x="236" y="208" width="20" height="10" rx="1"/><path class="p-svg-handle" d="M238 228h16"/>
+<rect class="p-svg-drawer" x="274" y="202" width="36" height="38" rx="3"/><rect class="p-svg-card" x="282" y="208" width="20" height="10" rx="1"/><path class="p-svg-handle" d="M284 228h16"/>
+<rect class="p-svg-drawer" x="182" y="248" width="36" height="38" rx="3"/><rect class="p-svg-card" x="190" y="254" width="20" height="10" rx="1"/><path class="p-svg-handle" d="M192 274h16"/>
+<rect class="p-svg-drawer" x="228" y="248" width="36" height="38" rx="3"/><rect class="p-svg-card" x="236" y="254" width="20" height="10" rx="1"/><path class="p-svg-handle" d="M238 274h16"/>
+<rect class="p-svg-drawer" x="274" y="248" width="36" height="38" rx="3"/><rect class="p-svg-card" x="282" y="254" width="20" height="10" rx="1"/><path class="p-svg-handle" d="M284 274h16"/>
+<circle class="p-svg-dot" cx="185" cy="178" r="9"/><text class="p-svg-num" x="185" y="182">1</text>
+<text class="p-svg-name" x="244" y="316" text-anchor="middle">Card catalogue</text>
+<text class="p-svg-note" x="244" y="331" text-anchor="middle">= the map file</text>
+<text class="p-svg-note" x="244" y="346" text-anchor="middle">which drawer, which task</text>
+
+<path class="p-svg-arrow" d="M172 240H158"/><polygon class="p-svg-ahead" points="150,240 159,235 159,245"/>
+<path class="p-svg-arrow" d="M76 354V386"/><polygon class="p-svg-ahead" points="76,396 71,386 81,386"/>
+
+<text class="p-svg-name" x="314" y="372" text-anchor="end">Librarian = the AI tool</text>
+<path class="p-svg-arm" d="M252 418L204 422"/>
+<rect class="p-svg-leg" x="256" y="460" width="10" height="14" rx="2"/><rect class="p-svg-leg" x="274" y="460" width="10" height="14" rx="2"/>
+<rect class="p-svg-body" x="250" y="404" width="40" height="56" rx="12"/>
+<text class="p-svg-ai" x="270" y="437">AI</text>
+<circle class="p-svg-head" cx="270" cy="392" r="11"/>
+<path class="p-svg-hair" d="M259 391a11 11 0 0 1 22 0z"/>
+
+<rect class="p-svg-desk" x="6" y="420" width="198" height="10" rx="2"/>
+<rect class="p-svg-leg" x="16" y="430" width="8" height="44"/><rect class="p-svg-leg" x="186" y="430" width="8" height="44"/>
+<rect class="p-svg-cover" x="16" y="418" width="44" height="4" rx="1"/><rect class="p-svg-page" x="18" y="402" width="20" height="16"/><rect class="p-svg-page" x="38" y="402" width="20" height="16"/><path class="p-svg-line" d="M22 408h12M22 413h12M42 408h12M42 413h12"/>
+<rect class="p-svg-cover" x="68" y="418" width="44" height="4" rx="1"/><rect class="p-svg-page" x="70" y="402" width="20" height="16"/><rect class="p-svg-page" x="90" y="402" width="20" height="16"/><path class="p-svg-line" d="M74 408h12M74 413h12M94 408h12M94 413h12"/>
+<rect class="p-svg-cover" x="120" y="418" width="44" height="4" rx="1"/><rect class="p-svg-page" x="122" y="402" width="20" height="16"/><rect class="p-svg-page" x="142" y="402" width="20" height="16"/><path class="p-svg-line" d="M126 408h12M126 413h12M146 408h12M146 413h12"/>
+<circle class="p-svg-dot" cx="186" cy="404" r="9"/><text class="p-svg-num" x="186" y="408">3</text>
+<path class="p-svg-line" d="M6 474H314"/>
+<text class="p-svg-name" x="6" y="494">Reading desk = the context window</text>
+<text class="p-svg-note" x="6" y="510">Only the few books open right now</text>
 </svg>
-<figcaption>Made-up example: one folder for each want or need, three plain files in each.</figcaption>
+<figcaption>The librarian reads the card catalogue first (1), opens the one drawer the task needs (2), and puts a few books on the desk (3).</figcaption>
 </figure>
-<div class="p-box"><h3 class="p-lab">When it outgrows this</h3><p>Bigger setups, such as a company's document store, later move to retrieval (RAG, a search index) when the files outgrow what fits in context.</p></div>
-<p class="p-principle"><span class="p-lab">Principle</span>One folder per want or need, a few plain files in each, and the AI reads only the ones the task needs.</p>
-<a class="p-more" href="#s-idea">Read the idea</a>
+<div class="p-box"><h3 class="p-lab">What each thing is</h3>
+<table class="p-table"><thead><tr><th>In the library</th><th>In your setup</th></tr></thead><tbody>
+<tr><td>Library</td><td>All your folders</td></tr>
+<tr><td>Filing cabinet</td><td>One room: a folder for one kind of work, with a file saying how that work is done</td></tr>
+<tr><td>Card catalogue</td><td>The map: one short file, <code>AGENTS.md</code>, saying which drawer to open for which task</td></tr>
+<tr><td>Reading desk</td><td>The context window: the few files the AI has open right now</td></tr>
+<tr><td>Librarian</td><td>The AI tool, such as Claude, Codex or Gemini</td></tr>
+</tbody></table></div>
+<div class="p-box"><h3 class="p-lab">Where "everything is a file" comes from</h3><p>Unix, the system under Macs and most servers, treats nearly everything as a file you can open: your disk, your keyboard, even a running program. One plain rule made a complicated machine easy to use. This post borrows the rule for your own life: put it in plain files and folders.</p></div>
+<p class="p-principle"><span class="p-lab">Principle</span>One folder per kind of work, one index at the top, and the AI opens only what the task needs.</p>
+<a class="p-more" href="#s-idea">Read more: the idea</a>
 </section>
 
 <section class="p-panel" id="p3" aria-labelledby="p3-t">
-<header class="p-panel-h"><span class="p-num">03</span><h2 id="p3-t">Three levels of using AI</h2></header>
-<div class="p-box"><h3 class="p-lab">Think of cooking</h3>
-<table class="p-table"><thead><tr><th>Level</th><th>In the kitchen</th><th>With AI</th></tr></thead><tbody>
-<tr><td>1</td><td>The recipe card</td><td>You look it up again next time</td></tr>
-<tr><td>2</td><td>Your own recipe book</td><td>Save what worked as a file</td></tr>
-<tr><td>3</td><td>A kitchen</td><td>Organise the files so the AI can find them on its own</td></tr>
-</tbody></table></div>
-<div class="p-box"><h3 class="p-lab">The payoff at level 3</h3>
-<ul><li>It works without you in the room</li><li>Many cooks at once</li><li>Fix it once, fixed everywhere</li><li>Cheaper</li><li>It gets better</li><li>You can hand it over</li></ul></div>
-<div class="p-box"><h3 class="p-lab">The catch</h3><p>A kitchen takes some setting up, and a messy kitchen is worse than a recipe card.</p></div>
-<p class="p-principle"><span class="p-lab">Principle</span>The jump from level 1 to level 2 is simple: save what worked as a file.</p>
-<a class="p-more" href="#s1">Read section 1</a>
+<header class="p-panel-h"><span class="p-num">03</span><h2 id="p3-t">Your first five minutes</h2><svg class="p-ico" aria-hidden="true" focusable="false"><use href="#i-folder"/></svg></header>
+<div class="p-box"><h3 class="p-lab">Build the smallest library</h3>
+<ol class="p-steps"><li>Make a folder called <code>my-life</code>.</li><li>Inside it, make a text file named <code>AGENTS.md</code>. This is your map. Write a few lines: who you are and how you like answers.</li><li>Make one folder for something you work on, such as <code>money</code>, and put one file in it, <code>CONTEXT.md</code>: a few lines on how that work is done.</li><li>Start your next chat with: "Read my-life/AGENTS.md first."</li></ol></div>
+<div class="p-box"><h3 class="p-lab">What goes in the map</h3><ul><li>Who you are, in one line.</li><li>How you like answers: short, plain, no hype.</li><li>For money questions, read <code>money/</code>.</li><li>For anything else, ask which drawer.</li></ul></div>
+<div class="p-box"><h3 class="p-lab">Why that file name</h3><p>Many AI tools look for <code>AGENTS.md</code> by name and read it when a session starts. If yours does not, the line in step 4 does the same job.</p></div>
+<p class="p-principle"><span class="p-lab">Principle</span>Start with one map and one drawer. Add a drawer only when you need it.</p>
+<a class="p-more" href="#s-first">Read more: the first five minutes</a>
 </section>
 
 <section class="p-panel" id="p4" aria-labelledby="p4-t">
-<header class="p-panel-h"><span class="p-num">04</span><h2 id="p4-t">Map, rooms and tools</h2></header>
-<div class="p-box"><h3 class="p-lab">Three kinds of file</h3>
-<ul><li><strong>The map:</strong> one short file at the top (<code>AGENTS.md</code>). Who I am, my house rules, and a routing table.</li>
-<li><strong>The rooms:</strong> one folder per kind of work, each with a <code>CONTEXT.md</code>.</li>
-<li><strong>The tools:</strong> skills and scripts the rooms can use.</li></ul></div>
-<div class="p-box"><h3 class="p-lab">One file, linked into every tool</h3><p>Keep all those hidden config files in one git repo. Then put a symlink where each tool expects its file. Change one file and every tool sees the change from its next session.</p></div>
-<div class="p-box"><h3 class="p-lab">Three habits</h3>
-<ol class="p-steps"><li>Say feedback as a rule.</li><li>Declare the end.</li><li>Never let a session edit the shared file.</li></ol></div>
-<p class="p-principle"><span class="p-lab">Principle</span>The routing table is the most important part. Without it, the AI either reads everything (slow and expensive) or guesses.</p>
-<a class="p-more" href="#s2">Read section 2</a>
+<header class="p-panel-h"><span class="p-num">04</span><h2 id="p4-t">Drawers and the card catalogue</h2><svg class="p-ico" aria-hidden="true" focusable="false"><use href="#i-cabinet"/></svg></header>
+<div class="p-box"><h3 class="p-lab">The filing cabinet: one room each</h3><p>Each kind of work gets its own folder, a room. A <code>CONTEXT.md</code> inside says how that work is done: the tone, the template, what to check. My blog room also holds a tone file and a template for how a post is laid out.</p></div>
+<div class="p-box"><h3 class="p-lab">The card catalogue: the map</h3><p>At the top sits one short file, <code>AGENTS.md</code>. It holds who you are, your house rules and a routing table: for this task, open this drawer.</p></div>
+<div class="p-box"><h3 class="p-lab">A routing table</h3>
+<table class="p-table"><thead><tr><th>Task</th><th>Open</th></tr></thead><tbody>
+<tr><td>Write a blog post</td><td><code>writing/</code>: CONTEXT.md, voice.md</td></tr>
+<tr><td>Money question</td><td><code>money/</code>: CONTEXT.md</td></tr>
+<tr><td>Anything else</td><td>Ask which drawer</td></tr>
+</tbody></table></div>
+<p class="p-principle"><span class="p-lab">Principle</span>The routing table matters most. Without it the librarian either pulls every book (slow and costly) or guesses.</p>
+<a class="p-more" href="#s-rooms">Read more: drawers and the catalogue</a>
 </section>
 
 <section class="p-panel" id="p5" aria-labelledby="p5-t">
-<header class="p-panel-h"><span class="p-num">05</span><h2 id="p5-t">A file on disk is not something the AI knows</h2></header>
-<div class="p-box"><h3 class="p-lab">Library and desk</h3>
-<table class="p-table"><thead><tr><th>What</th><th>Is the</th></tr></thead><tbody>
-<tr><td>Your folders</td><td>Library: thousands of books</td></tr>
-<tr><td>The context window</td><td>Desk: the three books open right now</td></tr>
-</tbody></table></div>
-<div class="p-box"><h3 class="p-lab">Two ways to check</h3>
-<ol class="p-steps"><li><strong>A canary.</strong> A nonsense line in the map. Ask the AI for it.</li><li><strong>A "files read" list.</strong> At the end of every task, list the files you actually read.</li></ol></div>
-<div class="p-box"><h3 class="p-lab">What is on the desk</h3><p>My rules are instructions. A web page or document the AI opened is just material to work with, and it doesn't get to give orders.</p></div>
+<header class="p-panel-h"><span class="p-num">05</span><h2 id="p5-t">The reading desk</h2><svg class="p-ico" aria-hidden="true" focusable="false"><use href="#i-desk"/></svg></header>
+<div class="p-box"><h3 class="p-lab">Library and desk</h3><p>Your folders hold thousands of books. The AI's context window is the desk: it knows only what is open on it right now. A file in a folder does nothing until the librarian opens it.</p></div>
+<div class="p-box"><h3 class="p-lab">Two ways to check what was opened</h3>
+<ol class="p-steps"><li><strong>A canary.</strong> Put a nonsense line in the map, such as <code>ctx-canary: blue-teapot-42</code>, and ask the AI for it. If it answers, the map was read.</li><li><strong>A "files read" list.</strong> At the end of every task, the AI names the files it actually opened.</li></ol></div>
+<div class="p-box"><h3 class="p-lab">Instructions and material</h3><p>Your rules on the desk are instructions. A web page or document the AI opens is material to work with, and it does not give orders.</p></div>
 <p class="p-principle"><span class="p-lab">Principle</span>A file sitting in a folder does nothing until the AI actually opens it.</p>
-<a class="p-more" href="#s3">Read section 3</a>
+<a class="p-more" href="#s-desk">Read more: the reading desk</a>
 </section>
 
 <section class="p-panel" id="p6" aria-labelledby="p6-t">
-<header class="p-panel-h"><span class="p-num">06</span><h2 id="p6-t">Conversations become rules, one fix at a time</h2></header>
-<div class="p-box"><h3 class="p-lab">Four rounds to tighten a paragraph</h3>
-<table class="p-table"><thead><tr><th>You say</th><th>It becomes</th></tr></thead><tbody>
-<tr><td>"too wordy"</td><td>goal: shorter</td></tr>
-<tr><td>"weirdly formal now"</td><td>keep my rhythm</td></tr>
-<tr><td>"think Vox, not the FT"</td><td>general audience</td></tr>
-<tr><td>"more measured"</td><td>measured, not casual</td></tr>
-</tbody></table></div>
-<div class="p-box"><h3 class="p-lab">Keep the card</h3><p>Nobody set out to write a style guide, but by round four there is one, scattered across the chat. Save the decisions as a file (<code>areas/blog/voice.md</code>).</p></div>
-<div class="p-box"><h3 class="p-lab">When an answer comes back wrong</h3>
-<ol class="p-steps"><li>Read</li><li>Draft</li><li>Check against the source</li><li>Find the one cause</li><li>Change one line</li><li>Rerun the same task</li></ol></div>
-<p class="p-principle"><span class="p-lab">Principle</span>Keep the card, and change one thing at a time: one change, one visible effect.</p>
-<a class="p-more" href="#s4">Read section 4</a>
-<a class="p-more" href="#s6">Read section 6</a>
+<header class="p-panel-h"><span class="p-num">06</span><h2 id="p6-t">Three habits that keep it working</h2><svg class="p-ico" aria-hidden="true" focusable="false"><use href="#i-habits"/></svg></header>
+<div class="p-box"><h3 class="p-lab">Three habits</h3>
+<ol class="p-steps"><li><strong>Say feedback as a rule.</strong> Not "redo it" but "too formal, keep my conversational tone".</li><li><strong>Declare the end.</strong> Say "end of session" and the AI writes down its notes.</li><li><strong>Keep the map yours.</strong> Sessions write notes to an inbox folder. Only you change the map.</li></ol></div>
+<div class="p-box"><h3 class="p-lab">Keep the index card</h3><p>"Too wordy", "weirdly formal now", "think Vox, not the FT": four rounds like that are a style guide scattered across a chat. Save it once as a file and the next draft starts right.</p></div>
+<p class="p-principle"><span class="p-lab">Principle</span>Save each lesson as a file, and change one thing at a time: one change, one visible effect.</p>
+<a class="p-more" href="#s-habits">Read more: the three habits</a>
 </section>
 
 <section class="p-panel" id="p7" aria-labelledby="p7-t">
-<header class="p-panel-h"><span class="p-num">07</span><h2 id="p7-t">The model is not the system</h2></header>
-<div class="p-box"><h3 class="p-lab">The model is one step in the middle</h3>
-<ol class="p-steps"><li>Request</li><li>Routing (code)</li><li>Tools (code)</li><li>Model (swap)</li><li>Check (person and code)</li><li>Result</li></ol></div>
-<div class="p-box"><h3 class="p-lab">The useful question</h3><p>If I changed the model tomorrow, what would still work? In my setup, almost everything. FirstMate and Kun Chen's tools are the kitchen. The map in <code>AGENTS.md</code> is the written rules. Claude, Codex or Pi is whichever chef is on shift.</p></div>
-<div class="p-box"><h3 class="p-lab">A normal day</h3>
-<table class="p-table"><tbody>
-<tr><td>Start a session</td><td>Any tool reads the map and routes to a room</td></tr>
-<tr><td>Work</td><td>Say feedback as rules</td></tr>
-<tr><td>"End of session"</td><td>Notes land in the inbox</td></tr>
-<tr><td>Daily</td><td>backpass proposes rule changes, writes nothing</td></tr>
-<tr><td>Review</td><td>I approve the changes I agree with</td></tr>
-</tbody></table></div>
-<p class="p-principle"><span class="p-lab">Principle</span>Swap the chef and a well-run kitchen still serves the same menu.</p>
-<a class="p-more" href="#s5">Read section 5</a>
-<a class="p-more" href="#s7">Read section 7</a>
+<header class="p-panel-h"><span class="p-num">07</span><h2 id="p7-t">One map, any librarian</h2><svg class="p-ico" aria-hidden="true" focusable="false"><use href="#i-catalogue"/></svg></header>
+<div class="p-box"><h3 class="p-lab">One map for every tool</h3><p>Each AI tool looks for its instructions in its own hidden folder, so you end up with copies that drift apart. Keep one real file and put a symlink, a shortcut that points at the real file, where each tool looks. Change the file once and every tool sees it from its next session.</p></div>
+<div class="p-box"><h3 class="p-lab">Swap the librarian</h3><p>The AI model is one step in the middle. The library, the catalogue and the checks are plain files and code. Switch from one tool to another tomorrow and the library still works.</p></div>
+<div class="p-box"><h3 class="p-lab">When the library gets huge</h3><p>A company's document store outgrows one desk, so it adds a search index (RAG: search that finds the right pages for the AI). For one person, plain folders are enough.</p></div>
+<p class="p-principle"><span class="p-lab">Principle</span>Swap the librarian and a well-kept library still serves the same books.</p>
+<a class="p-more" href="#s-tools">Read more: one map, any librarian</a>
 </section>
 
 <section class="p-panel" id="p8" aria-labelledby="p8-t">
-<header class="p-panel-h"><span class="p-num">08</span><h2 id="p8-t">Why it matters</h2></header>
+<header class="p-panel-h"><span class="p-num">08</span><h2 id="p8-t">Why it matters</h2><svg class="p-ico" aria-hidden="true" focusable="false"><use href="#i-mark"/></svg></header>
 <div class="p-box"><h3 class="p-lab">It helps you first</h3><p>Journaling and note-taking turn a busy week into a record you can look back on. It is also a way to express yourself.</p></div>
 <div class="p-box"><h3 class="p-lab">It helps the AI work your way</h3><p>The same record means no re-explaining. The AI reads what you wrote.</p></div>
-<div class="p-box"><h3 class="p-lab">It helps newcomers</h3><p>I think a record like this makes it easier for someone new to learn AI. They start from their own notes, not a blank page, and can go on to contribute to the bigger good.</p></div>
-<div class="p-box"><h3 class="p-lab">Try it yourself</h3>
-<ol class="p-steps"><li>Make three folders: one for something you want, one for something you need, one for something you are learning.</li><li>Write one note a day in one of them. A few plain lines is enough.</li><li>When you ask an AI for help, point it at the folder that fits.</li></ol></div>
-<p class="p-principle"><span class="p-lab">Principle</span>Three folders, one note a day.</p>
-<a class="p-more" href="#s-why">Read why it matters</a>
+<div class="p-box"><h3 class="p-lab">It helps newcomers</h3><p>A record like this gives someone new to AI a place to start: their own notes, not a blank page.</p></div>
+<div class="p-box"><h3 class="p-lab">Your next step</h3><p><a href="#p3">Build the smallest library</a> today. Five minutes, one folder, one map file.</p></div>
+<p class="p-principle"><span class="p-lab">Principle</span>Write it down once. Every chat after that starts at the library, not at zero.</p>
+<a class="p-more" href="#s-why">Read more: why it matters</a>
 </section>
 
 </div>
@@ -194,212 +211,146 @@
 <h2>The full post</h2>
 <p class="p-lab">For readers who want the whole argument</p>
 
-<p>Unix has an old idea: everything is a file. Your keyboard, your disk, even a running program show up as files you can read and write. It made a complicated machine simple to work with.</p>
-<p>Working with AI is heading the same way. Jake Van Clief calls his version the <a href="https://arxiv.org/abs/2603.16021">Interpretable Context Methodology</a> (ICM). Strip away the name and it says this: stop pasting the same explanations into chats. Write them down as plain files in folders, and let the AI read the ones it needs.</p>
-<p>This post walks through how I set that up. I built a small working version as I went, and each section ends with a test that checks it.</p>
-
 <section id="s-problem">
-<h2>The problem</h2>
-<p>Picture a kitchen drawer where every receipt, spare key and takeaway menu has been thrown in together. You know what you need is in there somewhere. That is how AI feels to me today, and I think it shows up in four ways. This is my view from using it every day, not a survey.</p>
-<ul>
-<li><strong>Noise and overload.</strong> There is more AI than anyone can follow. New tools and new advice arrive every week, and I think most of us end up skimming and saving links we never open.</li>
-<li><strong>AI that guesses what you want.</strong> I ask for one thing and get a confident answer to a different question, because the AI doesn't know what I meant. In my reading, that gap is why many people give up.</li>
-<li><strong>Knowledge scattered everywhere.</strong> What I know about my own life sits in notes apps, chats, email and my head. No AI can see it, so every chat starts from zero.</li>
-<li><strong>Newcomers left behind.</strong> If you are just starting, there is no obvious place to begin, and the people who already know how seem a long way ahead.</li>
-</ul>
-<p>All four get easier when what you know sits in one place the AI can read.</p>
+<h2>The problem: every chat starts from zero</h2>
+<p>You open a new chat and explain yourself again: who you are, what you are working on, how you like things done. When the chat ends, the AI forgets all of it. What you know about your own life sits in notes apps, email, old chats and your head, where no AI can see it.</p>
+<p>So you retype the same background every time, and the AI fills the gaps with guesses. You ask for one thing and get a confident answer to a different question. A cleverer prompt does not fix that. What fixes it is a place to keep what you know, written once, that every AI tool can read.</p>
 </section>
 
 <section id="s-idea">
-<h2>The idea: an ordered folder harness</h2>
-<p>A harness is the straps and buckles that let a horse pull a cart in the right direction. Here it is a set of folders. The idea is simple: <strong>every want and need becomes a folder the AI can read</strong>. Each folder holds a few plain files. Anyone, or any AI tool, can open the folder and see what you mean.</p>
-<p>Here is a made-up example, with generic names. Yours will differ. The diagram above shows the same folders.</p>
+<h2>The idea: a library for your AI</h2>
+<p>Think of a library. Your folders are the library: thousands of books, most of them closed. The AI is the librarian. A good librarian does not carry every book to your desk. They check the card catalogue, open the one drawer your question needs, and put a few books on the reading desk. Your folders are the library; the AI is the librarian, and only a few books reach its desk.</p>
 <ul>
-<li><strong>money/</strong>: <code>budget.md</code>, <code>goals.md</code>, <code>bills-calendar.md</code></li>
-<li><strong>health/</strong>: <code>sleep-notes.md</code>, <code>exercise-plan.md</code>, <code>appointments.md</code></li>
-<li><strong>work-and-career/</strong>: <code>skills.md</code>, <code>wins-this-year.md</code>, <code>next-role.md</code></li>
-<li><strong>personal-brand/</strong>: <code>about-me.md</code>, <code>writing-topics.md</code>, <code>draft-posts.md</code></li>
-<li><strong>learning/</strong>: <code>reading-list.md</code>, <code>course-notes.md</code>, <code>questions.md</code></li>
-<li><strong>family-community/</strong>: <code>birthdays.md</code>, <code>shared-plans.md</code>, <code>volunteering.md</code></li>
+<li><strong>The library</strong> is all your folders.</li>
+<li><strong>The filing cabinet</strong> is one room: a folder for one kind of work, with a file saying how that work is done.</li>
+<li><strong>The card catalogue</strong> is the map: one short file that says which drawer to open for which task.</li>
+<li><strong>The reading desk</strong> is the AI's context window, the few files it has open right now.</li>
+<li><strong>The librarian</strong> is the AI tool: Claude, Codex, Gemini or whichever you use.</li>
 </ul>
-<p>One short file at the top, the map, says which folder to read for which kind of task. The rest of this post is about how to set that up and keep it tidy.</p>
-<p>This simple file-and-folder method is good enough to start. Bigger setups, such as a company's document store, later move to retrieval (RAG, a search index) when the files outgrow what fits in context.</p>
+<p>This page's address, <code>everything-is-a-file</code>, comes from an old idea in Unix, the system under Macs and most servers. Unix treats nearly everything as a file you can read and write: your disk, your keyboard, even a running program. That one rule made a complicated machine simple to work with. Working with AI is heading the same way. Jake Van Clief calls his version the Interpretable Context Methodology (ICM): stop pasting the same explanations into chats, write them down as plain files in folders, and let the AI read the ones it needs.</p>
 </section>
 
-<section id="s1">
-<h2>1. Three levels of using AI</h2>
-<p>Think of cooking.</p>
-<ul>
-<li><strong>Level 1, the recipe card.</strong> You read a recipe off your phone, cook, and forget it. Next time you look it up again.</li>
-<li><strong>Level 2, your own recipe book.</strong> You've written down how <em>you</em> make it: less salt, a bit more garlic, the pan you like. It comes out right the first time.</li>
-<li><strong>Level 3, a kitchen.</strong> Ingredients sit where you expect them. Your recipe books are on the shelf. Anyone in your kitchen can cook your dishes.</li>
-</ul>
-<p>AI works the same way. The jump from level 1 to level 2 is simple: <strong>save what worked as a file</strong>. Level 3 is when you organise those files so the AI can find them on its own. That's where the payoff is:</p>
-<ul>
-<li><strong>It works without you in the room.</strong> A fresh AI session, or a different AI tool, reads the same files and works your way. No re-explaining.</li>
-<li><strong>Many cooks at once.</strong> In my setup FirstMate runs several coding agents side by side, and they all read the same base file.</li>
-<li><strong>Fix it once, fixed everywhere.</strong> Correct a rule in one file and every tool picks it up from the next session.</li>
-<li><strong>Cheaper.</strong> The AI reads only the files the task needs, instead of a giant prompt pasted every time.</li>
-<li><strong>It gets better.</strong> Session notes turn into better rules (section 2).</li>
-<li><strong>You can hand it over.</strong> Give someone, or another AI tool, the folder and they can work.</li>
-</ul>
-<p>The catch: a kitchen takes some setting up, and a messy kitchen is worse than a recipe card. That's why the next sections are about keeping it small and tidy.</p>
-<pre>level 1:  chat ──► answer ──► (forgotten)
-level 2:  chat + voice.md ──► better answer
-level 3:  folder (map + rooms + tools) ──► agent finds what it needs</pre>
-<p class="p-test">Test: <code>tests/run.sh</code> section S1 checks that every kind of work I do has a written process (<code>CONTEXT.md</code>), and that the blog room has its saved tone guide (<code>voice.md</code>) and template.</p>
-</section>
-
-<section id="s2">
-<h2>2. Map, rooms and tools</h2>
-<p>Walk into any office building and there's a floor plan by the lifts. It doesn't tell you how to do your job. It tells you which floor to go to.</p>
-<p>A good AI folder has three kinds of file:</p>
-<ul>
-<li><strong>The map</strong>: one short file at the top (<code>AGENTS.md</code>). Who I am, my house rules, and a table: <em>for this kind of task, go to this folder and read these files.</em></li>
-<li><strong>The rooms</strong>: one folder per kind of work, each with a <code>CONTEXT.md</code> that explains how that work is done.</li>
-<li><strong>The tools</strong>: skills and scripts the rooms can use.</li>
-</ul>
-<p>This is the shape of the folder I use. It lives in my dotfiles repo:</p>
-<pre>dotfiles/
-├── home/AGENTS.md        the map: who, rules, routing table
-├── context/              the shared agent context
-│   ├── areas/            one room per kind of work:
-│   │                     blog, factory, cert-prep, content, harness …
-│   ├── inbox/sessions/   what each AI session leaves behind
-│   └── tests/            run.sh · e2e-probe.sh
-└── home.nix              the list of links (see below)</pre>
-<p>And this is the kind of routing table inside the map:</p>
-<pre>| Task                      | Go to            | Read first            |
-|---------------------------|------------------|-----------------------|
-| Write or edit a blog post | areas/blog/      | CONTEXT.md, voice.md  |
-| Software factory work     | areas/factory/   | CONTEXT.md            |
-| Cert prep                 | areas/cert-prep/ | CONTEXT.md            |
-| Anything else             | ask which room   | —                     |</pre>
-<p>The routing table is the most important part. Without it, the AI either reads everything (slow and expensive) or guesses.</p>
-
-<h3 id="s2-links">The key trick: one file, linked into every tool</h3>
-<p>Every AI tool looks for its own instructions file in its own hidden folder in your home folder. Claude Code reads <code>.claude/CLAUDE.md</code>, Codex reads <code>.codex/AGENTS.md</code>, Gemini reads <code>.gemini/GEMINI.md</code>. Left alone, you end up with four copies that slowly disagree.</p>
-<p>Unix people solved this long ago with <strong>dotfiles</strong>. Keep all those hidden config files (the ones whose names start with a dot) in one git repo. Then put a <strong>symlink</strong> where each tool expects its file. A symlink is a signpost: the tool opens its own file and lands on the real one in your repo.</p>
-<pre>.claude/CLAUDE.md           ─┐
-.codex/AGENTS.md            ─┤
-.config/opencode/AGENTS.md  ─┼──►  dotfiles/home/AGENTS.md   (the one real file)
-.gemini/GEMINI.md           ─┤
-.agents/AGENTS.md           ─┘   (for backpass)</pre>
-<p>Change one file and every tool sees the change from its next session. New laptop? Clone the repo, run one script, and the signposts come back. I borrowed this setup from Kun Chen's <a href="https://github.com/kunchenguid/dotfiles">dotfiles</a>, which manage the links with Nix.</p>
-<p>There are two limits. Links only help tools that read files from your disk. Chat apps like Claude.ai can't, so there you paste the map into a project. And each machine needs its own copy of the repo.</p>
-
-<h3 id="s2-loop">Load it at the start, save at the end</h3>
-<p>Because every tool reads the same file when a session starts, it's also where the lessons from each session should end up. Think of a hospital shift change: the incoming nurse reads the patient's chart, the outgoing nurse writes down what happened. Same chart for every nurse, and nothing depends on anyone's memory.</p>
-<pre>start   → the tool loads the map (+ the room's CONTEXT.md)
-during  → you give feedback and constraints out loud
-end     → you say "end of session"; the AI writes notes to inbox/
-daily   → backpass reads the session logs and proposes rule changes
-review  → you approve or reject; only approved rules go into the map</pre>
-<p>Three habits make this work:</p>
+<section id="s-first">
+<h2>Your first five minutes</h2>
+<p>You do not need a system to begin. You need one folder and one file.</p>
 <ol>
-<li><strong>Say feedback as a rule.</strong> Not just "redo it", but "too formal, keep my conversational tone". The AI can only save what you actually said.</li>
-<li><strong>Declare the end.</strong> "End of session" tells the AI to write its notes: the goals, constraints and decisions, where it went its own way, and which files it read. Close the tab without it and the lesson is gone.</li>
-<li><strong>Never let a session edit the shared file.</strong> Notes go into <code>inbox/</code>, not into the map. Kun Chen's <a href="https://github.com/kunchenguid/backpass">backpass</a> reads the session logs and proposes a rule only when the same correction shows up in at least two sessions, with exact quotes as proof. I go through the proposals one at a time and approve what is right. The map only changes with my OK, so it stays a rulebook I agreed to.</li>
+<li>Make a folder called <code>my-life</code>.</li>
+<li>Inside it, make a text file named <code>AGENTS.md</code>. This is your map, the card catalogue. Many AI tools look for that exact name and read it when a session starts.</li>
+<li>Make one folder for something you work on, such as <code>money</code>, and put one file in it, <code>CONTEXT.md</code>, with a few lines on how that work is done.</li>
+<li>Start your next chat with: "Read my-life/AGENTS.md first." If your tool reads <code>AGENTS.md</code> by itself, this line is optional. If it does not, the line does the job.</li>
 </ol>
-<p class="p-test">Test: <code>tests/run.sh</code> section S2 checks that the map has a routing table with a fallback row, that every file the table names exists, and that <code>home.nix</code> links Claude, Codex, OpenCode and Gemini to the one map. Section S3 checks that the map says what to do on "end of session" and routes rule changes through backpass.</p>
-<p class="p-callout">S2 also checks the map stays short, at 120 lines or fewer. The map grows one reasonable rule at a time. The test is there to catch exactly that.</p>
+<p>A first map can be this short. It is a made-up example:</p>
+<pre>Who I am: Sam, a teacher learning to use AI.
+How I like answers: short, plain, no hype.
+
+For this kind of task, open this drawer:
+- money questions   → money/CONTEXT.md
+- lesson planning   → teaching/CONTEXT.md
+- anything else     → ask me which drawer</pre>
+<p>Add a drawer when a kind of work keeps coming up, not before.</p>
 </section>
 
-<section id="s3">
-<h2>3. A file on disk is not something the AI knows</h2>
-<p>Think of a library and your desk. The library has thousands of books. You only know what's in the three books open on your desk right now.</p>
-<p>Your folders are the library. The AI's context window is the desk. A file sitting in a folder does nothing until the AI actually opens it. The name <code>CONTEXT.md</code> doesn't make it load by magic.</p>
+<section id="s-rooms">
+<h2>Drawers and the card catalogue</h2>
+<p>A good AI library has three kinds of file:</p>
+<ul>
+<li><strong>The map</strong>: one short file at the top, <code>AGENTS.md</code>. Who you are, your house rules, and a table: <em>for this kind of task, go to this drawer and read these files.</em></li>
+<li><strong>The rooms</strong>: one folder per kind of work, each with a <code>CONTEXT.md</code> that explains how that work is done.</li>
+<li><strong>The tools</strong>: scripts and skills the rooms can use, once you have some.</li>
+</ul>
+<p>This is the shape of a small library:</p>
+<pre>my-life/
+├── AGENTS.md          the map: who I am, my rules, the routing table
+├── money/
+│   └── CONTEXT.md     how I handle money
+├── health/
+│   └── CONTEXT.md     how I track health
+└── writing/
+    ├── CONTEXT.md     how I write
+    └── voice.md       my tone, saved once</pre>
+<p>And this is the kind of routing table inside the map:</p>
+<pre>| Task                      | Open drawer   | Read first            |
+|---------------------------|---------------|-----------------------|
+| Write or edit a post      | writing/      | CONTEXT.md, voice.md  |
+| Money question            | money/        | CONTEXT.md            |
+| Anything else             | ask which drawer           |</pre>
+<p>The routing table is the most important part. Without it, the librarian either pulls every book off the shelf (slow and expensive) or guesses which one you meant.</p>
+</section>
+
+<section id="s-desk">
+<h2>The reading desk</h2>
+<p>A file on disk is not something the AI knows. The library holds thousands of books. The AI knows only what is open on its desk right now, and a file in a folder does nothing until the librarian opens it. The name <code>CONTEXT.md</code> does not make it load by magic.</p>
 <pre>folder (library)          context window (desk)
 ─────────────────         ─────────────────────
-AGENTS.md          ──►    AGENTS.md        ✓ loaded at start
-areas/blog/...     ──►    CONTEXT.md       ✓ read because the route said so
-areas/factory/...         (not read)       ✗ not needed for this task</pre>
-<p>So you need a way to check what the AI actually read. I use two:</p>
+AGENTS.md          ──►    AGENTS.md        ✓ loaded at the start
+writing/CONTEXT.md ──►    CONTEXT.md       ✓ read, because the route said so
+money/CONTEXT.md          (not read)       ✗ not needed for this task</pre>
+<p>So check what the AI actually read. There are two ways:</p>
 <ol>
-<li><strong>A canary.</strong> My map contains a nonsense line, <code>ctx-canary: blue-teapot-42</code>. If I ask an AI for the canary and it answers correctly, I know the map really loaded. If it doesn't, it didn't, however sure the setup looks.</li>
+<li><strong>A canary.</strong> A canary is a test line that proves a file was read. My map contains a nonsense line, <code>ctx-canary: blue-teapot-42</code>. If I ask an AI for the canary and it answers correctly, the map loaded. If it cannot, it did not, however sure the setup looks.</li>
 <li><strong>A "files read" list.</strong> One house rule: at the end of every task, list the files you actually read.</li>
 </ol>
-<p>There's a second half to this. What's on the desk isn't all equally trusted. My rules are instructions. A web page or document the AI opened is just material to work with, and it doesn't get to give orders.</p>
-<p class="p-test">Test: <code>tests/run.sh</code> section S3 checks the canary is in the map. <code>tests/e2e-probe.sh</code> is the real end-to-end test: from an empty folder it asks Claude Code, Codex, Gemini CLI and OpenCode for the canary. A tool passes only if the map actually reached it.</p>
+<p>Not everything on the desk is equally trusted. My rules are instructions. A web page or document the AI opened is material to work with, and it does not get to give orders.</p>
 </section>
 
-<section id="s4">
-<h2>4. Every workflow starts as a conversation</h2>
-<p>A good tailor writes your fit notes on a card: <em>likes room in the shoulders, hates a tight waist.</em> The next suit fits first time. Most of us use AI like a tailor with no card. We go round and round in a chat until it's right, then close the tab and lose everything we just taught it.</p>
-<p>In Jake's video <a href="https://www.youtube.com/watch?v=956DPSPX4wg">"You're Automating The Wrong Layer"</a>, someone asks a model to tighten a paragraph. It takes four rounds:</p>
+<section id="s-habits">
+<h2>Three habits that keep it working</h2>
+<p>Because every tool reads the same map at the start of a session, the map is also where the lessons from each session should end up. Three habits make that work:</p>
+<ol>
+<li><strong>Say feedback as a rule.</strong> Not just "redo it", but "too formal, keep my conversational tone". The AI can only save what you actually said.</li>
+<li><strong>Declare the end.</strong> "End of session" tells the AI to write its notes: the goals, constraints and decisions, where it went its own way, and which files it read. Close the tab without saying it and the lesson is gone.</li>
+<li><strong>Keep the map yours.</strong> Sessions write notes into an inbox folder, never into the map. A small open-source tool, Kun Chen's <a href="https://github.com/kunchenguid/backpass">backpass</a>, reads those notes and proposes a rule only when the same correction shows up in at least two sessions. I go through the proposals one at a time and approve what is right. The map changes only with my OK.</li>
+</ol>
+<pre>start   → the tool loads the map (+ the room's CONTEXT.md)
+during  → you give feedback and constraints out loud
+end     → you say "end of session"; the AI writes notes to the inbox
+daily   → a tool reads the notes and proposes rule changes
+review  → you approve or reject; only approved rules go into the map</pre>
+<h3>Keep the index card</h3>
+<p>In Jake Van Clief's video <a href="https://www.youtube.com/watch?v=956DPSPX4wg">"You're Automating The Wrong Layer"</a>, someone asks a model to tighten a paragraph. It takes four rounds:</p>
 <pre>"too wordy"                      → goal: shorter
 "weirdly formal now"             → keep my rhythm
 "think Vox, not the FT"          → general audience
 "more measured — like this one"  → measured, not casual + an example</pre>
-<p>Nobody set out to write a style guide, but by round four there is one, scattered across the chat.</p>
-<p>The same video shows Substrate, a research tool by Kay Kumar (not public yet). It reads a chat and draws two maps side by side: what the person meant, and what the model decided. Then it circles the gaps, like the model switching to a formal tone nobody asked for, or quietly changing what a sentence meant.</p>
-<p>The fix is to keep the card. Save the decisions as a file (<code>areas/blog/voice.md</code> in my folder), and next time "tighten this paragraph" is right in one go:</p>
-<pre>long chat (4 rounds) ──► pull out the decisions ──► voice.md
-         ▲                                              │
-         └──── a new mistake shows up ◄── next request ◄┘</pre>
-<p>I don't have Substrate, so I use the end-of-session notes from section 2. Their <em>where the AI went its own way</em> heading is my version of the red circles. A week of those, read back, is how I found the corrections in <a href="rules-from-chat-history.html">Turn your corrections into rules your AI follows</a>.</p>
-<p class="p-test">Test: the real check is whether the same correction stops showing up week after week.</p>
+<p>Nobody set out to write a style guide, but by round four there is one, scattered across the chat. Save the decisions as a file (<code>writing/voice.md</code> in the library above) and next time "tighten this paragraph" is right in one go. I turned a week of my own corrections into rules the same way, in <a href="rules-from-chat-history.html">Turn your corrections into rules your AI follows</a>.</p>
+<p>When an answer comes back wrong, change one thing and rerun:</p>
+<pre>read → draft → check against the source → find the one cause → change one line → rerun the same task</pre>
+<p>Keep the change if it helped. Drop it if it did not. One change, one visible effect.</p>
 </section>
 
-<section id="s5">
-<h2>5. Separate the model from the system</h2>
-<p>A restaurant isn't its chef. Most of what makes it work is ordinary: the fridge, the stove, the order tickets, the person who checks each plate before it goes out. Swap the chef and a well-run kitchen still serves the same menu.</p>
-<p>AI tools work the same way. The model is one step in the middle. Around it sit plain code, written rules and checks.</p>
+<section id="s-tools">
+<h2>One map, any librarian</h2>
+<h3>One map, linked into every tool</h3>
+<p>Every AI tool looks for its own instructions file in its own hidden folder in your home folder. Claude Code reads <code>.claude/CLAUDE.md</code>, Codex reads <code>.codex/AGENTS.md</code>, Gemini reads <code>.gemini/GEMINI.md</code>. Left alone, you end up with copies that slowly disagree.</p>
+<p>Unix people solved this long ago with <strong>dotfiles</strong>: keep all those hidden settings files (the ones whose names start with a dot) in one git repository, and put a <strong>symlink</strong> where each tool expects its file. A symlink is a shortcut: the tool opens its own file and lands on the real one.</p>
+<pre>.claude/CLAUDE.md           ─┐
+.codex/AGENTS.md            ─┤
+.config/opencode/AGENTS.md  ─┼──►  dotfiles/home/AGENTS.md   (the one real file)
+.gemini/GEMINI.md           ─┘</pre>
+<p>Change one file and every tool sees the change from its next session. I borrowed this setup from Kun Chen's <a href="https://github.com/kunchenguid/dotfiles">dotfiles</a>, which manage the links with Nix. There are two limits. Links only help tools that read files from your disk, so for chat apps such as Claude.ai you paste the map into a project. And each machine needs its own copy of the repository.</p>
+<h3>Swap the librarian</h3>
+<p>The AI model is one step in the middle. Around it sit plain code, written rules and checks.</p>
 <pre>request → routing → tools → model → check → result
            code      code    (swap)  person + code</pre>
-<p>The useful question is: if I changed the model tomorrow, what would still work?</p>
-<p>In my setup the answer is almost everything. FirstMate and Kun Chen's tools are the kitchen: separate worktrees, watchers, and a pre-push gate that runs review, tests and lint. The map in <code>AGENTS.md</code> is the written rules. Claude, Codex or Pi is whichever chef is on shift.</p>
-<p>The smallest version of this is this post. It sits in my blog room (<code>areas/blog/</code>). The room already knows how I want it to sound (<code>voice.md</code>), how a post is laid out (<code>template.md</code>) and where drafts go. From there, "write the next section" is enough of a prompt, whichever tool I use.</p>
-<p class="p-test">Test: <code>tests/e2e-probe.sh</code> asks four different AI tools the same question. If all four return the canary, the context doesn't depend on which model is on shift.</p>
-</section>
-
-<section id="s6">
-<h2>6. Fix one thing, then rerun</h2>
-<p>Tuning a guitar: pluck one string, adjust, pluck again. Turn all six pegs at once and you'll never know which one put it out of tune.</p>
-<p>Fix these files the same way. When an answer comes back wrong:</p>
-<pre>read → draft → check against the source → find the one cause → change one line → rerun the same task</pre>
-<p>Keep the change if it helped. Drop it if it didn't.</p>
-<p class="p-test">Test: the tests follow the same rule. Delete <code>voice.md</code> and rerun <code>tests/run.sh</code>: the checks that need it fail and the rest still pass. One change, one visible effect.</p>
-</section>
-
-<section id="s7">
-<h2>7. How I wired it up</h2>
-<p>Everything lives in one git repo, my dotfiles:</p>
-<pre>dotfiles/
-├── home.nix          the list of links
-├── home/AGENTS.md    the map (every tool reads it)
-└── context/          rooms, inbox, tests</pre>
-<p>Setting up a machine takes three steps: clone the repo, run the rebuild script (it creates every link), run the tests. A normal day looks like this:</p>
-<pre>start a session    any tool reads the map → routes to a room
-work               say feedback as rules
-"end of session"   notes land in the inbox's sessions/ folder
-daily              backpass proposes rule changes, writes nothing
-review             I approve the changes I agree with</pre>
-<p>FirstMate runs several agents at once. Each picks up the same map through its own tool's link, so there's nothing extra to sync. Each project repo adds its own short <code>AGENTS.md</code> for its build and test rules.</p>
-<p>What's next: chat apps can't follow links on my disk. These include Claude.ai, Claude Desktop's chat and Gemini on the web. I paste the map into a project there. One idea for next: a small MCP server with two tools, "load context" and "save context", so chat apps could read the map and write to the inbox too.</p>
-<p>If you take one thing from this post, take this. Write down what you keep explaining. Put it where every tool can find it. Change it only on purpose.</p>
-<p>The post <a href="how-it-fits-together.html">How one person runs a crew of AI agents, safely</a> covers the other half: how the work gets done when several agents run at once.</p>
+<p>The useful question is: if I changed the model tomorrow, what would still work? In my setup, almost everything. The map is the written rules, the checks run in code, and Claude, Codex or Pi is whichever librarian is at the desk. The same setup runs several coding agents side by side through Kun Chen's <a href="https://github.com/kunchenguid/firstmate">FirstMate</a>, and each one reads the same map through its own tool's link.</p>
+<h3>When the library gets huge</h3>
+<p>This plain method is built for one person's library. A company's document store outgrows what fits on one desk. Those setups add a search index, known as RAG (retrieval-augmented generation), which finds the right pages and hands them to the AI. When your own files outgrow the desk, that is the next step.</p>
+<p>Next, I plan to add a small MCP server with two tools, "load context" and "save context". MCP is a standard way for apps to call tools, and this one would let chat apps such as Claude.ai read the map and write to the inbox too.</p>
 </section>
 
 <section id="s-why">
 <h2>Why it matters</h2>
 <p>A diary does two jobs. It helps you sort out your week, and years later it is the record you reach for. Folders of notes work the same way, and now an AI can read them too.</p>
-<p>Expressing yourself, journaling and taking notes build a record that helps you. The same record means the AI works your way, with no re-explaining. I also think it makes it easier for newcomers to learn AI: they start from their own notes, not a blank page, and can go on to contribute to the bigger good.</p>
-<h3>Try it yourself</h3>
-<ol>
-<li>Make three folders: one for something you want, one for something you need, one for something you are learning.</li>
-<li>Write one note a day in one of them. A few plain lines is enough.</li>
-<li>When you ask an AI for help, point it at the folder that fits.</li>
-</ol>
-<p>Start small. Three folders and one note a day is enough to begin.</p>
+<p>Expressing yourself, journaling and taking notes build a record that helps you. The same record means the AI works your way, with no re-explaining. It also gives someone new to AI a place to start: their own notes, not a blank page. From there they can go on to contribute to the bigger good.</p>
+<p>If you take one thing from this post, take this. Write down what you keep explaining. Put it where every tool can find it. Change it only on purpose. Then <a href="#s-first">build the smallest library</a>: one folder, one map file, five minutes.</p>
+<p>The post <a href="how-it-fits-together.html">How one person runs a crew of AI agents, safely</a> covers the other half: how the work gets done when several agents run at once.</p>
 </section>
 
 <section id="credits">
 <h2>Credits and further reading</h2>
 <ul>
 <li><strong>Jake Van Clief</strong>: the Interpretable Context Methodology (ICM), the map-rooms-and-routing idea this post follows. Read <a href="https://arxiv.org/abs/2603.16021">the paper</a>, then watch <a href="https://www.youtube.com/watch?v=956DPSPX4wg">"You're Automating The Wrong Layer"</a>, the source of the tighten-a-paragraph example. More on <a href="https://www.youtube.com/@JEVanClief">his YouTube channel</a> and in his <a href="https://www.skool.com/cliefnotes">Clief Notes community on Skool</a>. This post does not reproduce his course material.</li>
-<li><strong>Kay Kumar</strong>: Substrate, the research tool in Jake's video that maps what a user meant against what a model decided (not public yet).</li>
-<li><strong>Kun Chen</strong>: <a href="https://github.com/kunchenguid/firstmate">FirstMate</a>, <a href="https://github.com/kunchenguid/backpass">backpass</a>, <a href="https://github.com/kunchenguid/no-mistakes">no-mistakes</a>, the <a href="https://axi.md">AXI</a> principles, and the <a href="https://github.com/kunchenguid/dotfiles">dotfiles</a> my setup is forked from.</li>
+<li><strong>Kun Chen</strong>: <a href="https://github.com/kunchenguid/firstmate">FirstMate</a> (runs several coding agents side by side), <a href="https://github.com/kunchenguid/backpass">backpass</a> (proposes rule changes from session notes), <a href="https://github.com/kunchenguid/no-mistakes">no-mistakes</a> (a review gate before code is pushed), the <a href="https://axi.md">AXI</a> principles for agent-friendly tools, and the <a href="https://github.com/kunchenguid/dotfiles">dotfiles</a> my setup is forked from.</li>
 <li><strong>Andrej Karpathy</strong>: the <a href="https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f">LLM Wiki idea file</a> and the push for <a href="https://x.com/karpathy/status/1937902205765607626">"context engineering" over "prompt engineering"</a>.</li>
 <li><strong>The <a href="https://agents.md">AGENTS.md</a> convention</strong>: one instructions file that many coding agents read.</li>
 </ul>
