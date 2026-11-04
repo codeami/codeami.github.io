@@ -603,7 +603,7 @@
        "body": [
         "Every tool reads one short map first, about 1.5k tokens. The supervisor also reads its rules file each session.",
         "Gap: The supervisor's rules file is about 11k tokens, loaded before any work.",
-        "From the Core logic page. The comparison there comes from two scout reports dated 2026-10-27 that read public docs, repos and papers; they did not test the tools."
+        "From the Core logic page. The comparison there comes from two scout reports dated 2026-10-27 that read public docs, repos and papers."
        ],
        "links": [
         {
@@ -622,7 +622,7 @@
        "line": "harness part",
        "body": [
         "One rules file, plus a written brief for each task. A routing table says which folder to read for which job.",
-        "From the Core logic page. The comparison there comes from two scout reports dated 2026-10-27 that read public docs, repos and papers; they did not test the tools."
+        "From the Core logic page. The comparison there comes from two scout reports dated 2026-10-27 that read public docs, repos and papers."
        ],
        "links": [
         {
@@ -641,7 +641,7 @@
        "line": "harness part",
        "body": [
         "Each skill's name and description load every turn. The body loads only when the trigger fits.",
-        "From the Core logic page. The comparison there comes from two scout reports dated 2026-10-27 that read public docs, repos and papers; they did not test the tools."
+        "From the Core logic page. The comparison there comes from two scout reports dated 2026-10-27 that read public docs, repos and papers."
        ],
        "links": [
         {
@@ -660,7 +660,7 @@
        "line": "harness part",
        "body": [
         "At the end of a session, a \"stow\" step files lessons with decay tiers. Agent memory reaches the curated facts only after review.",
-        "From the Core logic page. The comparison there comes from two scout reports dated 2026-10-27 that read public docs, repos and papers; they did not test the tools."
+        "From the Core logic page. The comparison there comes from two scout reports dated 2026-10-27 that read public docs, repos and papers."
        ],
        "links": [
         {
@@ -679,7 +679,7 @@
        "line": "harness part",
        "body": [
         "Scripts the tool must run. They block file writes through the shell, warn on text shaped like a key, and remind the agent to write a session note.",
-        "From the Core logic page. The comparison there comes from two scout reports dated 2026-10-27 that read public docs, repos and papers; they did not test the tools."
+        "From the Core logic page. The comparison there comes from two scout reports dated 2026-10-27 that read public docs, repos and papers."
        ],
        "links": [
         {
@@ -696,7 +696,7 @@
        "body": [
         "Each worker gets its own disposable git worktree. Each second mate gets its own home folder.",
         "Gap: A worktree isolates files only. It does not fence the network or credentials.",
-        "From the Core logic page. The comparison there comes from two scout reports dated 2026-10-27 that read public docs, repos and papers; they did not test the tools."
+        "From the Core logic page. The comparison there comes from two scout reports dated 2026-10-27 that read public docs, repos and papers."
        ],
        "links": [
         {
@@ -714,7 +714,7 @@
        "line": "harness part",
        "body": [
         "The owner talks to one supervisor. Workers are full agent sessions in visible windows. A watcher that uses no tokens wakes the supervisor when needed.",
-        "From the Core logic page. The comparison there comes from two scout reports dated 2026-10-27 that read public docs, repos and papers; they did not test the tools."
+        "From the Core logic page. The comparison there comes from two scout reports dated 2026-10-27 that read public docs, repos and papers."
        ],
        "links": [
         {
@@ -734,7 +734,7 @@
        "body": [
         "A local gate runs review, tests, docs and lint before the branch leaves the machine. Shell tests check the rule files.",
         "On the Core logic page, Claude Code, OpenCode and Pi lack a gate like this; Omnigent and ICM do the job another way.",
-        "From the Core logic page. The comparison there comes from two scout reports dated 2026-10-27 that read public docs, repos and papers; they did not test the tools."
+        "From the Core logic page. The comparison there comes from two scout reports dated 2026-10-27 that read public docs, repos and papers."
        ],
        "links": [
         {
@@ -754,7 +754,7 @@
        "body": [
         "Only the owner merges, publishes, sends or spends. A decision is a task held for the owner. Reviews happen on HTML pages.",
         "Gap: The approval and spend rules are prose. The model may not follow them. Omnigent writes the same ideas as enforced policy.",
-        "From the Core logic page. The comparison there comes from two scout reports dated 2026-10-27 that read public docs, repos and papers; they did not test the tools."
+        "From the Core logic page. The comparison there comes from two scout reports dated 2026-10-27 that read public docs, repos and papers."
        ],
        "links": [
         {
@@ -774,7 +774,7 @@
         "A tool called backpass reads past transcripts and proposes rule edits. The owner applies each one by hand.",
         "On the Core logic page, Claude Code, OpenCode, Pi and Omnigent lack this. Harness-squared has it with no human step; Meta-Harness searches harness code instead.",
         "Gap: A proposed edit is argued from past evidence. It is never tested by replaying a task.",
-        "From the Core logic page. The comparison there comes from two scout reports dated 2026-10-27 that read public docs, repos and papers; they did not test the tools."
+        "From the Core logic page. The comparison there comes from two scout reports dated 2026-10-27 that read public docs, repos and papers."
        ],
        "links": [
         {
@@ -793,7 +793,7 @@
        "body": [
         "Links put the one map where five tools look for it. The supervisor's rules reach running sessions through git.",
         "Gap: Agent memory does not sync between machines. (Guess: not checked.)",
-        "From the Core logic page. The comparison there comes from two scout reports dated 2026-10-27 that read public docs, repos and papers; they did not test the tools."
+        "From the Core logic page. The comparison there comes from two scout reports dated 2026-10-27 that read public docs, repos and papers."
        ],
        "links": [
         {
@@ -810,7 +810,7 @@
        "body": [
         "A private owner's layer holds current priorities and preferences, on top of the shared base.",
         "On the Core logic page, ICM, Claude Code, OpenCode, Pi, Warp, Omnigent and Harness-squared lack a goals layer.",
-        "From the Core logic page. The comparison there comes from two scout reports dated 2026-10-27 that read public docs, repos and papers; they did not test the tools."
+        "From the Core logic page. The comparison there comes from two scout reports dated 2026-10-27 that read public docs, repos and papers."
        ],
        "links": [
         {

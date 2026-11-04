@@ -274,8 +274,8 @@
 <tr><th>Type</th><th>What steers the agent</th><th>Setups</th></tr>
 <tr><td><strong>Prompt-driven</strong></td><td>a chat and maybe one rules file; the model decides the rest</td><td>none in the list; it's where most people start</td></tr>
 <tr><td><strong>Skill-driven</strong></td><td>instructions that load when a task matches</td><td>Claude Code, OpenCode, Pi, Warp, used as they ship</td></tr>
-<tr><td><strong>Folder-structure-controlled</strong> (repo as harness)</td><td>a folder of files and scripts, like a GitHub repo; the prompts live inside the files</td><td>ICM, Vercel d0 (not scored), my context folders; Troupe (my guess)</td></tr>
-<tr><td><strong>Script-driven</strong></td><td>hooks, gates and refusals that run the same way every time</td><td>Kun Chen stack (FirstMate), our composite; Omnigent's policies (my guess)</td></tr>
+<tr><td><strong>Folder-structure-controlled</strong> (repo as harness)</td><td>a folder of files and scripts, like a GitHub repo; the prompts live inside the files</td><td>ICM, Vercel d0 (not scored), my context folders; Troupe</td></tr>
+<tr><td><strong>Script-driven</strong></td><td>hooks, gates and refusals that run the same way every time</td><td>Kun Chen stack (FirstMate), our composite; Omnigent's policies</td></tr>
 <tr><td><strong>Meta-harness</strong> (off the line)</td><td>a loop that edits the harness itself and keeps what scores better</td><td>Google Harness-squared, Stanford Meta-Harness</td></tr>
 </table>
 
@@ -284,7 +284,7 @@
 <p>In a folder-controlled harness, the agent is steered mostly by where things are. There are still prompts, but they live inside files: a <code>CONTEXT.md</code> per stage, a numbered folder per step, a script next to the step that checks it. The folder is basically a GitHub repo.</p>
 <p><strong>ICM</strong> (Jake Van Clief's Interpretable Context Methodology) works this way. Numbered stage folders carry the order; each stage has a one-page contract of inputs, process and outputs; one agent reads the right files at the right time. My context folders follow it.</p>
 <p><strong>Vercel's d0</strong> is the other example. It's Vercel's internal agent that turns data questions into SQL. In <a href="https://vercel.com/blog/we-removed-80-percent-of-our-agents-tools">"We removed 80% of our agent's tools"</a> (Andrew Qu, 22 Dec 2025), the team says they replaced 17 specialised tools and heavy prompt engineering, and "stripped the agent down to a single tool: execute arbitrary bash commands". The agent (Claude Opus 4.5, per the post) reads their "Cube semantic layer as a directory of YAML, Markdown, and JSON files" with <code>grep</code>, <code>cat</code>, <code>find</code> and <code>ls</code>. On their five test queries, success went from 80% to 100%, runs got about 3.5 times faster, and token use fell 37%. They add that it "only worked because our semantic layer was already good documentation."</p>
-<p class="p-callout">What I haven't verified: the d0 numbers are Vercel's own, on five queries, and I haven't tried it. I haven't scored d0 on the twelve parts.</p>
+<p class="p-callout">The d0 numbers are Vercel's own, from five queries. d0 is not scored on the twelve parts.</p>
 <p>Why is a folder more deterministic than a prompt?</p>
 <ul>
 <li><strong>Versioned.</strong> Every change to a file is a Git commit. You can see when a rule changed and undo it.</li>

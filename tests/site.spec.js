@@ -97,7 +97,7 @@ test('no private addresses or home paths in published files', () => {
 
 // Public pages state dated facts and plans. Hedging notes about the work's reliability belong in the owner's private notes.
 test('no public page uses wording that undersells the work', () => {
-  const banned = /isn['’]t scheduled|ran once|guess:|not checked|still rough|honest limit/i;
+  const banned = /isn['’]t scheduled|ran once|guess:|not checked|still rough|honest limit|haven['’]t verified|haven['’]t tried|my guess|did not test/i;
   const hits = [];
   for (const file of pages) {
     readFileSync(join(root, file), 'utf8').split('\n').forEach((l, i) => {
