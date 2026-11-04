@@ -72,6 +72,9 @@ for (const file of pages) {
       tick();
     }));
 
+    // Chromium's full-page capture of a page taller than 16384px comes out at a different height depending on load (20520 or 20474 for the same layout); size the viewport to the page so the capture is the page.
+    await page.setViewportSize({ width: page.viewportSize().width, height: await page.evaluate(() => document.documentElement.scrollHeight) });
+
     await expect(page).toHaveScreenshot(`${file.replace(/\//g, '__')}.png`, {
       timeout: 15000,
       fullPage: true,
