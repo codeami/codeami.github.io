@@ -1,58 +1,138 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-skin="calm">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="color-scheme" content="light dark">
-<title>A map of my mind you can read without leaving it · The Chart Room</title>
+<meta name="color-scheme" content="light">
+<title>My second brain on one page · The Chart Room</title>
 <meta name="description" content="One page that shows my whole agent setup as rings around one file, and a rule I won&#x27;t break: read in place, never navigate away">
 <link rel="stylesheet" href="../hud.css">
-<script src="../article.js"></script>
 <link rel="icon" href="../kit/bosun.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../kit/kit.css">
-<link rel="stylesheet" href="../article.css">
-<style>
-.tag{display:inline-block;font-size:.78rem;font-weight:600;padding:0 .45em;border-radius:4px;white-space:nowrap}
-.tag.ok{background:var(--ok-soft);color:var(--ok)}
-.tag.bad{background:var(--bad-soft);color:var(--bad)}
-.tag.soon{background:var(--warn-soft);color:var(--warn)}
-tr.bad td{background:var(--bad-soft)}
-.test{font-size:.86rem;color:var(--muted)}
-.callout{background:var(--warn-soft);border-left:3px solid var(--warn);padding:10px 14px;border-radius:6px;margin:1.2em 0}
-.gloss{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 16px;margin:0 0 28px}
-.gloss summary{font-weight:600;cursor:pointer}
-.gloss dl{margin:.6em 0 .2em;display:grid;grid-template-columns:1fr;gap:4px 18px;font-size:.92rem}
-@media (min-width:640px){.gloss dl{grid-template-columns:1fr 1fr}}
-.gloss dt{font-weight:600;display:inline}
-.gloss dd{margin:0;display:inline}
-.gloss dl div{line-height:1.45}
-svg .ring{fill:none;stroke:var(--line);stroke-width:1.5}
-svg .ring.dash{stroke-dasharray:5 4}
-svg .hub{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.5}
-svg .core{fill:var(--warn-soft);stroke:var(--warn);stroke-width:2}
-svg .dia{fill:var(--warn-soft);stroke:var(--warn);stroke-width:1.4}
-svg .rt{fill:var(--ok-soft);stroke:var(--ok);stroke-width:1.4}
-svg .rt.bad{fill:var(--bad-soft);stroke:var(--bad)}
-svg .hex{fill:var(--panel);stroke:var(--muted);stroke-width:1.4}
-svg text{font-family:var(--sans);font-size:11px;fill:var(--ink)}
-svg text.dim{fill:var(--muted)}
-svg text.halo{paint-order:stroke;stroke:var(--panel);stroke-width:3px}
-</style>
+<link rel="stylesheet" href="../panel.css">
 </head>
 <body>
-<header class="k-nav">
-  <a class="k-home" href="../index.html"><img class="k-mark" src="../kit/bosun.svg" alt=""><span class="k-logo">The Chart Room<small>How one captain runs a crew of AI agents, safely.</small></span></a>
-  <nav aria-label="Site"><a href="../blog/index.html" aria-current="page">Blog</a><a href="../arena.html">Arena</a><a href="../safety.html">Safety</a><button class="theme" id="theme" type="button">Night</button></nav>
+<header class="p-nav">
+  <a class="p-brand" href="../index.html"><img src="../kit/bosun.svg" alt=""><span>The Chart Room</span></a>
+  <nav aria-label="Site"><a href="index.html" aria-current="page">Blog</a><a href="../arena.html">Arena</a><a href="../safety.html">Safety</a></nav>
 </header>
-<main class="page">
-<article class="k-article">
-<p class="k-kicker"><a href="index.html">Blog</a> · Setup</p>
-<h1 class="k-title">A map of my mind you can read without leaving it</h1>
-<p class="k-dek">One page that shows my whole agent setup as rings around one file, and a rule I won't break: read in place, never navigate away</p>
-<p class="k-meta"><span>Ashish Raina</span><time datetime="2026-11-02">2 Nov 2026</time><span>8 min read</span></p>
+<main class="p-page">
 
+<header class="p-head">
+<p class="p-kicker"><a href="index.html">Blog</a><span>Signal from noise</span></p>
+<h1 class="p-title">My second brain <mark class="p-hl">on one page</mark></h1>
+<p class="p-sub">A map of my mind you can read without leaving it</p>
+<p class="p-byline"><span>Ashish Raina</span><time datetime="2026-11-02">2 Nov 2026</time><span>8 min read</span></p>
+<ul class="p-tags" aria-label="Topics"><li>Second brain</li><li>Rooms</li><li>Skills</li><li>Routines</li><li>7 panels</li></ul>
+</header>
+<p class="p-intro">One page that shows my whole agent setup as rings around one file, and a rule I won't break: read in place, never navigate away.</p>
 
-<details class="gloss" id="glossary" open>
+<div class="p-top">
+<nav class="p-index" aria-label="In this post">
+<h2>In this post</h2>
+<ol>
+<li><a href="#p1">The problem</a></li>
+<li><a href="#p2">The idea: one page that draws the lot</a></li>
+<li><a href="#p3">Rooms and skills, as rings</a></li>
+<li><a href="#p4">Routines and apps, with honest status</a></li>
+<li><a href="#p5">How the data is built, and the design rule</a></li>
+<li><a href="#p6">What's next</a></li>
+<li><a href="#p7">Why it matters</a></li>
+</ol>
+</nav>
+<aside class="p-side" aria-label="At a glance">
+<blockquote class="p-quote"><p class="p-lab">In the post's own words</p><p>A map that only shows good news is not a map.</p></blockquote>
+<div class="p-card core"><h2 class="p-lab">The core idea</h2><p>Draw everything you have as rings around one file, and let each dot open a card on the page, so you never lose your place.</p></div>
+<div class="p-card"><h2 class="p-lab">Different from a folder tree</h2><p>You see the whole setup at once, with a status word on each part, and read the details in place.</p></div>
+</aside>
+</div>
+
+<div class="p-grid">
+
+<section class="p-panel" id="p1" aria-labelledby="p1-t">
+<header class="p-panel-h"><span class="p-num">01</span><h2 id="p1-t">The problem</h2></header>
+<div class="p-box"><h3 class="p-lab">A setup spread over many places</h3><p>Rules in one file, notes in seven folders, skills in a fourth place, scheduled jobs in a fifth. To see "what do I have?" I had to open all of them.</p></div>
+<div class="p-box"><h3 class="p-lab">Maps that only show good news</h3><p>A list of what works does not tell you what has stopped. I want the broken parts shown as plainly as the working ones.</p></div>
+<div class="p-box"><h3 class="p-lab">Trips that lose your place</h3><p>Each click-through to read about one thing costs you your place on the map.</p></div>
+<div class="p-box"><h3 class="p-lab">Newcomers cannot see the shape</h3><p>If you are just starting, a pile of files and tools has no obvious order. It is hard to know where anything begins.</p></div>
+<p class="p-principle"><span class="p-lab">My view, not a study</span>All four get easier when the whole setup fits on one page you can read in place.</p>
+<a class="p-more" href="#s-problem">Read the problem</a>
+</section>
+
+<section class="p-panel" id="p2" aria-labelledby="p2-t">
+<header class="p-panel-h"><span class="p-num">02</span><h2 id="p2-t">The idea: one page that draws the lot</h2></header>
+<div class="p-box"><h3 class="p-lab">A city map</h3><p>A good city map does not make you walk the streets to learn the layout. You see the whole town at once, then zoom into the street you care about.</p></div>
+<div class="p-box"><h3 class="p-lab">What is on screen</h3>
+<ul><li>The ring graph in the middle</li><li>A left column of apps and pages</li><li>A right column of skills and routines</li><li>A menu with four layouts and two views</li></ul></div>
+<div class="p-box"><h3 class="p-lab">The centre</h3><p>The centre is <code>AGENTS.md</code>. Everything else is a ring around it.</p></div>
+<p class="p-principle"><span class="p-lab">Principle</span>Read in place, never navigate away. A node's details show up as a card on the page.</p>
+<a class="p-more" href="#s1">Read section 1</a>
+<a class="p-more" href="#s2">Read section 2</a>
+</section>
+
+<section class="p-panel" id="p3" aria-labelledby="p3-t">
+<header class="p-panel-h"><span class="p-num">03</span><h2 id="p3-t">Rooms and skills, as rings</h2></header>
+<div class="p-box"><h3 class="p-lab">The front desk</h3><p><code>AGENTS.md</code> is the front desk. Every agent loads it first, and it says which room to go to next. So it sits in the middle.</p></div>
+<div class="p-box"><h3 class="p-lab">Seven rooms, 290 files</h3>
+<table class="p-table"><thead><tr><th>Room</th><th>Files</th></tr></thead><tbody>
+<tr><td>Wiki</td><td>138</td></tr><tr><td>Tools catalog</td><td>101</td></tr><tr><td>Inbox</td><td>18</td></tr><tr><td>Blog</td><td>15</td></tr><tr><td>Factory</td><td>10</td></tr><tr><td>Content</td><td>7</td></tr><tr><td>Cert prep</td><td>1</td></tr>
+</tbody></table></div>
+<div class="p-box"><h3 class="p-lab">The skills deck</h3><p>A skill is a tool an agent picks up when the job calls for it. All 32 are listed in a deck, and each is a diamond on the first ring.</p></div>
+<p class="p-principle"><span class="p-lab">Principle</span>The size of a cluster shows where notes pile up. I did not plan that. The map showed me.</p>
+<a class="p-more" href="#s3">Read section 3</a>
+<a class="p-more" href="#s4">Read section 4</a>
+</section>
+
+<section class="p-panel" id="p4" aria-labelledby="p4-t">
+<header class="p-panel-h"><span class="p-num">04</span><h2 id="p4-t">Routines and apps, with honest status</h2></header>
+<div class="p-box"><h3 class="p-lab">Six routines</h3><p>The map shows what exists. Routines show what runs while I am away. Five are scheduled or running. One, the nightly backpass, shows in red as not running.</p></div>
+<div class="p-box"><h3 class="p-lab">Ten apps, eight projects, six pages</h3><p>Each row has one status word, and the word means something.</p></div>
+<div class="p-box"><h3 class="p-lab">"Live" is a word, not a heartbeat</h3><p>The page does not ping anything. The build writes each status into the data, and the data carries a date.</p></div>
+<p class="p-principle"><span class="p-lab">Principle</span>A map that only shows good news is not a map.</p>
+<a class="p-more" href="#s5">Read section 5</a>
+<a class="p-more" href="#s6">Read section 6</a>
+</section>
+
+<section class="p-panel" id="p5" aria-labelledby="p5-t">
+<header class="p-panel-h"><span class="p-num">05</span><h2 id="p5-t">How the data is built, and the design rule</h2></header>
+<div class="p-box"><h3 class="p-lab">One data file</h3><p>The page does not know my setup. It reads one file, <code>brain-data.json</code>, and draws what is in it.</p></div>
+<div class="p-box"><h3 class="p-lab">Names and counts only</h3><p>No file names, no paths, no mail, no calendar contents and no keys.</p></div>
+<div class="p-box"><h3 class="p-lab">Three parts of the rule</h3>
+<ol class="p-steps"><li>Every node gets a card.</li><li>Cards overlay the map.</li><li>Links leave only when you ask.</li></ol></div>
+<p class="p-principle"><span class="p-lab">Principle</span>When I click a node, I want an answer, not a trip.</p>
+<a class="p-more" href="#s7">Read section 7</a>
+<a class="p-more" href="#s8">Read section 8</a>
+</section>
+
+<section class="p-panel" id="p6" aria-labelledby="p6-t">
+<header class="p-panel-h"><span class="p-num">06</span><h2 id="p6-t">What's next</h2></header>
+<div class="p-box"><h3 class="p-lab">Coming, not shipped</h3>
+<ul><li>A bots graph</li><li>"Explain this screen", a scripted tour</li><li>A right-side reading overlay</li></ul></div>
+<div class="p-box"><h3 class="p-lab">What I would change</h3>
+<ul><li>One line per room card</li><li>A live ping instead of a build-time status</li><li>A re-check of the phone-width drawer</li></ul></div>
+<p class="p-principle"><span class="p-lab">Principle</span>The reading order matters most, because a map with no route is a poster.</p>
+<a class="p-more" href="#s9">Read what's next</a>
+</section>
+
+<section class="p-panel" id="p7" aria-labelledby="p7-t">
+<header class="p-panel-h"><span class="p-num">07</span><h2 id="p7-t">Why it matters</h2></header>
+<div class="p-box"><h3 class="p-lab">It helps you first</h3><p>Writing down what you keep, and where, is note-taking for your whole setup. It shows you what you have, and what has stopped.</p></div>
+<div class="p-box"><h3 class="p-lab">It helps the AI work your way</h3><p>The same map is the one file every agent reads first, so it knows where to look.</p></div>
+<div class="p-box"><h3 class="p-lab">It helps newcomers</h3><p>I think a page like this is an easier start than a pile of folders. A newcomer can see the shape, then copy what fits and share what worked.</p></div>
+<div class="p-box"><h3 class="p-lab">Try it yourself</h3>
+<ol class="p-steps"><li>List your own rooms: one per kind of work you do.</li><li>Put one short file at the centre that says which room to read first.</li><li>Give each part a status word and a date, and keep the bad news.</li></ol></div>
+<p class="p-principle"><span class="p-lab">Principle</span>One file at the centre, one status word on each part.</p>
+<a class="p-more" href="#s-why">Read why it matters</a>
+<a class="p-more" href="#s-try">Read try it yourself</a>
+</section>
+
+</div>
+
+<article class="p-full p-prose" id="full">
+<h2>The full post</h2>
+<p class="p-lab">For readers who want the whole argument</p>
+
+<details class="p-gloss" id="glossary" open>
 <summary>Glossary: the words this post uses</summary>
 <dl>
 <div><dt>Second brain</dt>: <dd>my notes and setup, kept as plain files so people and agents can both read them.</dd></div>
@@ -71,6 +151,18 @@ svg text.halo{paint-order:stroke;stroke:var(--panel);stroke-width:3px}
 <div><dt>PR</dt> (pull request): <dd>a request to merge a change, so someone can review it first.</dd></div>
 </dl>
 </details>
+
+<section id="s-problem">
+<h2>The problem</h2>
+<p>Picture a workshop where the hammers are in one shed, the saws in another and the nails in a third, and nothing tells you which shed holds what. That was my setup. This is my view from running it every day, not a survey.</p>
+<ul>
+<li><strong>A setup spread over many places.</strong> Rules in one file, notes in seven folders, skills in a fourth place, scheduled jobs in a fifth. To see "what do I have?" I had to open all of them.</li>
+<li><strong>Maps that only show good news.</strong> A list of what works does not tell you what has stopped. I want the broken parts shown as plainly as the working ones.</li>
+<li><strong>Trips that lose your place.</strong> Each click-through to read about one thing costs you your place on the map.</li>
+<li><strong>Newcomers cannot see the shape.</strong> If you are just starting, a pile of files and tools has no obvious order. It is hard to know where anything begins.</li>
+</ul>
+<p>All four get easier when the whole setup fits on one page you can read in place.</p>
+</section>
 
 <section id="s1">
 <h2>1. The idea</h2>
@@ -167,7 +259,7 @@ svg text.halo{paint-order:stroke;stroke:var(--panel);stroke-width:3px}
 </table>
 <p>The size of a cluster shows where notes pile up. Wiki and Tools catalog hold most of them. I did not plan that. The map showed me.</p>
 <p>Double-click a room to fold it into one hub with its count. That is how I look at the shape without the noise.</p>
-<p class="test">Test: <code>jq '[.rooms[].folders[].count]|add' brain-data.json</code> prints 290, and <code>jq '[.rooms[].folders|length]|add'</code> prints 38.</p>
+<p class="p-test">Test: <code>jq '[.rooms[].folders[].count]|add' brain-data.json</code> prints 290, and <code>jq '[.rooms[].folders|length]|add'</code> prints 38.</p>
 </section>
 
 <section id="s4">
@@ -175,7 +267,7 @@ svg text.halo{paint-order:stroke;stroke:var(--panel);stroke-width:3px}
 <p>A toolbox only helps if you can see what is in it. A skill is a tool an agent picks up when the job calls for it.</p>
 <p>The right column lists all 32 skills in a deck. Each row says "details" or "open". "Details" shows a card on the page. "Open" goes to a public page, and the arrow tells you before you click. On the map, each skill is a diamond on the first ring, so the ring is the count: 32 diamonds.</p>
 <p>Hover a skill and two lines appear. One runs to the centre, because every skill is reachable from the base rules. The other runs to the routine that uses it, if there is one.</p>
-<p class="test">Test: <code>jq '.skills|length' brain-data.json</code> prints 32.</p>
+<p class="p-test">Test: <code>jq '.skills|length' brain-data.json</code> prints 32.</p>
 </section>
 
 <section id="s5">
@@ -184,15 +276,15 @@ svg text.halo{paint-order:stroke;stroke:var(--panel);stroke-width:3px}
 <table id="routines-table">
 <thead><tr><th>Routine</th><th>When</th><th>Status</th></tr></thead>
 <tbody>
-<tr><td>herdr server</td><td>at login, kept alive</td><td><span class="tag ok">running</span></td></tr>
-<tr><td>secondbrain-export</td><td>01:15 daily</td><td><span class="tag ok">scheduled</span></td></tr>
-<tr class="bad"><td>nightly backpass</td><td>01:30 daily</td><td><span class="tag bad">not running</span></td></tr>
-<tr><td>aio-daily-review</td><td>Mon–Fri 09:03</td><td><span class="tag ok">scheduled</span></td></tr>
-<tr><td>suggest-routines</td><td>Fri 09:00</td><td><span class="tag ok">scheduled</span></td></tr>
-<tr><td>secondbrain-weekly-review</td><td>Sat 09:00</td><td><span class="tag ok">scheduled</span></td></tr>
+<tr><td>herdr server</td><td>at login, kept alive</td><td><span class="p-tag ok">running</span></td></tr>
+<tr><td>secondbrain-export</td><td>01:15 daily</td><td><span class="p-tag ok">scheduled</span></td></tr>
+<tr class="bad"><td>nightly backpass</td><td>01:30 daily</td><td><span class="p-tag bad">not running</span></td></tr>
+<tr><td>aio-daily-review</td><td>Mon–Fri 09:03</td><td><span class="p-tag ok">scheduled</span></td></tr>
+<tr><td>suggest-routines</td><td>Fri 09:00</td><td><span class="p-tag ok">scheduled</span></td></tr>
+<tr><td>secondbrain-weekly-review</td><td>Sat 09:00</td><td><span class="p-tag ok">scheduled</span></td></tr>
 </tbody>
 </table>
-<p>Look at the "not running" row. The page shows it in red. I like that. A map that only shows good news is not a map. It also fits a point from <a href="guides-and-sensors.html">my last post</a>: a check you cannot see failing is a check you cannot trust.</p>
+<p>Look at the "not running" row. The page shows it in red. I like that. A map that only shows good news is not a map. It also fits a point from <a href="guides-and-sensors.html">my post on guides and sensors</a>: a check you cannot see failing is a check you cannot trust.</p>
 </section>
 
 <section id="s6">
@@ -203,8 +295,8 @@ svg text.halo{paint-order:stroke;stroke:var(--panel);stroke-width:3px}
 <li><strong>Projects:</strong> two live on the web, one public repo, three private, one local, one paused.</li>
 <li><strong>Pages:</strong> learn pages, a blog draft, and three pages about FirstMate.</li>
 </ul>
-<div class="callout"><strong>"Live" is a word, not a heartbeat.</strong> The page does not ping anything. The build writes each status into the data, and the data carries a date (2026-11-01). My reading: that is the honest level for now. A real ping would be a good next step.</div>
-<p class="test">Test: <code>jq '.apps|length, (.projects|length), (.pages|length)' brain-data.json</code> prints 10, 8, 6.</p>
+<div class="p-callout"><strong>"Live" is a word, not a heartbeat.</strong> The page does not ping anything. The build writes each status into the data, and the data carries a date (2026-11-01). My reading: that is the honest level for now. A real ping would be a good next step.</div>
+<p class="p-test">Test: <code>jq '.apps|length, (.projects|length), (.pages|length)' brain-data.json</code> prints 10, 8, 6.</p>
 </section>
 
 <section id="s7">
@@ -218,7 +310,7 @@ svg text.halo{paint-order:stroke;stroke:var(--panel);stroke-width:3px}
 <li>A browser blocks the fetch when you open the page straight from disk. So the build script also pastes a <strong>fallback copy</strong> of the JSON inside the HTML. The page says "inline copy" when it uses it.</li>
 <li>The <code>?data=</code> option accepts only a plain file name. A link cannot point the page at another site.</li>
 </ul>
-<p class="test">Test: <code>jq '.meta' brain-data.json</code> shows the "names and counts only" note.</p>
+<p class="p-test">Test: <code>jq '.meta' brain-data.json</code> shows the "names and counts only" note.</p>
 </section>
 
 <section id="s8">
@@ -229,28 +321,7 @@ svg text.halo{paint-order:stroke;stroke:var(--panel);stroke-width:3px}
 <li><strong>Cards overlay the map.</strong> The map keeps its zoom and its folded rooms.</li>
 <li><strong>Links leave only when you ask.</strong> A link that goes elsewhere says "open" with an arrow. Nothing else moves you.</li>
 </ol>
-<p>Today this works for hover cards and click-for-detail cards. A longer read does not exist yet. That is the next section.</p>
-</section>
-
-<section id="s9">
-<h2>9. Coming: a reading overlay, a bots graph, a guided tour</h2>
-<p><span class="tag soon">coming</span> An open pull request adds three things. It has not merged as I write this. Treat all three as coming, not shipped.</p>
-<ul>
-<li><strong>A bots graph.</strong> The same map style for the agents themselves. An operator and an assistant bot sit in the middle, with crew, harness and tools in rings around them. Each bot's card says what it may do freely, what it asks me about, and what it never does.</li>
-<li><strong>"Explain this screen".</strong> A scripted tour. It dims the page, outlines one section at a time, and shows a short caption with Back, Next and Done. It makes no model calls. It is a fixed script.</li>
-<li><strong>A right-side reading overlay</strong> with a logical reading order of notes. It is a path through the nodes, drawn on top of the map. You read it start to end and never navigate away.</li>
-</ul>
-<p>I will update this section when the pull request merges.</p>
-</section>
-
-<section id="s10">
-<h2>10. What I would change</h2>
-<ul>
-<li>Room cards show folder counts, not a note. I want one line per room.</li>
-<li>Statuses are as of the build. A live ping would be better.</li>
-<li>At phone width the side columns become a drawer. I want to check that again once the reading overlay lands.</li>
-<li>The reading order is still a plan. I think it matters most, because a map with no route is a poster.</li>
-</ul>
+<p>Today this works for hover cards and click-for-detail cards. A longer read does not exist yet. That is in section 9, What's next.</p>
 </section>
 
 <section id="privacy">
@@ -269,18 +340,53 @@ svg text.halo{paint-order:stroke;stroke:var(--panel);stroke-width:3px}
 <p>The screenshot is cropped to drop the left column, which lists project names I keep private. The data file holds names and counts only.</p>
 </section>
 
+<section id="s-why">
+<h2>Why it matters</h2>
+<p>A map of your own setup does two jobs. It shows you what you have, and it is the record you look back on when something stops working.</p>
+<p>Writing down what you keep, and where, is note-taking for your whole setup, and a way to express how you work. The same map is the one file every agent reads first, so it knows where to look. I also think a page like this is an easier start for a newcomer than a pile of folders: they can see the shape, copy what fits, and share what worked for the bigger good.</p>
+</section>
+
+<section id="s9">
+<h2>9. What's next</h2>
+<h3>Coming, not shipped</h3>
+<p><span class="p-tag soon">coming</span> An open pull request adds three things. It has not merged as I write this. Treat all three as coming, not shipped.</p>
+<ul>
+<li><strong>A bots graph.</strong> The same map style for the agents themselves. An operator and an assistant bot sit in the middle, with crew, harness and tools in rings around them. Each bot's card says what it may do freely, what it asks me about, and what it never does.</li>
+<li><strong>"Explain this screen".</strong> A scripted tour. It dims the page, outlines one section at a time, and shows a short caption with Back, Next and Done. It makes no model calls. It is a fixed script.</li>
+<li><strong>A right-side reading overlay</strong> with a logical reading order of notes. It is a path through the nodes, drawn on top of the map. You read it start to end and never navigate away.</li>
+</ul>
+<p>I will update this section when the pull request merges.</p>
+<h3>What I would change</h3>
+<ul>
+<li>Room cards show folder counts, not a note. I want one line per room.</li>
+<li>Statuses are as of the build. A live ping would be better.</li>
+<li>At phone width the side columns become a drawer. I want to check that again once the reading overlay lands.</li>
+<li>The reading order is still a plan. I think it matters most, because a map with no route is a poster.</li>
+</ul>
+</section>
+
+<section id="s-try">
+<h2>Try it yourself</h2>
+<ol>
+<li>List your own rooms: one per kind of work you do.</li>
+<li>Put one short file at the centre that says which room to read first.</li>
+<li>Give each part a status word and a date, and keep the bad news.</li>
+</ol>
+<p>Start small. Three rooms and one file at the centre is enough to begin.</p>
+</section>
+
 <section id="credits">
 <h2>Credits</h2>
 <ul>
 <li><strong>Kun Chen</strong>: FirstMate and the AXI tools whose names show up in the map.</li>
 <li><strong>Jake Van Clief</strong>: the folder-per-room structure (ICM) the rooms follow.</li>
-<li><strong>Thoughtworks</strong>: the Adopt, Trial, Assess and Hold radar idea, borrowed in <a href="guides-and-sensors.html">the last post</a>.</li>
+<li><strong>Thoughtworks</strong>: the Adopt, Trial, Assess and Hold radar idea, borrowed in <a href="guides-and-sensors.html">the guides and sensors post</a>.</li>
 </ul>
 </section>
-
+<nav class="p-pager" aria-label="Previous and next"><a href="everything-is-a-file.html" rel="prev">← Everything is a file: an ordered folder harness for your AI</a><a href="rules-from-chat-history.html" rel="next">Turn your corrections into rules your AI follows →</a></nav>
 </article>
-<nav class="pager" aria-label="Previous and next"><a href="everything-is-a-file.html" rel="prev">← In AI, everything is a file (or a folder)</a><a href="progress-three-weeks.html" rel="next">Three weeks in: what I built, what I checked, what is still open →</a></nav>
+
 </main>
-<footer class="k-foot"><p>by Ashish Raina – program manager turned AI-crew operator</p><p><a href="../about.html">About</a> · <a href="../index.html">Chat with EA-bot</a> · <a href="../index.html#pages">All pages</a> · <a href="https://github.com/codeami">GitHub</a></p></footer>
+<footer class="p-foot"><p>by Ashish Raina – program manager turned AI-crew operator</p><ul><li><a href="../about.html">About</a></li><li><a href="../index.html">Chat with EA-bot</a></li><li><a href="../index.html#pages">All pages</a></li><li><a href="https://github.com/codeami">GitHub</a></li></ul></footer>
 </body>
 </html>

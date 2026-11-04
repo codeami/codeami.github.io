@@ -106,6 +106,83 @@ html[data-skin="calm"] :target { scroll-margin-top: 16px; }
 .p-prose pre code { padding: 0; background: none; }
 .p-test { font-size: .86rem; color: var(--mute); }
 .p-callout { margin: 1.2em 0; padding: 10px 14px; background: var(--panel); border-left: 3px solid var(--warn); border-radius: 0 var(--radius-calm) var(--radius-calm) 0; }
+.p-prose blockquote { margin: 1em 0; padding: 4px 14px; border-left: 3px solid var(--accent); font-style: italic; }
+.p-prose .p-lab { margin: 1.2em 0 6px; color: var(--accent); }
+.p-prose table { width: 100%; font-size: 14px; border-collapse: collapse; }
+.p-prose th, .p-prose td { padding: 6px 8px; text-align: left; vertical-align: top; border-top: 1px solid var(--line); overflow-wrap: anywhere; }
+.p-prose th { font: 11px/1.2 var(--f-read); font-variant: small-caps; letter-spacing: .12em; color: var(--mute); border-top: 0; }
+.p-prose td.n { text-align: right; font-variant-numeric: tabular-nums; }
+.p-prose tr.bad td { background: color-mix(in srgb, var(--warn) 14%, var(--panel)); }
+.p-prose tr.half td { background: color-mix(in srgb, var(--warn) 14%, var(--panel)); }
+.p-tag { display: inline-block; padding: 0 .45em; font-size: .78rem; font-weight: 600; white-space: nowrap; border-radius: 4px; }
+.p-tag.ok, .p-tag.cpu { color: var(--ok); background: color-mix(in srgb, var(--ok) 16%, var(--panel)); }
+.p-tag.bad, .p-tag.soon, .p-tag.gpu { color: var(--warn); background: color-mix(in srgb, var(--warn) 14%, var(--panel)); }
+.p-tag.me { color: var(--accent); background: var(--accent-dim); }
+.p-gloss { margin: 0 0 28px; padding: 10px 16px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-calm); }
+.p-gloss summary { font-weight: 600; cursor: pointer; }
+.p-gloss dl { display: grid; grid-template-columns: minmax(0, 1fr); gap: 4px 18px; margin: .6em 0 .2em; font-size: .92rem; }
+@media (min-width: 640px) { .p-gloss dl { grid-template-columns: 1fr 1fr; } }
+.p-gloss dt, .p-gloss dd { display: inline; margin: 0; }
+.p-gloss dt { font-weight: 600; }
+.p-ex { margin: 1.2em 0; padding: 4px 16px 8px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-calm); }
+.p-words { font-style: italic; color: var(--mute); }
+.p-try { margin: 1.2em 0; padding: 14px 16px; background: var(--accent-dim); border: 1px solid var(--accent); border-radius: var(--radius-calm); }
+.p-try pre { margin: .6em 0; white-space: pre-wrap; }
+.p-try button { padding: 7px 14px; font: 600 .9rem var(--f-ui); color: var(--on-accent); background: var(--accent); border: 0; border-radius: 6px; cursor: pointer; }
+
+/* Post figures: inline SVG with a viewBox and no fixed width, drawn with the role tokens only.
+   Box, line and text classes are used inside `.p-prose figure svg` only. */
+.p-prose figure { margin: 1.2em 0; padding: var(--s-md); background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius-calm); }
+.p-prose figure svg, .p-prose figure img { display: block; width: 100%; height: auto; }
+.p-prose figure img { border-radius: 6px; }
+.p-prose figcaption { margin-top: var(--s-sm); font-size: 14px; color: var(--mute); }
+.p-prose svg text { font: 11px var(--f-ui); fill: var(--ink); }
+.p-prose svg text.dim { fill: var(--mute); }
+.p-prose svg text.halo { paint-order: stroke; stroke: var(--panel); stroke-width: 3px; }
+.p-prose svg a { cursor: pointer; }
+.p-prose svg a:hover .box, .p-prose svg a:focus .box { stroke-width: 2.6; }
+.p-prose svg a:hover .ring, .p-prose svg a:focus .ring { stroke-width: 2.4; }
+.p-prose svg a:hover .dot, .p-prose svg a:focus .dot { stroke-width: 3; }
+.p-prose svg .ring { fill: none; stroke: var(--line); stroke-width: 1.5; }
+.p-prose svg .ring.dash { stroke-dasharray: 5 4; }
+.p-prose svg .ring.outer { fill: var(--accent-dim); stroke: var(--accent); stroke-dasharray: 6 4; }
+.p-prose svg .ring.agent { fill: var(--bg); }
+.p-prose svg .hub { fill: var(--accent-dim); stroke: var(--accent); stroke-width: 1.5; }
+.p-prose svg .core { fill: color-mix(in srgb, var(--warn) 14%, var(--panel)); stroke: var(--warn); stroke-width: 2; }
+.p-prose svg .dia { fill: color-mix(in srgb, var(--warn) 14%, var(--panel)); stroke: var(--warn); stroke-width: 1.4; }
+.p-prose svg .rt { fill: color-mix(in srgb, var(--ok) 16%, var(--panel)); stroke: var(--ok); stroke-width: 1.4; }
+.p-prose svg .rt.bad { fill: color-mix(in srgb, var(--warn) 14%, var(--panel)); stroke: var(--warn); }
+.p-prose svg .hex { fill: var(--panel); stroke: var(--mute); stroke-width: 1.4; }
+.p-prose svg .box { fill: var(--bg); stroke: var(--line); stroke-width: 1.5; }
+.p-prose svg .box.hi { fill: var(--accent-dim); stroke: var(--accent); }
+.p-prose svg .box.warn, .p-prose svg .box.gpu { fill: color-mix(in srgb, var(--warn) 14%, var(--panel)); stroke: var(--warn); }
+.p-prose svg .box.ok, .p-prose svg .box.cpu { fill: color-mix(in srgb, var(--ok) 16%, var(--panel)); stroke: var(--ok); }
+.p-prose svg .box.me { fill: var(--panel); stroke: var(--accent); }
+.p-prose svg .bar.has { fill: var(--ok); }
+.p-prose svg .bar.diff { fill: var(--accent); }
+.p-prose svg .bar.lacks { fill: var(--line); }
+.p-prose svg .bar.guess { fill: var(--bg); stroke: var(--mute); stroke-dasharray: 3 2; }
+.p-prose svg .bar.none { fill: none; stroke: var(--mute); stroke-dasharray: 5 4; }
+.p-prose svg .t { fill: var(--ink); font: 600 14px var(--f-ui); }
+.p-prose svg .s { fill: var(--mute); font: 12px var(--f-ui); }
+.p-prose svg .m { fill: var(--mute); font: 12px var(--font-mono); }
+.p-prose svg .h { fill: var(--accent); font: 600 12px var(--f-ui); letter-spacing: .04em; }
+.p-prose svg .lbl { fill: var(--mute); font: 12px var(--f-ui); }
+.p-prose svg .lbl.no { fill: var(--warn); }
+.p-prose svg .edge { stroke: var(--mute); stroke-width: 1.5; fill: none; }
+.p-prose svg .edge.hi { stroke: var(--accent); }
+.p-prose svg .edge.me { stroke: var(--accent); stroke-dasharray: 5 4; }
+.p-prose svg .edge.dash { stroke-dasharray: 5 4; }
+.p-prose svg .edge.no { stroke: var(--warn); stroke-dasharray: 5 4; }
+.p-prose svg .edge.ok { stroke: var(--ok); }
+.p-prose svg .edge.warn { stroke: var(--warn); }
+.p-prose svg .edge.line { stroke: var(--line); }
+.p-prose svg .dot { fill: var(--panel); stroke: var(--mute); stroke-width: 1.5; }
+.p-prose svg .dot.moved { fill: var(--accent-dim); stroke: var(--accent); stroke-width: 2.2; }
+.p-prose svg .dot.new { fill: color-mix(in srgb, var(--warn) 14%, var(--panel)); stroke: var(--warn); stroke-width: 2; stroke-dasharray: 3 2; }
+.p-prose svg .dn { fill: var(--ink); font: 600 10px var(--f-ui); text-anchor: middle; }
+.p-prose svg .arrowhead { fill: var(--mute); }
+.p-prose svg .arrowhead.me, .p-prose svg .arrowhead.hi { fill: var(--accent); }
 
 /* Pager and footer. */
 .p-pager { display: flex; justify-content: space-between; gap: var(--s-lg); max-width: 46rem; margin: var(--s-xl) auto 0; padding-top: var(--s-lg); border-top: 1px solid var(--line); }

@@ -457,7 +457,12 @@ stays).
     (folder, root, line, name, file), max 30rem, with a `<title>`, a `<desc>`
     and a caption that says when the example is made up.
   - **Full prose** (`.p-full.p-prose`): the whole post below the panels, with
-    `.p-test` for a test note and `.p-callout` for an honest note.
+    `.p-test` for a test note and `.p-callout` for an honest note. It opens with
+    "The problem" and ends "Why it matters", "What's still rough", "Try it
+    yourself", credits. Inside it, `figure` SVGs use the box, line and text
+    classes in `panel.css` (`.box`, `.edge`, `.ring`, `.bar`, `.dot`, `.t`, `.s`),
+    and `.p-tag`, `.p-gloss`, `.p-ex` and `.p-try` for tags, glossary, examples
+    and the try-it box. No post carries a `<style>` block or a `style` attribute.
   - **Post card** (`.p-post` in `.p-posts`, under a `.p-group` heading): kicker,
     title link, one-line summary, date and reading time. The whole card is the
     link. Groups by series or topic, newest first; list only pages that are

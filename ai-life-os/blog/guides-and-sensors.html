@@ -1,82 +1,135 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-skin="calm">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="color-scheme" content="light dark">
-<title>Guides, sensors, and the rules I&#x27;m still begging for · The Chart Room</title>
+<meta name="color-scheme" content="light">
+<title>Guides and sensors: steering AI agents before and after they act · The Chart Room</title>
 <meta name="description" content="Mapping my agent setup onto the harness engineering frame, honestly, and picking the next three sensors">
 <link rel="stylesheet" href="../hud.css">
-<script src="../article.js"></script>
 <link rel="icon" href="../kit/bosun.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../kit/kit.css">
-<link rel="stylesheet" href="../article.css">
-<style>
-td:first-child{min-width:120px}
-@media (min-width:640px){td:first-child{min-width:180px}}
-#radar-table td:first-child{min-width:0;width:2.2em}
-tr.half td{background:var(--warn-soft)}
-.tag{display:inline-block;font-size:.78rem;font-weight:600;padding:0 .45em;border-radius:4px;white-space:nowrap}
-.tag.cpu{background:var(--ok-soft);color:var(--ok)}
-.tag.gpu{background:var(--warn-soft);color:var(--warn)}
-.tag.me{background:var(--accent-soft);color:var(--accent)}
-figure.slide img{display:block;width:100%;height:auto;border-radius:6px}
-.q{font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin:0 0 6px}
-.test{font-size:.86rem;color:var(--muted)}
-.callout{background:var(--warn-soft);border-left:3px solid var(--warn);padding:10px 14px;border-radius:6px;margin:1.2em 0}
-.gloss{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 16px;margin:0 0 28px}
-.gloss summary{font-weight:600;cursor:pointer}
-.gloss dl{margin:.6em 0 .2em;display:grid;grid-template-columns:1fr;gap:4px 18px;font-size:.92rem}
-@media (min-width:640px){.gloss dl{grid-template-columns:1fr 1fr}}
-.gloss dt{font-weight:600;display:inline}
-.gloss dd{margin:0;display:inline}
-.gloss dl div{line-height:1.45}
-.note-hint{font-size:.86rem;color:var(--muted)}
-svg a{cursor:pointer}
-svg a:hover .box,svg a:focus .box{stroke-width:2.6}
-svg a:hover .ring,svg a:focus .ring{stroke-width:2.4}
-svg .ring{fill:none;stroke:var(--line);stroke-width:1.5}
-svg .ring.outer{fill:var(--accent-soft);stroke:var(--accent);stroke-dasharray:6 4}
-svg .ring.agent{fill:var(--paper)}
-svg .box{fill:var(--paper);stroke:var(--line);stroke-width:1.5}
-svg .box.cpu{fill:var(--ok-soft);stroke:var(--ok)}
-svg .box.gpu{fill:var(--warn-soft);stroke:var(--warn)}
-svg .box.me{fill:var(--panel);stroke:var(--accent)}
-svg .box.hi{fill:var(--accent-soft);stroke:var(--accent)}
-svg .bar.has{fill:var(--ok)}
-svg .bar.diff{fill:var(--accent)}
-svg .bar.lacks{fill:var(--line)}
-svg .bar.guess{fill:var(--paper);stroke:var(--muted);stroke-dasharray:3 2}
-svg .bar.none{fill:none;stroke:var(--muted);stroke-dasharray:5 4}
-svg .t{fill:var(--ink);font-family:var(--sans);font-size:14px;font-weight:600}
-svg .s{fill:var(--muted);font-family:var(--sans);font-size:12px}
-svg .h{fill:var(--accent);font-family:var(--sans);font-size:12px;font-weight:600;letter-spacing:.04em}
-svg .edge{stroke:var(--muted);stroke-width:1.6;fill:none}
-svg .edge.me{stroke:var(--accent);stroke-dasharray:5 4}
-svg .lbl{fill:var(--muted);font-family:var(--sans);font-size:11.5px}
-svg .dot{fill:var(--panel);stroke:var(--muted);stroke-width:1.5}
-svg .dot.moved{fill:var(--accent-soft);stroke:var(--accent);stroke-width:2.2}
-svg .dot.new{fill:var(--warn-soft);stroke:var(--warn);stroke-width:2;stroke-dasharray:3 2}
-svg a:hover .dot,svg a:focus .dot{stroke-width:3}
-svg .dn{fill:var(--ink);font-family:var(--sans);font-size:10px;font-weight:600;text-anchor:middle}
-svg .arrowhead{fill:var(--muted)}
-svg .arrowhead.me{fill:var(--accent)}
-</style>
+<link rel="stylesheet" href="../panel.css">
 </head>
 <body>
-<header class="k-nav">
-  <a class="k-home" href="../index.html"><img class="k-mark" src="../kit/bosun.svg" alt=""><span class="k-logo">The Chart Room<small>How one captain runs a crew of AI agents, safely.</small></span></a>
-  <nav aria-label="Site"><a href="../blog/index.html" aria-current="page">Blog</a><a href="../arena.html">Arena</a><a href="../safety.html">Safety</a><button class="theme" id="theme" type="button">Night</button></nav>
+<header class="p-nav">
+  <a class="p-brand" href="../index.html"><img src="../kit/bosun.svg" alt=""><span>The Chart Room</span></a>
+  <nav aria-label="Site"><a href="index.html" aria-current="page">Blog</a><a href="../arena.html">Arena</a><a href="../safety.html">Safety</a></nav>
 </header>
-<main class="page">
-<article class="k-article">
-<p class="k-kicker"><a href="index.html">Blog</a> · Harness engineering</p>
-<h1 class="k-title">Guides, sensors, and the rules I'm still begging for</h1>
-<p class="k-dek">Mapping my agent setup onto the harness engineering frame, honestly, and picking the next three sensors</p>
-<p class="k-meta"><span>Ashish Raina</span><time datetime="2026-11-02">2 Nov 2026</time><span>21 min read</span></p>
+<main class="p-page">
 
+<header class="p-head">
+<p class="p-kicker"><a href="index.html">Blog</a><span>Safe AI crews</span></p>
+<h1 class="p-title">Guides and sensors: <mark class="p-hl">steering AI agents</mark> before and after they act</h1>
+<p class="p-sub">…and the rules I'm still begging for</p>
+<p class="p-byline"><span>Ashish Raina</span><time datetime="2026-11-02">2 Nov 2026</time><span>21 min read</span></p>
+<ul class="p-tags" aria-label="Topics"><li>Harness engineering</li><li>Guides</li><li>Sensors</li><li>Hooks</li><li>6 panels</li></ul>
+</header>
+<p class="p-intro">Mapping my agent setup onto the harness engineering frame, honestly, and picking the next three sensors.</p>
 
-<details class="gloss" id="glossary" open>
+<div class="p-top">
+<nav class="p-index" aria-label="In this post">
+<h2>In this post</h2>
+<ol>
+<li><a href="#p1">The problem</a></li>
+<li><a href="#p2">The idea: guides before, sensors after</a></li>
+<li><a href="#p3">Four ways to steer, and the arena</a></li>
+<li><a href="#p4">My setup on that map</a></li>
+<li><a href="#p5">Where I'm still begging, and three sensors to add</a></li>
+<li><a href="#p6">Why it matters</a></li>
+</ol>
+</nav>
+<aside class="p-side" aria-label="At a glance">
+<blockquote class="p-quote"><p class="p-lab">In the post's own words</p><p>A smoke alarm that only works when you press the test button isn't a smoke alarm.</p></blockquote>
+<div class="p-card core"><h2 class="p-lab">The core idea</h2><p>Guides shape the agent's first attempt. Sensors check what it did. When the same thing keeps going wrong, add a sensor that runs by itself.</p></div>
+<div class="p-card"><h2 class="p-lab">Different from more rules</h2><p>A rule in markdown is a request. A hook-wired script fires every time, because the agent never calls it.</p></div>
+</aside>
+</div>
+
+<div class="p-grid">
+
+<section class="p-panel" id="p1" aria-labelledby="p1-t">
+<header class="p-panel-h"><span class="p-num">01</span><h2 id="p1-t">The problem</h2></header>
+<div class="p-box"><h3 class="p-lab">Agents act fast and sound sure</h3><p>A coding agent will make changes quickly and report them confidently. Reading every change yourself does not scale.</p></div>
+<div class="p-box"><h3 class="p-lab">Rules that are only begging</h3><p>The talk has a good phrase for most rules files: "a lot of begging. You should always do this and you should never do that." Mine has plenty.</p></div>
+<div class="p-box"><h3 class="p-lab">Checks that run only if the agent remembers</h3><p>A check that depends on the agent deciding to run it is only half a check.</p></div>
+<div class="p-box"><h3 class="p-lab">Newcomers cannot tell what to trust</h3><p>If you are just starting, it is hard to know which agent output is safe to use, and which parts need your eyes.</p></div>
+<p class="p-principle"><span class="p-lab">My view, not a study</span>All four get easier when checks run by themselves and your review time goes where it is needed.</p>
+<a class="p-more" href="#s-problem">Read the problem</a>
+</section>
+
+<section class="p-panel" id="p2" aria-labelledby="p2-t">
+<header class="p-panel-h"><span class="p-num">02</span><h2 id="p2-t">The idea: guides before, sensors after</h2></header>
+<div class="p-box"><h3 class="p-lab">A car with three layers</h3><p>The model is the engine. A coding agent like Claude Code or Codex is the first harness. Around that sits the outer harness: everything I put in place for my own projects.</p></div>
+<div class="p-box"><h3 class="p-lab">Guides and sensors</h3>
+<table class="p-table"><thead><tr><th></th><th>When</th><th>Examples</th></tr></thead><tbody>
+<tr><td>Guides</td><td>Before the agent acts</td><td>Rules files, skills, how-tos</td></tr>
+<tr><td>Sensors</td><td>After it acts</td><td>Tests, logs, a review agent</td></tr>
+</tbody></table></div>
+<div class="p-box"><h3 class="p-lab">Who does the checking</h3><p>CPU: a deterministic script, the same answer every time. GPU: a model's judgement, good for fuzzy questions.</p></div>
+<p class="p-principle"><span class="p-lab">Principle</span>Once a rule is objective, turn it into a script. It is more reliable, and a lot more token efficient.</p>
+<a class="p-more" href="#s1">Read section 1</a>
+<a class="p-more" href="#s2">Read section 2</a>
+</section>
+
+<section class="p-panel" id="p3" aria-labelledby="p3-t">
+<header class="p-panel-h"><span class="p-num">03</span><h2 id="p3-t">Four ways to steer, and the arena</h2></header>
+<div class="p-box"><h3 class="p-lab">From the model deciding to scripts deciding</h3>
+<ol class="p-steps"><li>Prompt-driven</li><li>Skill-driven</li><li>Folder-controlled</li><li>Script-driven</li></ol></div>
+<div class="p-box"><h3 class="p-lab">Why a folder beats a prompt</h3>
+<ul><li>Versioned</li><li>Diffable</li><li>Reviewed</li><li>Same steps every time</li></ul></div>
+<div class="p-box"><h3 class="p-lab">The arena</h3><p>On 27 October a research agent compared eleven setups on the same twelve harness parts. The scores show coverage, not quality, and none of the tools were tested.</p></div>
+<p class="p-principle"><span class="p-lab">Principle</span>A user-invoked skill like grill-me teaches the person, not the agent.</p>
+<a class="p-more" href="#s4">Read section 3</a>
+<a class="p-more" href="#s5">Read section 4</a>
+</section>
+
+<section class="p-panel" id="p4" aria-labelledby="p4-t">
+<header class="p-panel-h"><span class="p-num">04</span><h2 id="p4-t">My setup on that map</h2></header>
+<div class="p-box"><h3 class="p-lab">What exists today</h3><p>I went through the real files rather than my memory of them. Guides are scripts and markdown; sensors are hooks, refusals, lint, tests and a review agent.</p></div>
+<div class="p-box"><h3 class="p-lab">When each check fires</h3><p>Most of my checks sit in the coding session and at integration, which is the cheap end. That's good.</p></div>
+<div class="p-box"><h3 class="p-lab">The thin end</h3><p>The scheduled column watches my rules and my setup, not the work itself. And in production there's nothing.</p></div>
+<p class="p-principle"><span class="p-lab">Principle</span>A typo caught while you write costs a keystroke. The same typo caught after printing costs a reprint.</p>
+<a class="p-more" href="#s6">Read section 5</a>
+<a class="p-more" href="#s7-path">Read section 6</a>
+</section>
+
+<section class="p-panel" id="p5" aria-labelledby="p5-t">
+<header class="p-panel-h"><span class="p-num">05</span><h2 id="p5-t">Where I'm still begging, and three sensors to add</h2></header>
+<div class="p-box"><h3 class="p-lab">Rules with no sensor behind them</h3>
+<ul><li>Secrets never go in files</li><li>Verify, then report</li><li>Check light, dark and phone width</li><li>Before you give a link, open it</li></ul></div>
+<div class="p-box"><h3 class="p-lab">Half a sensor</h3>
+<table class="p-table"><thead><tr><th>Wiring</th><th>Fires</th></tr></thead><tbody>
+<tr><td>Hook-wired script</td><td>Every time</td></tr>
+<tr><td>Script in a skill</td><td>When the model asks</td></tr>
+<tr><td>Rule in markdown</td><td>No check at all</td></tr>
+</tbody></table></div>
+<div class="p-box"><h3 class="p-lab">Three sensors to add next</h3>
+<ol class="p-steps"><li>A secret and privacy scan at commit time</li><li>plain-check on every draft, automatically</li><li>A link check before a report goes out</li></ol></div>
+<p class="p-principle"><span class="p-lab">Principle</span>When a rule keeps breaking, more wording rarely helps. A check might.</p>
+<a class="p-more" href="#s8">Read section 7</a>
+<a class="p-more" href="#s10">Read section 8</a>
+</section>
+
+<section class="p-panel" id="p6" aria-labelledby="p6-t">
+<header class="p-panel-h"><span class="p-num">06</span><h2 id="p6-t">Why it matters</h2></header>
+<div class="p-box"><h3 class="p-lab">It helps you first</h3><p>Guides make the first attempt better. Sensors catch what the guides missed, before I do. My review time goes where it's needed.</p></div>
+<div class="p-box"><h3 class="p-lab">It helps the AI work your way</h3><p>A rule that becomes a script cannot be forgotten. The agent works inside your limits without being reminded.</p></div>
+<div class="p-box"><h3 class="p-lab">It helps newcomers</h3><p>I think a short list of checks is a safer start than a long list of rules. Beginners can trust what is checked, and share which checks helped.</p></div>
+<div class="p-box"><h3 class="p-lab">Try it yourself</h3>
+<ol class="p-steps"><li>Pick one rule you keep repeating to your agent.</li><li>Ask whether a script could check it, with no model.</li><li>Wire that script to run by itself, so the agent cannot skip it.</li></ol></div>
+<p class="p-principle"><span class="p-lab">Principle</span>The goal isn't a clever harness. It's safe, quick, sustainable delivery.</p>
+<a class="p-more" href="#s11">Read section 9</a>
+<a class="p-more" href="#s-why">Read why it matters</a>
+</section>
+
+</div>
+
+<article class="p-full p-prose" id="full">
+<h2>The full post</h2>
+<p class="p-lab">For readers who want the whole argument</p>
+
+<details class="p-gloss" id="glossary" open>
 <summary>Glossary: the words this post uses</summary>
 <dl>
 <div><dt>Model</dt> <dd>the AI itself (Claude, GPT): text in, text out.</dd></div>
@@ -107,11 +160,23 @@ svg .arrowhead.me{fill:var(--accent)}
 <div><dt>AXI tools</dt> <dd>small command-line tools built for agents: <code>gh-axi</code> for GitHub, <code>chrome-devtools-axi</code> for a browser.</dd></div>
 <div><dt>launchd</dt> <dd>the macOS scheduler that runs jobs at set times.</dd></div>
 <div><dt>Radar</dt> <dd>a chart of things you use (Adopt), try (Trial), look at (Assess) or stopped (Hold); the idea is Thoughtworks'.</dd></div>
-<div><dt>CPU / GPU</dt> <dd>shorthand in this post for "a script checks it" vs "a model judges it". See section 3.</dd></div>
+<div><dt>CPU / GPU</dt> <dd>shorthand in this post for "a script checks it" vs "a model judges it". See section 2.</dd></div>
 </dl>
 </details>
 
-<p class="note-hint">Where a public note exists, a box or dot in my diagrams links to it in the <a href="../brain/index.html">second brain</a> on this site.</p>
+<p class="p-test">Where a public note exists, a box or dot in my diagrams links to it in the <a href="../brain/index.html">second brain</a> on this site.</p>
+
+<section id="s-problem">
+<h2>The problem</h2>
+<p>Picture a new hire who works very fast and never says "I'm not sure". You can give them a long list of instructions, but you cannot watch every move. That is how coding agents feel to me. This is my view from using them every day, not a survey.</p>
+<ul>
+<li><strong>Agents act fast and sound sure.</strong> A coding agent will make changes quickly and report them confidently. Reading every change yourself does not scale.</li>
+<li><strong>Rules that are only begging.</strong> The talk has a good phrase for most rules files: "a lot of begging. You should always do this and you should never do that." Mine has plenty.</li>
+<li><strong>Checks that run only if the agent remembers.</strong> A check that depends on the agent deciding to run it is only half a check.</li>
+<li><strong>Newcomers cannot tell what to trust.</strong> If you are just starting, it is hard to know which agent output is safe to use, and which parts need your eyes.</li>
+</ul>
+<p>All four get easier when checks run by themselves and your review time goes where it is needed.</p>
+</section>
 
 <section id="s1">
 <h2>1. What "harness" means here</h2>
@@ -119,37 +184,35 @@ svg .arrowhead.me{fill:var(--accent)}
 <p>Coding agents have the same three layers. The model is the engine. A coding agent like Claude Code or Codex is the first harness, built by the people who make the agent. Around that sits the "outer" harness: everything I put in place for my own projects. Birgitta Boeckeler and Chris Ford call that outer layer "what we can control". Their talk is about harnessing "not the model but ... the agent".</p>
 <pre id="s1-rings">model  &lt;  coding agent's harness (Claude Code, Codex)  &lt;  my outer harness
           built by the agent's makers                     rules, skills, scripts, hooks, gates</pre>
-<p class="note-hint">The talk draws this as three rings: "We can expand the coding agent harness." See the slide in <a href="https://www.youtube.com/watch?v=uLWOLmeHOSE">Harness engineering beyond skills</a> (Birgitta Boeckeler and Chris Ford, Thoughtworks).</p>
+<p class="p-test">The talk draws this as three rings: "We can expand the coding agent harness." See the slide in <a href="https://www.youtube.com/watch?v=uLWOLmeHOSE">Harness engineering beyond skills</a> (Birgitta Boeckeler and Chris Ford, Thoughtworks).</p>
 <p>The goal they name is trust: "We want to increase our trust in ... the coding agent output", so that changes ship "safely, quickly, and in a sustainable way", and my review time goes where it's needed.</p>
 </section>
 
 <section id="s2">
 <h2>2. Guides and sensors</h2>
-<p class="q">Before the agent acts, or after?</p>
+<p class="p-lab">Before the agent acts, or after?</p>
 <p>A recipe tells you what to do before you cook. Tasting the soup tells you what actually happened.</p>
 <ul>
 <li id="s2-guides"><strong>Guides</strong> are feedforward: things given to the agent "in anticipation of what it might have to know and what it might do wrong". Rules files, skills, reference docs, how-tos.</li>
 <li id="s2-sensors"><strong>Sensors</strong> are feedback: checks that run after the agent acts, "so that it can self-correct before we even look at it". Static analysis, logs, tests, a browser, a review agent.</li>
 </ul>
-<p class="note-hint">The talk's slide shows guides feeding forward, sensors feeding back, and a human steering both. See <a href="https://www.youtube.com/watch?v=uLWOLmeHOSE">Harness engineering beyond skills</a> (Thoughtworks).</p>
+<p class="p-test">The talk's slide shows guides feeding forward, sensors feeding back, and a human steering both. See <a href="https://www.youtube.com/watch?v=uLWOLmeHOSE">Harness engineering beyond skills</a> (Thoughtworks).</p>
 <p>A human sits above both. When the same thing keeps going wrong, the question is: "is there a sensor I can add? Is there something I should add to the guides?"</p>
-</section>
 
-<section id="s3">
-<h2>3. CPU and GPU</h2>
-<p class="q">Who does the checking?</p>
+<h3 id="s3">CPU and GPU</h3>
+<p class="p-lab">Who does the checking?</p>
 <p>A ruler and a second opinion both check a shelf. Only one gives the same answer every time.</p>
 <p>The talk splits both guides and sensors by what runs them:</p>
 <ul>
-<li id="s3-cpu"><span class="tag cpu">CPU</span> <strong>computational</strong>: deterministic scripts. A linter, a type checker, a test, a log. "An observation of what's really going on." Cheap and repeatable.</li>
-<li id="s3-gpu"><span class="tag gpu">GPU</span> <strong>inferential</strong>: a model's judgement. A review agent is "an LLM judging what another LLM did ... still probabilistic". Good for fuzzy questions.</li>
+<li id="s3-cpu"><span class="p-tag cpu">CPU</span> <strong>computational</strong>: deterministic scripts. A linter, a type checker, a test, a log. "An observation of what's really going on." Cheap and repeatable.</li>
+<li id="s3-gpu"><span class="p-tag gpu">GPU</span> <strong>inferential</strong>: a model's judgement. A review agent is "an LLM judging what another LLM did ... still probabilistic". Good for fuzzy questions.</li>
 </ul>
 <p>Chris Ford's advice: successful teams "try to offload from the GPU to the CPU". Once a rule is objective, turn it into a script. It's more reliable, and "a lot more token efficient".</p>
 </section>
 
 <section id="s4">
-<h2>4. Prompt, skill, folder, script: four ways to steer an agent</h2>
-<p class="q">How much does the model decide?</p>
+<h2>3. Prompt, skill, folder, script: four ways to steer an agent</h2>
+<p class="p-lab">How much does the model decide?</p>
 <p>You can teach someone to cook by talking them through it, by handing them a recipe card when they need it, by giving them a labelled kitchen, or by giving them a machine that only does it one way.</p>
 <p>Harnesses sit on the same line. On the left, the model decides almost everything. On the right, scripts decide and the model fills in the gaps.</p>
 <figure id="fig-spectrum">
@@ -163,7 +226,7 @@ svg .arrowhead.me{fill:var(--accent)}
 <g id="sp-script"><title>Script-driven: hooks, gates and refusals that run the same way every time</title><rect class="box cpu" x="506" y="46" width="150" height="104" rx="8"/><text class="t" x="581" y="70" text-anchor="middle">Script-driven</text><text class="s" x="581" y="92" text-anchor="middle">hooks, gates,</text><text class="s" x="581" y="108" text-anchor="middle">refusals</text><text class="s" x="581" y="134" text-anchor="middle">FirstMate</text></g>
 <g id="sp-user"><title>The other end: skills a person invokes on purpose, to learn and to say what they want</title><rect class="box me" x="20" y="182" width="636" height="100" rx="10"/><text class="t" x="40" y="208">The other end: you invoke it</text><text class="s" x="40" y="232">grill-me: the agent interviews you, one question at a time, until what you want is clear.</text><text class="s" x="40" y="252">"Introduce me to AI": an onboarding mode that teaches as you go (an idea; not built yet).</text><text class="s" x="40" y="272">Here a person pulls the skill on purpose. The harness doesn't push it.</text></g>
 </svg>
-<figcaption>My own drawing. The four types line up with the tier list in section 5.</figcaption>
+<figcaption>My own drawing. The four types line up with the tier list in section 4.</figcaption>
 </figure>
 <p>FirstMate sits on the right. It's script-driven: hooks, guarded merge scripts and refusals that don't depend on the model remembering a rule. My context folders sit one step left. They're folder-controlled: numbered stage folders, a contract file per stage, and a few scripts.</p>
 <p>The far end is different in kind. Most of a harness pushes things at the agent. A user-invoked skill is pulled by a person, on purpose. Two of these matter most for people new to AI:</p>
@@ -175,9 +238,9 @@ svg .arrowhead.me{fill:var(--accent)}
 </section>
 
 <section id="s5">
-<h2>5. The harness arena</h2>
-<p class="note-hint">This section also has its own page: <a href="../arena.html">the harness arena</a>.</p>
-<p class="q">How do other setups compare, and what's become standard?</p>
+<h2>4. The harness arena</h2>
+<p class="p-test">This section also has its own page: <a href="../arena.html">the harness arena</a>.</p>
+<p class="p-lab">How do other setups compare, and what's become standard?</p>
 <p>A spec sheet doesn't tell you how a car drives. It does tell you what's missing.</p>
 <p>I think of this as an arena, not a ranking. New harnesses enter it. Techniques that several harnesses share get compared side by side. And some techniques stop being special: rules files like <code>AGENTS.md</code>, worktrees and skills are close to standard now, so I mark them that way. The arena holds two views: the tier list below, and my own radar in "How we composed ours".</p>
 <p><strong>How often it runs:</strong> it isn't scheduled yet. The tier list ran once, on 27 October. The radar was drawn on 17 October and refreshed for this post.</p>
@@ -206,7 +269,7 @@ svg .arrowhead.me{fill:var(--accent)}
 <p>Two honest caveats. "Our composite" includes Kun Chen's tools, so it inherits most of his rows; what it adds is the folder map, a goals layer, and one rules file shared by several tools. And Troupe is a design, not shipped software, so its "has" means "designed".</p>
 
 <h3 id="s5-types">Harness types</h3>
-<p>The tier list ranks setups. It doesn't say what <em>kind</em> each one is. Here they are grouped by the four types from section 4, plus one that sits off that line. This grouping is my reading.</p>
+<p>The tier list ranks setups. It doesn't say what <em>kind</em> each one is. Here they are grouped by the four types from section 3, plus one that sits off that line. This grouping is my reading.</p>
 <table id="types-table">
 <tr><th>Type</th><th>What steers the agent</th><th>Setups</th></tr>
 <tr><td><strong>Prompt-driven</strong></td><td>a chat and maybe one rules file; the model decides the rest</td><td>none in the list; it's where most people start</td></tr>
@@ -221,7 +284,7 @@ svg .arrowhead.me{fill:var(--accent)}
 <p>In a folder-controlled harness, the agent is steered mostly by where things are. There are still prompts, but they live inside files: a <code>CONTEXT.md</code> per stage, a numbered folder per step, a script next to the step that checks it. The folder is basically a GitHub repo.</p>
 <p><strong>ICM</strong> (Jake Van Clief's Interpretable Context Methodology) works this way. Numbered stage folders carry the order; each stage has a one-page contract of inputs, process and outputs; one agent reads the right files at the right time. My context folders follow it.</p>
 <p><strong>Vercel's d0</strong> is the other example. It's Vercel's internal agent that turns data questions into SQL. In <a href="https://vercel.com/blog/we-removed-80-percent-of-our-agents-tools">"We removed 80% of our agent's tools"</a> (Andrew Qu, 22 Dec 2025), the team says they replaced 17 specialised tools and heavy prompt engineering, and "stripped the agent down to a single tool: execute arbitrary bash commands". The agent (Claude Opus 4.5, per the post) reads their "Cube semantic layer as a directory of YAML, Markdown, and JSON files" with <code>grep</code>, <code>cat</code>, <code>find</code> and <code>ls</code>. On their five test queries, success went from 80% to 100%, runs got about 3.5 times faster, and token use fell 37%. They add that it "only worked because our semantic layer was already good documentation."</p>
-<p class="callout">What I haven't verified: the d0 numbers are Vercel's own, on five queries, and I haven't tried it. I haven't scored d0 on the twelve parts.</p>
+<p class="p-callout">What I haven't verified: the d0 numbers are Vercel's own, on five queries, and I haven't tried it. I haven't scored d0 on the twelve parts.</p>
 <p>Why is a folder more deterministic than a prompt?</p>
 <ul>
 <li><strong>Versioned.</strong> Every change to a file is a Git commit. You can see when a rule changed and undo it.</li>
@@ -236,31 +299,31 @@ svg .arrowhead.me{fill:var(--accent)}
 <p>"Our composite" scores 10 has and 2 different. Here is where each of the twelve parts comes from, and whether that part is now standard across the arena. "Now standard" is my reading of the 27 October report: <strong>yes</strong> if most setups have it, <strong>becoming</strong> if the big coding agents are adding it, <strong>no</strong> if it's still rare.</p>
 <table id="ours-table">
 <tr><th>Part</th><th>Where ours comes from</th><th>Mark</th><th>Now standard?</th></tr>
-<tr><td>Always-loaded context</td><td>a small base map, <code>AGENTS.md</code> (about 1.5k tokens), kept small the ICM way</td><td>has</td><td><span class="tag cpu">yes</span></td></tr>
-<tr><td>Rules / instructions</td><td>the map, plus a <code>CONTEXT.md</code> per room, plus each repo's <code>AGENTS.md</code>; a routing table says which room to read (ICM)</td><td>has</td><td><span class="tag cpu">yes</span></td></tr>
-<tr><td>Skills</td><td>Claude Code skills: descriptions always loaded, bodies on use</td><td>has</td><td><span class="tag cpu">yes</span></td></tr>
-<tr><td>Memory and decay</td><td>FirstMate's <code>/stow</code> with decay tiers (Kun Chen), session notes, second-brain notes</td><td>different</td><td><span class="tag gpu">no</span></td></tr>
-<tr><td>Hooks</td><td>Claude Code hooks, FirstMate's tool-call and turn-end guards, nightly launchd jobs</td><td>has</td><td><span class="tag me">becoming</span></td></tr>
-<tr><td>Isolation</td><td>treehouse worktrees, one per task (Kun Chen)</td><td>has</td><td><span class="tag me">becoming</span></td></tr>
-<tr><td>Orchestrator</td><td>FirstMate (Kun Chen)</td><td>has</td><td><span class="tag gpu">no</span></td></tr>
-<tr><td>Review gate before push</td><td>no-mistakes (Kun Chen), plus my structure tests and <code>chain-check</code></td><td>has</td><td><span class="tag gpu">no</span></td></tr>
-<tr><td>Human approval points</td><td>Lavish review pages and <code>backpass apply</code> (Kun Chen); my "drafts, not sends" and "ask before destructive" rules</td><td>has</td><td><span class="tag cpu">yes</span></td></tr>
-<tr><td>Self-improvement from failures</td><td>backpass (Kun Chen), plus the weekly corrections review</td><td>has</td><td><span class="tag gpu">no</span></td></tr>
-<tr><td>Sync across tools</td><td>one <code>AGENTS.md</code> linked into several agents (the AGENTS.md convention)</td><td>different</td><td><span class="tag gpu">no</span></td></tr>
-<tr><td>Goals layer</td><td>a private priorities file</td><td>has</td><td><span class="tag gpu">no</span></td></tr>
+<tr><td>Always-loaded context</td><td>a small base map, <code>AGENTS.md</code> (about 1.5k tokens), kept small the ICM way</td><td>has</td><td><span class="p-tag cpu">yes</span></td></tr>
+<tr><td>Rules / instructions</td><td>the map, plus a <code>CONTEXT.md</code> per room, plus each repo's <code>AGENTS.md</code>; a routing table says which room to read (ICM)</td><td>has</td><td><span class="p-tag cpu">yes</span></td></tr>
+<tr><td>Skills</td><td>Claude Code skills: descriptions always loaded, bodies on use</td><td>has</td><td><span class="p-tag cpu">yes</span></td></tr>
+<tr><td>Memory and decay</td><td>FirstMate's <code>/stow</code> with decay tiers (Kun Chen), session notes, second-brain notes</td><td>different</td><td><span class="p-tag gpu">no</span></td></tr>
+<tr><td>Hooks</td><td>Claude Code hooks, FirstMate's tool-call and turn-end guards, nightly launchd jobs</td><td>has</td><td><span class="p-tag me">becoming</span></td></tr>
+<tr><td>Isolation</td><td>treehouse worktrees, one per task (Kun Chen)</td><td>has</td><td><span class="p-tag me">becoming</span></td></tr>
+<tr><td>Orchestrator</td><td>FirstMate (Kun Chen)</td><td>has</td><td><span class="p-tag gpu">no</span></td></tr>
+<tr><td>Review gate before push</td><td>no-mistakes (Kun Chen), plus my structure tests and <code>chain-check</code></td><td>has</td><td><span class="p-tag gpu">no</span></td></tr>
+<tr><td>Human approval points</td><td>Lavish review pages and <code>backpass apply</code> (Kun Chen); my "drafts, not sends" and "ask before destructive" rules</td><td>has</td><td><span class="p-tag cpu">yes</span></td></tr>
+<tr><td>Self-improvement from failures</td><td>backpass (Kun Chen), plus the weekly corrections review</td><td>has</td><td><span class="p-tag gpu">no</span></td></tr>
+<tr><td>Sync across tools</td><td>one <code>AGENTS.md</code> linked into several agents (the AGENTS.md convention)</td><td>different</td><td><span class="p-tag gpu">no</span></td></tr>
+<tr><td>Goals layer</td><td>a private priorities file</td><td>has</td><td><span class="p-tag gpu">no</span></td></tr>
 </table>
 <p>So most of the machinery is Kun Chen's, the folder shape is ICM's, and the skills and hooks come with Claude Code. What's mine is the map that routes between them, the goals layer, and one rules file shared across tools.</p>
-<p class="test">Test: 10 rows say "has" and 2 say "different", matching the tier list. Sources are the "Our composite" column of the 27 October report.</p>
+<p class="p-test">Test: 10 rows say "has" and 2 say "different", matching the tier list. Sources are the "Our composite" column of the 27 October report.</p>
 
 <h4 id="s5-radar">My radar</h4>
 <p>The ring idea is borrowed from the <a href="https://www.thoughtworks.com/radar">Thoughtworks Technology Radar</a>: <strong>Adopt</strong> (use it), <strong>Trial</strong> (using it on real work), <strong>Assess</strong> (looking at it), <strong>Hold</strong> (stopped or parked). I drew my own on 17 October with 25 items in four quadrants: tools, skills, context and habits. Here it is refreshed to 2 November: the same 25 items, three moved, and five new ones.</p>
-<p class="callout">Every placement on this radar is a draft. The owner decides.</p>
+<p class="p-callout">Every placement on this radar is a draft. The owner decides.</p>
 <figure id="fig-radar">
 <svg viewBox="0 0 680 680" role="img" aria-labelledby="fig-radar-title">
 <title id="fig-radar-title">My factory radar on 2 November: 30 numbered items in four quadrants and four rings, Adopt in the middle and Hold at the edge</title>
 <g id="rd-rings"><title>Rings: Adopt, Trial, Assess, Hold</title>
 <circle class="ring" cx="340" cy="340" r="310"/><circle class="ring" cx="340" cy="340" r="250"/><circle class="ring" cx="340" cy="340" r="180"/><circle class="ring agent" cx="340" cy="340" r="110"/>
-<path class="edge" d="M340 30 V650 M30 340 H650" style="stroke:var(--line)"/>
+<path class="edge line" d="M340 30 V650 M30 340 H650"/>
 <text class="h" x="340" y="398" text-anchor="middle">ADOPT</text><text class="h" x="340" y="488" text-anchor="middle">TRIAL</text><text class="h" x="340" y="558" text-anchor="middle">ASSESS</text><text class="h" x="340" y="638" text-anchor="middle">HOLD</text></g>
 <g id="rd-quads"><title>Quadrants</title><text class="t" x="16" y="24">Tools</text><text class="t" x="664" y="24" text-anchor="end">Skills</text><text class="t" x="16" y="668">Context</text><text class="t" x="664" y="668" text-anchor="end">Habits</text></g>
 <a href="../brain/index.html#first-mate"><g><title>1 firstmate (dispatcher): Adopt</title><circle class="dot" cx="328" cy="271" r="10"/><text class="dn" x="328" y="275">1</text></g></a>
@@ -306,17 +369,17 @@ svg .arrowhead.me{fill:var(--accent)}
 <tr><td>4</td><td>lavish-axi pages: how I review drafts and plans</td><td>Adopt</td><td>same</td></tr>
 <tr><td>5</td><td>gnhf overnight loops: used less than the rest</td><td>Trial</td><td>same</td></tr>
 <tr><td>6</td><td>quota-axi: cost check before long runs</td><td>Trial</td><td>same</td></tr>
-<tr><td>7</td><td>Harness sensors: secret scan, plain-check hook, link check (section 10)</td><td>Trial</td><td><strong>new</strong>: the three sensors this post proposes, being built</td></tr>
+<tr><td>7</td><td>Harness sensors: secret scan, plain-check hook, link check (section 8)</td><td>Trial</td><td><strong>new</strong>: the three sensors this post proposes, being built</td></tr>
 <tr><td>8</td><td>Greptile-style test design: closed and paid; the gap is a free tool</td><td>Assess</td><td>same</td></tr>
 <tr><td>9</td><td>Daily links page</td><td>Hold</td><td>same</td></tr>
 <tr><td colspan="4"><strong>Skills</strong></td></tr>
-<tr><td>10</td><td>/grill-with-docs: adapted from Matt Pocock's grill-me and domain modelling (MIT)</td><td>Adopt</td><td>same; section 4 names it as an onboarding tool</td></tr>
+<tr><td>10</td><td>/grill-with-docs: adapted from Matt Pocock's grill-me and domain modelling (MIT)</td><td>Adopt</td><td>same; section 3 names it as an onboarding tool</td></tr>
 <tr><td>11</td><td>taste-check and plain-check: no-model checks on intent and plain words</td><td>Adopt</td><td><strong>moved</strong> from Trial: now a named check in the factory's review and learn stages, though not yet hook-wired</td></tr>
 <tr><td>12</td><td>backpass: proposes rule edits from transcripts; I approve</td><td>Adopt</td><td><strong>moved</strong> from Trial: runs every night from a launchd job</td></tr>
 <tr><td>13</td><td>Pocock's other skills: not installed, not compared yet</td><td>Assess</td><td>same</td></tr>
 <tr><td>14</td><td>Kun Chen's /vision: read and compared, not adopted</td><td>Assess</td><td>same</td></tr>
 <tr><td>15</td><td>Jake Van Clief's icm-architect: its questions feed the grill design</td><td>Assess</td><td>same</td></tr>
-<tr><td>16</td><td>"Introduce me to AI" onboarding mode (section 4)</td><td>Assess</td><td><strong>new</strong>: an idea, not built</td></tr>
+<tr><td>16</td><td>"Introduce me to AI" onboarding mode (section 3)</td><td>Assess</td><td><strong>new</strong>: an idea, not built</td></tr>
 <tr><td>17</td><td><a href="https://github.com/ChristopherKahler/paul">PAUL</a> (Plan-Apply-Unify Loop for Claude Code)</td><td>Assess</td><td><strong>new</strong>: found 2 Nov, not tried</td></tr>
 <tr><td>18</td><td>Claude animation skills, for short videos</td><td>Assess</td><td><strong>new</strong>: on the list to vet first</td></tr>
 <tr><td colspan="4"><strong>Context</strong></td></tr>
@@ -326,7 +389,7 @@ svg .arrowhead.me{fill:var(--accent)}
 <tr><td>22</td><td>Context sync (Drive and Claude): the phone sync test worked once</td><td>Trial</td><td>same</td></tr>
 <tr><td>23</td><td>Obsidian as planner: picked, not built</td><td>Assess</td><td>same</td></tr>
 <tr><td>24</td><td>HumanLayer ideas: frequent compaction, smart and dumb zones</td><td>Assess</td><td>same</td></tr>
-<tr><td>25</td><td><a href="https://vercel.com/blog/we-removed-80-percent-of-our-agents-tools">Vercel d0</a>: folder as harness (section 5)</td><td>Assess</td><td><strong>new</strong>: read Vercel's post, not tried</td></tr>
+<tr><td>25</td><td><a href="https://vercel.com/blog/we-removed-80-percent-of-our-agents-tools">Vercel d0</a>: folder as harness (section 4)</td><td>Assess</td><td><strong>new</strong>: read Vercel's post, not tried</td></tr>
 <tr><td colspan="4"><strong>Habits</strong></td></tr>
 <tr><td>26</td><td>Ordered stages (ICM): numbered folders, one task each, a check at the end</td><td>Adopt</td><td>same</td></tr>
 <tr><td>27</td><td>Secondmates: helper agents for marketing, product and finance</td><td>Trial</td><td>same</td></tr>
@@ -342,13 +405,13 @@ svg .arrowhead.me{fill:var(--accent)}
 <tr><td>R6</td><td><a href="https://daemon.danielmiessler.com">Daemon</a></td><td>Assess</td><td><strong>new</strong>: good ideas (expiring fields, privacy gate). It has no licence, so don't copy the code</td></tr>
 <tr><td>R7</td><td><a href="https://github.com/danielmiessler/Substrate">Substrate</a></td><td>Hold</td><td><strong>new</strong>: a public-knowledge project, not our problem space</td></tr>
 </table>
-<p class="test">Test: items 1 to 6, 8 to 15, 19 to 24 and 26 to 30 are the 25 from the 17 October radar. Items 7, 16, 17, 18 and 25 are new. Items 11, 12 and 21 moved. Rows R1 to R7 are seven more new items from the Miessler review. The radar figure does not plot them yet.</p>
+<p class="p-test">Test: items 1 to 6, 8 to 15, 19 to 24 and 26 to 30 are the 25 from the 17 October radar. Items 7, 16, 17, 18 and 25 are new. Items 11, 12 and 21 moved. Rows R1 to R7 are seven more new items from the Miessler review. The radar figure does not plot them yet.</p>
 <p><strong>Outside comparison.</strong> <a href="https://aiharnesses.ai">aiharnesses.ai</a> (matrix at <a href="https://aiharnesses.ai/matrix">aiharnesses.ai/matrix</a>, read 2 Nov 2026) compares six harnesses on 17 feature rows. I'm adopting its rule for this arena. Every cell carries one source URL and a read date. A cell the source doesn't answer says "unknown", not a guess. It also warns that scores across different product shapes aren't meaningful.</p>
 <p>I read it through a page summariser, so its figures are close readings, and I'm not reusing its data (no terms seen). I haven't applied the rule to the 27 October tier list yet, so its "guess" column stays as it was. The tier list shows LifeOS as "not scored yet", as it does Vercel d0.</p>
 </section>
 
 <section id="s6">
-<h2>6. My setup on that map</h2>
+<h2>5. My setup on that map</h2>
 <p>I went through the real files rather than my memory of them. Here is what exists today.</p>
 
 <figure id="fig-harness">
@@ -370,7 +433,7 @@ svg .arrowhead.me{fill:var(--accent)}
 <g id="fig-sensors-h"><title>Sensors: feedback, run after the agent acts</title><text class="h" x="556" y="104" text-anchor="middle">SENSORS · after</text></g>
 <g id="fig-s-cpu"><title>Sensors that are scripts: tool-call and turn-end hooks, merge and teardown refusals, lint and tests</title><rect class="box cpu" x="456" y="114" width="200" height="86" rx="8"/><text class="t" x="556" y="136" text-anchor="middle">Scripts</text><text class="s" x="556" y="156" text-anchor="middle">tool-call + turn-end hooks</text><text class="s" x="556" y="172" text-anchor="middle">merge / teardown refusals</text><text class="s" x="556" y="188" text-anchor="middle">lint, tests, plain-check*</text></g>
 <g id="fig-s-gpu"><title>Sensors that are model judgement: the no-mistakes review agent, browser look-overs, the privacy read</title><rect class="box gpu" x="456" y="212" width="200" height="86" rx="8"/><text class="t" x="556" y="234" text-anchor="middle">Model judgement</text><text class="s" x="556" y="254" text-anchor="middle">no-mistakes review agent</text><text class="s" x="556" y="270" text-anchor="middle">browser look-over*</text><text class="s" x="556" y="286" text-anchor="middle">privacy read*</text></g>
-<g id="fig-path"><title>Where sensors sit on the path to production</title><text class="h" x="340" y="356" text-anchor="middle">PLACED ALONG THE PATH TO PRODUCTION · SECTION 7</text></g>
+<g id="fig-path"><title>Where sensors sit on the path to production</title><text class="h" x="340" y="356" text-anchor="middle">PLACED ALONG THE PATH TO PRODUCTION · SECTION 6</text></g>
 <g id="fig-legend"><title>Legend</title><rect class="box cpu" x="24" y="404" width="16" height="16" rx="3"/><text class="s" x="48" y="417">CPU: a script, same answer every time</text><rect class="box gpu" x="300" y="404" width="16" height="16" rx="3"/><text class="s" x="324" y="417">GPU: a model's judgement</text><text class="s" x="24" y="448">* runs only when an agent decides to run it</text></g>
 </svg>
 <figcaption>My drawing of Boeckeler and Ford's guides-and-sensors idea, filled in with my own controls.</figcaption>
@@ -378,31 +441,31 @@ svg .arrowhead.me{fill:var(--accent)}
 
 <table id="s6-table">
 <tr><th>Control</th><th>Kind</th><th>Runs on</th><th>Runs when</th></tr>
-<tr id="r-base"><td>Base rules file every agent loads (<code>AGENTS.md</code>)</td><td>guide</td><td><span class="tag gpu">GPU</span></td><td>every session</td></tr>
-<tr id="r-fm"><td>FirstMate's own <code>AGENTS.md</code> (434 lines) and 29 skills</td><td>guide</td><td><span class="tag gpu">GPU</span></td><td>every session / on demand</td></tr>
-<tr id="r-room"><td>Blog room <code>CONTEXT.md</code>, <code>voice.md</code></td><td>guide</td><td><span class="tag gpu">GPU</span></td><td>when writing a post</td></tr>
-<tr id="r-brief"><td><code>fm-brief.sh</code>: scaffolds every worker brief with the same rules and done-definition</td><td>guide</td><td><span class="tag cpu">CPU</span></td><td>every dispatch</td></tr>
-<tr id="r-spawn"><td><code>fm-spawn.sh</code>: refuses to start without a delivery mode; puts the work in a throwaway worktree</td><td>guide</td><td><span class="tag cpu">CPU</span></td><td>every dispatch</td></tr>
-<tr id="r-axi"><td>AXI command-line tools (<code>gh-axi</code>, <code>chrome-devtools-axi</code>) instead of heavy tool schemas</td><td>guide</td><td><span class="tag cpu">CPU</span></td><td>every GitHub or browser step</td></tr>
-<tr id="r-hooks"><td><code>cd</code> and delegation checks (PreToolUse hooks)</td><td>sensor</td><td><span class="tag cpu">CPU</span></td><td>before every tool call</td></tr>
-<tr id="r-turnend"><td>Turn-end guard (Stop hook): no ending a turn with supervision down</td><td>sensor</td><td><span class="tag cpu">CPU</span></td><td>every turn end</td></tr>
-<tr id="r-merge"><td><code>fm-pr-merge.sh</code>, <code>fm-teardown.sh</code>: refuse a red PR, an unproved merge, or unlanded work</td><td>sensor</td><td><span class="tag cpu">CPU</span></td><td>at merge and cleanup</td></tr>
-<tr id="r-lint"><td><code>fm-lint.sh</code> (pinned ShellCheck), context structure tests in CI</td><td>sensor</td><td><span class="tag cpu">CPU</span></td><td>on push</td></tr>
-<tr id="r-nm"><td>no-mistakes pre-push gate: review, fix, test, lint, docs</td><td>sensor</td><td><span class="tag gpu">GPU</span> review agent + <span class="tag cpu">CPU</span> tests, lint</td><td>before every push</td></tr>
-<tr id="r-plain" class="half"><td><code>plain-check</code> (plain-English rules R1 to R9), <code>taste-check</code></td><td>sensor</td><td><span class="tag cpu">CPU</span></td><td><strong>only when an agent runs it</strong></td></tr>
-<tr id="r-browser" class="half"><td>Browser check with <code>chrome-devtools-axi</code></td><td>sensor</td><td><span class="tag cpu">CPU</span> to look, <span class="tag gpu">GPU</span> to judge</td><td><strong>only when an agent runs it</strong></td></tr>
+<tr id="r-base"><td>Base rules file every agent loads (<code>AGENTS.md</code>)</td><td>guide</td><td><span class="p-tag gpu">GPU</span></td><td>every session</td></tr>
+<tr id="r-fm"><td>FirstMate's own <code>AGENTS.md</code> (434 lines) and 29 skills</td><td>guide</td><td><span class="p-tag gpu">GPU</span></td><td>every session / on demand</td></tr>
+<tr id="r-room"><td>Blog room <code>CONTEXT.md</code>, <code>voice.md</code></td><td>guide</td><td><span class="p-tag gpu">GPU</span></td><td>when writing a post</td></tr>
+<tr id="r-brief"><td><code>fm-brief.sh</code>: scaffolds every worker brief with the same rules and done-definition</td><td>guide</td><td><span class="p-tag cpu">CPU</span></td><td>every dispatch</td></tr>
+<tr id="r-spawn"><td><code>fm-spawn.sh</code>: refuses to start without a delivery mode; puts the work in a throwaway worktree</td><td>guide</td><td><span class="p-tag cpu">CPU</span></td><td>every dispatch</td></tr>
+<tr id="r-axi"><td>AXI command-line tools (<code>gh-axi</code>, <code>chrome-devtools-axi</code>) instead of heavy tool schemas</td><td>guide</td><td><span class="p-tag cpu">CPU</span></td><td>every GitHub or browser step</td></tr>
+<tr id="r-hooks"><td><code>cd</code> and delegation checks (PreToolUse hooks)</td><td>sensor</td><td><span class="p-tag cpu">CPU</span></td><td>before every tool call</td></tr>
+<tr id="r-turnend"><td>Turn-end guard (Stop hook): no ending a turn with supervision down</td><td>sensor</td><td><span class="p-tag cpu">CPU</span></td><td>every turn end</td></tr>
+<tr id="r-merge"><td><code>fm-pr-merge.sh</code>, <code>fm-teardown.sh</code>: refuse a red PR, an unproved merge, or unlanded work</td><td>sensor</td><td><span class="p-tag cpu">CPU</span></td><td>at merge and cleanup</td></tr>
+<tr id="r-lint"><td><code>fm-lint.sh</code> (pinned ShellCheck), context structure tests in CI</td><td>sensor</td><td><span class="p-tag cpu">CPU</span></td><td>on push</td></tr>
+<tr id="r-nm"><td>no-mistakes pre-push gate: review, fix, test, lint, docs</td><td>sensor</td><td><span class="p-tag gpu">GPU</span> review agent + <span class="p-tag cpu">CPU</span> tests, lint</td><td>before every push</td></tr>
+<tr id="r-plain" class="half"><td><code>plain-check</code> (plain-English rules R1 to R9), <code>taste-check</code></td><td>sensor</td><td><span class="p-tag cpu">CPU</span></td><td><strong>only when an agent runs it</strong></td></tr>
+<tr id="r-browser" class="half"><td>Browser check with <code>chrome-devtools-axi</code></td><td>sensor</td><td><span class="p-tag cpu">CPU</span> to look, <span class="p-tag gpu">GPU</span> to judge</td><td><strong>only when an agent runs it</strong></td></tr>
 <tr id="r-privacy" class="half"><td>Privacy scan before a public post</td><td>sensor</td><td>a grep, but written and counted by the agent</td><td><strong>only when the brief asks</strong></td></tr>
-<tr id="r-human"><td>Lavish review, weekly corrections review, nightly backpass</td><td>steering</td><td><span class="tag me">me</span></td><td>every draft / weekly / nightly</td></tr>
+<tr id="r-human"><td>Lavish review, weekly corrections review, nightly backpass</td><td>steering</td><td><span class="p-tag me">me</span></td><td>every draft / weekly / nightly</td></tr>
 </table>
-<p class="test">Test: in FirstMate, <code>ls .agents/skills | wc -l</code> prints 29 and <code>wc -l AGENTS.md</code> prints 434 on my copy; the hooks are listed in <code>.claude/settings.json</code>.</p>
+<p class="p-test">Test: in FirstMate, <code>ls .agents/skills | wc -l</code> prints 29 and <code>wc -l AGENTS.md</code> prints 434 on my copy; the hooks are listed in <code>.claude/settings.json</code>.</p>
 </section>
 
 <section id="s7-path">
-<h2>7. Where my checks sit on the path to production</h2>
-<p class="q">When does each check fire?</p>
+<h2>6. Where my checks sit on the path to production</h2>
+<p class="p-lab">When does each check fire?</p>
 <p>A typo caught while you write costs a keystroke. The same typo caught after printing costs a reprint.</p>
 <p>The talk places guides and sensors along the path a change travels: the coding session, integration, the CI pipeline, then things that run repeatedly (drift detection) and in production (runtime feedback). Early checks are "cheap and quick to run, cheap to fix". Late ones are expensive to run, expensive to fix, and need processes around them.</p>
-<p class="note-hint">The talk's slide: "Strategic placement of guides and sensors across the path to production." See <a href="https://www.youtube.com/watch?v=uLWOLmeHOSE">Harness engineering beyond skills</a> (Thoughtworks).</p>
+<p class="p-test">The talk's slide: "Strategic placement of guides and sensors across the path to production." See <a href="https://www.youtube.com/watch?v=uLWOLmeHOSE">Harness engineering beyond skills</a> (Thoughtworks).</p>
 <p>Here are my real checks on that path.</p>
 
 <figure id="fig-path2">
@@ -442,13 +505,13 @@ svg .arrowhead.me{fill:var(--accent)}
 <figcaption>My own drawing, after a slide in the Thoughtworks talk, filled in with my checks.</figcaption>
 </figure>
 
-<p>Two things stand out. Most of my checks sit in the coding session and at integration, which is the cheap end. That's good. But the starred ones in the session column are the "half sensors" from section 9: cheap to run, yet only when an agent remembers.</p>
+<p>Two things stand out. Most of my checks sit in the coding session and at integration, which is the cheap end. That's good. But the starred ones in the session column are the "half sensors" from section 7: cheap to run, yet only when an agent remembers.</p>
 <p>The other end is thin. The scheduled column watches my rules and my setup, not the work itself. And in production there's nothing: no check that a published page still renders, or that a link I shipped still opens.</p>
-<p class="test">Test: firstmate's <code>.github/workflows/ci.yml</code> runs <code>bin/fm-test-run.sh --check-coverage</code>; the dotfiles <code>context-tests.yml</code> runs on pushes that touch <code>context/</code>; harness-check (weekdays), backpass (nightly) and the routine scan (daily) are launchd agents in <code>home.nix</code>; the weekly corrections review I run by hand.</p>
+<p class="p-test">Test: firstmate's <code>.github/workflows/ci.yml</code> runs <code>bin/fm-test-run.sh --check-coverage</code>; the dotfiles <code>context-tests.yml</code> runs on pushes that touch <code>context/</code>; harness-check (weekdays), backpass (nightly) and the routine scan (daily) are launchd agents in <code>home.nix</code>; the weekly corrections review I run by hand.</p>
 </section>
 
 <section id="s8">
-<h2>8. Where I'm still begging</h2>
+<h2>7. Where I'm still begging</h2>
 <p>The talk has a good phrase for most rules files: "a lot of begging. You should always do this and you should never do that."</p>
 <p>Mine has plenty. Each of these is a rule with no sensor behind it:</p>
 <ul>
@@ -458,11 +521,9 @@ svg .arrowhead.me{fill:var(--accent)}
 <li id="beg-links">"Before you give a link, open it." <a href="rules-from-chat-history.html">My last post</a> found this broken five times in a week.</li>
 </ul>
 <p>This is the "battle of the markdown files". When a rule keeps breaking, more wording rarely helps. A check might.</p>
-</section>
 
-<section id="s9">
-<h2>9. Half a sensor</h2>
-<p class="q">The lesson from the orange rows</p>
+<h3 id="s9">Half a sensor</h3>
+<p class="p-lab">The lesson from the orange rows</p>
 <p>A smoke alarm that only works when you press the test button isn't a smoke alarm.</p>
 <p>The orange rows in the table taught me the most. <code>plain-check</code> is a real CPU sensor: no model, no network, the same answer every time. But it only runs when an agent decides to run it. So the <em>decision</em> is still GPU. The script is deterministic; whether it fires is not.</p>
 <p>Compare the <code>cd</code> check. It's a hook. The agent can't forget it, because the agent never calls it. That's the difference between a sensor and a tool that happens to check things.</p>
@@ -472,43 +533,59 @@ rule in markdown    -&gt; no check at all           (begging)</pre>
 </section>
 
 <section id="s10">
-<h2>10. Three sensors to add next</h2>
+<h2>8. Three sensors to add next</h2>
 <p>Each one moves a rule I'm currently begging for onto the CPU, and wires it so it can't be skipped.</p>
 <ol>
 <li id="next-secrets"><strong>A secret and privacy scan at commit time.</strong> A pre-commit hook: a secret scanner like gitleaks (the talk's own example) plus my own pattern list for home paths, emails and private names. Today the privacy scan is a grep the agent writes and counts itself.</li>
 <li id="next-plain"><strong>plain-check on every draft, automatically.</strong> Run it when a file under <code>drafts/</code> is written or committed, and hand back only the failures. The talk goes further with a "sensors sidecar": a small process that re-runs tests, lint, type checks and more every 10 to 60 seconds and keeps a status table the agent can read. It calls this kind of output an "agent optimized view", and custom lint messages "positive prompt injection".</li>
 <li id="next-links"><strong>A link check before a report goes out.</strong> A script that opens every URL in a final message and fails on any that don't load, or that only load on this machine. This is the rule that already broke five times.</li>
 </ol>
-<p class="callout">My guess: the third is the hardest, because "the final message" isn't a file. It may need a turn-end hook rather than a commit hook.</p>
-<p class="callout"><strong>Update, 2 November:</strong> all three are now in place: a secret scan at commit, a plain-language check on drafts, and a link check before replies.</p>
+<p class="p-callout">My guess: the third is the hardest, because "the final message" isn't a file. It may need a turn-end hook rather than a commit hook.</p>
+<p class="p-callout"><strong>Update, 2 November:</strong> all three are now in place: a secret scan at commit, a plain-language check on drafts, and a link check before replies.</p>
 </section>
 
 <section id="s11">
-<h2>11. The goal is continuous delivery</h2>
+<h2>9. The goal is continuous delivery</h2>
 <p>The end goal isn't a clever harness. It's the old one:</p>
 <blockquote id="s11-cd">"Continuous Delivery is the ability to get changes of all types ... into production, or into the hands of users, safely and quickly in a sustainable way."</blockquote>
 <p>Guides make the first attempt better. Sensors catch what the guides missed, before I do. The human loop turns repeated mistakes into new guides and sensors. Moving checks from GPU to CPU makes each step cheaper and more reliable, and that's where the speed comes from.</p>
 </section>
 
+<section id="s-why">
+<h2>Why it matters</h2>
+<p>A smoke alarm is a promise that you do not have to stand watch. Checks that run by themselves do the same for your review time, and for the record of what was caught.</p>
+<p>Writing a rule down is note-taking, and turning a rule that keeps breaking into a script is a way to say what you really mean. The agent then works inside your limits without being reminded. I also think a short list of working checks is a safer start for a newcomer than a long list of rules: they can trust what is checked, and go on to share which checks helped, for the bigger good.</p>
+</section>
+
 <section id="s12">
-<h2>12. What's still rough</h2>
+<h2>10. What's still rough</h2>
 <ul>
-<li>The table is my reading of my own setup. Some rows could fairly go in two columns. The same goes for the harness types in section 5.</li>
+<li>The table is my reading of my own setup. Some rows could fairly go in two columns. The same goes for the harness types in section 4.</li>
 <li>The tier scores are from 27 October, read from docs and papers, not tested. All twelve parts count the same.</li>
 <li>I haven't measured anything. The talk ran the same task with a small model, no guides, from a clean "bill of health", once with sensors and once without. With sensors everything stayed green; without, lint and structure went red and coverage slipped. I haven't run anything like that.</li>
 <li>Green isn't proof either. The talk shows a file with 100% statement coverage, no unit tests of its own, and 13 survivors under mutation testing. My CI checks coverage; nothing checks test quality.</li>
 <li>No-mistakes mixes CPU and GPU steps in one gate. I don't yet know which of its catches came from which.</li>
 <li>The talk's open question applies here too: "how many guides can you actually just delete" once a sensor covers them? I don't know yet.</li>
 </ul>
-<p class="note-hint">The talk shows the end state of that experiment as two dashboards, one with sensors and one without. See <a href="https://www.youtube.com/watch?v=uLWOLmeHOSE">Harness engineering beyond skills</a> (Thoughtworks).</p>
+<p class="p-test">The talk shows the end state of that experiment as two dashboards, one with sensors and one without. See <a href="https://www.youtube.com/watch?v=uLWOLmeHOSE">Harness engineering beyond skills</a> (Thoughtworks).</p>
+</section>
+
+<section id="s-try">
+<h2>Try it yourself</h2>
+<ol>
+<li>Pick one rule you keep repeating to your agent.</li>
+<li>Ask whether a script could check it, with no model.</li>
+<li>Wire that script to run by itself, so the agent cannot skip it.</li>
+</ol>
+<p>Start small. One rule and one script is enough to begin.</p>
 </section>
 
 <section id="credits">
 <h2>Credits</h2>
 <ul>
 <li><strong>Birgitta Boeckeler and Chris Ford</strong> (Thoughtworks): the talk <a href="https://www.youtube.com/watch?v=uLWOLmeHOSE">"Harness engineering beyond skills: Using sensors to keep your coding agent in check"</a> (April 2026), and Birgitta's article <a href="https://martinfowler.com/articles/harness-engineering.html">Harness engineering for coding agent users</a>. The guides-and-sensors frame, CPU vs GPU, the path to production, the sensors sidecar and experiment, and the quotes from them are theirs. Their slides are not reproduced here; watch the talk for them. The diagrams are my own drawings.</li>
-<li><strong>Andrew Qu and Vercel</strong>: <a href="https://vercel.com/blog/we-removed-80-percent-of-our-agents-tools">"We removed 80% of our agent's tools"</a>, the d0 story and quotes in section 5.</li>
-<li><a href="https://continuousdelivery.com/">continuousdelivery.com</a>: the definition in section 11.</li>
+<li><strong>Andrew Qu and Vercel</strong>: <a href="https://vercel.com/blog/we-removed-80-percent-of-our-agents-tools">"We removed 80% of our agent's tools"</a>, the d0 story and quotes in section 4.</li>
+<li><a href="https://continuousdelivery.com/">continuousdelivery.com</a>: the definition in section 9.</li>
 <li><strong>Thoughtworks</strong>: the <a href="https://www.thoughtworks.com/radar">Technology Radar</a>, whose Adopt, Trial, Assess and Hold rings my radar borrows.</li>
 <li><strong>Kun Chen</strong>: <a href="https://github.com/kunchenguid/firstmate">FirstMate</a>, <a href="https://github.com/kunchenguid/no-mistakes">no-mistakes</a>, the AXI tools, <a href="https://github.com/kunchenguid/backpass">backpass</a> and <a href="https://github.com/kunchenguid/lavish-axi">Lavish</a>.</li>
 <li><strong>Jake Van Clief</strong>: the <a href="https://arxiv.org/abs/2603.16021">Interpretable Context Methodology</a>, the folder-as-harness structure my context folders follow.</li>
@@ -516,10 +593,10 @@ rule in markdown    -&gt; no check at all           (begging)</pre>
 </ul>
 </section>
 
-
+<nav class="p-pager" aria-label="Previous and next"><a href="how-it-fits-together.html" rel="prev">← How one person runs a crew of AI agents, safely</a><span></span></nav>
 </article>
-<nav class="pager" aria-label="Previous and next"><span></span><a href="rules-from-chat-history.html" rel="next">Your corrections are your next rules →</a></nav>
+
 </main>
-<footer class="k-foot"><p>by Ashish Raina – program manager turned AI-crew operator</p><p><a href="../about.html">About</a> · <a href="../index.html">Chat with EA-bot</a> · <a href="../index.html#pages">All pages</a> · <a href="https://github.com/codeami">GitHub</a></p></footer>
+<footer class="p-foot"><p>by Ashish Raina – program manager turned AI-crew operator</p><ul><li><a href="../about.html">About</a></li><li><a href="../index.html">Chat with EA-bot</a></li><li><a href="../index.html#pages">All pages</a></li><li><a href="https://github.com/codeami">GitHub</a></li></ul></footer>
 </body>
 </html>

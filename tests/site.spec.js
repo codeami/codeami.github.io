@@ -247,6 +247,91 @@ test('panel post: the folder diagram is a labelled SVG that fits the width and s
   expect(spill, 'label runs past its folder').toEqual([]);
 });
 
+// ---- the five public posts: one panel shape, grouped by series ----
+// The page loop above already takes a phone (390) and a desktop (1280) screenshot of each; these checks pin the structure.
+const convertedPosts = [
+  { slug: 'everything-is-a-file', series: 'Signal from noise', panels: 8 },
+  { slug: 'second-brain-page', series: 'Signal from noise', panels: 7 },
+  { slug: 'rules-from-chat-history', series: 'Customize everything, including yourself', panels: 7 },
+  { slug: 'how-it-fits-together', series: 'Safe AI crews', panels: 7 },
+  { slug: 'guides-and-sensors', series: 'Safe AI crews', panels: 6 },
+];
+
+test('converted posts: each one is a covered page, public in share.json and listed on the blog index under its series', async ({ page }) => {
+  await page.goto('/ai-life-os/blog/index.html');
+  const groups = await page.$$eval('.p-group', (gs) => gs.map((g) => ({ title: g.querySelector('h2').textContent, hrefs: [...g.querySelectorAll('.p-post h3 a')].map((a) => a.getAttribute('href')), kickers: [...g.querySelectorAll('.p-post .p-kicker')].map((k) => k.textContent) })));
+  for (const { slug, series } of convertedPosts) {
+    expect(pages, `${slug} gets a screenshot at both widths`).toContain(`ai-life-os/blog/${slug}.html`);
+    expect(share.find((r) => r.path === `ai-life-os/blog/${slug}.html`)?.level, `${slug} level`).toBe('public');
+    const group = groups.find((g) => g.hrefs.includes(`${slug}.html`));
+    expect(group?.title, `${slug} group`).toBe(series);
+    expect(group.kickers.every((k) => k === series), 'card kicker is the series').toBe(true);
+  }
+  expect(groups.map((g) => g.title), 'one group per series, no empty group').toEqual(['Signal from noise', 'Customize everything, including yourself', 'Safe AI crews']);
+  expect(await page.locator('.p-posts a[href*="progress-three-weeks"], .p-posts a[href*="trading"]').count(), 'retired and draft posts stay off the index').toBe(0);
+});
+
+for (const { slug, series, panels: expected } of convertedPosts) {
+  test(`converted post ${slug}: series label, problem first, why it matters last, panels capped, one try-it box, no inline style, no private links`, async ({ page }) => {
+    const file = `ai-life-os/blog/${slug}.html`;
+    await page.goto(`/${file}`);
+    await expect(page.locator('html')).toHaveAttribute('data-skin', 'calm');
+    await expect(page.locator('.p-head .p-kicker span')).toHaveText(series);
+    await expect(page.locator('.p-title .p-hl')).toHaveCount(1);
+    await expect(page.locator('.p-sub')).toBeVisible();
+    await expect(page.locator('.p-byline time')).toHaveCount(1);
+    expect(await page.locator('.p-tags li').count()).toBeGreaterThan(0);
+    const side = await page.locator('.p-side > *').count();
+    expect(side).toBeGreaterThanOrEqual(1);
+    expect(side).toBeLessThanOrEqual(3);
+
+    const panels = page.locator('.p-grid > .p-panel');
+    expect(await panels.count(), 'numbered panels').toBe(expected);
+    if (slug !== 'everything-is-a-file') expect(expected, 'at most 7 numbered panels').toBeLessThanOrEqual(7);
+    await expect(panels.locator('.p-principle')).toHaveCount(expected);
+    await expect(page.locator('.p-panel .p-num')).toHaveText(Array.from({ length: expected }, (_, i) => String(i + 1).padStart(2, '0')));
+    await expect(page.locator('.p-panel h2').first()).toHaveText('The problem');
+    await expect(page.locator('.p-panel h2').nth(1)).toContainText('The idea');
+    await expect(page.locator('.p-panel h2').last()).toHaveText('Why it matters');
+    await expect(page.locator('#p1 .p-box'), 'four problems').toHaveCount(4);
+    await expect(page.locator('.p-panel:last-child .p-box:has(h3:text-is("Try it yourself")) .p-steps li'), 'try it yourself: three steps').toHaveCount(3);
+
+    const targets = await page.$$eval('.p-index a', (as) => as.map((a) => a.getAttribute('href')));
+    expect(targets.length).toBe(expected);
+    for (const t of [...targets, ...(await page.$$eval('.p-more', (as) => as.map((a) => a.getAttribute('href'))))]) {
+      await expect(page.locator(t), t).toHaveCount(1);
+    }
+
+    // the full post opens with the problem and ends with why it matters, (what is still rough,) try it yourself, credits
+    const heads = await page.$$eval('.p-full > section > h2', (hs) => hs.map((h) => h.textContent.replace(/^\d+\.\s*/, '')));
+    expect(heads[0]).toBe('The problem');
+    const at = (prefix) => heads.findIndex((h) => h.startsWith(prefix));
+    expect(at('Why it matters'), 'why it matters follows the argument').toBeGreaterThan(0);
+    expect(at('Why it matters')).toBeLessThan(at('Credits'));
+    if (slug !== 'everything-is-a-file') {
+      // the pilot keeps "Try it yourself" inside "Why it matters" and has no "What's still rough" section;
+      // the second-brain post folds its rough edges into "What's next"
+      const rough = heads.findIndex((h) => /^What's (still rough|next)/.test(h));
+      expect(at('Why it matters')).toBeLessThan(rough);
+      expect(rough).toBeLessThan(at('Try it yourself'));
+      expect(at('Try it yourself')).toBeLessThan(at('Credits'));
+    }
+
+    expect(await page.locator('[style], style').count(), 'no inline style').toBe(0);
+    expect(await page.locator('script[src*="article.js"], script[src*="hud.js"]').count(), 'Calm pages load no frame script').toBe(0);
+    for (const svg of await page.locator('.p-full svg').all()) {
+      await expect(svg).toHaveAttribute('role', 'img');
+      await expect(svg.locator('title').first()).not.toBeEmpty();
+      const box = await svg.boundingBox();
+      expect(box.x + box.width, 'figure fits the width').toBeLessThanOrEqual(page.viewportSize().width);
+    }
+
+    // public site: no local or tailnet addresses, no home paths, no private repo links
+    const html = readFileSync(join(root, file), 'utf8');
+    expect(html.match(/127\.0\.0\.1|localhost|\.ts\.net|tailnet|\/Users\/|github\.com\/codeami\/(?!codeami\.github\.io)/gi), 'private or local address').toBeNull();
+  });
+}
+
 // ---- the landing at / ----
 test('landing: eight steps with the fork, no sideways scroll, no console errors, no capture', async ({ page }) => {
   const problems = [];
