@@ -115,7 +115,7 @@
      "cite": {"label": "Matt Pocock's skills, with grill-me", "href": "https://github.com/mattpocock/skills"}},
     {"text": "Put together: life intent is your needs from lessons 1 and 2, written down. Project intent is one want, made precise. The life file helps you judge whether a project is worth doing at all."}
    ],
-   "read": {"label": "In AI, everything is a file (or a folder)", "href": "../blog/everything-is-a-file.html", "note": "Blog: your goals, context and rules written down once in plain folders, and read by every AI tool. About 12 minutes."},
+   "read": {"label": "Write it down once: a folder your AI can read", "href": "../blog/everything-is-a-file.html", "note": "Blog: your goals, context and rules written down once in plain folders, and read by every AI tool. About 12 minutes."},
    "more": [{"label": "TELOS: a template for your life intent file", "href": "https://github.com/danielmiessler/Telos"}],
    "check": {"q": "“Spend more evenings with my family” and “Fix the links on my site by Friday”. Which is which?",
     "options": ["Both are project intent", "The first is life intent; the second is project intent", "The first is project intent; the second is life intent"],

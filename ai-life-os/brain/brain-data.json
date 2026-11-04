@@ -835,7 +835,7 @@
        ],
        "links": [
         {
-         "label": "Post: everything is a file",
+         "label": "Post: Write it down once: a folder your AI can read",
          "href": "../blog/everything-is-a-file.html"
         }
        ],
@@ -1037,7 +1037,7 @@
        ],
        "links": [
         {
-         "label": "Post: everything is a file",
+         "label": "Post: Write it down once: a folder your AI can read",
          "href": "../blog/everything-is-a-file.html"
         },
         {
@@ -1427,7 +1427,7 @@
      "files": [
       {
        "id": "everything-is-a-file",
-       "n": "In AI, everything is a file (or a folder)",
+       "n": "Write it down once: a folder your AI can read",
        "line": "post · 2 Nov 2026",
        "body": [
         "Your goals, your context and your rules, written down once in plain folders and read by every AI tool you use"
@@ -1949,7 +1949,7 @@
  ],
  "reading": [
   {
-   "title": "In AI, everything is a file",
+   "title": "Write it down once: a folder your AI can read",
    "url": "../blog/everything-is-a-file.html",
    "line": "Context · Blog"
   },

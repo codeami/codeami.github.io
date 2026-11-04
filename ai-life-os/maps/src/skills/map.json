@@ -317,7 +317,7 @@
   "instruction-files": {"name": "instruction-files", "trigger": "what the next session reads",
    "when": ["At the start of every session → [[instruction-files]]"],
    "whatItIs": "One plain-text rules file that every agent reads, plus per-project files. A reviewed rule lands here. **This closes the loop:** the next task's Intake starts from these files.",
-   "next": ["project-management"], "sources": [{"label": "Post: everything is a file", "url": "../blog/everything-is-a-file.html"}]},
+   "next": ["project-management"], "sources": [{"label": "Post: Write it down once", "url": "../blog/everything-is-a-file.html"}]},
   "stow": {"name": "stow", "command": "/stow", "trigger": "save what was learned",
    "when": ["When the owner types ==/stow==, or before a context reset → [[stow]]"],
    "whatItIs": "An **upstream** skill. It sweeps the session for durable knowledge and files it.\n\n**Status: designed, not proven.** Nothing starts it before auto-compaction. It was not exercised recently.",

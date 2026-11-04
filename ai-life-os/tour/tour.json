@@ -210,7 +210,7 @@
           "One short rules file, the map, is read first by every helper. Notes from each session are saved, and the next session starts from them.",
           "Because it's all files, you can read exactly what each helper was told."
         ],
-        "see": { "label": "Post: everything is a file", "href": "blog/everything-is-a-file.html" },
+        "see": { "label": "Post: Write it down once", "href": "blog/everything-is-a-file.html" },
         "next": ["st-real", "memory"]
       },
       {
@@ -244,13 +244,13 @@
       {
         "id": "tour-ours", "folder": "tour", "title": "Use our way of keeping notes", "chip": "How do you keep notes?",
         "fact": "It's opinionated: one idea per note, a one-line description on each, a link from every new note to a neighbour, and nothing filed until you approve it.",
-        "see": { "label": "Post: everything is a file", "href": "blog/everything-is-a-file.html" },
+        "see": { "label": "Post: Write it down once", "href": "blog/everything-is-a-file.html" },
         "next": ["tour-build", "tour-learn", "index"]
       },
       {
         "id": "tour-build", "folder": "tour", "title": "Build your own second brain", "chip": "Help me build my own second brain.",
         "fact": "Start from scratch with plain files: three parts, then your first linked notes, then a review rhythm.",
-        "see": { "label": "Post: everything is a file", "href": "blog/everything-is-a-file.html" },
+        "see": { "label": "Post: Write it down once", "href": "blog/everything-is-a-file.html" },
         "next": ["tour-learn", "tour-ours", "brain"]
       },
       {
@@ -781,7 +781,7 @@
           "plain": "Make one folder with three parts: an inbox for raw notes, a notes folder for finished ideas, and one index page that lists them.",
           "tech": "inbox/, notes/ and INDEX.md. Plain markdown, one idea per file, a short kebab-case file name. The index has one line per note: a link and a one-line hook.",
           "prompt": "Help me set up a second brain in plain markdown files: an inbox, a notes folder and an index. Give me the folder layout and a template for one note.",
-          "see": { "label": "Post: everything is a file", "href": "blog/everything-is-a-file.html" }
+          "see": { "label": "Post: Write it down once", "href": "blog/everything-is-a-file.html" }
         },
         {
           "title": "Write your first linked notes",

@@ -229,14 +229,39 @@ test('panel post: header, index, side cards, numbered panels; columns follow the
   await expect(page.locator('.p-panel h2').first()).toHaveText('The problem');
   await expect(page.locator('.p-panel h2').nth(1)).toContainText('The idea');
   await expect(page.locator('.p-panel h2').last()).toHaveText('Why it matters');
-  await expect(page.locator('.p-head + .p-intro')).toHaveText('This simple file-and-folder method is good enough to start.');
-  await expect(page.locator('#p2')).toContainText('retrieval (RAG, a search index)');
-  await expect(page.locator('#p1 .p-box'), 'four problems').toHaveCount(4);
-  await expect(page.locator('#p8 .p-steps li'), 'try it yourself: three steps').toHaveCount(3);
+  await expect(page.locator('.p-head + .p-intro')).toContainText('Every chat with an AI starts from zero.');
+  await expect(page.locator('#p2'), 'the Unix origin is one short aside').toContainText('Unix');
+  await expect(page.locator('#p7')).toContainText('RAG');
+  await expect(page.locator('#p1 .p-box'), 'one problem and what it costs').toHaveCount(2);
+  await expect(page.locator('#p1')).toContainText('Every chat starts from zero');
+  await expect(page.locator('#p3 h2'), 'the first step comes early').toHaveText('Your first five minutes');
+  await expect(page.locator('#p3 .p-steps li'), 'first five minutes: four steps').toHaveCount(4);
+  await expect(page.locator('#p6 .p-steps li'), 'three habits').toHaveCount(3);
   const targets = await page.$$eval('.p-index a', (as) => as.map((a) => a.getAttribute('href')));
   expect(targets.length).toBe(8);
-  for (const t of [...targets, ...(await page.$$eval('.p-more', (as) => as.map((a) => a.getAttribute('href'))))]) {
+  const mores = await page.$$eval('.p-more', (as) => as.map((a) => ({ href: a.getAttribute('href'), text: a.textContent })));
+  expect(mores.length, 'one link to the full section per panel').toBe(8);
+  for (const { href, text } of mores) expect(text, 'link text says what it opens').not.toMatch(/section \d/i);
+  // each panel's link opens the full-post section that carries the panel's own subject
+  for (const [i, { href }] of mores.entries()) {
+    const sectionHead = (await page.locator(`${href} > h2`).textContent()).toLowerCase();
+    const panelHead = (await page.locator(`#p${i + 1} h2`).first().textContent()).toLowerCase();
+    expect(sectionHead.split(/\W+/).filter((w) => w.length > 3).some((w) => panelHead.includes(w)), `${href} matches panel ${i + 1}`).toBe(true);
+  }
+  for (const t of [...targets, ...mores.map((m) => m.href), '#p3']) {
     await expect(page.locator(t), t).toHaveCount(1);
+  }
+  // one analogy, the library; no self-undermining hedges; no unexplained insider words in the panels
+  const panelText = (await page.locator('.p-grid').innerText()).toLowerCase();
+  for (const word of ['kitchen', 'recipe', 'chef', 'tailor', 'my view, not a study', 'in my reading', 'good enough to start', 'i think']) {
+    expect(panelText, `panels do not say "${word}"`).not.toMatch(new RegExp(`\\b${word}\\b`));
+  }
+  for (const word of ['icm', 'backpass', 'kun chen', 'firstmate', 'dotfiles']) {
+    expect(panelText, `panels do not use the insider word "${word}"`).not.toMatch(new RegExp(`\\b${word}\\b`));
+  }
+  const bodyText = (await page.locator('main').innerText()).toLowerCase();
+  for (const word of ['kitchen', 'recipe', 'chef', 'tailor', 'my view, not a study', 'in my reading', 'good enough to start', 'i think']) {
+    expect(bodyText, `the post does not say "${word}"`).not.toMatch(new RegExp(`\\b${word}\\b`));
   }
   await expect(page.locator('.p-full .p-prose, .p-full.p-prose')).toHaveCount(1);
   const cols = await page.$eval('.p-grid', (g) => getComputedStyle(g).gridTemplateColumns.split(' ').length);
@@ -245,34 +270,37 @@ test('panel post: header, index, side cards, numbered panels; columns follow the
   expect(await page.locator('[style], style').count(), 'no inline style').toBe(0);
 });
 
-test('panel post: the folder diagram is a labelled SVG that fits the width and shows six folders of three files', async ({ page }) => {
+test('panel post: the library scene is a labelled SVG that fits the width, names all five parts, and every panel has a marker icon', async ({ page }) => {
   await page.goto('/ai-life-os/blog/everything-is-a-file.html');
   const svg = page.locator('.p-fig svg');
   await expect(svg).toHaveAttribute('role', 'img');
   await expect(svg.locator('title')).not.toBeEmpty();
   await expect(svg.locator('desc')).not.toBeEmpty();
-  await expect(svg.locator('.p-svg-folder')).toHaveCount(6);
-  await expect(svg.locator('text.p-svg-file')).toHaveCount(19);
+  // the five parts of the one analogy are written on the drawing
+  const labels = (await svg.locator('text').allTextContents()).join(' | ');
+  for (const part of ['The library', 'Filing cabinet', 'Card catalogue', 'Reading desk', 'Librarian']) expect(labels, part).toContain(part);
+  await expect(svg.locator('.p-svg-dot'), 'three numbered steps').toHaveCount(3);
   const box = await svg.boundingBox();
   const vw = page.viewportSize().width;
   expect(box.x, 'inside the page').toBeGreaterThanOrEqual(0);
   expect(box.x + box.width, 'inside the page').toBeLessThanOrEqual(vw);
-  // every label stays inside its folder: no text runs past the drawing
+  // every label stays inside the drawing: no text runs past the edge
   const out = await svg.evaluate((s) => {
     const r = s.getBoundingClientRect();
-    return [...s.querySelectorAll('text')].filter((t) => { const b = t.getBoundingClientRect(); return b.left < r.left - 1 || b.right > r.right + 1; }).map((t) => t.textContent);
+    return [...s.querySelectorAll('text')].filter((t) => { const b = t.getBoundingClientRect(); return b.left < r.left - 1 || b.right > r.right + 1 || b.top < r.top - 1 || b.bottom > r.bottom + 1; }).map((t) => t.textContent);
   });
   expect(out).toEqual([]);
-  // and inside its own folder card, not just inside the drawing
-  const spill = await svg.evaluate((s) => {
-    const rects = [...s.querySelectorAll('.p-svg-folder')].map((r) => r.getBoundingClientRect());
-    return [...s.querySelectorAll('text')].filter((t) => {
-      const b = t.getBoundingClientRect();
-      const home = rects.find((r) => b.left >= r.left - 1 && b.left < r.right && b.top >= r.top - 1 && b.top <= r.bottom);
-      return home && b.right > home.right - 2;
-    }).map((t) => t.textContent);
-  });
-  expect(spill, 'label runs past its folder').toEqual([]);
+  // labels stay legible on a phone: the 13px captions are drawn no smaller than 10px
+  const smallest = await svg.evaluate((s) => Math.min(...[...s.querySelectorAll('text')].map((t) => parseFloat(getComputedStyle(t).fontSize) * (s.getBoundingClientRect().width / s.viewBox.baseVal.width))));
+  expect(smallest, 'smallest label in screen pixels').toBeGreaterThanOrEqual(9.5);
+  // one marker icon per panel, reused from the page's own sprite
+  const icons = page.locator('.p-panel-h svg.p-ico');
+  await expect(icons).toHaveCount(8);
+  for (const ico of await icons.all()) {
+    await expect(ico).toHaveAttribute('aria-hidden', 'true');
+    const id = (await ico.locator('use').getAttribute('href')).slice(1);
+    await expect(page.locator(`.p-sprite symbol#${id}`), id).toHaveCount(1);
+  }
 });
 
 // ---- the five public posts: one panel shape, grouped by series ----
@@ -321,8 +349,11 @@ for (const { slug, series, panels: expected } of convertedPosts) {
     await expect(page.locator('.p-panel h2').first()).toHaveText('The problem');
     await expect(page.locator('.p-panel h2').nth(1)).toContainText('The idea');
     await expect(page.locator('.p-panel h2').last()).toHaveText('Why it matters');
-    await expect(page.locator('#p1 .p-box'), 'four problems').toHaveCount(4);
-    await expect(page.locator('.p-panel:last-child .p-box:has(h3:text-is("Try it yourself")) .p-steps li'), 'try it yourself: three steps').toHaveCount(3);
+    // the library post names one problem and puts its first step in panel 3 (its own test above); the others keep four problems and a last-panel try-it box
+    if (slug !== 'everything-is-a-file') {
+      await expect(page.locator('#p1 .p-box'), 'four problems').toHaveCount(4);
+      await expect(page.locator('.p-panel:last-child .p-box:has(h3:text-is("Try it yourself")) .p-steps li'), 'try it yourself: three steps').toHaveCount(3);
+    }
 
     const targets = await page.$$eval('.p-index a', (as) => as.map((a) => a.getAttribute('href')));
     expect(targets.length).toBe(expected);
@@ -332,7 +363,7 @@ for (const { slug, series, panels: expected } of convertedPosts) {
 
     // the full post opens with the problem and ends with why it matters, (what is still rough,) try it yourself, credits
     const heads = await page.$$eval('.p-full > section > h2', (hs) => hs.map((h) => h.textContent.replace(/^\d+\.\s*/, '')));
-    expect(heads[0]).toBe('The problem');
+    expect(heads[0]).toMatch(/^The problem/);
     const at = (prefix) => heads.findIndex((h) => h.startsWith(prefix));
     expect(at('Why it matters'), 'why it matters follows the argument').toBeGreaterThan(0);
     expect(at('Why it matters')).toBeLessThan(at('Credits'));
