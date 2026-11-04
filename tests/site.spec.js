@@ -412,6 +412,27 @@ test('landing: the CV lists the approved roles and years, with one external link
   expect(ext).toEqual(['https://github.com/codeami']);
 });
 
+test('landing: How I work shows the six work traits as a radar, links each to a post, and keeps the private profile out', async ({ page }) => {
+  await page.goto('/#step-8');
+  const how = page.locator('#how-i-work');
+  await expect(how.locator('svg[role="img"]')).toBeVisible();
+  const traits = ['Pace 18', 'Delegation 19', 'Curiosity 18', 'Structure 16', 'Quality review 16', 'Outside memory 17'];
+  await expect(how.locator('.radar .lbl text')).toHaveText(traits);
+  await expect(how.locator('.how-list li')).toHaveCount(6);
+  await expect(how.locator('figcaption')).toHaveText('Built from my own AI working sessions, Oct-Nov 2026.');
+  for (const t of ['Openness', 'Extravert', 'Agreeable', 'Stress', 'Neurotic']) await expect(how).not.toContainText(t);
+  // Every interest link opens a public page, and every public series post is listed.
+  const hrefs = await how.locator('a').evaluateAll((as) => as.map((a) => new URL(a.href).pathname.slice(1)));
+  for (const h of hrefs) expect(share.find((r) => r.path === h)?.level, h).toBe('public');
+  const posts = share.filter((r) => /^ai-life-os\/blog\/(?!index\.html)/.test(r.path) && r.level === 'public').map((r) => r.path);
+  expect(hrefs).toEqual(expect.arrayContaining(posts));
+  const w = await page.evaluate(() => ({ s: document.documentElement.scrollWidth, c: document.documentElement.clientWidth }));
+  expect(w.s, 'sideways scroll').toBeLessThanOrEqual(w.c);
+  // The page sits in a scrolling card, so the radar figure (not the whole section) is captured.
+  await how.locator('.radar').scrollIntoViewIfNeeded();
+  await expect(how.locator('.radar')).toHaveScreenshot('landing-how-i-work.png');
+});
+
 test("landing: the dog interview ends on Sam's criterion", async ({ page }) => {
   await page.goto('/#step-3');
   await page.getByRole('button', { name: 'Start the interview.' }).click();
