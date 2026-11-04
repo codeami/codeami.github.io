@@ -104,6 +104,18 @@
 .strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin: 12px 0; }
 .strip .card { padding: 10px 12px; }
 .strip h3 { font-size: 1rem; }
+/* How I work: a hand-drawn radar of six traits, with a plain line and an evidence link for each. */
+.how-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; align-items: center; margin: 12px 0; }
+.radar { min-width: 0; margin: 0; padding: 10px 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 2px; }
+.radar svg { display: block; width: 100%; min-width: 0; height: auto; max-width: 520px; margin: 0 auto; }
+.radar figcaption { margin-top: 6px; font-size: 14px; color: var(--mute); }
+.radar .rings polygon, .radar .rings path { fill: none; stroke: var(--line); stroke-width: 1; }
+.radar .shape { fill: var(--accent); fill-opacity: .25; stroke: var(--accent); stroke-width: 2; stroke-linejoin: round; }
+.radar .dots circle { fill: var(--accent); }
+.radar .lbl text { font-family: var(--font-body); font-size: 16px; fill: var(--ink); text-transform: none; letter-spacing: 0; }
+.how-list { margin: 0; padding: 0; list-style: none; }
+.how-list li { margin: 0 0 10px; }
+.how-list a { display: block; font-size: 14px; }
 .credits { margin: 8px 0 0; padding-left: 18px; }
 .credits li { margin: 0 0 6px; }
 .sections { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 12px; padding: 0; list-style: none; }
@@ -355,6 +367,58 @@
 </ul>
 <h3>Education</h3>
 <ul><li>BE Electronics and Telecommunication, University of Pune (2005)</li></ul>
+</div>
+</div>
+<div class="how" id="how-i-work">
+<h3>How I work</h3>
+<p>Six work traits, each scored 0 to 20.</p>
+<div class="how-grid">
+<figure class="radar">
+<svg viewBox="-55 40 520 320" role="img" aria-labelledby="radar-t radar-d">
+<title id="radar-t">How I work: six traits scored 0 to 20</title>
+<desc id="radar-d">Radar chart. Pace 18, Delegation 19, Curiosity 18, Structure 16, Quality review 16, Outside memory 17.</desc>
+<g class="rings">
+<polygon points="220,170 246,185 246,215 220,230 194,215 194,185"/>
+<polygon points="220,140 272,170 272,230 220,260 168,230 168,170"/>
+<polygon points="220,110 298,155 298,245 220,290 142,245 142,155"/>
+<polygon points="220,80 324,140 324,260 220,320 116,260 116,140"/>
+<path d="M220 200V80M220 200L324 140M220 200L324 260M220 200V320M220 200L116 260M220 200L116 140"/>
+</g>
+<polygon class="shape" points="220,92 319,143 314,254 220,296 137,248 132,149"/>
+<g class="dots"><circle cx="220" cy="92" r="4"/><circle cx="319" cy="143" r="4"/><circle cx="314" cy="254" r="4"/><circle cx="220" cy="296" r="4"/><circle cx="137" cy="248" r="4"/><circle cx="132" cy="149" r="4"/></g>
+<g class="lbl">
+<text x="220" y="62" text-anchor="middle">Pace 18</text>
+<text x="344" y="134">Delegation 19</text>
+<text x="344" y="284">Curiosity 18</text>
+<text x="220" y="344" text-anchor="middle">Structure 16</text>
+<text x="96" y="284" text-anchor="end">Quality review 16</text>
+<text x="96" y="134" text-anchor="end">Outside memory 17</text>
+</g>
+</svg>
+<figcaption>Built from my own AI working sessions, Oct-Nov 2026.</figcaption>
+</figure>
+<ul class="how-list">
+<li><b>Pace 18.</b> Moves fast, runs work in parallel.</li>
+<li><b>Delegation 19.</b> Directs AI crews, keeps the decisions. <a href="ai-life-os/blog/how-it-fits-together.html">How one person runs a crew of AI agents, safely</a></li>
+<li><b>Curiosity 18.</b> Always testing new tools and ideas. <a href="ai-life-os/arena.html">The harness arena</a></li>
+<li><b>Structure 16.</b> Folders, templates, ordered stages. <a href="ai-life-os/blog/everything-is-a-file.html">Everything is a file</a></li>
+<li><b>Quality review 16.</b> Reviews what ships, on clear review pages. <a href="ai-life-os/blog/guides-and-sensors.html">Guides and sensors</a></li>
+<li><b>Outside memory 17.</b> Keeps context in files, not in his head. <a href="ai-life-os/blog/second-brain-page.html">My second brain on one page</a></li>
+</ul>
+</div>
+<h3>Areas of interest</h3>
+<div class="cards interests">
+<div class="card"><p class="k-kicker">Signal from noise</p><ul>
+<li><a href="ai-life-os/blog/everything-is-a-file.html">Everything is a file: an ordered folder harness for your AI</a></li>
+<li><a href="ai-life-os/blog/second-brain-page.html">My second brain on one page</a></li>
+</ul></div>
+<div class="card"><p class="k-kicker">Customize everything, including yourself</p><ul>
+<li><a href="ai-life-os/blog/rules-from-chat-history.html">Turn your corrections into rules your AI follows</a></li>
+</ul></div>
+<div class="card"><p class="k-kicker">Safe AI crews</p><ul>
+<li><a href="ai-life-os/blog/guides-and-sensors.html">Guides and sensors: steering AI agents before and after they act</a></li>
+<li><a href="ai-life-os/blog/how-it-fits-together.html">How one person runs a crew of AI agents, safely</a></li>
+</ul></div>
 </div>
 </div>
 <blockquote>"Managing a complex AI agentic bot system is sort of like managing a contract with different vendors."</blockquote>
