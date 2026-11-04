@@ -551,8 +551,8 @@
    "hub": true,
    "label": "Harness tier list",
    "text": [
-    "Eleven setups marked on the same twelve harness parts. Has it, does it differently, lacks it, or a guess the scout could not confirm.",
-    "The counts treat all twelve parts as equal. They show coverage, not quality. From a scout report dated 2026-10-27 that read public docs, repos and papers; the tools were not tested."
+    "Eleven setups marked on the same twelve harness parts. Has it, does it differently, lacks it, or an estimate where no primary source answers it.",
+    "The counts treat all twelve parts as equal. They show coverage, not quality. From a scout report dated 2026-10-27 that read public docs, repos and papers."
    ]
   }
  ],
