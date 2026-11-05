@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
 <title>The harness arena · The Chart Room</title>
-<meta name="description" content="Eleven agent setups scored on twelve harness parts, plus a personal Adopt, Trial, Assess, Hold radar.">
+<meta name="description" content="Twelve agent setups scored on harness parts, plus a personal Adopt, Trial, Assess, Hold radar.">
 <link rel="stylesheet" href="hud.css">
 <script src="article.js"></script>
 <link rel="icon" href="kit/bosun.svg" type="image/svg+xml">
@@ -75,35 +75,48 @@ svg .arrowhead.me{fill:var(--accent)}
 <article class="k-article">
 <p class="k-kicker">Harness engineering</p>
 <h1 class="k-title">The harness arena</h1>
-<p class="k-dek">Eleven agent setups scored on the same twelve harness parts, and my own radar of what I use, try, watch and stopped.</p>
+<p class="k-dek">Twelve agent setups scored on the same harness parts, and my own radar of what I use, try, watch and stopped.</p>
 <p class="k-meta"><span>Ashish Raina</span><time datetime="2026-11-02">2 Nov 2026</time><span>9 min read</span></p>
 <p>This page is section 5 of <a href="blog/guides-and-sensors.html">Guides, sensors, and the rules I'm still begging for</a>, on its own so it is easy to find. Section numbers below point into that post.</p>
 <p class="q">How do other setups compare, and what's become standard?</p>
 <p>A spec sheet doesn't tell you how a car drives. It does tell you what's missing.</p>
 <p>I think of this as an arena, not a ranking. New harnesses enter it. Techniques that several harnesses share get compared side by side. And some techniques stop being special: rules files like <code>AGENTS.md</code>, worktrees and skills are close to standard now, so I mark them that way. The arena holds two views: the tier list below, and my own radar in "How we composed ours".</p>
-<p><strong>Last run:</strong> 27 October 2026 (tier list). <strong>Radar refreshed:</strong> 2 November 2026.</p>
+<p><strong>Last run:</strong> 27 October 2026 (tier list); the Hermes Agent row and two new parts, Surfaces and Scheduler, were added on 5 November 2026. <strong>Radar refreshed:</strong> 2 November 2026; item 31 (Hermes Agent) added 5 November 2026.</p>
 <h3 id="s5-tier">The tier list</h3>
-<p>On 27 October a research agent compared eleven setups on the same twelve harness parts: always-loaded context, rules, skills, memory, hooks, isolation, orchestrator, review gate before push, human approval points, self-improvement from failures, sync across machines and tools, and a goals layer. Each part is marked: <strong>has</strong> it, does it <strong>differently</strong>, <strong>lacks</strong> it, or an <strong>estimate</strong> where no primary source answers it.</p>
+<p>On 27 October a research agent compared eleven setups on the same twelve harness parts: always-loaded context, rules, skills, memory, hooks, isolation, orchestrator, review gate before push, human approval points, self-improvement from failures, sync across machines and tools, and goals and user model (called "goals layer" on 27 October). Each part is marked: <strong>has</strong> it, does it <strong>differently</strong>, <strong>lacks</strong> it, or an <strong>estimate</strong> where no primary source answers it.</p>
+<p>On 5 November I added <a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a> (Nous Research) as a twelfth setup, read the same way from its docs and repo. I also added two parts the first twelve did not cover: <strong>Surfaces</strong> (where the human reaches the agent: terminal, chat apps, voice, a phone page) and <strong>Scheduler</strong> (runs that start without a person). The bars below are the original twelve parts. The two new parts are marked in a small table after the figure.</p>
 <figure id="fig-tier">
-<svg viewBox="0 0 680 428" role="img" aria-labelledby="fig-tier-title">
-<title id="fig-tier-title">Harness tier list: eleven setups scored on twelve parts, plus Vercel d0 and LifeOS not scored yet</title>
+<svg viewBox="0 0 680 456" role="img" aria-labelledby="fig-tier-title">
+<title id="fig-tier-title">Harness tier list: twelve setups scored on twelve parts, plus Vercel d0 and LifeOS not scored yet</title>
 <g id="tier-legend"><title>Legend</title><rect class="bar has" x="210" y="10" width="14" height="12"/><text class="s" x="230" y="21">has</text><rect class="bar diff" x="270" y="10" width="14" height="12"/><text class="s" x="290" y="21">different</text><rect class="bar lacks" x="360" y="10" width="14" height="12"/><text class="s" x="380" y="21">lacks</text><rect class="bar estimate" x="430" y="10" width="14" height="12"/><text class="s" x="450" y="21">estimate</text></g>
 <g id="tier-0"><title>Our composite: 10 has, 2 different, 0 lacks, 0 estimate</title><text class="s" x="200" y="64" text-anchor="end">Our composite</text><rect class="bar has" x="210" y="50" width="300" height="18"/><rect class="bar diff" x="510" y="50" width="60" height="18"/><text class="s" x="580" y="64">10 has</text></g>
-<g id="tier-1"><title>Kun Chen stack: 8 has, 4 different, 0 lacks, 0 estimate</title><text class="s" x="200" y="92" text-anchor="end">Kun Chen stack</text><rect class="bar has" x="210" y="78" width="240" height="18"/><rect class="bar diff" x="450" y="78" width="120" height="18"/><text class="s" x="580" y="92">8 has</text></g>
-<g id="tier-2"><title>Troupe design (a design, not shipped software): 7 has, 2 different, 3 lacks, 0 estimate</title><text class="s" x="200" y="120" text-anchor="end">Troupe design</text><rect class="bar has" x="210" y="106" width="210" height="18"/><rect class="bar diff" x="420" y="106" width="60" height="18"/><rect class="bar lacks" x="480" y="106" width="90" height="18"/><text class="s" x="580" y="120">7 has</text></g>
-<g id="tier-3"><title>Claude Code: 7 has, 2 different, 3 lacks, 0 estimate</title><text class="s" x="200" y="148" text-anchor="end">Claude Code</text><rect class="bar has" x="210" y="134" width="210" height="18"/><rect class="bar diff" x="420" y="134" width="60" height="18"/><rect class="bar lacks" x="480" y="134" width="90" height="18"/><text class="s" x="580" y="148">7 has</text></g>
-<g id="tier-4"><title>Warp: 5 has, 1 different, 5 lacks, 1 estimate</title><text class="s" x="200" y="176" text-anchor="end">Warp</text><rect class="bar has" x="210" y="162" width="150" height="18"/><rect class="bar diff" x="360" y="162" width="30" height="18"/><rect class="bar lacks" x="390" y="162" width="150" height="18"/><rect class="bar estimate" x="540" y="162" width="30" height="18"/><text class="s" x="580" y="176">5 has</text></g>
-<g id="tier-5"><title>Databricks Omnigent: 4 has, 5 different, 2 lacks, 1 estimate</title><text class="s" x="200" y="204" text-anchor="end">Databricks Omnigent</text><rect class="bar has" x="210" y="190" width="120" height="18"/><rect class="bar diff" x="330" y="190" width="150" height="18"/><rect class="bar lacks" x="480" y="190" width="60" height="18"/><rect class="bar estimate" x="540" y="190" width="30" height="18"/><text class="s" x="580" y="204">4 has</text></g>
-<g id="tier-6"><title>OpenCode: 4 has, 3 different, 4 lacks, 1 estimate</title><text class="s" x="200" y="232" text-anchor="end">OpenCode</text><rect class="bar has" x="210" y="218" width="120" height="18"/><rect class="bar diff" x="330" y="218" width="90" height="18"/><rect class="bar lacks" x="420" y="218" width="120" height="18"/><rect class="bar estimate" x="540" y="218" width="30" height="18"/><text class="s" x="580" y="232">4 has</text></g>
-<g id="tier-7"><title>ICM (Van Clief): 3 has, 5 different, 3 lacks, 1 estimate</title><text class="s" x="200" y="260" text-anchor="end">ICM (Van Clief)</text><rect class="bar has" x="210" y="246" width="90" height="18"/><rect class="bar diff" x="300" y="246" width="150" height="18"/><rect class="bar lacks" x="450" y="246" width="90" height="18"/><rect class="bar estimate" x="540" y="246" width="30" height="18"/><text class="s" x="580" y="260">3 has</text></g>
-<g id="tier-8"><title>Google Harness-squared: 3 has, 4 different, 5 lacks, 0 estimate</title><text class="s" x="200" y="288" text-anchor="end">Google Harness-squared</text><rect class="bar has" x="210" y="274" width="90" height="18"/><rect class="bar diff" x="300" y="274" width="120" height="18"/><rect class="bar lacks" x="420" y="274" width="150" height="18"/><text class="s" x="580" y="288">3 has</text></g>
-<g id="tier-9"><title>Pi: 3 has, 3 different, 6 lacks, 0 estimate</title><text class="s" x="200" y="316" text-anchor="end">Pi</text><rect class="bar has" x="210" y="302" width="90" height="18"/><rect class="bar diff" x="300" y="302" width="90" height="18"/><rect class="bar lacks" x="390" y="302" width="180" height="18"/><text class="s" x="580" y="316">3 has</text></g>
-<g id="tier-10"><title>Stanford Meta-Harness: 1 has, 6 different, 4 lacks, 1 estimate</title><text class="s" x="200" y="344" text-anchor="end">Stanford Meta-Harness</text><rect class="bar has" x="210" y="330" width="30" height="18"/><rect class="bar diff" x="240" y="330" width="180" height="18"/><rect class="bar lacks" x="420" y="330" width="120" height="18"/><rect class="bar estimate" x="540" y="330" width="30" height="18"/><text class="s" x="580" y="344">1 has</text></g>
-<g id="tier-11"><title>Vercel d0: not scored yet</title><text class="s" x="200" y="372" text-anchor="end">Vercel d0</text><rect class="bar none" x="210" y="358" width="360" height="18"/><text class="s" x="390" y="372" text-anchor="middle">not scored yet</text></g>
-<g id="tier-12"><title>LifeOS (Miessler): not scored yet</title><text class="s" x="200" y="400" text-anchor="end">LifeOS (Miessler)</text><rect class="bar none" x="210" y="386" width="360" height="18"/><text class="s" x="390" y="400" text-anchor="middle">not scored yet</text></g>
+<g id="tier-1"><title>Hermes Agent (Nous Research), added 5 Nov: 9 has, 3 different, 0 lacks, 0 estimate</title><text class="s" x="200" y="92" text-anchor="end">Hermes Agent</text><rect class="bar has" x="210" y="78" width="270" height="18"/><rect class="bar diff" x="480" y="78" width="90" height="18"/><text class="s" x="580" y="92">9 has</text></g>
+<g id="tier-2"><title>Kun Chen stack: 8 has, 4 different, 0 lacks, 0 estimate</title><text class="s" x="200" y="120" text-anchor="end">Kun Chen stack</text><rect class="bar has" x="210" y="106" width="240" height="18"/><rect class="bar diff" x="450" y="106" width="120" height="18"/><text class="s" x="580" y="120">8 has</text></g>
+<g id="tier-3"><title>Troupe design (a design, not shipped software): 7 has, 2 different, 3 lacks, 0 estimate</title><text class="s" x="200" y="148" text-anchor="end">Troupe design</text><rect class="bar has" x="210" y="134" width="210" height="18"/><rect class="bar diff" x="420" y="134" width="60" height="18"/><rect class="bar lacks" x="480" y="134" width="90" height="18"/><text class="s" x="580" y="148">7 has</text></g>
+<g id="tier-4"><title>Claude Code: 7 has, 2 different, 3 lacks, 0 estimate</title><text class="s" x="200" y="176" text-anchor="end">Claude Code</text><rect class="bar has" x="210" y="162" width="210" height="18"/><rect class="bar diff" x="420" y="162" width="60" height="18"/><rect class="bar lacks" x="480" y="162" width="90" height="18"/><text class="s" x="580" y="176">7 has</text></g>
+<g id="tier-5"><title>Warp: 5 has, 1 different, 5 lacks, 1 estimate</title><text class="s" x="200" y="204" text-anchor="end">Warp</text><rect class="bar has" x="210" y="190" width="150" height="18"/><rect class="bar diff" x="360" y="190" width="30" height="18"/><rect class="bar lacks" x="390" y="190" width="150" height="18"/><rect class="bar estimate" x="540" y="190" width="30" height="18"/><text class="s" x="580" y="204">5 has</text></g>
+<g id="tier-6"><title>Databricks Omnigent: 4 has, 5 different, 2 lacks, 1 estimate</title><text class="s" x="200" y="232" text-anchor="end">Databricks Omnigent</text><rect class="bar has" x="210" y="218" width="120" height="18"/><rect class="bar diff" x="330" y="218" width="150" height="18"/><rect class="bar lacks" x="480" y="218" width="60" height="18"/><rect class="bar estimate" x="540" y="218" width="30" height="18"/><text class="s" x="580" y="232">4 has</text></g>
+<g id="tier-7"><title>OpenCode: 4 has, 3 different, 4 lacks, 1 estimate</title><text class="s" x="200" y="260" text-anchor="end">OpenCode</text><rect class="bar has" x="210" y="246" width="120" height="18"/><rect class="bar diff" x="330" y="246" width="90" height="18"/><rect class="bar lacks" x="420" y="246" width="120" height="18"/><rect class="bar estimate" x="540" y="246" width="30" height="18"/><text class="s" x="580" y="260">4 has</text></g>
+<g id="tier-8"><title>ICM (Van Clief): 3 has, 5 different, 3 lacks, 1 estimate</title><text class="s" x="200" y="288" text-anchor="end">ICM (Van Clief)</text><rect class="bar has" x="210" y="274" width="90" height="18"/><rect class="bar diff" x="300" y="274" width="150" height="18"/><rect class="bar lacks" x="450" y="274" width="90" height="18"/><rect class="bar estimate" x="540" y="274" width="30" height="18"/><text class="s" x="580" y="288">3 has</text></g>
+<g id="tier-9"><title>Google Harness-squared: 3 has, 4 different, 5 lacks, 0 estimate</title><text class="s" x="200" y="316" text-anchor="end">Google Harness-squared</text><rect class="bar has" x="210" y="302" width="90" height="18"/><rect class="bar diff" x="300" y="302" width="120" height="18"/><rect class="bar lacks" x="420" y="302" width="150" height="18"/><text class="s" x="580" y="316">3 has</text></g>
+<g id="tier-10"><title>Pi: 3 has, 3 different, 6 lacks, 0 estimate</title><text class="s" x="200" y="344" text-anchor="end">Pi</text><rect class="bar has" x="210" y="330" width="90" height="18"/><rect class="bar diff" x="300" y="330" width="90" height="18"/><rect class="bar lacks" x="390" y="330" width="180" height="18"/><text class="s" x="580" y="344">3 has</text></g>
+<g id="tier-11"><title>Stanford Meta-Harness: 1 has, 6 different, 4 lacks, 1 estimate</title><text class="s" x="200" y="372" text-anchor="end">Stanford Meta-Harness</text><rect class="bar has" x="210" y="358" width="30" height="18"/><rect class="bar diff" x="240" y="358" width="180" height="18"/><rect class="bar lacks" x="420" y="358" width="120" height="18"/><rect class="bar estimate" x="540" y="358" width="30" height="18"/><text class="s" x="580" y="372">1 has</text></g>
+<g id="tier-12"><title>Vercel d0: not scored yet</title><text class="s" x="200" y="400" text-anchor="end">Vercel d0</text><rect class="bar none" x="210" y="386" width="360" height="18"/><text class="s" x="390" y="400" text-anchor="middle">not scored yet</text></g>
+<g id="tier-13"><title>LifeOS (Miessler): not scored yet</title><text class="s" x="200" y="428" text-anchor="end">LifeOS (Miessler)</text><rect class="bar none" x="210" y="414" width="360" height="18"/><text class="s" x="390" y="428" text-anchor="middle">not scored yet</text></g>
 </svg>
-<figcaption>Scores from a research agent's report dated 27 Oct 2026. It compared the tools from their public docs, repos and papers. The counts treat all twelve parts as equal: they show coverage, not quality. Vercel d0 and LifeOS were added after and aren't scored.</figcaption>
+<figcaption>Scores from a research agent's report dated 27 Oct 2026. It compared the tools from their public docs, repos and papers. The Hermes Agent row was added 5 Nov 2026 from its <a href="https://github.com/NousResearch/hermes-agent">public repo</a> and docs. The counts treat all twelve parts as equal: they show coverage, not quality. Vercel d0 and LifeOS were added after and aren't scored.</figcaption>
 </figure>
+<p>Hermes Agent: 9 has, 3 different, 0 lacks, 0 estimate. The three "different" marks: no gate before push (its gates sit at "done"), sync is import and share rather than live, and goals are per task. Read from its docs and repo on 5 November 2026; I have not run it. Two README claims did not match the current docs (FTS5 search "with LLM summarization", and idle-cost serverless persistence), so the marks use the docs.</p>
+<p><strong>The two new parts</strong>, marked on 5 November. Only setups with a source I have read get a mark. The rest stay at "estimate". Nothing is guessed.</p>
+<table id="new-parts-table">
+<tr><th>Setup</th><th>Surfaces</th><th>Scheduler</th><th>Basis</th></tr>
+<tr><td>Hermes Agent</td><td>has</td><td>has</td><td>terminal UI, one gateway to many chat apps, voice memos; built-in cron with delivery</td></tr>
+<tr><td>Our composite</td><td>has</td><td>has</td><td>terminal agents plus review pages I read on my phone; nightly jobs and overnight loops</td></tr>
+<tr><td>Kun Chen stack</td><td>estimate</td><td>has</td><td>overnight loops (radar item 5)</td></tr>
+<tr><td>Claude Code, OpenCode</td><td>has</td><td>estimate</td><td>both ship a terminal front end</td></tr>
+<tr><td>Databricks Omnigent</td><td>has</td><td>estimate</td><td>shares live sessions by URL, on phone and web (27 Oct report)</td></tr>
+<tr><td>The other six</td><td>estimate</td><td>estimate</td><td>no source read for these two parts yet</td></tr>
+</table>
 <p>Two notes. "Our composite" includes Kun Chen's tools, so it inherits most of his rows; what it adds is the folder map, a goals layer, and one rules file shared by several tools. And Troupe is a design, not shipped software, so its "has" means "designed".</p>
 
 <h3 id="s5-types">Harness types</h3>
@@ -134,7 +147,7 @@ svg .arrowhead.me{fill:var(--accent)}
 
 <h3 id="s5-ours">How we composed ours</h3>
 <p>A kit car is built from other makers' parts. The skill is in choosing them and making them fit.</p>
-<p>"Our composite" scores 10 has and 2 different. Here is where each of the twelve parts comes from, and whether that part is now standard across the arena. "Now standard" is my reading of the 27 October report: <strong>yes</strong> if most setups have it, <strong>becoming</strong> if the big coding agents are adding it, <strong>no</strong> if it's still rare.</p>
+<p>"Our composite" scores 10 has and 2 different on the original twelve parts, and has on the two added 5 November. Here is where each part comes from, and whether that part is now standard across the arena. "Now standard" is my reading of the 27 October report: <strong>yes</strong> if most setups have it, <strong>becoming</strong> if the big coding agents are adding it, <strong>no</strong> if it's still rare.</p>
 <table id="ours-table">
 <tr><th>Part</th><th>Where ours comes from</th><th>Mark</th><th>Now standard?</th></tr>
 <tr><td>Always-loaded context</td><td>a small base map, <code>AGENTS.md</code> (about 1.5k tokens), kept small the ICM way</td><td>has</td><td><span class="tag cpu">yes</span></td></tr>
@@ -148,17 +161,19 @@ svg .arrowhead.me{fill:var(--accent)}
 <tr><td>Human approval points</td><td>Lavish review pages and <code>backpass apply</code> (Kun Chen); my "drafts, not sends" and "ask before destructive" rules</td><td>has</td><td><span class="tag cpu">yes</span></td></tr>
 <tr><td>Self-improvement from failures</td><td>backpass (Kun Chen), plus the weekly corrections review</td><td>has</td><td><span class="tag gpu">no</span></td></tr>
 <tr><td>Sync across tools</td><td>one <code>AGENTS.md</code> linked into several agents (the AGENTS.md convention)</td><td>different</td><td><span class="tag gpu">no</span></td></tr>
-<tr><td>Goals layer</td><td>a private priorities file</td><td>has</td><td><span class="tag gpu">no</span></td></tr>
+<tr><td>Goals and user model</td><td>a private priorities file</td><td>has</td><td><span class="tag gpu">no</span></td></tr>
+<tr><td>Surfaces</td><td>terminal agents, plus review pages I read on my phone</td><td>has</td><td>not rated yet</td></tr>
+<tr><td>Scheduler</td><td>nightly launchd jobs (backpass, daily review) and gnhf overnight loops</td><td>has</td><td>not rated yet</td></tr>
 </table>
-<p>So most of the machinery is Kun Chen's, the folder shape is ICM's, and the skills and hooks come with Claude Code. What's mine is the map that routes between them, the goals layer, and one rules file shared across tools.</p>
-<p class="test">Test: 10 rows say "has" and 2 say "different", matching the tier list. Sources are the "Our composite" column of the 27 October report.</p>
+<p>So most of the machinery is Kun Chen's, the folder shape is ICM's, and the skills and hooks come with Claude Code. What's mine is the map that routes between them, the goals and user model layer, and one rules file shared across tools.</p>
+<p class="test">Test: of the first twelve rows, 10 say "has" and 2 say "different", matching the tier list. The last two rows, Surfaces and Scheduler, are the parts added 5 November. Sources are the "Our composite" column of the 27 October report.</p>
 
 <h4 id="s5-radar">My radar</h4>
-<p>The ring idea is borrowed from the <a href="https://www.thoughtworks.com/radar">Thoughtworks Technology Radar</a>: <strong>Adopt</strong> (use it), <strong>Trial</strong> (using it on real work), <strong>Assess</strong> (looking at it), <strong>Hold</strong> (stopped or parked). I drew my own on 17 October with 25 items in four quadrants: tools, skills, context and habits. Here it is refreshed to 2 November: the same 25 items, three moved, and five new ones.</p>
+<p>The ring idea is borrowed from the <a href="https://www.thoughtworks.com/radar">Thoughtworks Technology Radar</a>: <strong>Adopt</strong> (use it), <strong>Trial</strong> (using it on real work), <strong>Assess</strong> (looking at it), <strong>Hold</strong> (stopped or parked). I drew my own on 17 October with 25 items in four quadrants: tools, skills, context and habits. Here it is refreshed to 2 November: the same 25 items, three moved, and five new ones. On 5 November I added Hermes Agent as item 31.</p>
 <p class="callout">Every placement on this radar is a draft. The owner decides.</p>
 <figure id="fig-radar">
 <svg viewBox="0 0 680 680" role="img" aria-labelledby="fig-radar-title">
-<title id="fig-radar-title">My factory radar on 2 November: 30 numbered items in four quadrants and four rings, Adopt in the middle and Hold at the edge</title>
+<title id="fig-radar-title">My factory radar on 5 November: 31 numbered items in four quadrants and four rings, Adopt in the middle and Hold at the edge</title>
 <g id="rd-rings"><title>Rings: Adopt, Trial, Assess, Hold</title>
 <circle class="ring" cx="340" cy="340" r="310"/><circle class="ring" cx="340" cy="340" r="250"/><circle class="ring" cx="340" cy="340" r="180"/><circle class="ring agent" cx="340" cy="340" r="110"/>
 <path class="edge" d="M340 30 V650 M30 340 H650" style="stroke:var(--line)"/>
@@ -172,6 +187,7 @@ svg .arrowhead.me{fill:var(--accent)}
 <g><title>6 quota-axi: Trial</title><circle class="dot" cx="238" cy="238" r="10"/><text class="dn" x="238" y="242">6</text></g>
 <g><title>7 Harness sensors (secret scan, plain-check hook, link check): Trial, new</title><circle class="dot new" cx="204" cy="290" r="10"/><text class="dn" x="204" y="294">7</text></g>
 <g><title>8 Greptile-style test design: Assess</title><circle class="dot" cx="188" cy="188" r="10"/><text class="dn" x="188" y="192">8</text></g>
+<a href="https://github.com/NousResearch/hermes-agent"><g><title>31 Hermes Agent: Assess, new</title><circle class="dot new" cx="170" cy="230" r="10"/><text class="dn" x="170" y="234">31</text></g></a>
 <g><title>9 Daily links page: Hold</title><circle class="dot" cx="142" cy="142" r="10"/><text class="dn" x="142" y="146">9</text></g>
 <a href="brain/index.html#dialogue-freezes-into-skills"><g><title>10 /grill-with-docs (grill-me): Adopt</title><circle class="dot" cx="406" cy="316" r="10"/><text class="dn" x="406" y="320">10</text></g></a>
 <g><title>11 taste-check and plain-check: moved Trial to Adopt</title><circle class="dot moved" cx="390" cy="291" r="10"/><text class="dn" x="390" y="295">11</text></g>
@@ -210,6 +226,7 @@ svg .arrowhead.me{fill:var(--accent)}
 <tr><td>7</td><td>Harness sensors: secret scan, plain-check hook, link check (section 10)</td><td>Trial</td><td><strong>new</strong>: the three sensors this post proposes, being built</td></tr>
 <tr><td>8</td><td>Greptile-style test design: closed and paid; the gap is a free tool</td><td>Assess</td><td>same</td></tr>
 <tr><td>9</td><td>Daily links page</td><td>Hold</td><td>same</td></tr>
+<tr><td>31</td><td><a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a>: a self-hosted agent with a built-in learning loop (memory, skills, a curator)</td><td>Assess</td><td><strong>new</strong> (5 Nov): read from its docs; not yet tried on real work</td></tr>
 <tr><td colspan="4"><strong>Skills</strong></td></tr>
 <tr><td>10</td><td>/grill-with-docs: adapted from Matt Pocock's grill-me and domain modelling (MIT)</td><td>Adopt</td><td>same; section 4 names it as an onboarding tool</td></tr>
 <tr><td>11</td><td>taste-check and plain-check: no-model checks on intent and plain words</td><td>Adopt</td><td><strong>moved</strong> from Trial: now a named check in the factory's review and learn stages</td></tr>
@@ -243,7 +260,7 @@ svg .arrowhead.me{fill:var(--accent)}
 <tr><td>R6</td><td><a href="https://daemon.danielmiessler.com">Daemon</a></td><td>Assess</td><td><strong>new</strong>: good ideas (expiring fields, privacy gate). It has no licence, so don't copy the code</td></tr>
 <tr><td>R7</td><td><a href="https://github.com/danielmiessler/Substrate">Substrate</a></td><td>Hold</td><td><strong>new</strong>: a public-knowledge project, not our problem space</td></tr>
 </table>
-<p class="test">Test: items 1 to 6, 8 to 15, 19 to 24 and 26 to 30 are the 25 from the 17 October radar. Items 7, 16, 17, 18 and 25 are new. Items 11, 12 and 21 moved. Rows R1 to R7 are seven more new items from the Miessler review. The radar figure does not plot them yet.</p>
+<p class="test">Test: items 1 to 6, 8 to 15, 19 to 24 and 26 to 30 are the 25 from the 17 October radar. Items 7, 16, 17, 18 and 25 are new, and so is item 31 (Hermes Agent, added 5 November). Items 11, 12 and 21 moved. Rows R1 to R7 are seven more new items from the Miessler review. The radar figure does not plot them yet.</p>
 <p><strong>Outside comparison.</strong> <a href="https://aiharnesses.ai">aiharnesses.ai</a> (matrix at <a href="https://aiharnesses.ai/matrix">aiharnesses.ai/matrix</a>, read 2 Nov 2026) compares six harnesses on 17 feature rows. I'm adopting its rule for this arena. Every cell carries one source URL and a read date. A cell the source doesn't answer says "unknown". It also warns that scores across different product shapes aren't meaningful.</p>
 <p>I'm not reusing its data (no terms seen). The 27 October tier list keeps its "estimate" column as scored on that date. It lists LifeOS and Vercel d0 as not scored.</p>
 <h3>Where I looked</h3>
