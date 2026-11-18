@@ -95,7 +95,7 @@ svg .arrowhead.me{fill:var(--accent)}
 <p class="k-meta"><span>Ashish Raina</span><time datetime="2026-11-18">18 Nov 2026</time><span>22 min read</span></p>
 <p><a href="#full-table">Skip to the full scoring table and radar</a></p>
 
-<div class="note" id="codename-note"><strong>Professor is our codename for our own setup.</strong> Its roles carry city names from the series Money Heist: Professor plans and hands out the work, Moscow builds, Nairobi checks the result, Lisbon asks a person before anything risky, and Tokyo keeps the record. The names are only labels.</div>
+<div class="note" id="codename-note"><strong>"Our setup" is my own harness.</strong> Its roles carry names from the Mahabharata, the Indian epic. Each is introduced once here, then called by its plain role name. The Orchestrator (Krishna) guides the work and hands it out. The Librarian (Vyasa) keeps what we know findable. The Scout (Nakula) goes ahead and reports back. The Builder (Arjuna) makes the change. The Verifier (Vidura) checks the result is right. The Gatekeeper (Bhishma) asks a person before anything risky. The Watcher (Sanjaya) watches health from afar. The Scheduler (Samay, Time) runs the outer loop and keeps jobs on time. The Record keeper (Ganesha) writes down decisions. The names are only labels.</div>
 
 <h2 id="problem">The problem: picking an agent harness is hard</h2>
 <p>Most comparisons of AI agents are written by someone selling one of them. I have a stake too: I run my own setup. So I put it in the ring with the others, under a codename, and I show the test where it could have lost.</p>
@@ -130,7 +130,7 @@ svg .arrowhead.me{fill:var(--accent)}
 
 <h3 id="contenders">The six contenders</h3>
 <ul>
-<li><strong>Professor (our setup).</strong> A self-hosted setup that runs everyday assistants and a small team of coding agents. It picks a model for each request.</li>
+<li><strong>Our setup.</strong> A self-hosted setup that runs everyday assistants and a small team of coding agents. It picks a model for each request.</li>
 <li><strong>Hermes Agent.</strong> An open-source agent from Nous Research, under the MIT licence. It runs on your own machine or server and talks to you through the terminal or chat apps. In our trial it refused any model with less than a 64,000-token context window.</li>
 <li><strong>OpenClaw.</strong> An open-source personal agent. Its docs list a long set of model providers, local models and fallback chains.</li>
 <li><strong>Claude Duet.</strong> Anthropic's proactive agent, announced on 21 October 2026 as a research preview. It is a separate app that works when you are away and checks with you before it acts. It is built on Claude Opus 5.5, with a waitlist for paid US plans.</li>
@@ -146,12 +146,12 @@ svg .arrowhead.me{fill:var(--accent)}
 <figure id="fig-lockin">
 <svg viewBox="0 0 720 280" role="img" aria-labelledby="fl-t fl-d">
 <title id="fl-t">Open harnesses can route; locked ones cannot</title>
-<desc id="fl-d">Left: Professor, Hermes and OpenClaw each send requests to a cheap, a mid-size or a strong model from any provider. Right: Claude Duet, Muse and Grok Bot each send every request to their maker's own model.</desc>
+<desc id="fl-d">Left: Our setup, Hermes and OpenClaw each send requests to a cheap, a mid-size or a strong model from any provider. Right: Claude Duet, Muse and Grok Bot each send every request to their maker's own model.</desc>
 <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="arrowhead" d="M0,0 L10,5 L0,10 z"/></marker></defs>
 <g id="fl-open"><title>Open: route any model</title>
 <rect class="zone" x="6" y="30" width="340" height="230" rx="10"/>
 <text class="t" x="20" y="22">Open: you pick the model</text>
-<g id="fl-open-h"><title>Professor (our setup), Hermes, OpenClaw</title><rect class="box me" x="24" y="104" width="128" height="74" rx="8"/><text class="t" x="88" y="128" text-anchor="middle">Harness</text><text class="s" x="88" y="146" text-anchor="middle">Professor (our setup)</text><text class="s" x="88" y="162" text-anchor="middle">Hermes · OpenClaw</text></g>
+<g id="fl-open-h"><title>Our setup, Hermes, OpenClaw</title><rect class="box me" x="24" y="104" width="128" height="74" rx="8"/><text class="t" x="88" y="128" text-anchor="middle">Harness</text><text class="s" x="88" y="146" text-anchor="middle">Our setup</text><text class="s" x="88" y="162" text-anchor="middle">Hermes · OpenClaw</text></g>
 <g id="fl-cheap"><title>Cheap or free model for easy work</title><rect class="box cpu" x="214" y="52" width="118" height="44" rx="8"/><text class="t" x="273" y="72" text-anchor="middle">Cheap model</text><text class="s" x="273" y="88" text-anchor="middle">easy work</text></g>
 <g id="fl-mid"><title>Mid-size model</title><rect class="box" x="214" y="119" width="118" height="44" rx="8"/><text class="t" x="273" y="139" text-anchor="middle">Mid model</text><text class="s" x="273" y="155" text-anchor="middle">most work</text></g>
 <g id="fl-strong"><title>Strong model for hard work</title><rect class="box" x="214" y="186" width="118" height="44" rx="8"/><text class="t" x="273" y="206" text-anchor="middle">Strong model</text><text class="s" x="273" y="222" text-anchor="middle">hard work</text></g>
@@ -173,24 +173,24 @@ svg .arrowhead.me{fill:var(--accent)}
 <p><strong>Why I still name Hermes the main rival.</strong> It is the one we ran side by side with ours, and the one we keep borrowing ideas from. In the threads, many people said they had left large frameworks such as OpenClaw after updates kept breaking. That is a reason to watch OpenClaw less closely, not a test result.</p>
 <p><strong>Routing is not the whole bill.</strong> In our test, Hermes sent a smaller prompt for a plain chat: about 2,900 tokens to our 5,200. A lean prompt saves tokens on every call. Routing saves on the expensive calls. A good harness needs both.</p>
 
-<h3 id="head-to-head">Head to head: Professor vs Hermes</h3>
+<h3 id="head-to-head">Head to head: Our setup vs Hermes</h3>
 <p>A driving test is short. It does not prove you are a good driver. It shows whether you can do a few set things without help. This was a driving test.</p>
 <p>Both harnesses got the same four tasks, word for word, on the same small free model, on 12 November 2026. A logging proxy sat in front of the model, so both were counted the same way. Each task had a written pass check.</p>
 <figure id="fig-bench">
 <svg viewBox="0 0 720 300" role="img" aria-labelledby="fb-t fb-d">
 <title id="fb-t">Head-to-head results, four tasks</title>
-<desc id="fb-d">Chat: both passed. Web reading: Professor passed, Hermes failed after looping. Hand-off: Professor passed, Hermes did the work alone and failed the check. Schedule: both passed. Totals: Professor 5 of 5, Hermes 3 of 5.</desc>
-<text class="t" x="300" y="22" text-anchor="middle">Professor (our setup)</text>
+<desc id="fb-d">Chat: both passed. Web reading: Our setup passed, Hermes failed after looping. Hand-off: Our setup passed, Hermes did the work alone and failed the check. Schedule: both passed. Totals: Our setup 5 of 5, Hermes 3 of 5.</desc>
+<text class="t" x="300" y="22" text-anchor="middle">Our setup</text>
 <text class="t" x="520" y="22" text-anchor="middle">Hermes</text>
 <g id="fb-t1"><title>Chat: plan a small herb garden in a set format. Both passed twice</title>
 <text class="t" x="10" y="58">Chat</text><text class="s" x="10" y="74">plan in a set format</text>
 <rect class="box cpu" x="210" y="40" width="180" height="40" rx="6"/><text class="t ok" x="300" y="65" text-anchor="middle">✓ pass 2/2</text>
 <rect class="box cpu" x="430" y="40" width="180" height="40" rx="6"/><text class="t ok" x="520" y="65" text-anchor="middle">✓ pass 2/2</text></g>
-<g id="fb-t2"><title>Web: read two shop pages and compare prices. Professor passed in 3 calls; Hermes looped for 13 calls and gave no answer</title>
+<g id="fb-t2"><title>Web: read two shop pages and compare prices. Our setup passed in 3 calls; Hermes looped for 13 calls and gave no answer</title>
 <text class="t" x="10" y="114">Web reading</text><text class="s" x="10" y="130">compare two prices</text>
 <rect class="box cpu" x="210" y="96" width="180" height="40" rx="6"/><text class="t ok" x="300" y="121" text-anchor="middle">✓ pass 1/1</text>
 <rect class="box bad" x="430" y="96" width="180" height="40" rx="6"/><text class="t no" x="520" y="121" text-anchor="middle">✗ fail: looped</text></g>
-<g id="fb-t3"><title>Hand-off: a planner hands a checklist to a doer. Professor ran both agents; Hermes wrote good text but no second agent ran</title>
+<g id="fb-t3"><title>Hand-off: a planner hands a checklist to a doer. Our setup ran both agents; Hermes wrote good text but no second agent ran</title>
 <text class="t" x="10" y="170">Hand-off</text><text class="s" x="10" y="186">planner to doer</text>
 <rect class="box cpu" x="210" y="152" width="180" height="40" rx="6"/><text class="t ok" x="300" y="177" text-anchor="middle">✓ pass 1/1</text>
 <rect class="box bad" x="430" y="152" width="180" height="40" rx="6"/><text class="t no" x="520" y="177" text-anchor="middle">✗ fail: no hand-off</text></g>
@@ -207,7 +207,7 @@ svg .arrowhead.me{fill:var(--accent)}
 <figcaption>One or two runs per task. That is a signal, not a rate.</figcaption>
 </figure>
 <table id="bench-numbers">
-<thead><tr><th>Measure</th><th>Professor</th><th>Hermes</th></tr></thead>
+<thead><tr><th>Measure</th><th>Our setup</th><th>Hermes</th></tr></thead>
 <tbody>
 <tr><td>Valid runs passed</td><td class="n">5 of 5</td><td class="n">3 of 5</td></tr>
 <tr><td>Tokens in, all 5 runs</td><td class="n">72,227</td><td class="n">76,010</td></tr>
@@ -225,7 +225,7 @@ svg .arrowhead.me{fill:var(--accent)}
 <table class="arena" id="compare-table">
 <thead><tr><th>Contender</th><th>Provider lock-in</th><th>Model routing, token saving</th><th>Multi-agent</th><th>Memory</th><th>Hooks and gates</th><th>Cost</th><th>Who it suits</th></tr></thead>
 <tbody>
-<tr class="ours" id="row-professor"><td>Professor (our setup)</td>
+<tr class="ours" id="row-our-setup"><td>Our setup</td>
 <td>None for its assistants. The coding side can switch harness per task, but some features work with one vendor only <span class="src">ours</span></td>
 <td>Yes: easy work goes to free or cheap models first <span class="src">ours</span></td>
 <td>Yes: one lead, each worker in its own copy. The hand-off task passed <span class="src">test</span></td>
@@ -281,9 +281,9 @@ svg .arrowhead.me{fill:var(--accent)}
 <p>What the evidence above does not cover, and the weak spots I know about.</p>
 <ul>
 <li><strong>One small test.</strong> One or two runs per task, on one free model. A lean, not a proof.</li>
-<li><strong>Two halves of Professor.</strong> The head-to-head ran its everyday-assistant side. The tier list below scores the setup as a whole, coding side included.</li>
+<li><strong>Two halves of our setup.</strong> The head-to-head ran its everyday-assistant side. The tier list below scores the setup as a whole, coding side included.</li>
 <li><strong>Four contenders were not run.</strong> Duet, Muse and Grok Bot are described from launch pages and comments. OpenClaw is described from its docs, and three of its cells have no source read.</li>
-<li><strong>Our own gaps.</strong> Old sessions are kept but not yet searchable. Against our own 30-point checklist, Professor scores 6 have, 18 partly, 2 lack and 4 not needed, and 14 of those marks still need a test. The biggest gaps are retrying failed calls with a growing delay, and packaging an agent so it installs on another machine. I have not scored the other five on all 30 yet.</li>
+<li><strong>Our own gaps.</strong> Old sessions are kept but not yet searchable. Against our own 30-point checklist, our setup scores 6 have, 18 partly, 2 lack and 4 not needed, and 14 of those marks still need a test. The biggest gaps are retrying failed calls with a growing delay, and packaging an agent so it installs on another machine. I have not scored the other five on all 30 yet.</li>
 <li><strong>Approval rules are prose.</strong> "Drafts, not sends" and "ask before destructive" are written as rules the model reads, not as hooks that block. Omnigent and Claude Code's own docs both point to enforced policy instead.</li>
 <li><strong>Isolation is worktrees only.</strong> They keep files apart but not the network or credentials.</li>
 <li><strong>Still to borrow from Hermes.</strong> A leaner chat prompt, scheduled jobs that need no model, and a one-command backup.</li>
@@ -304,7 +304,7 @@ svg .arrowhead.me{fill:var(--accent)}
 <svg viewBox="0 0 680 456" role="img" aria-labelledby="fig-tier-title">
 <title id="fig-tier-title">Harness tier list: twelve setups scored on twelve parts, plus Vercel d0 and LifeOS not scored yet</title>
 <g id="tier-legend"><title>Legend</title><rect class="bar has" x="210" y="10" width="14" height="12"/><text class="s" x="230" y="21">has</text><rect class="bar diff" x="270" y="10" width="14" height="12"/><text class="s" x="290" y="21">different</text><rect class="bar lacks" x="360" y="10" width="14" height="12"/><text class="s" x="380" y="21">lacks</text><rect class="bar estimate" x="430" y="10" width="14" height="12"/><text class="s" x="450" y="21">estimate</text></g>
-<g id="tier-0"><title>Professor (our setup): 10 has, 2 different, 0 lacks, 0 estimate</title><text class="s" x="200" y="64" text-anchor="end">Professor (our setup)</text><rect class="bar has" x="210" y="50" width="300" height="18"/><rect class="bar diff" x="510" y="50" width="60" height="18"/><text class="s" x="580" y="64">10 has</text></g>
+<g id="tier-0"><title>Our setup: 10 has, 2 different, 0 lacks, 0 estimate</title><text class="s" x="200" y="64" text-anchor="end">Our setup</text><rect class="bar has" x="210" y="50" width="300" height="18"/><rect class="bar diff" x="510" y="50" width="60" height="18"/><text class="s" x="580" y="64">10 has</text></g>
 <g id="tier-1"><title>Hermes Agent (Nous Research), added 5 Nov: 9 has, 3 different, 0 lacks, 0 estimate</title><text class="s" x="200" y="92" text-anchor="end">Hermes Agent</text><rect class="bar has" x="210" y="78" width="270" height="18"/><rect class="bar diff" x="480" y="78" width="90" height="18"/><text class="s" x="580" y="92">9 has</text></g>
 <g id="tier-2"><title>Kun Chen stack: 8 has, 4 different, 0 lacks, 0 estimate</title><text class="s" x="200" y="120" text-anchor="end">Kun Chen stack</text><rect class="bar has" x="210" y="106" width="240" height="18"/><rect class="bar diff" x="450" y="106" width="120" height="18"/><text class="s" x="580" y="120">8 has</text></g>
 <g id="tier-3"><title>Troupe design (a design, not shipped software): 7 has, 2 different, 3 lacks, 0 estimate</title><text class="s" x="200" y="148" text-anchor="end">Troupe design</text><rect class="bar has" x="210" y="134" width="210" height="18"/><rect class="bar diff" x="420" y="134" width="60" height="18"/><rect class="bar lacks" x="480" y="134" width="90" height="18"/><text class="s" x="580" y="148">7 has</text></g>
@@ -326,20 +326,20 @@ svg .arrowhead.me{fill:var(--accent)}
 <table id="new-parts-table">
 <tr><th>Setup</th><th>Surfaces</th><th>Scheduler</th><th>Basis</th></tr>
 <tr><td>Hermes Agent</td><td>has</td><td>has</td><td>terminal UI, one gateway to many chat apps, voice memos; built-in cron with delivery</td></tr>
-<tr><td>Professor (our setup)</td><td>has</td><td>has</td><td>terminal agents plus review pages I read on my phone; nightly jobs and overnight loops</td></tr>
+<tr><td>Our setup</td><td>has</td><td>has</td><td>terminal agents plus review pages I read on my phone; nightly jobs and overnight loops</td></tr>
 <tr><td>Kun Chen stack</td><td>estimate</td><td>has</td><td>overnight loops (radar item 5)</td></tr>
 <tr><td>Claude Code, OpenCode</td><td>has</td><td>estimate</td><td>both ship a terminal front end</td></tr>
 <tr><td>Databricks Omnigent</td><td>has</td><td>estimate</td><td>shares live sessions by URL, on phone and web (27 Oct report)</td></tr>
 <tr><td>The other six</td><td>estimate</td><td>estimate</td><td>no source read for these two parts yet</td></tr>
 </table>
-<p>Two notes. Professor (our setup) includes Kun Chen's tools, so it inherits most of his rows; what it adds is the folder map, a goals layer, and one rules file shared by several tools. And Troupe is a design, not shipped software, so its "has" means "designed".</p>
+<p>Two notes. Our setup includes Kun Chen's tools, so it inherits most of his rows; what it adds is the folder map, a goals layer, and one rules file shared by several tools. And Troupe is a design, not shipped software, so its "has" means "designed".</p>
 
 <h3 id="s5-grid">The full grid: every setup on every part</h3>
 <p>The bars give counts. The grid gives each mark, so you can see where a setup is strong and where it is missing. <span class="tag cpu">has</span> it, <span class="tag me">diff</span> does it another way, <span class="tag gpu">lacks</span> it, <span class="tag est">est</span> an estimate, because no primary source answers it. It covers the original twelve parts; the two added on 5 November are in the small table above. Vercel d0 and LifeOS are not scored.</p>
 <table class="grid" id="grid-table">
 <thead><tr><th>Setup</th><th>Context</th><th>Rules</th><th>Skills</th><th>Memory</th><th>Hooks</th><th>Isolation</th><th>Orchestrator</th><th>Review gate</th><th>Approval</th><th>Self-improve</th><th>Sync</th><th>Goals</th></tr></thead>
 <tbody>
-<tr class="ours"><td>Professor (our setup)</td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag me">diff</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag me">diff</span></td><td><span class="tag cpu">has</span></td></tr>
+<tr class="ours"><td>Our setup</td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag me">diff</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag me">diff</span></td><td><span class="tag cpu">has</span></td></tr>
 <tr><td>Hermes Agent</td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag me">diff</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag me">diff</span></td><td><span class="tag me">diff</span></td></tr>
 <tr><td>Kun Chen stack</td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag me">diff</span></td><td><span class="tag me">diff</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag me">diff</span></td><td><span class="tag me">diff</span></td></tr>
 <tr><td>Troupe design</td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag gpu">lacks</span></td><td><span class="tag cpu">has</span></td><td><span class="tag gpu">lacks</span></td><td><span class="tag me">diff</span></td><td><span class="tag gpu">lacks</span></td><td><span class="tag me">diff</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td></tr>
@@ -353,7 +353,7 @@ svg .arrowhead.me{fill:var(--accent)}
 <tr><td>Stanford Meta-Harness</td><td><span class="tag gpu">lacks</span></td><td><span class="tag me">diff</span></td><td><span class="tag gpu">lacks</span></td><td><span class="tag me">diff</span></td><td><span class="tag gpu">lacks</span></td><td><span class="tag est">est</span></td><td><span class="tag me">diff</span></td><td><span class="tag me">diff</span></td><td><span class="tag me">diff</span></td><td><span class="tag cpu">has</span></td><td><span class="tag gpu">lacks</span></td><td><span class="tag me">diff</span></td></tr>
 </tbody>
 </table>
-<p class="test">Test: each row adds up to its bar above (Professor 10 has and 2 diff; Warp 5 has, 1 diff, 5 lacks and 1 est). Every cell in the 27 October report carries a source; the sources are listed under "Where I looked".</p>
+<p class="test">Test: each row adds up to its bar above (Our setup 10 has and 2 diff; Warp 5 has, 1 diff, 5 lacks and 1 est). Every cell in the 27 October report carries a source; the sources are listed under "Where I looked".</p>
 
 <h3 id="s5-stands-out">What stands out: four problems others solve with less</h3>
 <p>Reading the grid part by part, four problems come up where another setup does the same job with less. For each: the problem, what others do, and where we stand.</p>
@@ -365,7 +365,7 @@ svg .arrowhead.me{fill:var(--accent)}
 </ul>
 <p>Where ours carries more than the others:</p>
 <ul>
-<li><strong>Coverage.</strong> Professor (our setup) and the Kun Chen stack are the only two with no "lacks": all twelve parts are has or diff. Professor has 10 outright has to Kun's 8. The reason is plain: it contains Kun's tools, so it inherits those rows. What it adds is the folder map and its routing, a goals layer, and a link layer that serves several tools. Next best are Troupe (7 has, a design only) and Claude Code (7 has, with no gate, no self-improvement and no goals).</li>
+<li><strong>Coverage.</strong> Our setup and the Kun Chen stack are the only two with no "lacks": all twelve parts are has or diff. Our setup has 10 outright has to Kun's 8. The reason is plain: it contains Kun's tools, so it inherits those rows. What it adds is the folder map and its routing, a goals layer, and a link layer that serves several tools. Next best are Troupe (7 has, a design only) and Claude Code (7 has, with no gate, no self-improvement and no goals).</li>
 <li><strong>One file serves five tools.</strong> The base rules file is linked into Claude Code, Codex, OpenCode, Gemini and backpass. OpenCode also reads Claude Code's file as a fallback, but no other setup treats the instruction file as a port that tools plug into.</li>
 <li><strong>Structural checks that cost no tokens.</strong> Checks and CI run on the map itself. I saw no test of the instruction files in any other setup. That is an absence in what I read, not proof.</li>
 <li><strong>A goals layer.</strong> Only Troupe and ours have one.</li>
@@ -400,7 +400,7 @@ svg .arrowhead.me{fill:var(--accent)}
 <tr><td><strong>Prompt-driven</strong></td><td>a chat and maybe one rules file; the model decides the rest</td><td>none in the list; it's where most people start</td></tr>
 <tr><td><strong>Skill-driven</strong></td><td>instructions that load when a task matches</td><td>Claude Code, OpenCode, Pi, Warp, used as they ship</td></tr>
 <tr><td><strong>Folder-structure-controlled</strong> (repo as harness)</td><td>a folder of files and scripts, like a GitHub repo; the prompts live inside the files</td><td>Ordered stage folders (Jake Van Clief), Vercel d0 (not scored), my context folders; Troupe</td></tr>
-<tr><td><strong>Script-driven</strong></td><td>hooks, gates and refusals that run the same way every time</td><td>Kun Chen stack (FirstMate), Professor (our setup); Omnigent's policies</td></tr>
+<tr><td><strong>Script-driven</strong></td><td>hooks, gates and refusals that run the same way every time</td><td>Kun Chen stack (FirstMate), our setup; Omnigent's policies</td></tr>
 <tr><td><strong>Meta-harness</strong> (off the line)</td><td>a loop that edits the harness itself and keeps what scores better</td><td>Google Harness-squared, Stanford Meta-Harness</td></tr>
 </table>
 
@@ -421,7 +421,7 @@ svg .arrowhead.me{fill:var(--accent)}
 
 <h3 id="s5-ours">How we composed ours</h3>
 <p>A kit car is built from other makers' parts. The skill is in choosing them and making them fit.</p>
-<p>Professor (our setup) scores 10 has and 2 different on the original twelve parts, and has on the two added 5 November. Here is where each part comes from, and whether that part is now standard across the arena. "Now standard" is my reading of the 27 October report: <strong>yes</strong> if most setups have it, <strong>becoming</strong> if the big coding agents are adding it, <strong>no</strong> if it's still rare.</p>
+<p>Our setup scores 10 has and 2 different on the original twelve parts, and has on the two added 5 November. Here is where each part comes from, and whether that part is now standard across the arena. "Now standard" is my reading of the 27 October report: <strong>yes</strong> if most setups have it, <strong>becoming</strong> if the big coding agents are adding it, <strong>no</strong> if it's still rare.</p>
 <table id="ours-table">
 <tr><th>Part</th><th>Where ours comes from</th><th>Mark</th><th>Now standard?</th></tr>
 <tr><td>Always-loaded context</td><td>a small base map, <code>AGENTS.md</code> (about 1.5k tokens), kept small the ordered stage folders way (Jake Van Clief)</td><td>has</td><td><span class="tag cpu">yes</span></td></tr>
