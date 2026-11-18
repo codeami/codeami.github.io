@@ -9,8 +9,6 @@ header.tb .tb-links a { padding: 6px 0; color: var(--mute); text-decoration: non
 header.tb .tb-links a[aria-current] { color: var(--ink); font-weight: 700; box-shadow: inset 0 -2px 0 var(--accent); }
 header.tb .tb-links .tb-gh { display: inline-flex; align-items: center; }
 header.tb .tb-links .tb-gh svg { width: 20px; height: 20px; }
-/* Pages still carrying the old Menu button (the arena, until it is rebuilt) keep it out of sight: the links are always in view. */
-header.tb .tb-menu { display: none; }
 /* The last line of a page hands the reader on to the next page in the bar order. */
 .handoff { margin: 32px 0 8px; font-size: 1.1rem; font-weight: 700; }
 .handoff a { color: var(--accent-text, var(--accent)); text-decoration: none; }

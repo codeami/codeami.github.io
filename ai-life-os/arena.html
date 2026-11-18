@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<title>Hermes vs OpenClaw vs Claude Duet, Muse and Grok Bot · The Chart Room</title>
+<title>Hermes vs OpenClaw vs Claude Duet, Muse and Grok Bot · Ashish Raina</title>
 <meta name="description" content="Hermes, OpenClaw, Claude Duet, Meta Muse and Grok Bot compared on lock-in, model routing, memory, gates and cost, plus one head-to-head test, then twelve setups scored on harness parts and a personal Adopt, Trial, Assess, Hold radar.">
 <link rel="stylesheet" href="hud.css">
 <script src="article.js"></script>
@@ -12,7 +12,6 @@
 <link rel="stylesheet" href="kit/kit.css">
 <link rel="stylesheet" href="article.css">
 <link rel="stylesheet" href="topbar.css">
-<script src="topbar.js"></script>
 <style>
 td:first-child{min-width:120px}
 @media (min-width:640px){td:first-child{min-width:180px}}
@@ -86,12 +85,11 @@ svg .arrowhead.me{fill:var(--accent)}
 <body>
 <header class="k-nav tb">
   <a class="k-home tb-brand" href="../index.html"><img class="k-mark" src="kit/bosun.svg" alt=""><span class="k-logo">Ashish Raina</span></a>
-  <button class="tb-menu" type="button" aria-expanded="false" aria-controls="tb-links">Menu</button>
   <nav class="tb-links" id="tb-links" aria-label="Site"><a href="../index.html#me">Me</a><a href="blog/index.html" aria-current="page">Blog</a><a href="../intent/index.html">Intent</a><a href="course/index.html">Course</a><a class="tb-gh" href="https://github.com/codeami" aria-label="GitHub: github.com/codeami"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="kit/icons.svg#github"/></svg></a><button class="theme" id="theme" type="button">Night</button></nav>
 </header>
 <main class="page">
 <article class="k-article">
-<p class="k-kicker">Harness engineering</p>
+<p class="k-kicker"><a href="blog/index.html">Blog</a> · Safe AI crews</p>
 <h1 class="k-title">Hermes vs OpenClaw vs Claude Duet, Muse and Grok Bot: an AI agent arena</h1>
 <p class="k-dek">Six ways to run AI agents, scored on what matters day to day: can you pick the model, does it check its work, and who holds the merge. Below that, twelve setups scored on twelve harness parts, and my own radar.</p>
 <p class="k-meta"><span>Ashish Raina</span><time datetime="2026-11-18">18 Nov 2026</time><span>22 min read</span></p>
@@ -294,7 +292,7 @@ svg .arrowhead.me{fill:var(--accent)}
 </ul>
 
 <h2 id="full-table">The full scoring table and radar</h2>
-<p>The tier list and radar below are section 5 of <a href="blog/guides-and-sensors.html">Guides, sensors, and the rules I'm still begging for</a>, kept on this page so they are easy to find. Section numbers point into that post.</p>
+<p>The tier list and radar below started as one section of a longer post on guides and sensors. That post has left the site; its tier list and radar live here.</p>
 <p class="q">How do other setups compare, and what's become standard?</p>
 <p>A spec sheet doesn't tell you how a car drives. It does tell you what's missing.</p>
 <p>I think of this as an arena, not a ranking. New harnesses enter it. Techniques that several harnesses share get compared side by side. And some techniques stop being special: rules files like <code>AGENTS.md</code>, worktrees and skills are close to standard now, so I mark them that way. The arena holds two views: the tier list below, and my own radar in "How we composed ours".</p>
@@ -396,7 +394,7 @@ svg .arrowhead.me{fill:var(--accent)}
 </ul>
 
 <h3 id="s5-types">Harness types</h3>
-<p>The tier list ranks setups. It doesn't say what <em>kind</em> each one is. Here they are grouped by the four types from section 4, plus one that sits off that line. This grouping is my reading.</p>
+<p>The tier list ranks setups. It doesn't say what <em>kind</em> each one is. Here they are grouped by four types of harness, plus one that sits off that line. This grouping is my reading.</p>
 <table id="types-table">
 <tr><th>Type</th><th>What steers the agent</th><th>Setups</th></tr>
 <tr><td><strong>Prompt-driven</strong></td><td>a chat and maybe one rules file; the model decides the rest</td><td>none in the list; it's where most people start</td></tr>
@@ -479,9 +477,9 @@ svg .arrowhead.me{fill:var(--accent)}
 <a href="index.html#dialogue-freezes-into-skills"><g><title>10 /grill-with-docs (grill-me): Adopt</title><circle class="dot" cx="406" cy="316" r="10"/><text class="dn" x="406" y="320">10</text></g></a>
 <g><title>11 taste-check and plain-check: moved Trial to Adopt</title><circle class="dot moved" cx="390" cy="291" r="10"/><text class="dn" x="390" y="295">11</text></g>
 <g><title>12 backpass: moved Trial to Adopt</title><circle class="dot moved" cx="364" cy="274" r="10"/><text class="dn" x="364" y="278">12</text></g>
-<a href="brain/index.html#pocock-steers-with-skills-kun-builds-machinery"><g><title>13 Pocock's other skills: Assess</title><circle class="dot" cx="552" cy="303" r="10"/><text class="dn" x="552" y="307">13</text></g></a>
-<a href="brain/index.html#kun-chen-agent-policy"><g><title>14 Kun Chen /vision: Assess</title><circle class="dot" cx="535" cy="249" r="10"/><text class="dn" x="535" y="253">14</text></g></a>
-<a href="brain/index.html#icm-layer-ladder"><g><title>15 Jake Van Clief's stage-folder architect skill: Assess</title><circle class="dot" cx="505" cy="202" r="10"/><text class="dn" x="505" y="206">15</text></g></a>
+<a href="index.html#pocock-steers-with-skills-kun-builds-machinery"><g><title>13 Pocock's other skills: Assess</title><circle class="dot" cx="552" cy="303" r="10"/><text class="dn" x="552" y="307">13</text></g></a>
+<a href="index.html#kun-chen-agent-policy"><g><title>14 Kun Chen /vision: Assess</title><circle class="dot" cx="535" cy="249" r="10"/><text class="dn" x="535" y="253">14</text></g></a>
+<a href="index.html#icm-layer-ladder"><g><title>15 Jake Van Clief's stage-folder architect skill: Assess</title><circle class="dot" cx="505" cy="202" r="10"/><text class="dn" x="505" y="206">15</text></g></a>
 <g><title>16 "Introduce me to AI" onboarding mode: Assess, new</title><circle class="dot new" cx="463" cy="164" r="10"/><text class="dn" x="463" y="168">16</text></g>
 <g><title>17 PAUL (Plan-Apply-Unify Loop): Assess, new</title><circle class="dot new" cx="414" cy="138" r="10"/><text class="dn" x="414" y="142">17</text></g>
 <g><title>18 Claude animation skills: Assess, new</title><circle class="dot new" cx="359" cy="126" r="10"/><text class="dn" x="359" y="130">18</text></g>
@@ -492,7 +490,7 @@ svg .arrowhead.me{fill:var(--accent)}
 <g><title>23 Obsidian as planner: Assess</title><circle class="dot" cx="138" cy="414" r="10"/><text class="dn" x="138" y="418">23</text></g>
 <a href="index.html#compaction-is-an-implementation-detail"><g><title>24 HumanLayer ideas: Assess</title><circle class="dot" cx="188" cy="492" r="10"/><text class="dn" x="188" y="496">24</text></g></a>
 <g><title>25 Vercel d0 (folder as harness): Assess, new</title><circle class="dot new" cx="267" cy="542" r="10"/><text class="dn" x="267" y="546">25</text></g>
-<a href="brain/index.html#icm-layer-ladder"><g><title>26 Ordered stage folders (Jake Van Clief): Adopt</title><circle class="dot" cx="390" cy="390" r="10"/><text class="dn" x="390" y="394">26</text></g></a>
+<a href="index.html#icm-layer-ladder"><g><title>26 Ordered stage folders (Jake Van Clief): Adopt</title><circle class="dot" cx="390" cy="390" r="10"/><text class="dn" x="390" y="394">26</text></g></a>
 <g><title>27 Secondmates: Trial</title><circle class="dot" cx="401" cy="471" r="10"/><text class="dn" x="401" y="475">27</text></g>
 <g><title>28 Voice-first capture: Trial</title><circle class="dot" cx="471" cy="401" r="10"/><text class="dn" x="471" y="405">28</text></g>
 <g><title>29 Twice-a-day reflection: Assess</title><circle class="dot" cx="492" cy="492" r="10"/><text class="dn" x="492" y="496">29</text></g>
@@ -510,18 +508,18 @@ svg .arrowhead.me{fill:var(--accent)}
 <tr><td>4</td><td>lavish-axi pages: how I review drafts and plans</td><td>Adopt</td><td>same</td></tr>
 <tr><td>5</td><td>gnhf overnight loops: used less than the rest</td><td>Trial</td><td>same</td></tr>
 <tr><td>6</td><td>quota-axi: cost check before long runs</td><td>Trial</td><td>same</td></tr>
-<tr><td>7</td><td>Harness sensors: secret scan, plain-check hook, link check (section 10)</td><td>Trial</td><td><strong>new</strong>: the three sensors this post proposes, being built</td></tr>
+<tr><td>7</td><td>Harness sensors: secret scan, plain-check hook, link check</td><td>Trial</td><td><strong>new</strong>: the three sensors I proposed, being built</td></tr>
 <tr><td>8</td><td>Greptile-style test design: closed and paid; the gap is a free tool</td><td>Assess</td><td>same</td></tr>
 <tr><td>9</td><td>Daily links page</td><td>Hold</td><td>same</td></tr>
 <tr><td>31</td><td><a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a>: a self-hosted agent with a built-in learning loop (memory, skills, a curator)</td><td>Assess</td><td><strong>new</strong> (5 Nov): read from its docs; not yet tried on real work</td></tr>
 <tr><td colspan="4"><strong>Skills</strong></td></tr>
-<tr><td>10</td><td>/grill-with-docs: adapted from Matt Pocock's grill-me and domain modelling (MIT)</td><td>Adopt</td><td>same; section 4 names it as an onboarding tool</td></tr>
+<tr><td>10</td><td>/grill-with-docs: adapted from Matt Pocock's grill-me and domain modelling (MIT)</td><td>Adopt</td><td>same; named as an onboarding tool</td></tr>
 <tr><td>11</td><td>taste-check and plain-check: no-model checks on intent and plain words</td><td>Adopt</td><td><strong>moved</strong> from Trial: now a named check in the factory's review and learn stages</td></tr>
 <tr><td>12</td><td>backpass: proposes rule edits from transcripts; I approve</td><td>Adopt</td><td><strong>moved</strong> from Trial: runs every night from a launchd job</td></tr>
 <tr><td>13</td><td>Pocock's other skills: not installed, not compared yet</td><td>Assess</td><td>same</td></tr>
 <tr><td>14</td><td>Kun Chen's /vision: read and compared, not adopted</td><td>Assess</td><td>same</td></tr>
 <tr><td>15</td><td>Jake Van Clief's stage-folder architect skill: its questions feed the grill design</td><td>Assess</td><td>same</td></tr>
-<tr><td>16</td><td>"Introduce me to AI" onboarding mode (section 4)</td><td>Assess</td><td><strong>new</strong>: an idea, not built</td></tr>
+<tr><td>16</td><td>"Introduce me to AI" onboarding mode</td><td>Assess</td><td><strong>new</strong>: an idea, not built</td></tr>
 <tr><td>17</td><td><a href="https://github.com/ChristopherKahler/paul">PAUL</a> (Plan-Apply-Unify Loop for Claude Code)</td><td>Assess</td><td><strong>new</strong>: found 2 Nov, next to trial</td></tr>
 <tr><td>18</td><td>Claude animation skills, for short videos</td><td>Assess</td><td><strong>new</strong>: on the list to vet first</td></tr>
 <tr><td colspan="4"><strong>Context</strong></td></tr>
@@ -531,7 +529,7 @@ svg .arrowhead.me{fill:var(--accent)}
 <tr><td>22</td><td>Context sync (Drive and Claude): the phone sync test worked once</td><td>Trial</td><td>same</td></tr>
 <tr><td>23</td><td>Obsidian as planner: picked, not built</td><td>Assess</td><td>same</td></tr>
 <tr><td>24</td><td>HumanLayer ideas: frequent compaction, smart and dumb zones</td><td>Assess</td><td>same</td></tr>
-<tr><td>25</td><td><a href="https://vercel.com/blog/we-removed-80-percent-of-our-agents-tools">Vercel d0</a>: folder as harness (section 5)</td><td>Assess</td><td><strong>new</strong>: from Vercel's post, next to trial</td></tr>
+<tr><td>25</td><td><a href="https://vercel.com/blog/we-removed-80-percent-of-our-agents-tools">Vercel d0</a>: folder as harness (see "Folder as harness" above)</td><td>Assess</td><td><strong>new</strong>: from Vercel's post, next to trial</td></tr>
 <tr><td colspan="4"><strong>Habits</strong></td></tr>
 <tr><td>26</td><td>Ordered stage folders (Jake Van Clief): numbered folders, one task each, a check at the end</td><td>Adopt</td><td>same</td></tr>
 <tr><td>27</td><td>Secondmates: helper agents for marketing, product and finance</td><td>Trial</td><td>same</td></tr>
