@@ -62,7 +62,7 @@
     {"text": "The fix is to say the why and what done looks like, not only the what. “Fix my links” is a request. “Every link on the hub page opens at phone width, with a screenshot as proof” is a check anyone can run."}
    ],
    "read": {"label": "One captain, many crews: keeping the model's intent aligned with mine", "href": "../blog/how-it-fits-together.html#s5", "note": "Blog, section 5: four checks at four time scales for “did it do what I meant?”. About 8 minutes."},
-   "more": [{"label": "Guided tour: an example brief, intent on top and spec below", "href": "../tour/index.html#intent"}],
+   "more": [{"label": "Intent: how I work with agents, from brief to check", "href": "../../intent/index.html#how"}],
    "check": {"q": "Which ask carries the most intent?",
     "options": ["Fix the website.", "Make the site faster.", "Make the hub links open on my phone; done when every link opens at 375px, with a screenshot."],
     "answer": 2,

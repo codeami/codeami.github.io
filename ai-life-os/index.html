@@ -4,14 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<title>The Chart Room: chat with EA-bot</title>
-<meta name="description" content="The Chart Room: how one captain runs a crew of AI agents, safely. A plain chat with EA-bot, posts on harness engineering and alignment, and the day's numbers.">
+<title>The software factory demo · Ashish Raina</title>
+<meta name="description" content="The software factory: how one captain runs a crew of AI agents, safely. A plain chat with the front agent, and the second brain drawn as one map.">
 <link rel="stylesheet" href="hud.css">
 <script src="article.js"></script>
 <link rel="icon" href="kit/bosun.svg" type="image/svg+xml">
 <link rel="stylesheet" href="kit/kit.css">
 <link rel="stylesheet" href="topbar.css">
-<script src="topbar.js"></script>
 <style>
 html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
@@ -147,9 +146,8 @@ html { scroll-behavior: smooth; }
 </svg>
 
 <header class="k-nav tb">
-  <a class="k-home tb-brand" href="../index.html"><svg class="k-mark" role="img" aria-label="Bosun, the EA-bot mascot"><use href="#bosun"/></svg>
+  <a class="k-home tb-brand" href="../index.html"><svg class="k-mark" role="img" aria-label="Bosun, the software factory mascot"><use href="#bosun"/></svg>
   <span class="k-logo">Ashish Raina</span></a>
-  <button class="tb-menu" type="button" aria-expanded="false" aria-controls="tb-links">Menu</button>
   <nav class="tb-links" id="tb-links" aria-label="Site">
     <a href="../index.html#me">Me</a>
     <a href="blog/index.html">Blog</a>
@@ -168,7 +166,7 @@ html { scroll-behavior: smooth; }
 </div></aside>
 
 <div class="shell">
-  <main class="chatcol" aria-label="Chat with EA-bot">
+  <main class="chatcol" aria-label="Chat with the software factory">
     <div class="k-chat" id="log" role="log" aria-live="polite">
       <noscript><p>This chat needs JavaScript. <a href="blog/index.html">Read the Blog</a> instead.</p></noscript>
     </div>
@@ -195,20 +193,8 @@ html { scroll-behavior: smooth; }
   </aside>
 </div>
 
-<section class="proof" aria-labelledby="proof-h">
-  <h2 id="proof-h">2 November, in numbers</h2>
-  <p class="by">by Ashish Raina – program manager turned AI-crew operator. Each number links to the page that explains it.</p>
-  <div class="k-cards">
-    <a class="k-card" href="blog/rules-from-chat-history.html"><div class="k-n">46</div><p class="k-l">chat corrections reviewed</p></a>
-    <a class="k-card" href="blog/rules-from-chat-history.html#s6"><div class="k-n">4</div><p class="k-l">new rules, approved by me</p></a>
-    <a class="k-card" href="blog/guides-and-sensors.html#s10"><div class="k-n">3</div><p class="k-l">automatic checks added: secret scan at commit, plain-language check on drafts, link check before replies</p></a>
-    <a class="k-card" href="safety.html#false-passes"><div class="k-n">9</div><p class="k-l">false passes logged: work that passed the checks, then I rejected</p></a>
-    <a class="k-card" href="changelog.html#d2026-11-02"><div class="k-n">6</div><p class="k-l">pull requests merged that day</p></a>
-  </div>
-</section>
-
 <footer class="foot">
-  <p id="pages">Prefer to read? <a href="blog/index.html">Blog</a> · <a href="arena.html">Harness arena</a> · <a href="safety.html">Safety by design</a> · <a href="safety.html#works-today">What works today</a> · <a href="core.html">Core logic</a> · <a href="maps/skills.html">Skill map</a> · <a href="maps/flow.html">Harness flow map</a> · <a href="brain/index.html">Second brain</a> · <a href="changelog.html">Changelog</a> · <a href="about.html">About</a></p>
+  <p id="pages">Prefer to read? <a href="blog/index.html">Blog</a> · <a href="../intent/index.html">Intent</a> · <a href="../intent/index.html#safety">What the crew may do</a> · <a href="arena.html">Harness arena</a></p>
   <p>The supervisor and most crew mechanics are upstream <a href="https://github.com/kunchenguid/firstmate">Firstmate</a>, MIT licence, by Kun Chen and contributors.</p>
 </footer>
 
@@ -373,7 +359,7 @@ html { scroll-behavior: smooth; }
     var wait = botRow("");
     var dots = wait.lastChild;
     dots.className += " typing";
-    dots.setAttribute("aria-label", "EA-bot is typing");
+    dots.setAttribute("aria-label", "The front agent is typing");
     dots.innerHTML = "<i></i><i></i><i></i>";
     log.appendChild(wait);
     scrollTo(wait);

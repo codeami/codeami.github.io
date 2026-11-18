@@ -7,20 +7,21 @@
 <meta name="calm-landing" content="chart first: hud.js opens the page card only when asked">
 
 <title>Ashish Raina · Me</title>
-<meta name="description" content="Ashish Raina: program manager turned AI-crew operator. Write down what you actually want; a short CV, a blog, the Intent page, a free course and the AIO OS, a live demo of the setup.">
+<meta name="description" content="Ashish Raina: program manager turned AI-crew operator. Write down what you actually want; a short CV, a blog, the Intent page, a free course and the software factory, a live demo of the setup.">
 <link rel="stylesheet" href="ai-life-os/hud.css">
 <script src="ai-life-os/article.js"></script>
 <link rel="icon" href="ai-life-os/kit/bosun.svg" type="image/svg+xml">
 <link rel="stylesheet" href="ai-life-os/kit/kit.css">
 <link rel="stylesheet" href="ai-life-os/article.css">
 <link rel="stylesheet" href="ai-life-os/topbar.css">
-<script src="ai-life-os/topbar.js"></script>
 <script src="ai-life-os/chat.js" defer></script>
 <style>
 /* The whoami landing: who I am, then a guided walk in eight steps (intent first), then the work. */
 .who { font-size: 1.15rem; }
 .whoami h2 { margin: var(--space-3, 16px) 0 6px; font-size: 1.1rem; }
 .whoami h1:focus { outline: none; }
+.mission { margin: var(--space-3, 16px) 0; font-size: 1.15rem; font-weight: 700; line-height: 1.4; }
+.actions { margin: 6px 0 var(--space-3, 16px); }
 .whoami .outcomes { color: var(--mute); }
 .whoami .next-links { margin-top: var(--space-4, 24px); }
 /* The landing hook: one line and a sample star-map. The dashed outline is yours, empty until the end of the trip. */
@@ -144,7 +145,6 @@
 <body>
 <header class="k-nav tb">
   <a class="k-home tb-brand" href="index.html"><img class="k-mark" src="ai-life-os/kit/bosun.svg" alt=""><span class="k-logo">Ashish Raina</span></a>
-  <button class="tb-menu" type="button" aria-expanded="false" aria-controls="tb-links">Menu</button>
   <nav class="tb-links" id="tb-links" aria-label="Site"><a href="index.html#me" aria-current="page">Me</a><a href="ai-life-os/blog/index.html">Blog</a><a href="intent/index.html">Intent</a><a href="ai-life-os/course/index.html">Course</a><a class="tb-gh" href="https://github.com/codeami" aria-label="GitHub: github.com/codeami"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="ai-life-os/kit/icons.svg#github"/></svg></a><button class="theme" id="theme" type="button">Matrix</button></nav>
 </header>
 <main class="page">
@@ -152,8 +152,8 @@
 <!-- The landing hook, shown on a first visit: one line, a sample star-map, and the promise of your own. -->
 <section class="hook" id="hook" aria-labelledby="hook-h">
 <p class="k-kicker">Start here</p>
-<h1 class="k-title" id="hook-h" tabindex="-1">Write down what you actually want.</h1>
-<p class="k-dek who">Most people and companies never write down what they actually want, so they can't tell progress from motion. I help them write it down.</p>
+<h1 class="k-title" id="hook-h" tabindex="-1">I help people and companies write down what they actually want, then build the software that closes the gap.</h1>
+<p class="k-dek who">Most people and companies never write one down, so they can't tell progress from motion.</p>
 <figure class="radar">
 <svg viewBox="-55 40 520 320" role="img" aria-labelledby="hook-radar-t hook-radar-d">
 <title id="hook-radar-t">Sample star-map: six work traits for Sam, a made-up example</title>
@@ -189,7 +189,7 @@
 <section class="explain" id="explain" aria-labelledby="explain-h">
 <p class="k-kicker">Explain this</p>
 <h2 id="explain-h" tabindex="-1">Why this site exists</h2>
-<p class="scripted">Scripted. EA-bot reads a fixed script. No AI model answers on this page.</p>
+<p class="scripted">Scripted. The front agent reads a fixed script. No AI model answers on this page.</p>
 <div class="chat" id="journeyChat" data-start="j1"><noscript>
 <p>Most of us never write down what we actually want, so we can't tell progress from motion. Too much noise buries the thing you need, notes and goals sit in separate piles, AI fills gaps with confident guesses, and agents run where you can't see them.</p>
 <p>The fix is to write the target down first, then let the tool work toward it. I stand for signal over noise, a setup you can bend to fit you, safe AI helpers that keep learning, and goals that sit together instead of fighting.</p>
@@ -200,6 +200,14 @@
 <p class="k-kicker">Me</p>
 <h1 class="k-title" id="me-h" tabindex="-1">Ashish Raina</h1>
 <p class="k-dek who">Technical Program Manager · AI-native delivery</p>
+<p class="mission">I help people and companies write down what they actually want, then build the software that closes the gap.</p>
+<h2>Start with one of these</h2>
+<div class="next-links actions">
+<a class="k-btn primary" href="ai-life-os/blog/when-the-notes-are-wrong.html">Read one post</a>
+<a class="k-btn secondary" href="ai-life-os/index.html">Try the demo</a>
+<a class="k-btn secondary" href="ai-life-os/course/index.html">Take the course</a>
+<a class="k-btn secondary" href="https://github.com/codeami">Follow on GitHub</a>
+</div>
 <h2>Profile</h2>
 <p>Technical program lead with 20 years in software, the last six on a global B2B wholesale platform (Salesforce, S/4HANA), where I grew from leading to directing QA teams and practices, and also worked as Product Owner, on release and branching strategies, and in technical program management across four regions. I surface hidden dependencies while they are cheap to fix. I now run an AI meta-factory: a one-person agentic harness, run Chief-of-Staff style, with a human gate on every merge.</p>
 <h2>Selected outcomes</h2>
@@ -228,7 +236,7 @@
 <p class="k-kicker">Ideal state overview</p>
 <h2 id="step-1-h" tabindex="-1">What AI can do now, and which way you want to go</h2>
 <p class="lead">Thirty seconds. Then pick a path: a ten-minute walk, or straight to who made this.</p>
-<p class="scripted">Scripted. EA-bot reads a fixed script. No AI model answers on this page.</p>
+<p class="scripted">Scripted. The front agent reads a fixed script. No AI model answers on this page.</p>
 <div class="chat" data-start="ov1"><noscript><p>This chat needs JavaScript. Step through the page below instead, or open the <a href="ai-life-os/course/index.html">course</a>.</p></noscript></div>
 </section>
 
@@ -329,8 +337,8 @@
 <h2 id="step-6-h" tabindex="-1">How the AIs carry it</h2>
 <p class="lead">Personal, work and passion AI, kept in line by one assistant and one second brain.</p>
 <figure class="fig">
-<svg viewBox="0 0 320 200" role="img" aria-labelledby="f6-t"><title id="f6-t">EA-bot at the top, three rooms below it, and the second brain underneath</title>
-<circle class="box hit" cx="160" cy="34" r="26"/><text x="160" y="38" text-anchor="middle">EA-bot</text>
+<svg viewBox="0 0 320 200" role="img" aria-labelledby="f6-t"><title id="f6-t">The front agent at the top, three rooms below it, and the second brain underneath</title>
+<circle class="box hit" cx="160" cy="34" r="26"/><text x="160" y="38" text-anchor="middle">Front</text>
 <line class="ln" x1="160" y1="60" x2="60" y2="100"/><line class="ln" x1="160" y1="60" x2="160" y2="100"/><line class="ln" x1="160" y1="60" x2="260" y2="100"/>
 <rect class="box" x="16" y="100" width="88" height="32"/><text x="60" y="120" text-anchor="middle">Personal AI</text>
 <rect class="box" x="116" y="100" width="88" height="32"/><text x="160" y="120" text-anchor="middle">Work AI</text>
@@ -370,15 +378,9 @@
 <div class="demos">
 <a class="demo" href="ai-life-os/index.html">
   <p class="k-kicker">Live demo</p>
-  <h3>AI-Life-OS</h3>
-  <p>The setup I run every day, laid open: chat with EA-bot, the skill map, the harness arena, and what the agents may and may not do.</p>
-  <p class="go">Open AI-Life-OS</p>
-</a>
-<a class="demo" href="ai-life-os/brain/index.html">
-  <p class="k-kicker">Interactive map</p>
-  <h3>Second Brain</h3>
-  <p>How it all connects, as one ring map: the public notes, the twelve parts of the harness, the skills, the posts and the pages.</p>
-  <p class="go">Open the Second Brain</p>
+  <h3>The software factory</h3>
+  <p>The setup I run every day, laid open: a chat, and the second brain as one ring map of the public notes, the posts and the pages.</p>
+  <p class="go">Open the demo</p>
 </a>
 </div>
 <div class="chat" data-start="ov8"></div>
@@ -391,7 +393,7 @@
 <a class="demo" href="ai-life-os/course/index.html">
   <p class="k-kicker">Start here</p>
   <h3>Ashish's AI introductory course</h3>
-  <p>Seven short lessons with EA-bot, in a fixed order: wants and needs, Maslow, intent, and how people and AI pass it on. One reading and one question each.</p>
+  <p>Seven short lessons in a guided chat, in a fixed order: wants and needs, Maslow, intent, and how people and AI pass it on. One reading and one question each.</p>
   <ul><li>7 lessons</li><li>One read each</li><li>Lights up the map</li></ul>
   <p class="go">Start the course</p>
 </a>
@@ -402,7 +404,7 @@
 <div class="card planned"><h3>Build your second brain</h3><p><span class="badge">planned</span></p></div>
 <div class="card planned"><h3>Run a small AI crew</h3><p><span class="badge">planned</span></p></div>
 </div>
-<p class="scripted">Scripted. EA-bot reads a fixed script. No AI model answers on this page.</p>
+<p class="scripted">Scripted. The front agent reads a fixed script. No AI model answers on this page.</p>
 <div class="chat" data-start="ov9"></div>
 </section>
 
@@ -466,10 +468,10 @@
 </figure>
 <ul class="how-list">
 <li><b>Pace 18.</b> Moves fast, runs work in parallel.</li>
-<li><b>Delegation 19.</b> Directs AI crews, keeps the decisions. <a href="ai-life-os/blog/how-it-fits-together.html">How one person runs a crew of AI agents, safely</a></li>
+<li><b>Delegation 19.</b> Directs AI crews, keeps the decisions. <a href="ai-life-os/blog/one-harness-for-every-agent.html">One harness for every agent, model and machine</a></li>
 <li><b>Curiosity 18.</b> Always testing new tools and ideas. <a href="ai-life-os/arena.html">The harness arena</a></li>
 <li><b>Structure 16.</b> Folders, templates, ordered stages. <a href="ai-life-os/blog/everything-is-a-file.html">Write it down once</a></li>
-<li><b>Quality review 16.</b> Reviews what ships, on clear review pages. <a href="ai-life-os/blog/guides-and-sensors.html">Guides and sensors</a></li>
+<li><b>Quality review 16.</b> Reviews what ships, on clear review pages. <a href="ai-life-os/blog/when-the-notes-are-wrong.html">When the notes are wrong</a></li>
 <li><b>Outside memory 17.</b> Keeps context in files, not in his head. <a href="ai-life-os/blog/second-brain-page.html">My second brain on one page</a></li>
 </ul>
 </div>
@@ -481,32 +483,27 @@
 </ul></div>
 <div class="card"><p class="k-kicker">Customize everything, including yourself</p><ul>
 <li><a href="ai-life-os/blog/one-harness-for-every-agent.html">One harness for every agent, model and machine</a></li>
-<li><a href="ai-life-os/blog/rules-from-chat-history.html">Turn your corrections into rules your AI follows</a></li>
 </ul></div>
 <div class="card"><p class="k-kicker">Safe AI crews</p><ul>
 <li><a href="ai-life-os/blog/when-the-notes-are-wrong.html">When the notes are wrong</a></li>
-<li><a href="ai-life-os/blog/guides-and-sensors.html">Guides and sensors: steering AI agents before and after they act</a></li>
-<li><a href="ai-life-os/blog/how-it-fits-together.html">How one person runs a crew of AI agents, safely</a></li>
 </ul></div>
 </div>
 </div>
 <blockquote>"Managing a complex AI agentic bot system is sort of like managing a contract with different vendors."</blockquote>
-<p><a href="ai-life-os/about.html#vendors">The vendor practices, in a table</a>. Code and notes: <a href="https://github.com/codeami">github.com/codeami</a>.</p>
+<p><a href="intent/index.html#how">How I work with agents</a>. Code and notes: <a href="https://github.com/codeami">github.com/codeami</a>.</p>
 <h3>Work you can read</h3>
 <ol class="post-list">
 <li><p class="k-kicker">Harness</p><h3><a href="ai-life-os/blog/one-harness-for-every-agent.html">One harness for every agent, model and machine</a></h3><p>One base map every tool loads first, a link in each tool's folder, and Nix to rebuild the setup on each Mac</p><p class="k-meta"><time datetime="2026-11-04">4 Nov 2026</time><span>7 min read</span></p></li>
-<li><p class="k-kicker">Harness engineering</p><h3><a href="ai-life-os/blog/guides-and-sensors.html">Guides, sensors, and the rules I'm still begging for</a></h3><p>Mapping my agent setup onto the harness engineering frame, and picking the next three sensors</p><p class="k-meta"><time datetime="2026-11-02">2 Nov 2026</time><span>21 min read</span></p></li>
-<li><p class="k-kicker">Alignment</p><h3><a href="ai-life-os/blog/rules-from-chat-history.html">Your corrections are your next rules</a></h3><p>How I turn a week of "no, not like that" into rules my agents read, without letting them edit their own rules</p><p class="k-meta"><time datetime="2026-11-02">2 Nov 2026</time><span>6 min read</span></p></li>
 <li><p class="k-kicker">Context</p><h3><a href="ai-life-os/blog/everything-is-a-file.html">Write it down once: a folder your AI can read</a></h3><p>Your folders are a library and the AI is the librarian. Write down who you are and what you do once, in plain files, and every chat stops starting from zero</p><p class="k-meta"><time datetime="2026-11-02">2 Nov 2026</time><span>8 min read</span></p></li>
 </ol>
 <div class="next-links" id="evalLinks" hidden>
 <button class="k-btn secondary" type="button" id="watchDemo">Watch the interview demo</button>
-<a class="k-btn primary" href="ai-life-os/index.html">Open the Chart Room chat</a>
+<a class="k-btn primary" href="ai-life-os/index.html">Open the demo</a>
 <a class="k-btn secondary" href="ai-life-os/blog/index.html">All posts</a>
 </div>
 <div class="next-links" id="learnLinks">
 <a class="k-btn primary" href="ai-life-os/blog/index.html">All posts</a>
-<a class="k-btn secondary" href="ai-life-os/index.html">Open the Chart Room chat</a>
+<a class="k-btn secondary" href="ai-life-os/index.html">Open the demo</a>
 </div>
 <div class="chat" data-start="ov10" hidden></div>
 </section>
@@ -554,7 +551,7 @@
     var evalPath = ctx.path === "evaluator";
     // Learner: step 1 goes by the chat, steps 2 to 7 by Next, step 8 ends. Evaluator: 1, then 8, then the demo.
     next.hidden = n === 1 || n === 8 || (n === 3 && evalPath && false);
-    next.textContent = n === 3 && evalPath ? "Open the Chart Room chat" : "Next";
+    next.textContent = n === 3 && evalPath ? "Open the demo" : "Next";
     $("evalLinks").hidden = !evalPath;
     $("learnLinks").hidden = evalPath;
     mount(n);

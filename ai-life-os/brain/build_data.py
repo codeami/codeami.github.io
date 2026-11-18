@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build brain/brain-data.json, the public data of the second brain page (brain/index.html).
+"""Build brain/brain-data.json, the public data of the chart behind every page (graph.js).
 Run from anywhere: python3 -I ai-life-os/brain/build_data.py
 Reads only public files of this site:
   brain/notes.js            the approved wiki notes (built by build.py)
@@ -21,10 +21,11 @@ RETIRED = {r["path"] for r in json.loads((ROOT / "share.json").read_text(encodin
 
 
 def live(url):
-    """False for a url (relative to brain/) that points at a page that is not public."""
+    """False for a url (relative to brain/) that points at a page that is not public or is no longer in the repo."""
     if re.match(r"^[a-z][a-z0-9+.-]*:", url):
         return True
-    return posixpath.normpath(posixpath.join("ai-life-os/brain", url.split("#")[0].split("?")[0])) not in RETIRED
+    path = posixpath.normpath(posixpath.join("ai-life-os/brain", url.split("#")[0].split("?")[0]))
+    return path not in RETIRED and (ROOT / path).exists()
 site = json.loads(rd("brain/src/site.json"))
 extra = json.loads(rd("brain/src/extra.json"))
 notes = json.loads(rd("brain/notes.js").split("=", 1)[1].strip().rstrip(";"))
@@ -93,7 +94,7 @@ for tid, label, has, dif, lacks, guess, src in extra["tier"]:
 tier_room = hub_of("g-tier", "tier", "Harness tier list", "#ffd93d", [("scored setups", tier)])
 
 # Room 5: Blog posts, one folder per kicker; a post opens in the reading drawer
-POST = re.compile(r'<li><p class="k-kicker">([^<]+)</p><h2><a href="([^"]+)">(.+?)</a></h2><p>(.+?)</p><p class="k-meta"><time datetime="([^"]+)">([^<]+)</time>')
+POST = re.compile(r'<li class="p-post"><p class="p-kicker">([^<]+)</p><h3><a href="([^"]+)">(.+?)</a></h3><p>(.+?)</p><p class="p-byline"><time datetime="([^"]+)">([^<]+)</time>')
 posts = {}
 for kick, href, title, dek, _, date in POST.findall(rd("blog/index.html")):
     url = "../blog/" + href
@@ -109,17 +110,18 @@ posts_room = {"id": "posts", "label": "Blog", "color": "#5cd3ff", "note": "Publi
 course = json.loads(rd("course/course.json"))
 lessons = course["lessons"]
 course_room = {"id": "course", "label": "Course", "color": "#7dff8a",
-               "note": course["title"] + ": %d short lessons in a fixed order, read with EA-bot. A lesson's dot lights up once you finish it in this browser." % len(lessons),
+               "note": course["title"] + ": %d short lessons in a fixed order, read in a guided chat. A lesson's dot lights up once you finish it in this browser." % len(lessons),
                "links": links([["Open the course", "../course/index.html"]]),
                "folders": [{"name": "lessons", "count": len(lessons), "files": [
                    {"id": "course-" + l["id"], "n": "%d. %s" % (i, l["title"]), "line": "course · lesson %d of %d" % (i, len(lessons)),
                     "body": [l["summary"]], "links": links([["Open this lesson", "../course/index.html#" + l["id"]]]), "rel": [], "lesson": l["id"]}
                    for i, l in enumerate(lessons, 1)]}]}
 
-skills = [{"n": s["name"], "desc": plain(s.get("whatItIs")), "when": s.get("trigger", ""), "url": "../maps/skills.html#" + sid}
+skills = [dict({"n": s["name"], "desc": plain(s.get("whatItIs")), "when": s.get("trigger", "")},
+               **({"url": "../maps/skills.html#" + sid} if live("../maps/skills.html") else {}))
           for sid, s in skills_map["skills"].items()]
 
-out = {"meta": {"name": "AI-Life-OS public second brain", "invented": False,
+out = {"meta": {"name": "Public second brain of the software factory", "invented": False,
                 "note": "Public data only: the approved wiki notes, this site's pages and posts, the skill map and the harness tier list. No private files, paths, routines or links."},
        "root": site["root"], "rooms": [notes_room, fm_room, areas_room, tier_room, posts_room, course_room], "skills": skills, "routines": [],
        "apps": [], "projects": [dict(p, kind="project") for p in site["projects"]], "pages": [dict(p, kind="page") for p in site["pages"] if live(p["url"])],

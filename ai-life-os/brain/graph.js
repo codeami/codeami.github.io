@@ -94,8 +94,8 @@ function start(d,srcLabel){
   readLit();build(d);buildLegend();wire();renderSides();
   resize();setLayout(S.layout,true);mountTour();
   requestAnimationFrame(frame);
-  if(FRAMED){if(pending)API.select(pending);return}
-  // a link such as brain/index.html#first-mate opens that node's card
+  if(FRAMED&&pending)API.select(pending);
+  // a link such as ai-life-os/index.html#first-mate opens that node's card
   function fromHash(){var id=decodeURIComponent(location.hash.slice(1));if(id&&byId[id])openNode(byId[id])}
   window.addEventListener("hashchange",fromHash);setTimeout(fromHash,0);
 }
@@ -474,7 +474,7 @@ function mountTour(){
       {rect:ring(guide(1)),before:mapView,title:"Memory: rooms of notes",text:"Each coloured arc is a room, like Wiki notes or Blog. One dot is one note, part or post. Click a dot for its card; double-click a room to fold it."},
       {rect:ring(guide(2)),before:mapView,title:"Outer ring: pages and projects",text:"Hexagons are this site's pages and public projects. A page or post opens on top of the map, and its node lights up."}];
   if(FRAMED)steps.push(
-      {sel:doc(".k-nav"),before:mapView,title:"Site tabs",text:"The same tabs on every page: Blog, the AI-Life-OS demo, the Second Brain on its own, whoami and GitHub. Each one opens over this same map."},
+      {sel:doc(".k-nav"),before:mapView,title:"Site tabs",text:"The same bar on every page: Me, Blog, Intent, Course and GitHub. Each page opens over this same map."},
       {sel:doc("#pageov"),before:function(){setLegend(false);fold(true)},title:"The page overlay",text:"Every page of the site reads in this panel, on top of the live map. Minimise it to see the whole map, or close it; the button that is left brings it back."});
   steps.push(
       {sel:sh("motionBtn"),before:mapView,title:"Buttons",text:"Turn the motion on or off (remembered on this device), show or hide the side lists, and open the menu."},
@@ -490,8 +490,7 @@ function mountTour(){
     chips:(opts.explain?[{q:"Explain this",act:opts.explain}]:[]).concat([
       {q:opts.explain?"Tour the map":"Explain this screen",from:0,sec:!!opts.explain},
       {q:"What do the shapes mean?",only:at("Legend"),sec:!!opts.explain},
-      {q:"How do I find something?",only:at("Menu"),sec:!!opts.explain},
-      {q:"Show me the skill map",href:BASE+"../maps/skills.html",sec:!!opts.explain}
+      {q:"How do I find something?",only:at("Menu"),sec:!!opts.explain}
     ]),
     onStart:function(){
       keep={sides:!$("side").hidden,panel:!$("panel").hidden,legend:S.legend,layout:S.layout};
