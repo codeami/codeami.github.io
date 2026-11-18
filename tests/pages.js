@@ -1,5 +1,5 @@
 // Finds every HTML page in the repo, so new pages are covered without editing a list.
-// Build templates (files holding %%PLACEHOLDERS%%, e.g. maps/_shared/shell.html) are not pages.
+// Build templates (files holding %%PLACEHOLDERS%%) are not pages.
 const { readdirSync, readFileSync } = require('node:fs');
 const { join, relative, sep } = require('node:path');
 

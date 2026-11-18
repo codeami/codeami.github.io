@@ -483,31 +483,6 @@
    ]
   },
   {
-   "id": "b-shell",
-   "group": "fm",
-   "label": "Map shell",
-   "tags": [
-    "borrowed-from"
-   ],
-   "from": "EricTechPro/super-board",
-   "text": [
-    "The interactive Skill map and Harness flow map use the map shell from super-board by EricTechPro (MIT)."
-   ],
-   "links": [
-    [
-     "super-board",
-     "https://github.com/EricTechPro/super-board"
-    ],
-    [
-     "Skill map",
-     "../maps/skills.html"
-    ]
-   ],
-   "edges": [
-    "g-fm"
-   ]
-  },
-  {
    "id": "b-arms",
    "group": "fm",
    "label": "ARMS framework",

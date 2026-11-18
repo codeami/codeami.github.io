@@ -1,22 +1,15 @@
 {
- "about": "Hand-kept public data for brain/index.html: the centre file, the outer ring (this site's pages and public projects) and the reading order. Urls are relative to brain/. build_data.py merges it with notes.js, src/extra.json, the skill map and the Blog list.",
+ "about": "Hand-kept public data for the chart behind every page: the centre file, the outer ring (this site's pages and public projects) and the reading order. Urls are relative to brain/. build_data.py merges it with notes.js, src/extra.json, the skill map and the Blog list.",
  "root": {"label": "AGENTS.md", "also": "CLAUDE.md",
   "note": "The base map. Every agent tool loads this one rules file first; each room of work adds its own CONTEXT.md on top.",
-  "links": [["Post: one rules file for every tool", "../blog/everything-is-a-file.html"], ["Core logic: always-loaded context", "../core.html#part-context"]]},
+  "links": [["Post: one rules file for every tool", "../blog/everything-is-a-file.html"]]},
  "pages": [
   {"n": "whoami", "state": "home", "url": "../../index.html"},
-  {"n": "Chat with EA-bot", "state": "start here", "url": "../index.html"},
+  {"n": "Intent", "state": "what I do", "url": "../../intent/index.html"},
+  {"n": "The software factory demo", "state": "start here", "url": "../index.html"},
   {"n": "AI introductory course", "state": "7 lessons", "url": "../course/index.html"},
-  {"n": "The story", "state": "for beginners", "url": "../story.html"},
-  {"n": "Blog", "state": "5 posts", "url": "../blog/index.html"},
-  {"n": "Harness arena", "state": "11 setups scored", "url": "../arena.html"},
-  {"n": "Safety by design", "state": "limits, honestly", "url": "../safety.html"},
-  {"n": "Guided tour", "state": "step by step", "url": "../tour/index.html"},
-  {"n": "Changelog", "state": "dated", "url": "../changelog.html"},
-  {"n": "About", "state": "who and why", "url": "../about.html"},
-  {"n": "Core logic", "state": "12 parts", "url": "../core.html", "group": "firstmate"},
-  {"n": "Skill map", "state": "41 skills", "url": "../maps/skills.html", "group": "firstmate"},
-  {"n": "Harness flow map", "state": "one task", "url": "../maps/flow.html", "group": "firstmate"}
+  {"n": "Blog", "state": "4 posts", "url": "../blog/index.html"},
+  {"n": "Harness arena", "state": "11 setups scored", "url": "../arena.html"}
  ],
  "projects": [
   {"n": "Firstmate (upstream)", "state": "Kun Chen, MIT", "url": "https://github.com/kunchenguid/firstmate"},
@@ -25,15 +18,9 @@
   {"n": "swarm-referee", "state": "public repo", "url": "https://github.com/codeami/swarm-referee"}
  ],
  "reading": [
-  {"title": "The story", "url": "../story.html", "line": "Start · how it works, from the very beginning"},
   {"title": "Write it down once: a folder your AI can read", "url": "../blog/everything-is-a-file.html", "line": "Context · Blog"},
-  {"title": "One captain, many crews", "url": "../blog/how-it-fits-together.html", "line": "Alignment · Blog"},
-  {"title": "Core logic", "url": "../core.html", "line": "The harness · 12 parts"},
-  {"title": "Guides and sensors", "url": "../blog/guides-and-sensors.html", "line": "Harness engineering · Blog"},
-  {"title": "Your corrections are your next rules", "url": "../blog/rules-from-chat-history.html", "line": "Alignment · Blog"},
-  {"title": "Safety by design", "url": "../safety.html", "line": "Limits · what waits for the owner"},
+  {"title": "One harness for every agent", "url": "../blog/one-harness-for-every-agent.html", "line": "Setup · Blog"},
   {"title": "A map of my mind", "url": "../blog/second-brain-page.html", "line": "Setup · Blog"},
-  {"title": "Three weeks in", "url": "../blog/progress-three-weeks.html", "line": "Progress report · Blog"},
-  {"title": "About", "url": "../about.html", "line": "Who and why"}
+  {"title": "When the notes are wrong", "url": "../blog/when-the-notes-are-wrong.html", "line": "Alignment · Blog"}
  ]
 }

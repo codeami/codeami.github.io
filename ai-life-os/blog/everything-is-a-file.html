@@ -4,14 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light">
-<title>Write it down once: a folder your AI can read · The Chart Room</title>
+<title>Write it down once: a folder your AI can read · Ashish Raina</title>
 <meta name="description" content="Your folders are a library and the AI is the librarian. Write down who you are and what you do once, in plain files, and every chat stops starting from zero">
 <link rel="stylesheet" href="../hud.css">
 <link rel="icon" href="../kit/bosun.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../kit/kit.css">
 <link rel="stylesheet" href="../panel.css">
 <link rel="stylesheet" href="../topbar.css">
-<script src="../topbar.js"></script>
 </head>
 <body>
 <svg class="p-sprite" aria-hidden="true" focusable="false">
@@ -28,7 +27,6 @@
 </svg>
 <header class="p-nav tb">
   <a class="p-brand tb-brand" href="../../index.html"><img src="../kit/bosun.svg" alt=""><span>Ashish Raina</span></a>
-  <button class="tb-menu" type="button" aria-expanded="false" aria-controls="tb-links">Menu</button>
   <nav class="tb-links" id="tb-links" aria-label="Site"><a href="../../index.html#me">Me</a><a href="index.html" aria-current="page">Blog</a><a href="../../intent/index.html">Intent</a><a href="../course/index.html">Course</a><a class="tb-gh" href="https://github.com/codeami" aria-label="GitHub: github.com/codeami"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="../kit/icons.svg#github"/></svg></a></nav></header>
 <main class="p-page">
 
@@ -157,15 +155,9 @@
 
 <section class="p-panel" id="p4" aria-labelledby="p4-t">
 <header class="p-panel-h"><span class="p-num">04</span><h2 id="p4-t">Drawers and the card catalogue</h2><svg class="p-ico" aria-hidden="true" focusable="false"><use href="#i-cabinet"/></svg></header>
-<div class="p-box"><h3 class="p-lab">The filing cabinet: one room each</h3><p>Each kind of work gets its own folder, a room. A <code>CONTEXT.md</code> inside says how that work is done: the tone, the template, what to check. My blog room also holds a tone file and a template for how a post is laid out.</p></div>
-<div class="p-box"><h3 class="p-lab">The card catalogue: the map</h3><p>At the top sits one short file, <code>AGENTS.md</code>. It holds who you are, your house rules and a routing table: for this task, open this drawer.</p></div>
-<div class="p-box"><h3 class="p-lab">A routing table</h3>
-<table class="p-table"><thead><tr><th>Task</th><th>Open</th></tr></thead><tbody>
-<tr><td>Write a blog post</td><td><code>writing/</code>: CONTEXT.md, voice.md</td></tr>
-<tr><td>Money question</td><td><code>money/</code>: CONTEXT.md</td></tr>
-<tr><td>Anything else</td><td>Ask which drawer</td></tr>
-</tbody></table></div>
-<p class="p-principle"><span class="p-lab">Principle</span>The routing table matters most. Without it the librarian either pulls every book (slow and costly) or guesses.</p>
+<div class="p-box"><h3 class="p-lab">The filing cabinet: one room each</h3><p>Each kind of work gets its own folder, a room. A <code>CONTEXT.md</code> inside says how that work is done: the tone and what to check.</p></div>
+<div class="p-box"><h3 class="p-lab">The card catalogue: the map</h3><p>At the top sits one short file, <code>AGENTS.md</code>. It holds who you are and your house rules, and it points to the right drawer for each task.</p></div>
+<p class="p-principle"><span class="p-lab">Principle</span>The map matters most. Without it the librarian either pulls every book (slow and costly) or guesses.</p>
 <a class="p-more" href="#s-rooms">Read more: drawers and the catalogue</a>
 </section>
 
@@ -245,10 +237,8 @@
 <pre>Who I am: Sam, a teacher learning to use AI.
 How I like answers: short, plain, no hype.
 
-For this kind of task, open this drawer:
-- money questions   → money/CONTEXT.md
-- lesson planning   → teaching/CONTEXT.md
-- anything else     → ask me which drawer</pre>
+Drawers: money/ and teaching/.
+Anything else: ask me which drawer.</pre>
 <p>Add a drawer when a kind of work keeps coming up, not before.</p>
 </section>
 
@@ -256,13 +246,13 @@ For this kind of task, open this drawer:
 <h2>Drawers and the card catalogue</h2>
 <p>A good AI library has three kinds of file:</p>
 <ul>
-<li><strong>The map</strong>: one short file at the top, <code>AGENTS.md</code>. Who you are, your house rules, and a table: <em>for this kind of task, go to this drawer and read these files.</em></li>
+<li><strong>The map</strong>: one short file at the top, <code>AGENTS.md</code>. Who you are, your house rules, and which drawer to open for each kind of task.</li>
 <li><strong>The rooms</strong>: one folder per kind of work, each with a <code>CONTEXT.md</code> that explains how that work is done.</li>
 <li><strong>The tools</strong>: scripts and skills the rooms can use, once you have some.</li>
 </ul>
 <p>This is the shape of a small library:</p>
 <pre>my-life/
-├── AGENTS.md          the map: who I am, my rules, the routing table
+├── AGENTS.md          the map: who I am, my rules
 ├── money/
 │   └── CONTEXT.md     how I handle money
 ├── health/
@@ -270,13 +260,7 @@ For this kind of task, open this drawer:
 └── writing/
     ├── CONTEXT.md     how I write
     └── voice.md       my tone, saved once</pre>
-<p>And this is the kind of routing table inside the map:</p>
-<pre>| Task                      | Open drawer   | Read first            |
-|---------------------------|---------------|-----------------------|
-| Write or edit a post      | writing/      | CONTEXT.md, voice.md  |
-| Money question            | money/        | CONTEXT.md            |
-| Anything else             | ask which drawer           |</pre>
-<p>The routing table is the most important part. Without it, the librarian either pulls every book off the shelf (slow and expensive) or guesses which one you meant.</p>
+<p>The map is the most important part. Without it, the librarian either pulls every book off the shelf (slow and expensive) or guesses which one you meant.</p>
 <p>A card that points to a shelf that has moved is a real failure for AI tools too: <a href="when-the-notes-are-wrong.html">When the notes are wrong</a>.</p>
 </section>
 
@@ -315,7 +299,7 @@ review  → you approve or reject; only approved rules go into the map</pre>
 "weirdly formal now"             → keep my rhythm
 "think Vox, not the FT"          → general audience
 "more measured — like this one"  → measured, not casual + an example</pre>
-<p>Nobody set out to write a style guide, but by round four there is one, scattered across the chat. Save the decisions as a file (<code>writing/voice.md</code> in the library above) and next time "tighten this paragraph" is right in one go. I turned a week of my own corrections into rules the same way, in <a href="rules-from-chat-history.html">Turn your corrections into rules your AI follows</a>.</p>
+<p>Nobody set out to write a style guide, but by round four there is one, scattered across the chat. Save the decisions as a file (<code>writing/voice.md</code> in the library above) and next time "tighten this paragraph" is right in one go. I turned a week of my own corrections into rules the same way.</p>
 <p>When an answer comes back wrong, change one thing and rerun:</p>
 <pre>read → draft → check against the source → find the one cause → change one line → rerun the same task</pre>
 <p>Keep the change if it helped. Drop it if it did not. One change, one visible effect.</p>
@@ -346,7 +330,7 @@ review  → you approve or reject; only approved rules go into the map</pre>
 <p>A diary does two jobs. It helps you sort out your week, and years later it is the record you reach for. Folders of notes work the same way, and now an AI can read them too.</p>
 <p>Expressing yourself, journaling and taking notes build a record that helps you. The same record means the AI works your way, with no re-explaining. It also gives someone new to AI a place to start: their own notes, not a blank page. From there they can go on to contribute to the bigger good.</p>
 <p>If you take one thing from this post, take this. Write down what you keep explaining. Put it where every tool can find it. Change it only on purpose. Then <a href="#s-first">build the smallest library</a>: one folder, one map file, five minutes.</p>
-<p>The post <a href="how-it-fits-together.html">How one person runs a crew of AI agents, safely</a> covers the other half: how the work gets done when several agents run at once.</p>
+<p>The post <a href="one-harness-for-every-agent.html">One harness for every agent, model and machine</a> covers the next step: how every AI tool finds the same map.</p>
 </section>
 
 <section id="credits">

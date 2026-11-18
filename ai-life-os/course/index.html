@@ -4,14 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<title>Ashish's AI introductory course · The Chart Room</title>
-<meta name="description" content="Ashish's AI introductory course: seven short lessons with EA-bot, in a fixed order. Wants and needs, Maslow, intent, commander's intent, intent engineering, life and project intent, and a first step.">
+<title>Ashish's AI introductory course · Ashish Raina</title>
+<meta name="description" content="Ashish's AI introductory course: seven short lessons in a guided chat, in a fixed order. Wants and needs, Maslow, intent, commander's intent, intent engineering, life and project intent, and a first step.">
 <link rel="stylesheet" href="../hud.css">
 <script src="../article.js"></script>
 <link rel="icon" href="../kit/bosun.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../kit/kit.css">
 <link rel="stylesheet" href="../topbar.css">
-<script src="../topbar.js"></script>
 <style>
 /* The course: the same chat as the landing (bubbles, option chips, a save-for-later
    list), but the script is a fixed reading order from course.json. */
@@ -107,9 +106,8 @@
 </svg>
 
 <header class="k-nav tb">
-  <a class="k-home tb-brand" href="../../index.html"><svg class="k-mark" role="img" aria-label="Bosun, the EA-bot mascot"><use href="#bosun"/></svg>
+  <a class="k-home tb-brand" href="../../index.html"><svg class="k-mark" role="img" aria-label="Bosun, the software factory mascot"><use href="#bosun"/></svg>
   <span class="k-logo">Ashish Raina</span></a>
-  <button class="tb-menu" type="button" aria-expanded="false" aria-controls="tb-links">Menu</button>
   <nav class="tb-links" id="tb-links" aria-label="Site">
     <a href="../../index.html#me">Me</a>
     <a href="../blog/index.html">Blog</a>
@@ -121,7 +119,7 @@
 </header>
 
 <div class="shell">
-  <main class="chatcol" aria-label="Ashish's AI introductory course, with EA-bot">
+  <main class="chatcol" aria-label="Ashish's AI introductory course, a guided chat">
     <div class="k-chat" id="log" role="log" aria-live="polite">
       <noscript><p>This course runs as a chat and needs JavaScript. The readings are listed in <a href="course.json">course.json</a>.</p></noscript>
     </div>
@@ -150,7 +148,7 @@
 
 <footer class="foot">
   <p>Ashish's AI introductory course · modelled on <a href="https://bluedot.org/courses">BlueDot Impact's courses</a>. Progress stays in this browser only.</p>
-  <p><a href="../index.html">Chat with EA-bot</a> · <a href="../blog/index.html">Blog</a> · <a href="../brain/index.html">Second brain</a> · <a href="../about.html">About</a></p>
+  <p><a href="../index.html">The software factory demo</a> · <a href="../blog/index.html">Blog</a> · <a href="../../intent/index.html">Intent</a></p>
 </footer>
 
 <script>
@@ -220,7 +218,7 @@
     busy = true;
     var wait = botRow(""), dots = wait.lastChild;
     dots.className += " typing";
-    dots.setAttribute("aria-label", "EA-bot is typing");
+    dots.setAttribute("aria-label", "The front agent is typing");
     dots.innerHTML = "<i></i><i></i><i></i>";
     log.appendChild(wait);
     scrollTo(wait);

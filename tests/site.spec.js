@@ -6,11 +6,10 @@ const { join, dirname, extname, relative, sep } = require('node:path');
 const { root, pages, templates } = require('./pages');
 
 const origin = 'http://127.0.0.1:4173';
+const mission = 'I help people and companies write down what they actually want, then build the software that closes the gap.';
 
 // Overflow that exists today and is waiting for a page fix. Delete the entry when the page is fixed.
-const knownOverflow = {
-  'ai-life-os/kit/index.html': 'scrolls 2px sideways at 390px',
-};
+const knownOverflow = {};
 
 for (const file of pages) {
   test(`${file}: loads clean, fits the width, matches the baseline`, async ({ page }) => {
@@ -126,7 +125,6 @@ test('no public page uses wording that undersells the work', () => {
 // ---- share.json: one entry for every page; what is not public is hidden, not deleted ----
 const share = JSON.parse(readFileSync(join(root, 'share.json'), 'utf8')).pages;
 const retired = share.filter((r) => r.level === 'retired');
-const hidden = share.filter((r) => r.level !== 'public');
 const external = (u) => /^https?:/.test(u);
 
 test('share.json: every published HTML page has an entry with a valid level', () => {
@@ -153,41 +151,16 @@ test('share.json: no chart node points at a page that is not public', () => {
   expect(hit).toEqual([]);
 });
 
-test('retired pages are out of the nav and show a notice', async ({ page }) => {
-  await page.goto('/ai-life-os/core.html');
-  await page.waitForSelector('nav[aria-label="Pages"] a.nav', { state: 'attached' });
-  const hrefs = await page.$$eval('a[href]', (as) => as.map((a) => new URL(a.href).pathname));
-  expect(hrefs.filter((h) => hidden.some((r) => h === `/${r.path}`))).toEqual([]);
-  for (const r of retired.filter((x) => pages.includes(x.path))) {
-    await page.goto(`/${r.path}`);
-    await expect(page.locator('.retired-note'), r.path).toContainText('Retired');
-    await expect(page.locator('.retired-note a')).toHaveAttribute('href', external(r.into) ? r.into : `/${r.into}`);
-  }
-});
-
-test('a link-only page is out of the nav, still opens, and carries noindex', async ({ page }) => {
-  const listed = share.map((r) => (r.path === 'ai-life-os/changelog.html' ? { ...r, level: 'link-only' } : r));
-  await page.route('**/share.json', (route) => route.fulfill({ json: { pages: listed } }));
-  await page.goto('/ai-life-os/core.html');
-  await page.waitForSelector('nav[aria-label="Pages"] a.nav', { state: 'attached' });
-  const hrefs = await page.$$eval('nav a[href]', (as) => as.map((a) => new URL(a.href).pathname));
-  expect(hrefs).not.toContain('/ai-life-os/changelog.html');
-  const res = await page.goto('/ai-life-os/changelog.html');
-  expect(res.status()).toBe(200);
-  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex');
-  await expect(page.locator('.retired-note')).toHaveCount(0);
-});
-
 test('build: a link-only page gets a static noindex and no robots.txt line, a retired one keeps its Disallow', () => {
   const tmp = mkdtempSync(join(tmpdir(), 'share-build-'));
   try {
     cpSync(join(root, 'ai-life-os'), join(tmp, 'ai-life-os'), { recursive: true });
-    const fixture = share.map((r) => (r.path === 'ai-life-os/changelog.html' ? { ...r, level: 'link-only' } : r));
+    const fixture = share.map((r) => (r.path === 'ai-life-os/arena.html' ? { ...r, level: 'link-only' } : r));
     writeFileSync(join(tmp, 'share.json'), JSON.stringify({ pages: fixture }));
     execFileSync('python3', ['-I', join(tmp, 'ai-life-os/brain/build_data.py')], { stdio: 'pipe' });
-    expect(readFileSync(join(tmp, 'ai-life-os/changelog.html'), 'utf8')).toMatch(/<meta\s+name="robots"\s+content="noindex">/);
+    expect(readFileSync(join(tmp, 'ai-life-os/arena.html'), 'utf8')).toMatch(/<meta\s+name="robots"\s+content="noindex">/);
     const disallowed = readFileSync(join(tmp, 'robots.txt'), 'utf8').split('\n').filter((l) => l.startsWith('Disallow:'));
-    expect(disallowed).not.toContain('Disallow: /ai-life-os/changelog.html');
+    expect(disallowed).not.toContain('Disallow: /ai-life-os/arena.html');
     expect(disallowed).toEqual(retired.map((r) => `Disallow: /${r.path}`).sort());
   } finally {
     rmSync(tmp, { recursive: true, force: true });
@@ -308,10 +281,7 @@ test('panel post: the library scene is a labelled SVG that fits the width, names
 const convertedPosts = [
   { slug: 'everything-is-a-file', series: 'Signal from noise', panels: 8 },
   { slug: 'second-brain-page', series: 'Signal from noise', panels: 7 },
-  { slug: 'rules-from-chat-history', series: 'Customize everything, including yourself', panels: 7 },
-  { slug: 'one-harness-for-every-agent', series: 'Customize everything, including yourself', panels: 6 },
-  { slug: 'how-it-fits-together', series: 'Safe AI crews', panels: 7 },
-  { slug: 'guides-and-sensors', series: 'Safe AI crews', panels: 6 },
+  { slug: 'one-harness-for-every-agent', series: 'Customize everything, including yourself', panels: 5 },
   { slug: 'when-the-notes-are-wrong', series: 'Safe AI crews', panels: 5 },
 ];
 
@@ -327,6 +297,22 @@ test('converted posts: each one is a covered page, public in share.json and list
   }
   expect(groups.map((g) => g.title), 'one group per series, no empty group').toEqual(['Signal from noise', 'Customize everything, including yourself', 'Safe AI crews']);
   expect(await page.locator('.p-posts a[href*="progress-three-weeks"], .p-posts a[href*="trading"]').count(), 'retired and draft posts stay off the index').toBe(0);
+  for (const gone of ['how-it-fits-together', 'guides-and-sensors', 'rules-from-chat-history']) {
+    expect(await page.locator(`.p-posts a[href*="${gone}"]`).count(), `${gone} left the site`).toBe(0);
+  }
+});
+
+// The trimmed posts: no file layout or routing table, and the second brain post shows a picture, not a live page.
+test('trimmed posts: no routing table or file layout, second brain post uses a screenshot', async ({ page }) => {
+  for (const slug of ['everything-is-a-file', 'one-harness-for-every-agent']) {
+    await page.goto(`/ai-life-os/blog/${slug}.html`);
+    const text = (await page.locator('main').innerText()).toLowerCase();
+    expect(text, `${slug}: routing table`).not.toContain('routing table');
+    expect(text, `${slug}: file layout`).not.toContain('how each tool finds it');
+  }
+  await page.goto('/ai-life-os/blog/second-brain-page.html');
+  await expect(page.locator('#fig-screenshot img'), 'the screenshot').toHaveCount(1);
+  await expect(page.locator('main iframe, main a[href*="ai-life-os/index.html"], main a[href$="../index.html"]'), 'no live page link or frame').toHaveCount(0);
 });
 
 for (const { slug, series, panels: expected } of convertedPosts) {
@@ -489,7 +475,7 @@ test('landing: a return visit opens on the chart alone, with the nav label Blog 
   await expect(page.getByRole('button', { name: 'Show page' })).toBeVisible();
   await expect(page.locator('.k-nav a[href$="ai-life-os/blog/index.html"]')).toHaveAttribute('href', 'http://127.0.0.1:4173/ai-life-os/blog/index.html');
   await expect(explainBtn(page)).toBeVisible();
-  const others = ['Tour the map', 'What do the shapes mean?', 'How do I find something?', 'Show me the skill map'];
+  const others = ['Tour the map', 'What do the shapes mean?', 'How do I find something?'];
   for (const q of others) await expect(page.locator('#askBar').getByText(q)).toBeHidden();
   await page.locator('#askBar').getByRole('button', { name: 'More' }).click();
   for (const q of others) await expect(page.locator('#askBar').getByText(q)).toBeVisible();
@@ -514,7 +500,7 @@ test('landing: Explain this is a short conversation in plain prose, then the wal
   await explainBtn(page).click();
   const chat = page.locator('#journeyChat');
   const shot = (n) => expect(page).toHaveScreenshot(`landing-journey-${n}.png`, { mask: [page.locator('canvas')] });
-  await expect(chat).toContainText("Hi, I'm EA-bot");
+  await expect(chat).toContainText("Hi, I'm the front agent");
   await expect(chat).toContainText("we can't tell progress from motion");
   await shot(1);
   await chat.getByRole('button', { name: 'What goes wrong without that?' }).click();
@@ -541,7 +527,7 @@ test('landing: Explain this is a short conversation in plain prose, then the wal
   await chat.getByRole('button', { name: 'Show me how it works' }).click();
   await expect(page.locator('#explain')).toBeHidden();
   await expect(page.locator('#flowN')).toHaveText('1');
-  await expect(page.locator('#step-1')).toContainText("I'm EA-bot");
+  await expect(page.locator('#step-1')).toContainText("I'm the front agent");
 });
 
 // ---- whoami first: one lit node, a short CV, a way past it, and no click that only reloads ----
@@ -589,6 +575,11 @@ test('landing: Me opens a short CV with the full CV, a Next to the Blog and a Sk
   await expect(who.locator('h1')).toHaveText('Ashish Raina');
   await expect(who.locator('.k-dek')).toHaveText('Technical Program Manager · AI-native delivery');
   await expect(who.getByText('Technical program lead with 20 years in software')).toBeVisible();
+  // the mission line and the three things a visitor can do
+  await expect(who.locator('.mission')).toHaveText(mission);
+  const actions = who.locator('.actions a');
+  await expect(actions).toHaveText(['Read one post', 'Try the demo', 'Take the course', 'Follow on GitHub']);
+  expect(await actions.evaluateAll((as) => as.map((a) => a.getAttribute('href')))).toEqual(['ai-life-os/blog/when-the-notes-are-wrong.html', 'ai-life-os/index.html', 'ai-life-os/course/index.html', 'https://github.com/codeami']);
   await expect(who.locator('.outcomes')).toHaveText(/^~3,000 wholesale accounts onboarded · 4 regions · .* satisfaction \(internal NPS\) 5 → 7 \/ 10$/);
   await expect(who.getByRole('link', { name: 'Full CV' })).toHaveAttribute('href', 'cv.html');
   await expect(who.getByRole('link', { name: 'Next: what I write' })).toHaveAttribute('href', 'ai-life-os/blog/index.html');
@@ -605,7 +596,8 @@ test('landing: a first visit opens on the hook with a sample star-map; Next and 
   const hook = page.locator('#hook');
   await expect(page.locator('#pageov')).toBeVisible();
   await expect(hook).toBeVisible();
-  await expect(hook.locator('h1')).toHaveText('Write down what you actually want.');
+  await expect(hook.locator('h1')).toHaveText(mission);
+  expect(await page.locator('#intro, #hook, #me').locator('h1').allTextContents(), 'Me never opens with the headline of Intent').not.toContain('Write down what you actually want.');
   const radar = hook.locator('svg[role="img"]');
   await expect(radar).toBeVisible();
   await expect(radar.locator('.lbl text')).toHaveText(['Pace 12', 'Delegation 6', 'Curiosity 14', 'Structure 18', 'Quality review 16', 'Outside memory 5']);
@@ -654,11 +646,22 @@ test('landing: the hook shows until the reader moves on; a typed #trip address s
 });
 
 // ---- one top bar on every page, and a last-line hand-off to the next page in the bar order ----
-const barPages = () => pages.filter((f) => !/^ai-life-os\/(brain\/|maps\/|kit\/)/.test(f) && !share.some((r) => r.path === f && r.level !== 'public') && f !== 'blog/index.html');
+// No skip list: every public page carries the bar. The one exception is blog/index.html, a redirect that never shows.
+const barPages = () => pages.filter((f) => !share.some((r) => r.path === f && r.level !== 'public') && f !== 'blog/index.html');
 const barItems = ['Me', 'Blog', 'Intent', 'Course'];
+const barPaths = ['/index.html', '/ai-life-os/blog/index.html', '/intent/index.html', '/ai-life-os/course/index.html'];
+// The arena still carries the old Menu button, hidden by topbar.css, until its own pull request is rebased.
+const oldMenuButton = new Set(['ai-life-os/arena.html']);
 
-test('top bar: Me, Blog, Intent, Course and a GitHub icon on every public page, current page marked', async ({ page }) => {
-  expect(barPages().length, 'pages checked').toBeGreaterThanOrEqual(16);
+// What a page's bar says: the site name, then each item's text and target.
+const barOf = (page) => page.locator('header.tb').evaluate((b) => ({
+  brand: b.querySelector('.tb-brand').textContent.trim(),
+  home: new URL(b.querySelector('.tb-brand').href).pathname,
+  items: [...b.querySelectorAll('.tb-links > a')].map((a) => [a.textContent.trim() || a.getAttribute('aria-label'), new URL(a.href).origin === location.origin ? new URL(a.href).pathname : a.href]),
+}));
+
+test('top bar: Me, Blog, Intent, Course and a GitHub icon on every public page, all in view, current page marked', async ({ page }) => {
+  expect(barPages().length, 'pages checked').toBe(pages.length - 1);
   for (const file of barPages()) {
     await page.goto(`/${file}`);
     const bar = page.locator('header.tb');
@@ -669,32 +672,41 @@ test('top bar: Me, Blog, Intent, Course and a GitHub icon on every public page, 
     await expect(links.nth(4), file).toHaveAttribute('href', 'https://github.com/codeami');
     await expect(links.nth(4), file).toHaveAttribute('aria-label', 'GitHub: github.com/codeami');
     const paths = await links.evaluateAll((as) => as.slice(0, 4).map((a) => new URL(a.href).pathname));
-    expect(paths, file).toEqual(['/index.html', '/ai-life-os/blog/index.html', '/intent/index.html', '/ai-life-os/course/index.html']);
+    expect(paths, file).toEqual(barPaths);
     expect(await bar.locator('.tb-links > a[aria-current]').count(), `${file}: one current item at most`).toBeLessThanOrEqual(1);
     expect(await bar.evaluate((b) => b.scrollWidth <= b.clientWidth + 1), `${file}: bar fits the width`).toBe(true);
+    // no Menu button: all five items are in view at this width, and the site name is on the bar
+    for (let i = 0; i < 5; i++) await expect(links.nth(i), `${file}: item ${i} in view`).toBeVisible();
+    if (!oldMenuButton.has(file)) await expect(bar.locator('.tb-menu'), `${file}: no Menu button`).toHaveCount(0);
+    await expect(bar.locator('.tb-brand'), file).toHaveText('Ashish Raina');
+    const inView = await links.evaluateAll((as) => as.every((a) => { const r = a.getBoundingClientRect(); return r.left >= 0 && r.right <= document.documentElement.clientWidth; }));
+    expect(inView, `${file}: every item inside the screen width`).toBe(true);
   }
 });
 
-test('top bar: on a phone the links sit behind Menu; on a wide screen they are in view', async ({ page }) => {
-  await page.goto('/intent/index.html');
-  const menu = page.locator('header.tb .tb-menu');
-  const links = page.locator('header.tb .tb-links');
-  if (page.viewportSize().width <= 760) {
-    await expect(menu).toBeVisible();
-    await expect(links).toBeHidden();
-    await menu.click();
-    await expect(links).toBeVisible();
-    await expect(menu).toHaveAttribute('aria-expanded', 'true');
-    for (const t of barItems) await expect(links.getByRole('link', { name: t, exact: true })).toBeVisible();
-    await expect(links.getByRole('link', { name: 'GitHub: github.com/codeami' })).toBeVisible();
-  } else {
-    await expect(menu).toBeHidden();
-    await expect(links).toBeVisible();
+test('top bar: clicking each item on every public page lands on a page with the same bar and the same site name', async ({ page }) => {
+  await page.route('**/*', (route) => (route.request().url().startsWith(origin) ? route.continue() : route.fulfill({ status: 200, body: '' })));
+  await returning(page);
+  await page.goto('/index.html');
+  const same = await barOf(page);
+  expect(same.brand).toBe('Ashish Raina');
+  expect(same.items.map((i) => i[0])).toEqual([...barItems, 'GitHub: github.com/codeami']);
+  for (const file of barPages()) {
+    for (const [n, label] of barItems.entries()) {
+      await page.goto(`/${file}`);
+      const link = page.locator('header.tb .tb-links > a').nth(n);
+      await expect(link, `${file}: ${label}`).toHaveText(label);
+      await link.click();
+      await page.waitForURL((u) => u.pathname === barPaths[n], { timeout: 10000 });
+      await page.waitForSelector('header.tb');
+      expect(await barOf(page), `${file} then ${label}: same bar and site name`).toEqual(same);
+      await expect(page.locator('header.tb .tb-links > a[aria-current]'), `${label} marks itself`).toHaveText(label);
+    }
   }
 });
 
 test('top bar: the current page is marked in each part of the bar', async ({ page }) => {
-  const current = { 'index.html': 'Me', 'cv.html': 'Me', 'ai-life-os/blog/index.html': 'Blog', 'ai-life-os/arena.html': 'Blog', 'intent/index.html': 'Intent', 'ai-life-os/about.html': 'Intent', 'ai-life-os/core.html': 'Intent', 'ai-life-os/course/index.html': 'Course' };
+  const current = { 'index.html': 'Me', 'cv.html': 'Me', 'ai-life-os/blog/index.html': 'Blog', 'ai-life-os/arena.html': 'Blog', 'intent/index.html': 'Intent', 'ai-life-os/index.html': 'Intent', 'ai-life-os/course/index.html': 'Course' };
   for (const [file, label] of Object.entries(current)) {
     await page.goto(`/${file}`);
     await expect(page.locator('header.tb .tb-links > a[aria-current]'), file).toHaveText(label);
@@ -728,6 +740,11 @@ test('Intent: the four doors in his words, the causes, the dated harness line an
   await expect(page.locator('#credits a')).toHaveCount(7);
   await expect(page.locator('#os a[href*="ai-life-os/index.html"]')).toHaveCount(1);
   await expect(page.locator('#offer tbody tr')).toHaveCount(5);
+  // About and Safety live here now: how I work with agents, and what the crew may do, what waits for me, what it never does
+  await expect(page.locator('#how h2')).toHaveText('How I work with agents');
+  await expect(page.locator('#safety h3')).toHaveText(['On its own', 'Waits for me', 'Never']);
+  await expect(page.locator('#safety li').first()).toContainText('throwaway copy');
+  for (const name of ['AI-Life-OS', 'AIO OS', 'EA-bot', 'Chart Room']) expect(await page.locator('main').innerText(), name).not.toContain(name);
   // the page runs no script of its own and loads no frame script
   expect(await page.locator('script[src*="hud.js"], script[src*="article.js"], script:not([src])').count()).toBe(0);
 });
@@ -750,7 +767,11 @@ test('landing: a click on the Me node, the logo or the page card never reloads t
   for (const back of ['node', 'logo']) {
     await page.evaluate(() => window.dispatchEvent(new Event('explain'))); // what the Explain this button sends
     await expect(page.locator('#explain')).toBeVisible();
-    if (back === 'node') await clickNode(page, 'whoami');
+    if (back === 'node') {
+      // on a phone the sheet can cover the node: fold it away first, as a reader would
+      if (page.viewportSize().width <= 760) await page.getByRole('button', { name: 'Minimise the page to see the map' }).click();
+      await clickNode(page, 'whoami');
+    }
     else await page.locator('.k-nav .k-home').click();
     await expect(page.locator('#me'), back).toBeVisible();
     await expect(page.locator('#explain'), back).toBeHidden();
@@ -783,7 +804,7 @@ test('cv.html: the plain web CV is the v5 text without a phone number, an email,
   await expect(page.getByRole('link', { name: 'Back to Me' })).toHaveAttribute('href', 'index.html#me');
 });
 
-test('Chart Room chat holds the story and tour branches', () => {
+test('the demo chat holds the story and tour branches', () => {
   const t = JSON.parse(readFileSync(join(root, 'ai-life-os/tour/tour.json'), 'utf8')).chat;
   const folders = new Set(t.nodes.map((n) => n.folder));
   expect(folders.has('story') && folders.has('tour')).toBe(true);
@@ -792,7 +813,7 @@ test('Chart Room chat holds the story and tour branches', () => {
 });
 
 test('room drawer: every Related chip is one line, at most 28 px tall, with its full text in the title', async ({ page }) => {
-  await page.goto('/ai-life-os/brain/index.html#pocock-steers-with-skills-kun-builds-machinery');
+  await page.goto('/ai-life-os/index.html#pocock-steers-with-skills-kun-builds-machinery'); // the demo opens the card of the note in the hash
   const drawer = page.locator('#drawer');
   await expect(drawer).toBeVisible();
   await drawer.getByRole('tab', { name: 'Related' }).click();

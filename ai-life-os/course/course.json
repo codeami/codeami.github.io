@@ -58,11 +58,11 @@
    "steps": [
     {"text": "Intent is the want behind the words. The words are only a copy of it, and copies lose detail."},
     {"text": "Every hand-off loses a little more. In my post on running AI agents I call it the old telephone game: every hand-off is a chance for “keep it under ₹50k” to become “keep it cheap” (a made-up example).",
-     "cite": {"label": "Post: One captain, many crews, section 3", "href": "../blog/how-it-fits-together.html#s3"}},
+     "cite": {"label": "The Blog: posts on running AI agents", "href": "../blog/index.html"}},
     {"text": "The fix is to say the why and what done looks like, not only the what. “Fix my links” is a request. “Every link on the hub page opens at phone width, with a screenshot as proof” is a check anyone can run."}
    ],
-   "read": {"label": "One captain, many crews: keeping the model's intent aligned with mine", "href": "../blog/how-it-fits-together.html#s5", "note": "Blog, section 5: four checks at four time scales for “did it do what I meant?”. About 8 minutes."},
-   "more": [{"label": "Guided tour: an example brief, intent on top and spec below", "href": "../tour/index.html#intent"}],
+   "read": {"label": "One harness for every agent: keeping the model's intent aligned with mine", "href": "../blog/one-harness-for-every-agent.html", "note": "Blog: one set of rules that every agent reads, so “did it do what I meant?” has one answer."},
+   "more": [{"label": "Intent: how I work with agents, from brief to check", "href": "../../intent/index.html#how"}],
    "check": {"q": "Which ask carries the most intent?",
     "options": ["Fix the website.", "Make the site faster.", "Make the hub links open on my phone; done when every link opens at 375px, with a screenshot."],
     "answer": 2,
@@ -91,14 +91,14 @@
    "summary": "You can steer an AI with a prompt, a skill, a folder of files or a script. Intent engineering says: write the what, and let the model pick the how.",
    "steps": [
     {"text": "An AI gets your intent only through what you give it. In my setup there are four ways, from loose to strict: a prompt (a chat message), a skill (written instructions that load when a task matches), a folder of files that steers it, and a script (a hook or check that runs the same way every time).",
-     "cite": {"label": "Post: Guides and sensors, section 4", "href": "../blog/guides-and-sensors.html#s4"}},
+     "cite": {"label": "The Blog: posts on running AI agents", "href": "../blog/index.html"}},
     {"text": "At the loose end the model decides almost everything. At the strict end scripts decide and the model fills the gaps. Work that must go the same way every time belongs in a script. Judgement belongs in the prompt or the skill."},
     {"text": "Daniel Miessler calls the next step intent engineering. As models improve, step-by-step instructions help less, so the thing to write is “not HOW a thing should be done, but rather WHAT should be done.”",
      "cite": {"label": "Daniel Miessler: From Prompt Engineering to Intent Engineering", "href": "https://danielmiessler.com/blog/intent-engineering"}},
     {"text": "That is commander's intent again, for a machine: the purpose and what done looks like, plus a check that proves it."}
    ],
    "read": {"label": "Daniel Miessler: From Prompt Engineering to Intent Engineering", "href": "https://danielmiessler.com/blog/intent-engineering", "note": "A short essay: why “what” beats “how” as models get better. About 10 minutes."},
-   "more": [{"label": "Guides and sensors: prompt, skill, folder, script", "href": "../blog/guides-and-sensors.html#s4"}],
+   "more": [{"label": "The Blog: posts on running AI agents", "href": "../blog/index.html"}],
    "check": {"q": "Which of these is intent engineering?",
     "options": ["A 20-step list of exactly which buttons the AI must click", "The outcome you want and how you will check it, with the method left to the model", "Letting the AI guess what you probably want"],
     "answer": 1,

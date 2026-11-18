@@ -38,7 +38,7 @@
     if (!bar || bar.querySelector(".vtag") || bar.classList.contains("tb")) return; // the one top bar carries its own links
     var home = bar.querySelector(".k-home, .where");
     var v = document.createElement("span");
-    v.className = "vtag"; v.textContent = VERSION; v.title = "AI-Life-OS " + VERSION;
+    v.className = "vtag"; v.textContent = VERSION; v.title = "The software factory " + VERSION;
     if (home) home.parentNode.insertBefore(v, home.nextSibling);
     var toggle = bar.querySelector("#theme, button.theme");
     var at = toggle ? toggle.parentNode : bar;
@@ -53,11 +53,6 @@
       var co = document.createElement("a");
       co.className = "up"; co.href = base + "course/index.html"; co.textContent = "Course";
       at.insertBefore(co, toggle || null);
-    }
-    if (!bar.querySelector('a[href$="brain/index.html"]')) {
-      var sb = document.createElement("a");
-      sb.className = "up"; sb.href = base + "brain/index.html"; sb.textContent = "Second Brain";
-      at.insertBefore(sb, toggle || null);
     }
     // The whoami home itself loads this file from its subfolder: no link to itself there.
     if (new URL(up.href).pathname !== location.pathname.replace(/index\.html$/, "")) at.insertBefore(up, toggle || null);

@@ -25,7 +25,7 @@
 
     function botRow(node) {
       var row = el("div", "k-row"), b = el("div", "k-bubble"), img = el("img", "k-avatar");
-      img.src = o.avatar; img.alt = "EA-bot";
+      img.src = o.avatar; img.alt = "The front agent";
       b.appendChild(el("p", "", node.fact));
       (node.more || []).forEach(function (t) { b.appendChild(el("p", "", t)); });
       if (node.card) {
@@ -109,7 +109,7 @@
       var n = byId[item];
       box.appendChild(meRow(n.you || n.chip));
       var wait = el("div", "k-row"), dots = el("div", "k-bubble typing");
-      dots.setAttribute("aria-label", "EA-bot is typing");
+      dots.setAttribute("aria-label", "The front agent is typing");
       dots.innerHTML = "<i></i><i></i><i></i>";
       wait.appendChild(dots);
       box.appendChild(wait);
