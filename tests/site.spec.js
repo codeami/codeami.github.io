@@ -11,12 +11,6 @@ const mission = 'I help people and companies write down what they actually want,
 // Overflow that exists today and is waiting for a page fix. Delete the entry when the page is fixed.
 const knownOverflow = {};
 
-// Links to pages that left the site, still held in a file another pull request owns. Delete the entry when that file is rebased.
-const goneLinks = /(^|\/)(about|safety|changelog|core|story)\.html|brain\/index\.html|blog\/(guides-and-sensors|how-it-fits-together|rules-from-chat-history)\.html/;
-const knownBrokenLinks = {
-  'ai-life-os/arena.html': goneLinks, // PR https://github.com/codeami/codeami.github.io/pull/20 owns the arena and repoints these links
-};
-
 for (const file of pages) {
   test(`${file}: loads clean, fits the width, matches the baseline`, async ({ page }) => {
     const problems = [];
@@ -55,7 +49,7 @@ for (const file of pages) {
       if (!path || /^[a-z][a-z0-9+.-]*:/i.test(path)) continue;
       const target = path.startsWith('/') ? join(root, path) : join(dirname(join(root, file)), decodeURIComponent(path));
       const ok = existsSync(target) && (!statSync(target).isDirectory() || existsSync(join(target, 'index.html')));
-      if (!ok && !(knownBrokenLinks[file] && knownBrokenLinks[file].test(path))) problems.push(`broken link: ${href}`);
+      if (!ok) problems.push(`broken link: ${href}`);
     }
     expect(problems, 'console errors, failed requests, broken links').toEqual([]);
 

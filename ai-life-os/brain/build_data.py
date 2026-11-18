@@ -5,7 +5,6 @@ Reads only public files of this site:
   brain/notes.js            the approved wiki notes (built by build.py)
   brain/src/extra.json      hand-written nodes: areas, FirstMate parts and tricks, the harness tier list
   brain/src/site.json       the centre file, this site's pages, public projects, the reading order
-  maps/src/skills/map.json  the skills (the inner ring)
   blog/index.html           the Blog posts
   course/course.json        the AI introductory course's lessons
   ../../share.json          pages that are not public stay out of the chart; also writes ../../robots.txt from it
@@ -29,8 +28,6 @@ def live(url):
 site = json.loads(rd("brain/src/site.json"))
 extra = json.loads(rd("brain/src/extra.json"))
 notes = json.loads(rd("brain/notes.js").split("=", 1)[1].strip().rstrip(";"))
-skills_map = json.loads(rd("maps/src/skills/map.json"))
-plain = lambda s: re.sub(r"\*\*|==|`|\[\[([^\]]+)\]\]", lambda m: m.group(1) or "", s or "")
 
 
 def links(pairs):
@@ -117,12 +114,10 @@ course_room = {"id": "course", "label": "Course", "color": "#7dff8a",
                     "body": [l["summary"]], "links": links([["Open this lesson", "../course/index.html#" + l["id"]]]), "rel": [], "lesson": l["id"]}
                    for i, l in enumerate(lessons, 1)]}]}
 
-skills = [dict({"n": s["name"], "desc": plain(s.get("whatItIs")), "when": s.get("trigger", "")},
-               **({"url": "../maps/skills.html#" + sid} if live("../maps/skills.html") else {}))
-          for sid, s in skills_map["skills"].items()]
+skills = []
 
 out = {"meta": {"name": "Public second brain of the software factory", "invented": False,
-                "note": "Public data only: the approved wiki notes, this site's pages and posts, the skill map and the harness tier list. No private files, paths, routines or links."},
+                "note": "Public data only: the approved wiki notes, this site's pages and posts, the harness tier list. No private files, paths, routines or links."},
        "root": site["root"], "rooms": [notes_room, fm_room, areas_room, tier_room, posts_room, course_room], "skills": skills, "routines": [],
        "apps": [], "projects": [dict(p, kind="project") for p in site["projects"]], "pages": [dict(p, kind="page") for p in site["pages"] if live(p["url"])],
        "reading": [r for r in site["reading"] if live(r["url"])]}

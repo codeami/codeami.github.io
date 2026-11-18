@@ -468,9 +468,8 @@ function mountTour(){
   function sh(id){return function(){return $(id)}} // steps point at parts inside the shadow root
   function doc(sel){return function(){return document.querySelector(sel)}}
   var steps=[
-      {sel:FRAMED?sh("cv"):sh("src"),before:mapView,title:"The second brain",text:"A map of how the owner works with a crew of AI agents, always running behind every page of this site. It shows only public things: approved wiki notes, FirstMate's parts, the posts, the skills and this site's pages."},
+      {sel:FRAMED?sh("cv"):sh("src"),before:mapView,title:"The second brain",text:"A map of how the owner works with a crew of AI agents, always running behind every page of this site. It shows only public things: approved wiki notes, FirstMate's parts, the posts and this site's pages."},
       {rect:ring(function(){return 30}),before:mapView,title:"The centre: "+root.label,text:"Every agent reads this rules file first. Everything else on the map hangs off it."},
-      {rect:ring(guide(0)),before:mapView,title:"Inner ring: skills",text:"Each diamond is a skill: a playbook an agent loads only when a task calls for it. Each one links to its box on the skill map."},
       {rect:ring(guide(1)),before:mapView,title:"Memory: rooms of notes",text:"Each coloured arc is a room, like Wiki notes or Blog. One dot is one note, part or post. Click a dot for its card; double-click a room to fold it."},
       {rect:ring(guide(2)),before:mapView,title:"Outer ring: pages and projects",text:"Hexagons are this site's pages and public projects. A page or post opens on top of the map, and its node lights up."}];
   if(FRAMED)steps.push(
@@ -481,7 +480,6 @@ function mountTour(){
       {sel:sh("panel"),before:function(){if(window.innerWidth<900)setSides(false);setLegend(false);fold(false);setPanel(true)},title:"Menu",text:"Search the map (press / or ⌘K), switch layouts (Force, Circle, Hex, Rings), and tune motion and sizes."},
       {sel:sh("legend"),before:function(){mapView();setLegend(true)},title:"Legend",text:"Room colours with their counts, and what each shape means."},
       {sel:sh("wl"),before:function(){setLegend(false);fold(false);setSides(true)},title:"Left lists",text:"The reading order, the site's pages and projects, and FirstMate in detail. A page or post opens "+(FRAMED?"in the page overlay.":"on the right, with Prev and Next.")},
-      {sel:sh("wr"),before:function(){fold(false);setSides(true)},title:"Right list",text:"The skills deck, from the same data as the map."},
       {sel:doc("#askBar"),before:mapView,title:"This ask bar",text:"Each question runs a short scripted tour like this one. Nothing is sent to a model."});
   function at(t){for(var i=0;i<steps.length;i++)if(steps[i].title===t)return i;return 0}
   AIOTour({

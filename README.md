@@ -26,7 +26,7 @@ The layout is Chart & Cards. The chart is the second brain, a live ring map (`ai
 
 `ai-life-os/course/index.html` is Ashish's AI introductory course: a guided chat reads seven lessons in a fixed order from `ai-life-os/course/course.json`. Progress stays in the reader's localStorage (`ai-course:v1`); `graph.js` reads it to light each finished lesson in the Course room, and `build_data.py` builds that room from the same file.
 
-The chart's data, `ai-life-os/brain/brain-data.json`, is built from public files only (the approved notes in `notes.js`, `brain/src/extra.json`, `brain/src/site.json`, the skill map data in `maps/src/skills/map.json` and the Blog list): `python3 -I ai-life-os/brain/build_data.py`. A link to a page that is not in the repo is dropped from the data.
+The chart's data, `ai-life-os/brain/brain-data.json`, is built from public files only (the approved notes in `notes.js`, `brain/src/extra.json`, `brain/src/site.json`, the course lessons and the Blog list): `python3 -I ai-life-os/brain/build_data.py`. A link to a page that is not in the repo is dropped from the data.
 
 The Blog posts and `ai-life-os/arena.html` are built from the owner's private drafts by a script kept outside this repo. `ai-life-os/blog/index.html` and the four public posts (`everything-is-a-file`, `second-brain-page`, `one-harness-for-every-agent`, `when-the-notes-are-wrong`) are the exception: they use the calm panel post layout (`ai-life-os/panel.css`, described in `DESIGN.md`), and the index groups them by series. A post is a problem and its fix: the problem, the solution with its evidence, then the gaps that are still open.
 
