@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<title>The harness arena · Ashish Raina</title>
-<meta name="description" content="Twelve agent setups scored on harness parts, plus a personal Adopt, Trial, Assess, Hold radar.">
+<title>Hermes vs OpenClaw vs Claude Duet, Muse and Grok Bot · The Chart Room</title>
+<meta name="description" content="Hermes, OpenClaw, Claude Duet, Meta Muse and Grok Bot compared on lock-in, model routing, memory, gates and cost, plus one head-to-head test, then twelve setups scored on harness parts and a personal Adopt, Trial, Assess, Hold radar.">
 <link rel="stylesheet" href="hud.css">
 <script src="article.js"></script>
 <link rel="icon" href="kit/bosun.svg" type="image/svg+xml">
@@ -26,6 +26,16 @@ figure.slide img{display:block;width:100%;height:auto;border-radius:6px}
 .q{font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin:0 0 6px}
 .test{font-size:.86rem;color:var(--muted)}
 .callout{background:var(--warn-soft);border-left:3px solid var(--warn);padding:10px 14px;border-radius:6px;margin:1.2em 0}
+.note{background:var(--accent-soft);border-left:3px solid var(--accent);padding:8px 14px;border-radius:6px;margin:1em 0;font-size:.95rem}
+table.arena{font-size:.84rem}
+table.arena td,table.arena th{min-width:128px}
+table.arena th:first-child,table.arena td:first-child{min-width:96px;font-weight:600;position:sticky;left:0;z-index:1;background:var(--panel)}
+table.arena tr.ours td,table.arena tr.ours td:first-child{background:var(--accent-soft)}
+td.n{text-align:right;white-space:nowrap}
+.src{display:inline-block;font-size:.72rem;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:0 .3em;margin-left:.2em;white-space:nowrap}
+figure details{font-size:.88rem;margin-top:8px}
+figure details summary,details.more summary{cursor:pointer;color:var(--muted)}
+details.more{font-size:.88rem;margin:1em 0}
 .gloss{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 16px;margin:0 0 28px}
 .gloss summary{font-weight:600;cursor:pointer}
 .gloss dl{margin:.6em 0 .2em;display:grid;grid-template-columns:1fr;gap:4px 18px;font-size:.92rem}
@@ -50,6 +60,10 @@ svg .bar.diff{fill:var(--accent)}
 svg .bar.lacks{fill:var(--line)}
 svg .bar.estimate{fill:var(--paper);stroke:var(--muted);stroke-dasharray:3 2}
 svg .bar.none{fill:none;stroke:var(--muted);stroke-dasharray:5 4}
+svg .box.bad{fill:var(--warn-soft);stroke:var(--warn)}
+svg .zone{fill:none;stroke:var(--line);stroke-width:1;stroke-dasharray:5 4}
+svg .t.ok{fill:var(--ok)}
+svg .t.no{fill:var(--warn)}
 svg .t{fill:var(--ink);font-family:var(--sans);font-size:14px;font-weight:600}
 svg .s{fill:var(--muted);font-family:var(--sans);font-size:12px}
 svg .h{fill:var(--accent);font-family:var(--sans);font-size:12px;font-weight:600;letter-spacing:.04em}
@@ -74,14 +88,204 @@ svg .arrowhead.me{fill:var(--accent)}
 <main class="page">
 <article class="k-article">
 <p class="k-kicker">Harness engineering</p>
-<h1 class="k-title">The harness arena</h1>
-<p class="k-dek">Twelve agent setups scored on the same harness parts, and my own radar of what I use, try, watch and stopped.</p>
-<p class="k-meta"><span>Ashish Raina</span><time datetime="2026-11-02">2 Nov 2026</time><span>9 min read</span></p>
-<p>This page is section 5 of <a href="blog/index.html">Guides, sensors, and the rules I'm still begging for</a>, on its own so it is easy to find. Section numbers below point into that post.</p>
+<h1 class="k-title">Hermes vs OpenClaw vs Claude Duet, Muse and Grok Bot: an AI agent arena</h1>
+<p class="k-dek">Six ways to run AI agents, scored on what matters day to day: can you pick the model, does it check its work, and who holds the merge. Below that, twelve setups scored on twelve harness parts, and my own radar.</p>
+<p class="k-meta"><span>Ashish Raina</span><time datetime="2026-11-18">18 Nov 2026</time><span>17 min read</span></p>
+<p><a href="#full-table">Skip to the full scoring table and radar</a></p>
+
+<div class="note" id="codename-note"><strong>Professor is our codename for our own setup.</strong> Its roles carry city names from the series Money Heist: Professor plans and hands out the work, Moscow builds, Nairobi checks the result, Lisbon asks a person before anything risky, and Tokyo keeps the record. The names are only labels. In the full tier list further down, the same setup is the row called "Our composite".</div>
+
+<h2 id="short-answer">The question, and the short answer</h2>
+<p>Most comparisons of AI agents are written by someone selling one of them. I have a stake too: I run my own setup. So I put it in the ring with the others, under a codename, and I show the test where it could have lost.</p>
+<p>Think of six kitchens. Some can buy from any supplier. Some must buy everything from one. The food may be just as good. But only the first kind can buy the cheap onions for the soup and save the expensive ones for the main course.</p>
+<p id="answer"><strong>The short answer:</strong> the biggest split is not features. It is whether you can choose the model. Claude Duet, Meta's Muse and Grok Bot each run on their maker's own models. That rules out sending easy work to a cheaper model, which is the main way people in the Hacker News threads save tokens. Hermes and OpenClaw are open source and work with many providers. Of those two, Hermes is the one we tested head to head, and I see it as the main rival. In that test our setup passed 5 of 5 runs and Hermes passed 3 of 5, at about the same cost. The sample was tiny.</p>
+<div class="callout" id="caveat"><strong>Read this as one builder's evaluation, not a benchmark.</strong> Only one head-to-head test was run, with one or two runs per task. The rest comes from public docs, launch pages and Hacker News comments. Each cell in the table says which.</div>
+
+<h2 id="contenders">The six contenders</h2>
+<ul>
+<li><strong>Professor (ours).</strong> A self-hosted setup that runs everyday assistants and a small team of coding agents. It picks a model for each request.</li>
+<li><strong>Hermes Agent.</strong> An open-source agent from Nous Research, under the MIT licence. It runs on your own machine or server and talks to you through the terminal or chat apps. In our trial it refused any model with less than a 64,000-token context window.</li>
+<li><strong>OpenClaw.</strong> An open-source personal agent. Its docs list a long set of model providers, local models and fallback chains.</li>
+<li><strong>Claude Duet.</strong> Anthropic's proactive agent, announced on 21 October 2026 as a research preview. It is a separate app that works when you are away and checks with you before it acts. It is built on Claude Opus 5.5, with a waitlist for paid US plans.</li>
+<li><strong>Meta's Muse.</strong> A personal agent from Meta, launched in September 2026. Each user gets a cloud computer, and a Mac app can read local data if you allow it.</li>
+<li><strong>Grok Bot.</strong> An agent teammate from SpaceXAI, launched in August 2026. Each bot gets its own always-on computer, and bots can talk to each other.</li>
+</ul>
+
+<h2 id="arena-table">The arena table</h2>
+<p>One row per contender. The small grey tag says where each cell comes from: <span class="src">test</span> our own run, <span class="src">docs</span> the product's docs, <span class="src">launch</span> the maker's launch page, <span class="src">HN</span> Hacker News commenters, <span class="src">ours</span> our own marks for our setup. "No source read" means I found nothing to base a mark on.</p>
+<table class="arena" id="compare-table">
+<thead><tr><th>Contender</th><th>Provider lock-in</th><th>Model routing, token saving</th><th>Multi-agent</th><th>Memory</th><th>Hooks and gates</th><th>Cost</th><th>Who it suits</th></tr></thead>
+<tbody>
+<tr class="ours" id="row-professor"><td>Professor (ours)</td>
+<td>None for its assistants. The coding side can switch harness per task, but some features work with one vendor only <span class="src">ours</span></td>
+<td>Yes: easy work goes to free or cheap models first <span class="src">ours</span></td>
+<td>Yes: one lead, each worker in its own copy. The hand-off task passed <span class="src">test</span></td>
+<td>Notes on disk and a rules file every agent reads. Old sessions kept, not yet searchable <span class="src">ours</span></td>
+<td>A check must pass before done. Nothing merges without a person. Hooks on every tool call <span class="src">ours</span></td>
+<td>Self-hosted. About 1 cent for 5 test runs at a small paid model's prices <span class="src">test</span></td>
+<td>Someone who wants to own the stack and hold the merge</td></tr>
+<tr id="row-hermes"><td>Hermes</td>
+<td>None: many providers, switched in config <span class="src">docs</span></td>
+<td>Yes, by config. Leanest chat prompt in our test (2.9k vs 5.2k tokens), but one web task looped to 49k <span class="src">test</span></td>
+<td>Yes: up to 10 sub-agents, and a task board with a reviewer lane <span class="src">docs</span></td>
+<td>Two size-capped memory files plus search over past sessions. Skills tidied over time <span class="src">docs</span></td>
+<td>Four hook systems. Gates sit at "done"; none found before a push <span class="src">docs</span></td>
+<td>Free (MIT). About 1 cent for 5 test runs. Needs a large-context model <span class="src">test</span></td>
+<td>One technical owner. One owner per profile, no shared login</td></tr>
+<tr id="row-openclaw"><td>OpenClaw</td>
+<td>None: many providers and local models <span class="src">docs</span></td>
+<td>Fallback chains between models. No other routing on the page I read <span class="src">docs</span></td>
+<td>No source read</td>
+<td>No source read</td>
+<td>No source read</td>
+<td>Free, open source. You pay for the model</td>
+<td>Tinkerers. Many in the threads said they moved on <span class="src">HN</span></td></tr>
+<tr id="row-duet"><td>Claude Duet</td>
+<td>Yes: built on Claude Opus 5.5. No other model mentioned <span class="src">launch</span></td>
+<td>No</td>
+<td>One assistant with its own virtual machine and browser. Several agents not mentioned <span class="src">launch</span></td>
+<td>Uses your Claude memory, skills and connected apps <span class="src">launch</span></td>
+<td>Asks before it sends, pays, signs or deletes. Some actions are off-limits even with approval <span class="src">launch</span></td>
+<td>Inside paid Claude plans, sharing their usage limits. Waitlist, US only <span class="src">launch</span></td>
+<td>People already on a paid Claude plan who want a proactive assistant</td></tr>
+<tr id="row-muse"><td>Meta's Muse</td>
+<td>Yes: Meta picks the model, you cannot <span class="src">HN</span></td>
+<td>No</td>
+<td>No source read</td>
+<td>You can read its instructions, memory and files <span class="src">HN</span></td>
+<td>One broad permission on the Mac. About 10 complained of actions they could not undo <span class="src">HN</span></td>
+<td>Fast and cheap to try <span class="src">HN</span></td>
+<td>Life admin, for people who trust Meta with their data</td></tr>
+<tr id="row-grok"><td>Grok Bot</td>
+<td>Yes: Grok models <span class="src">HN</span></td>
+<td>No</td>
+<td>Yes: bots split by job and talk to each other <span class="src">HN</span></td>
+<td>No source read</td>
+<td>Worries about prompt injection (14) and acting as you with your logins (7) <span class="src">HN</span></td>
+<td>Needs a top-tier plan. Always-on bots burn tokens <span class="src">HN</span></td>
+<td>People already on the top plan who want an always-on teammate</td></tr>
+</tbody>
+</table>
+<p>My reading of the table: the three closed products compete on reach and polish. Duet has thousands of connectors. Muse is fast. Grok Bot gives each bot a computer. The two open ones, and ours, compete on control: which model, which gate, who decides.</p>
+
+<h2 id="open-vs-locked">Open or locked: why lock-in decides the token bill</h2>
+<p>Cost was the most common complaint in the Hacker News threads, from about 70 people. The most common fix, from about 31, was to send routine work to cheaper models. You can only do that if the harness lets you choose.</p>
+<figure id="fig-lockin">
+<svg viewBox="0 0 720 280" role="img" aria-labelledby="fl-t fl-d">
+<title id="fl-t">Open harnesses can route; locked ones cannot</title>
+<desc id="fl-d">Left: Professor, Hermes and OpenClaw each send requests to a cheap, a mid-size or a strong model from any provider. Right: Claude Duet, Muse and Grok Bot each send every request to their maker's own model.</desc>
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="arrowhead" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<g id="fl-open"><title>Open: route any model</title>
+<rect class="zone" x="6" y="30" width="340" height="230" rx="10"/>
+<text class="t" x="20" y="22">Open: you pick the model</text>
+<g id="fl-open-h"><title>Professor (ours), Hermes, OpenClaw</title><rect class="box me" x="24" y="104" width="128" height="74" rx="8"/><text class="t" x="88" y="128" text-anchor="middle">Harness</text><text class="s" x="88" y="146" text-anchor="middle">Professor (ours)</text><text class="s" x="88" y="162" text-anchor="middle">Hermes · OpenClaw</text></g>
+<g id="fl-cheap"><title>Cheap or free model for easy work</title><rect class="box cpu" x="214" y="52" width="118" height="44" rx="8"/><text class="t" x="273" y="72" text-anchor="middle">Cheap model</text><text class="s" x="273" y="88" text-anchor="middle">easy work</text></g>
+<g id="fl-mid"><title>Mid-size model</title><rect class="box" x="214" y="119" width="118" height="44" rx="8"/><text class="t" x="273" y="139" text-anchor="middle">Mid model</text><text class="s" x="273" y="155" text-anchor="middle">most work</text></g>
+<g id="fl-strong"><title>Strong model for hard work</title><rect class="box" x="214" y="186" width="118" height="44" rx="8"/><text class="t" x="273" y="206" text-anchor="middle">Strong model</text><text class="s" x="273" y="222" text-anchor="middle">hard work</text></g>
+<path class="edge" d="M152,130 C185,110 185,80 212,76" marker-end="url(#ah)"/>
+<line class="edge" x1="152" y1="141" x2="212" y2="141" marker-end="url(#ah)"/>
+<path class="edge" d="M152,152 C185,172 185,202 212,206" marker-end="url(#ah)"/>
+</g>
+<g id="fl-locked"><title>Locked: one provider</title>
+<rect class="zone" x="374" y="30" width="340" height="230" rx="10"/>
+<text class="t" x="388" y="22">Locked: the maker picks the model</text>
+<g id="fl-locked-h"><title>Claude Duet, Muse, Grok Bot</title><rect class="box" x="392" y="110" width="128" height="62" rx="8"/><text class="t" x="456" y="136" text-anchor="middle">Harness</text><text class="s" x="456" y="154" text-anchor="middle">Duet · Muse · Grok Bot</text></g>
+<g id="fl-own"><title>The maker's own model, for every request</title><rect class="box gpu" x="582" y="114" width="118" height="54" rx="8"/><text class="t" x="641" y="138" text-anchor="middle">Maker's model</text><text class="s" x="641" y="155" text-anchor="middle">every request</text></g>
+<line class="edge" x1="520" y1="141" x2="580" y2="141" marker-end="url(#ah)"/>
+</g>
+</svg>
+<figcaption>Routing is a choice per request. A locked harness makes that choice for you, every time.</figcaption>
+</figure>
+<p><strong>One correction to my own starting point.</strong> I went in thinking Hermes was the only open rival, because the others were locked to one provider. OpenClaw is not locked. Its docs list a dozen providers and local models. So the open camp has two outside contenders, not one.</p>
+<p><strong>Why I still name Hermes the main rival.</strong> It is the one we ran side by side with ours, and the one we keep borrowing ideas from. In the threads, many people said they had left large frameworks such as OpenClaw after updates kept breaking. That is a reason to watch OpenClaw less closely, not a test result.</p>
+<p><strong>Routing is not the whole bill.</strong> In our test, Hermes sent a smaller prompt for a plain chat: about 2,900 tokens to our 5,200. A lean prompt saves tokens on every call. Routing saves on the expensive calls. A good harness needs both.</p>
+
+<h2 id="head-to-head">Head to head: Professor vs Hermes</h2>
+<p>A driving test is short. It does not prove you are a good driver. It shows whether you can do a few set things without help. This was a driving test.</p>
+<p>Both harnesses got the same four tasks, word for word, on the same small free model, on 12 November 2026. A logging proxy sat in front of the model, so both were counted the same way. Each task had a written pass check.</p>
+<figure id="fig-bench">
+<svg viewBox="0 0 720 300" role="img" aria-labelledby="fb-t fb-d">
+<title id="fb-t">Head-to-head results, four tasks</title>
+<desc id="fb-d">Chat: both passed. Web reading: Professor passed, Hermes failed after looping. Hand-off: Professor passed, Hermes did the work alone and failed the check. Schedule: both passed. Totals: Professor 5 of 5, Hermes 3 of 5.</desc>
+<text class="t" x="300" y="22" text-anchor="middle">Professor (ours)</text>
+<text class="t" x="520" y="22" text-anchor="middle">Hermes</text>
+<g id="fb-t1"><title>Chat: plan a small herb garden in a set format. Both passed twice</title>
+<text class="t" x="10" y="58">Chat</text><text class="s" x="10" y="74">plan in a set format</text>
+<rect class="box cpu" x="210" y="40" width="180" height="40" rx="6"/><text class="t ok" x="300" y="65" text-anchor="middle">✓ pass 2/2</text>
+<rect class="box cpu" x="430" y="40" width="180" height="40" rx="6"/><text class="t ok" x="520" y="65" text-anchor="middle">✓ pass 2/2</text></g>
+<g id="fb-t2"><title>Web: read two shop pages and compare prices. Professor passed in 3 calls; Hermes looped for 13 calls and gave no answer</title>
+<text class="t" x="10" y="114">Web reading</text><text class="s" x="10" y="130">compare two prices</text>
+<rect class="box cpu" x="210" y="96" width="180" height="40" rx="6"/><text class="t ok" x="300" y="121" text-anchor="middle">✓ pass 1/1</text>
+<rect class="box bad" x="430" y="96" width="180" height="40" rx="6"/><text class="t no" x="520" y="121" text-anchor="middle">✗ fail: looped</text></g>
+<g id="fb-t3"><title>Hand-off: a planner hands a checklist to a doer. Professor ran both agents; Hermes wrote good text but no second agent ran</title>
+<text class="t" x="10" y="170">Hand-off</text><text class="s" x="10" y="186">planner to doer</text>
+<rect class="box cpu" x="210" y="152" width="180" height="40" rx="6"/><text class="t ok" x="300" y="177" text-anchor="middle">✓ pass 1/1</text>
+<rect class="box bad" x="430" y="152" width="180" height="40" rx="6"/><text class="t no" x="520" y="177" text-anchor="middle">✗ fail: no hand-off</text></g>
+<g id="fb-t4"><title>Schedule: a job runs once about two minutes later. Both passed</title>
+<text class="t" x="10" y="226">Schedule</text><text class="s" x="10" y="242">run once, later</text>
+<rect class="box cpu" x="210" y="208" width="180" height="40" rx="6"/><text class="t ok" x="300" y="233" text-anchor="middle">✓ pass 1/1</text>
+<rect class="box cpu" x="430" y="208" width="180" height="40" rx="6"/><text class="t ok" x="520" y="233" text-anchor="middle">✓ pass 1/1</text></g>
+<g id="fb-total"><title>Totals over valid runs</title>
+<line class="ring" x1="10" y1="264" x2="710" y2="264"/>
+<text class="t" x="10" y="288">Total</text>
+<text class="t" x="300" y="288" text-anchor="middle">5 of 5</text>
+<text class="t" x="520" y="288" text-anchor="middle">3 of 5</text></g>
+</svg>
+<figcaption>One or two runs per task. That is a signal, not a rate.</figcaption>
+</figure>
+<table id="bench-numbers">
+<thead><tr><th>Measure</th><th>Professor</th><th>Hermes</th></tr></thead>
+<tbody>
+<tr><td>Valid runs passed</td><td class="n">5 of 5</td><td class="n">3 of 5</td></tr>
+<tr><td>Tokens in, all 5 runs</td><td class="n">72,227</td><td class="n">76,010</td></tr>
+<tr><td>Cost of all 5 runs at a small paid model's list price</td><td class="n">$0.009</td><td class="n">$0.010</td></tr>
+<tr><td>Plain chat prompt size</td><td class="n">5,226 tokens</td><td class="n">2,943 tokens</td></tr>
+<tr><td>Maintainability for a second person (7 items, 35 points)</td><td class="n">24</td><td class="n">24</td></tr>
+</tbody>
+</table>
+<p><strong>Where Hermes won.</strong> A leaner chat prompt. An easier install: one command. Scheduled jobs that can run a script with no model at all, so they cost no tokens. A one-command backup. These are on my list to borrow.</p>
+<p><strong>Where it lost.</strong> On the web task it called tools in a loop and ran out of time. On the hand-off task it did the whole job itself, so the second agent never ran.</p>
+<p><strong>What made the test thin.</strong> The free model capped tokens per day and per minute. That allowed one run per task (two for chat), not the three I planned. Neither harness fit the free tier out of the box: both needed their tool lists cut first.</p>
+
+<h2 id="hn-threads-summary">What 35 Hacker News threads say</h2>
+<p>Before the test, I read 35 Hacker News threads from the last twelve months about agent setups, multi-agent tools and the Muse and Grok Bot launches. I quote no one and name no one. The counts are how many different people said something, made by hand, good to about two either way, and they overlap. They are opinions from one community, not proof.</p>
+<details class="more" id="hn-counts"><summary>The counts as a table: eight tips and eight problems</summary>
+<table>
+<thead><tr><th>Tip</th><th>People</th><th>Problem</th><th>People</th></tr></thead>
+<tbody>
+<tr><td>Build your own small harness</td><td class="n">46</td><td>Token cost, plan limits</td><td class="n">70</td></tr>
+<tr><td>One copy per task</td><td class="n">43</td><td>The human is the bottleneck</td><td class="n">60</td></tr>
+<tr><td>Short sessions, notes on disk</td><td class="n">36</td><td>Agents hold your keys</td><td class="n">45</td></tr>
+<tr><td>Plan first</td><td class="n">31</td><td>Too much orchestration</td><td class="n">36</td></tr>
+<tr><td>Cheap models for most work</td><td class="n">31</td><td>Ports and databases collide</td><td class="n">24</td></tr>
+<tr><td>A second model reviews</td><td class="n">27</td><td>Spending you were not told about</td><td class="n">20</td></tr>
+<tr><td>A check must pass first</td><td class="n">27</td><td>"Done" that is not done</td><td class="n">17</td></tr>
+<tr><td>Know when an agent needs you</td><td class="n">25</td><td>Quality drifts</td><td class="n">12</td></tr>
+</tbody>
+</table>
+</details>
+<p>Three things from the threads shape the arena:</p>
+<ul>
+<li><strong>Less swarm, more gate.</strong> Many tried big many-agent setups and went back to one main session with a few helpers. What they said worked is boring: plan first, give each task its own copy, make a check pass before anything counts as done, have a second reviewer, keep a person on the merge.</li>
+<li><strong>People leave big frameworks.</strong> In the largest setup thread, 21 people said they had dropped a large framework such as OpenClaw, Hermes or Gas Town, mostly because updates broke things. Four still liked theirs. About 22 said: keep a personal fork instead.</li>
+<li><strong>The closed launches were judged on trust.</strong> For both Muse (at least 44 people) and Grok Bot (15), the top complaint was who made it, not what it did. One widely shared security claim about Muse was disputed in the threads, and I treat it as unproven.</li>
+</ul>
+
+<h2 id="limits">What this does not show</h2>
+<ul>
+<li><strong>One small test.</strong> One or two runs per task, on one free model. A lean, not a proof.</li>
+<li><strong>Two halves of Professor.</strong> The head-to-head ran its everyday-assistant side. The tier list below scores the coding side as "Our composite".</li>
+<li><strong>Three contenders were not run.</strong> Duet, Muse and Grok Bot are described from launch pages and comments. OpenClaw is described from its docs.</li>
+<li><strong>I built one of the six.</strong> I have tried to mark where each claim comes from so you can discount mine.</li>
+<li><strong>The comments are one community.</strong> Hacker News leans toward people who build their own tools.</li>
+</ul>
+
+<h2 id="full-table">The full scoring table and radar</h2>
+<p>The tier list and radar below are section 5 of <a href="blog/guides-and-sensors.html">Guides, sensors, and the rules I'm still begging for</a>, kept on this page so they are easy to find. Section numbers point into that post.</p>
 <p class="q">How do other setups compare, and what's become standard?</p>
 <p>A spec sheet doesn't tell you how a car drives. It does tell you what's missing.</p>
 <p>I think of this as an arena, not a ranking. New harnesses enter it. Techniques that several harnesses share get compared side by side. And some techniques stop being special: rules files like <code>AGENTS.md</code>, worktrees and skills are close to standard now, so I mark them that way. The arena holds two views: the tier list below, and my own radar in "How we composed ours".</p>
-<p><strong>Last run:</strong> 27 October 2026 (tier list); the Hermes Agent row and two new parts, Surfaces and Scheduler, were added on 5 November 2026. <strong>Radar refreshed:</strong> 2 November 2026; item 31 (Hermes Agent) added 5 November 2026.</p>
+<p><strong>Last run:</strong> 27 October 2026 (tier list); the opening of this page, with the Hermes head-to-head test of 12 November, was merged in on 18 November 2026; the Hermes Agent row and two new parts, Surfaces and Scheduler, were added on 5 November 2026. <strong>Radar refreshed:</strong> 2 November 2026; item 31 (Hermes Agent) added 5 November 2026.</p>
 <h3 id="s5-tier">The tier list</h3>
 <p>On 27 October a research agent compared eleven setups on the same twelve harness parts: always-loaded context, rules, skills, memory, hooks, isolation, orchestrator, review gate before push, human approval points, self-improvement from failures, sync across machines and tools, and goals and user model (called "goals layer" on 27 October). Each part is marked: <strong>has</strong> it, does it <strong>differently</strong>, <strong>lacks</strong> it, or an <strong>estimate</strong> where no primary source answers it.</p>
 <p>On 5 November I added <a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a> (Nous Research) as a twelfth setup, read the same way from its docs and repo. I also added two parts the first twelve did not cover: <strong>Surfaces</strong> (where the human reaches the agent: terminal, chat apps, voice, a phone page) and <strong>Scheduler</strong> (runs that start without a person). The bars below are the original twelve parts. The two new parts are marked in a small table after the figure.</p>
@@ -106,7 +310,7 @@ svg .arrowhead.me{fill:var(--accent)}
 </svg>
 <figcaption>Scores from a research agent's report dated 27 Oct 2026. It compared the tools from their public docs, repos and papers. The Hermes Agent row was added 5 Nov 2026 from its <a href="https://github.com/NousResearch/hermes-agent">public repo</a> and docs. The counts treat all twelve parts as equal: they show coverage, not quality. Vercel d0 and LifeOS were added after and aren't scored.</figcaption>
 </figure>
-<p>Hermes Agent: 9 has, 3 different, 0 lacks, 0 estimate. The three "different" marks: no gate before push (its gates sit at "done"), sync is import and share rather than live, and goals are per task. Read from its docs and repo on 5 November 2026; I have not run it. Two README claims did not match the current docs (FTS5 search "with LLM summarization", and idle-cost serverless persistence), so the marks use the docs.</p>
+<p>Hermes Agent: 9 has, 3 different, 0 lacks, 0 estimate. The three "different" marks: no gate before push (its gates sit at "done"), sync is import and share rather than live, and goals are per task. Read from its docs and repo on 5 November 2026; the marks come from the docs, and the head-to-head test above ran it on 12 November. Two README claims did not match the current docs (FTS5 search "with LLM summarization", and idle-cost serverless persistence), so the marks use the docs.</p>
 <p><strong>The two new parts</strong>, marked on 5 November. Only setups with a source I have read get a mark. The rest stay at "estimate". Nothing is guessed.</p>
 <table id="new-parts-table">
 <tr><th>Setup</th><th>Surfaces</th><th>Scheduler</th><th>Basis</th></tr>
@@ -279,7 +483,68 @@ svg .arrowhead.me{fill:var(--accent)}
 <li><a href="https://github.com/Picrew/awesome-agent-harness">Picrew/awesome-agent-harness</a>: an awesome list of agent harness engineering resources (GitHub projects, tools, benchmarks and practical guides); about 1.9k stars, last push 7 October 2026.</li>
 <li><a href="https://aiharnesses.ai">aiharnesses.ai</a>: a six-harness, 17-row feature matrix with a source and read date on every cell.</li>
 </ul>
-<p>Credits: thanks to the Picrew list's maintainers and to aiharnesses.ai, the lists I looked at. The per-cell source rule comes from aiharnesses.ai.</p>
+<p>Credits: thanks to the Picrew list's maintainers and to aiharnesses.ai, the lists I looked at. The per-cell source rule comes from aiharnesses.ai. Thanks also to the commenters in the 35 Hacker News threads, who wrote down what worked and what did not (every idea from them is in my words); to Nous Research, the OpenClaw project and Anthropic, for public docs and launch pages detailed enough to compare; and to Hacker News and its public Algolia search, which made the threads easy to find.</p>
+
+<h2 id="sources">Sources for the opening</h2>
+<ul>
+<li><a href="https://github.com/NousResearch/hermes-agent">Hermes Agent on GitHub</a> and <a href="https://hermes-agent.nousresearch.com/docs/">its docs</a> (checked 2026-11-05)</li>
+<li><a href="https://docs.openclaw.ai/concepts/model-providers">OpenClaw: model providers</a> (checked 2026-11-17)</li>
+<li><a href="https://claude.com/blog/claude-duet">Introducing Claude Duet</a>, Anthropic, 21 October 2026 (checked 2026-11-17)</li>
+<li>Our head-to-head test, 12 November 2026: not public</li>
+<li>The Muse and Grok Bot launch threads, and the 35 Hacker News threads below (the big setup thread, <a href="https://news.ycombinator.com/item?id=50366117">50366117</a>, is the best single read)</li>
+</ul>
+<details class="more" id="hn-threads"><summary>The 35 Hacker News threads, December 2025 to November 2026</summary>
+<p><strong>Setups and harness design (8)</strong></p>
+<ul>
+<li><a href="https://news.ycombinator.com/item?id=50366117">Ask HN: What's your current AI agentic setup?</a></li>
+<li><a href="https://news.ycombinator.com/item?id=46993479">Ask HN: Are you using an agent orchestrator to write code?</a></li>
+<li><a href="https://news.ycombinator.com/item?id=46292682">Ask HN: How are you LLM-coding in an established code base?</a></li>
+<li><a href="https://news.ycombinator.com/item?id=49126604">qm – Multiplayer agent harness for work</a></li>
+<li><a href="https://news.ycombinator.com/item?id=47031268">Building SQLite with a small swarm</a></li>
+<li><a href="https://news.ycombinator.com/item?id=47990675">The agent harness belongs outside the sandbox</a></li>
+<li><a href="https://news.ycombinator.com/item?id=49182946">Building an Advanced Agentic Harness</a></li>
+<li><a href="https://news.ycombinator.com/item?id=48460863">Is grep all you need? How agent harnesses reshape agentic search</a></li>
+</ul>
+<p><strong>Terminal tools for many agents (9)</strong></p>
+<ul>
+<li><a href="https://news.ycombinator.com/item?id=50298436">Herdr has released native app</a></li>
+<li><a href="https://news.ycombinator.com/item?id=49201003">Herdr is joining Y Combinator. The runtime stays open</a></li>
+<li><a href="https://news.ycombinator.com/item?id=48756578">Herdr: One terminal to rule them all</a></li>
+<li><a href="https://news.ycombinator.com/item?id=48714802">Herdr: Agent multiplexer that lives in your terminal</a></li>
+<li><a href="https://news.ycombinator.com/item?id=48236770">Launch HN: Superset (YC P26) – IDE for the agents era</a></li>
+<li><a href="https://news.ycombinator.com/item?id=46368739">Show HN: Superset – Terminal to run 10 parallel coding agents</a></li>
+<li><a href="https://news.ycombinator.com/item?id=47140322">Show HN: Emdash – Open-source agentic development environment</a></li>
+<li><a href="https://news.ycombinator.com/item?id=49789356">Show HN: Foremerge – Catch intent conflicts between parallel coding agents</a></li>
+<li><a href="https://news.ycombinator.com/item?id=47218318">Parallel coding agents with tmux and Markdown specs</a></li>
+</ul>
+<p><strong>Gas Town (6)</strong></p>
+<ul>
+<li><a href="https://news.ycombinator.com/item?id=46734302">Gas Town's agent patterns, design bottlenecks, and vibecoding at scale</a></li>
+<li><a href="https://news.ycombinator.com/item?id=46624883">Gas Town Decoded</a></li>
+<li><a href="https://news.ycombinator.com/item?id=46458936">Welcome to Gas Town</a></li>
+<li><a href="https://news.ycombinator.com/item?id=47770124">Gas Town: From Clown Show to v1.0</a></li>
+<li><a href="https://news.ycombinator.com/item?id=47785053">Does Gas Town 'steal' usage from users' LLM credits to improve itself?</a></li>
+<li><a href="https://news.ycombinator.com/item?id=47250133">Welcome to the Wasteland: A Thousand Gas Towns</a></li>
+</ul>
+<p><strong>Grok Bot (3)</strong></p>
+<ul>
+<li><a href="https://news.ycombinator.com/item?id=49261514">Grok Bot</a></li>
+<li><a href="https://news.ycombinator.com/item?id=49261532">Grok Bot by SpaceXAI</a></li>
+<li><a href="https://news.ycombinator.com/item?id=50169169">Whoops: Grok Bot Spills Tech CEO's Bank Data in Public Slack</a></li>
+</ul>
+<p><strong>Meta's Muse (9)</strong></p>
+<ul>
+<li><a href="https://news.ycombinator.com/item?id=49615537">Muse – Meta's personal AI agent</a></li>
+<li><a href="https://news.ycombinator.com/item?id=49977588">Meta's Muse is an adorable privacy and security dumpster fire</a></li>
+<li><a href="https://news.ycombinator.com/item?id=49802871">I asked Meta's Muse for its filesystem and it sent me 6.8GB</a></li>
+<li><a href="https://news.ycombinator.com/item?id=49789982">Amazon blocks Meta's new Muse AI agent from shopping on amazon.com</a></li>
+<li><a href="https://news.ycombinator.com/item?id=49929970">Meta's Muse is fantastic for web scraping</a></li>
+<li><a href="https://news.ycombinator.com/item?id=49848095">Meta's Muse appears to use an OpenAI model labeled muse-special</a></li>
+<li><a href="https://news.ycombinator.com/item?id=49802030">Meta's Muse has a serious 0-day</a></li>
+<li><a href="https://news.ycombinator.com/item?id=49893709">Unsurprisingly, Meta's new Muse AI agent blatantly ignores users permissions</a></li>
+<li><a href="https://news.ycombinator.com/item?id=49983579">Meta's Muse AI agent is building a dossier on you</a></li>
+</ul>
+</details>
 
 </article>
 </main>
