@@ -155,15 +155,9 @@
 
 <section class="p-panel" id="p4" aria-labelledby="p4-t">
 <header class="p-panel-h"><span class="p-num">04</span><h2 id="p4-t">Drawers and the card catalogue</h2><svg class="p-ico" aria-hidden="true" focusable="false"><use href="#i-cabinet"/></svg></header>
-<div class="p-box"><h3 class="p-lab">The filing cabinet: one room each</h3><p>Each kind of work gets its own folder, a room. A <code>CONTEXT.md</code> inside says how that work is done: the tone, the template, what to check. My blog room also holds a tone file and a template for how a post is laid out.</p></div>
-<div class="p-box"><h3 class="p-lab">The card catalogue: the map</h3><p>At the top sits one short file, <code>AGENTS.md</code>. It holds who you are, your house rules and a routing table: for this task, open this drawer.</p></div>
-<div class="p-box"><h3 class="p-lab">A routing table</h3>
-<table class="p-table"><thead><tr><th>Task</th><th>Open</th></tr></thead><tbody>
-<tr><td>Write a blog post</td><td><code>writing/</code>: CONTEXT.md, voice.md</td></tr>
-<tr><td>Money question</td><td><code>money/</code>: CONTEXT.md</td></tr>
-<tr><td>Anything else</td><td>Ask which drawer</td></tr>
-</tbody></table></div>
-<p class="p-principle"><span class="p-lab">Principle</span>The routing table matters most. Without it the librarian either pulls every book (slow and costly) or guesses.</p>
+<div class="p-box"><h3 class="p-lab">The filing cabinet: one room each</h3><p>Each kind of work gets its own folder, a room. A <code>CONTEXT.md</code> inside says how that work is done: the tone and what to check.</p></div>
+<div class="p-box"><h3 class="p-lab">The card catalogue: the map</h3><p>At the top sits one short file, <code>AGENTS.md</code>. It holds who you are and your house rules, and it points to the right drawer for each task.</p></div>
+<p class="p-principle"><span class="p-lab">Principle</span>The map matters most. Without it the librarian either pulls every book (slow and costly) or guesses.</p>
 <a class="p-more" href="#s-rooms">Read more: drawers and the catalogue</a>
 </section>
 
@@ -243,10 +237,8 @@
 <pre>Who I am: Sam, a teacher learning to use AI.
 How I like answers: short, plain, no hype.
 
-For this kind of task, open this drawer:
-- money questions   → money/CONTEXT.md
-- lesson planning   → teaching/CONTEXT.md
-- anything else     → ask me which drawer</pre>
+Drawers: money/ and teaching/.
+Anything else: ask me which drawer.</pre>
 <p>Add a drawer when a kind of work keeps coming up, not before.</p>
 </section>
 
@@ -254,13 +246,13 @@ For this kind of task, open this drawer:
 <h2>Drawers and the card catalogue</h2>
 <p>A good AI library has three kinds of file:</p>
 <ul>
-<li><strong>The map</strong>: one short file at the top, <code>AGENTS.md</code>. Who you are, your house rules, and a table: <em>for this kind of task, go to this drawer and read these files.</em></li>
+<li><strong>The map</strong>: one short file at the top, <code>AGENTS.md</code>. Who you are, your house rules, and which drawer to open for each kind of task.</li>
 <li><strong>The rooms</strong>: one folder per kind of work, each with a <code>CONTEXT.md</code> that explains how that work is done.</li>
 <li><strong>The tools</strong>: scripts and skills the rooms can use, once you have some.</li>
 </ul>
 <p>This is the shape of a small library:</p>
 <pre>my-life/
-├── AGENTS.md          the map: who I am, my rules, the routing table
+├── AGENTS.md          the map: who I am, my rules
 ├── money/
 │   └── CONTEXT.md     how I handle money
 ├── health/
@@ -268,13 +260,7 @@ For this kind of task, open this drawer:
 └── writing/
     ├── CONTEXT.md     how I write
     └── voice.md       my tone, saved once</pre>
-<p>And this is the kind of routing table inside the map:</p>
-<pre>| Task                      | Open drawer   | Read first            |
-|---------------------------|---------------|-----------------------|
-| Write or edit a post      | writing/      | CONTEXT.md, voice.md  |
-| Money question            | money/        | CONTEXT.md            |
-| Anything else             | ask which drawer           |</pre>
-<p>The routing table is the most important part. Without it, the librarian either pulls every book off the shelf (slow and expensive) or guesses which one you meant.</p>
+<p>The map is the most important part. Without it, the librarian either pulls every book off the shelf (slow and expensive) or guesses which one you meant.</p>
 <p>A card that points to a shelf that has moved is a real failure for AI tools too: <a href="when-the-notes-are-wrong.html">When the notes are wrong</a>.</p>
 </section>
 

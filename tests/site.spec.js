@@ -281,7 +281,7 @@ test('panel post: the library scene is a labelled SVG that fits the width, names
 const convertedPosts = [
   { slug: 'everything-is-a-file', series: 'Signal from noise', panels: 8 },
   { slug: 'second-brain-page', series: 'Signal from noise', panels: 7 },
-  { slug: 'one-harness-for-every-agent', series: 'Customize everything, including yourself', panels: 6 },
+  { slug: 'one-harness-for-every-agent', series: 'Customize everything, including yourself', panels: 5 },
   { slug: 'when-the-notes-are-wrong', series: 'Safe AI crews', panels: 5 },
 ];
 
@@ -300,6 +300,19 @@ test('converted posts: each one is a covered page, public in share.json and list
   for (const gone of ['how-it-fits-together', 'guides-and-sensors', 'rules-from-chat-history']) {
     expect(await page.locator(`.p-posts a[href*="${gone}"]`).count(), `${gone} left the site`).toBe(0);
   }
+});
+
+// The trimmed posts: no file layout or routing table, and the second brain post shows a picture, not a live page.
+test('trimmed posts: no routing table or file layout, second brain post uses a screenshot', async ({ page }) => {
+  for (const slug of ['everything-is-a-file', 'one-harness-for-every-agent']) {
+    await page.goto(`/ai-life-os/blog/${slug}.html`);
+    const text = (await page.locator('main').innerText()).toLowerCase();
+    expect(text, `${slug}: routing table`).not.toContain('routing table');
+    expect(text, `${slug}: file layout`).not.toContain('how each tool finds it');
+  }
+  await page.goto('/ai-life-os/blog/second-brain-page.html');
+  await expect(page.locator('#fig-screenshot img'), 'the screenshot').toHaveCount(1);
+  await expect(page.locator('main iframe, main a[href*="ai-life-os/index.html"], main a[href$="../index.html"]'), 'no live page link or frame').toHaveCount(0);
 });
 
 for (const { slug, series, panels: expected } of convertedPosts) {
