@@ -11,10 +11,6 @@ opts=opts||{};
 var BASE=opts.base||"",FRAMED=!!opts.framed;
 var host=document.createElement("div");host.id="brainHost";if(FRAMED)host.className="framed";
 var shadow=host.attachShadow({mode:"open"});
-var NAV=FRAMED?"":'<nav class="nav" aria-label="Site"><span class="vtag">v1.0</span>'+
-  '<a class="btn" href="../../index.html">whoami</a><a class="btn" href="../index.html">AI-Life-OS</a>'+
-  '<a class="btn" href="../blog/index.html">Blog</a><a class="btn" href="../course/index.html">Course</a><a class="btn" href="index.html" aria-current="page">Second Brain</a>'+
-  '<a class="btn" href="https://github.com/codeami/codeami.github.io">GitHub</a></nav>';
 shadow.innerHTML='<link rel="stylesheet" href="'+BASE+'graph.css">'+
   '<div id="stage"><canvas id="cv" role="img" aria-label="Second brain map: a centre rules file linked to rooms of public notes, harness parts and posts, with a ring of skills and a ring of pages and projects. The side lists hold the same items as buttons."></canvas></div>'+
   '<div id="side" hidden><aside class="side-col" id="wl" aria-label="Reading order, pages and projects">'+
@@ -22,7 +18,7 @@ shadow.innerHTML='<link rel="stylesheet" href="'+BASE+'graph.css">'+
   '<section class="wd"><h2>FirstMate in detail</h2><ul id="sFm"></ul></section></aside>'+
   '<aside class="side-col" id="wr" aria-label="Skills"><section class="wd"><h2>Skills deck</h2><ul id="sSkills"></ul></section></aside></div>'+
   '<div class="title"'+(FRAMED?' hidden':'')+'><b>A<i>I</i>-LIFE-OS</b><span>SECOND BRAIN</span><small id="src">loading…</small></div>'+
-  '<div class="top">'+NAV+'<button class="btn" id="motionBtn" type="button" aria-pressed="true">Motion on</button>'+
+  '<div class="top"><button class="btn" id="motionBtn" type="button" aria-pressed="true">Motion on</button>'+
   '<button class="btn" id="sideBtn" type="button" aria-expanded="false" aria-controls="side">&#9638; Widgets</button>'+
   '<button class="btn" id="menuBtn" type="button" aria-expanded="true" aria-controls="panel">&#9776; Menu</button></div>'+
   '<aside id="panel" aria-label="Second brain controls"><h3>Search</h3>'+
