@@ -32,6 +32,10 @@ table.arena td,table.arena th{min-width:128px}
 table.arena th:first-child,table.arena td:first-child{min-width:96px;font-weight:600;position:sticky;left:0;z-index:1;background:var(--panel)}
 table.arena tr.ours td,table.arena tr.ours td:first-child{background:var(--accent-soft)}
 td.n{text-align:right;white-space:nowrap}
+table.grid{font-size:.82rem}
+table.grid th,table.grid td{padding:5px 6px;text-align:center}
+table.grid th:first-child,table.grid td:first-child{text-align:left;position:sticky;left:0;z-index:1;background:var(--panel)}
+.tag.est{color:var(--muted);border:1px dashed var(--muted)}
 .src{display:inline-block;font-size:.72rem;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:0 .3em;margin-left:.2em;white-space:nowrap}
 figure details{font-size:.88rem;margin-top:8px}
 figure details summary,details.more summary{cursor:pointer;color:var(--muted)}
@@ -90,7 +94,7 @@ svg .arrowhead.me{fill:var(--accent)}
 <p class="k-kicker">Harness engineering</p>
 <h1 class="k-title">Hermes vs OpenClaw vs Claude Duet, Muse and Grok Bot: an AI agent arena</h1>
 <p class="k-dek">Six ways to run AI agents, scored on what matters day to day: can you pick the model, does it check its work, and who holds the merge. Below that, twelve setups scored on twelve harness parts, and my own radar.</p>
-<p class="k-meta"><span>Ashish Raina</span><time datetime="2026-11-18">18 Nov 2026</time><span>17 min read</span></p>
+<p class="k-meta"><span>Ashish Raina</span><time datetime="2026-11-18">18 Nov 2026</time><span>22 min read</span></p>
 <p><a href="#full-table">Skip to the full scoring table and radar</a></p>
 
 <div class="note" id="codename-note"><strong>Professor is our codename for our own setup.</strong> Its roles carry city names from the series Money Heist: Professor plans and hands out the work, Moscow builds, Nairobi checks the result, Lisbon asks a person before anything risky, and Tokyo keeps the record. The names are only labels.</div>
@@ -282,6 +286,8 @@ svg .arrowhead.me{fill:var(--accent)}
 <li><strong>Two halves of Professor.</strong> The head-to-head ran its everyday-assistant side. The tier list below scores the setup as a whole, coding side included.</li>
 <li><strong>Four contenders were not run.</strong> Duet, Muse and Grok Bot are described from launch pages and comments. OpenClaw is described from its docs, and three of its cells have no source read.</li>
 <li><strong>Our own gaps.</strong> Old sessions are kept but not yet searchable. Against our own 30-point checklist, Professor scores 6 have, 18 partly, 2 lack and 4 not needed, and 14 of those marks still need a test. The biggest gaps are retrying failed calls with a growing delay, and packaging an agent so it installs on another machine. I have not scored the other five on all 30 yet.</li>
+<li><strong>Approval rules are prose.</strong> "Drafts, not sends" and "ask before destructive" are written as rules the model reads, not as hooks that block. Omnigent and Claude Code's own docs both point to enforced policy instead.</li>
+<li><strong>Isolation is worktrees only.</strong> They keep files apart but not the network or credentials.</li>
 <li><strong>Still to borrow from Hermes.</strong> A leaner chat prompt, scheduled jobs that need no model, and a one-command backup.</li>
 <li><strong>I built one of the six.</strong> I have tried to mark where each claim comes from so you can discount mine.</li>
 <li><strong>The comments are one community.</strong> Hacker News leans toward people who build their own tools.</li>
@@ -292,7 +298,7 @@ svg .arrowhead.me{fill:var(--accent)}
 <p class="q">How do other setups compare, and what's become standard?</p>
 <p>A spec sheet doesn't tell you how a car drives. It does tell you what's missing.</p>
 <p>I think of this as an arena, not a ranking. New harnesses enter it. Techniques that several harnesses share get compared side by side. And some techniques stop being special: rules files like <code>AGENTS.md</code>, worktrees and skills are close to standard now, so I mark them that way. The arena holds two views: the tier list below, and my own radar in "How we composed ours".</p>
-<p><strong>Last run:</strong> 27 October 2026 (tier list); the opening of this page, with the Hermes head-to-head test of 12 November, was merged in on 18 November 2026; the Hermes Agent row and two new parts, Surfaces and Scheduler, were added on 5 November 2026. <strong>Radar refreshed:</strong> 2 November 2026; item 31 (Hermes Agent) added 5 November 2026.</p>
+<p><strong>Last run:</strong> 27 October 2026 (tier list); the opening of this page, with the Hermes head-to-head test of 12 November, was merged in on 18 November 2026, together with the full grid, the findings and the Harness-squared read-through from the 27 October report; the Hermes Agent row and two new parts, Surfaces and Scheduler, were added on 5 November 2026. <strong>Radar refreshed:</strong> 2 November 2026; item 31 (Hermes Agent) added 5 November 2026.</p>
 <h3 id="s5-tier">The tier list</h3>
 <p>On 27 October a research agent compared eleven setups on the same twelve harness parts: always-loaded context, rules, skills, memory, hooks, isolation, orchestrator, review gate before push, human approval points, self-improvement from failures, sync across machines and tools, and goals and user model (called "goals layer" on 27 October). Each part is marked: <strong>has</strong> it, does it <strong>differently</strong>, <strong>lacks</strong> it, or an <strong>estimate</strong> where no primary source answers it.</p>
 <p>On 5 November I added <a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a> (Nous Research) as a twelfth setup, read the same way from its docs and repo. I also added two parts the first twelve did not cover: <strong>Surfaces</strong> (where the human reaches the agent: terminal, chat apps, voice, a phone page) and <strong>Scheduler</strong> (runs that start without a person). The bars below are the original twelve parts. The two new parts are marked in a small table after the figure.</p>
@@ -329,6 +335,65 @@ svg .arrowhead.me{fill:var(--accent)}
 <tr><td>The other six</td><td>estimate</td><td>estimate</td><td>no source read for these two parts yet</td></tr>
 </table>
 <p>Two notes. Professor (our setup) includes Kun Chen's tools, so it inherits most of his rows; what it adds is the folder map, a goals layer, and one rules file shared by several tools. And Troupe is a design, not shipped software, so its "has" means "designed".</p>
+
+<h3 id="s5-grid">The full grid: every setup on every part</h3>
+<p>The bars give counts. The grid gives each mark, so you can see where a setup is strong and where it is missing. <span class="tag cpu">has</span> it, <span class="tag me">diff</span> does it another way, <span class="tag gpu">lacks</span> it, <span class="tag est">est</span> an estimate, because no primary source answers it. It covers the original twelve parts; the two added on 5 November are in the small table above. Vercel d0 and LifeOS are not scored.</p>
+<table class="grid" id="grid-table">
+<thead><tr><th>Setup</th><th>Context</th><th>Rules</th><th>Skills</th><th>Memory</th><th>Hooks</th><th>Isolation</th><th>Orchestrator</th><th>Review gate</th><th>Approval</th><th>Self-improve</th><th>Sync</th><th>Goals</th></tr></thead>
+<tbody>
+<tr class="ours"><td>Professor (our setup)</td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag me">diff</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag me">diff</span></td><td><span class="tag cpu">has</span></td></tr>
+<tr><td>Hermes Agent</td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag me">diff</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag me">diff</span></td><td><span class="tag me">diff</span></td></tr>
+<tr><td>Kun Chen stack</td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag me">diff</span></td><td><span class="tag me">diff</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag me">diff</span></td><td><span class="tag me">diff</span></td></tr>
+<tr><td>Troupe design</td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag gpu">lacks</span></td><td><span class="tag cpu">has</span></td><td><span class="tag gpu">lacks</span></td><td><span class="tag me">diff</span></td><td><span class="tag gpu">lacks</span></td><td><span class="tag me">diff</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td></tr>
+<tr><td>Claude Code</td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag me">diff</span></td><td><span class="tag gpu">lacks</span></td><td><span class="tag cpu">has</span></td><td><span class="tag gpu">lacks</span></td><td><span class="tag me">diff</span></td><td><span class="tag gpu">lacks</span></td></tr>
+<tr><td>Warp</td><td><span class="tag est">est</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag gpu">lacks</span></td><td><span class="tag gpu">lacks</span></td><td><span class="tag cpu">has</span></td><td><span class="tag gpu">lacks</span></td><td><span class="tag me">diff</span></td><td><span class="tag gpu">lacks</span></td><td><span class="tag cpu">has</span></td><td><span class="tag gpu">lacks</span></td></tr>
+<tr><td>Databricks Omnigent</td><td><span class="tag est">est</span></td><td><span class="tag me">diff</span></td><td><span class="tag me">diff</span></td><td><span class="tag me">diff</span></td><td><span class="tag me">diff</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag me">diff</span></td><td><span class="tag cpu">has</span></td><td><span class="tag gpu">lacks</span></td><td><span class="tag cpu">has</span></td><td><span class="tag gpu">lacks</span></td></tr>
+<tr><td>OpenCode</td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag est">est</span></td><td><span class="tag me">diff</span></td><td><span class="tag cpu">has</span></td><td><span class="tag gpu">lacks</span></td><td><span class="tag me">diff</span></td><td><span class="tag gpu">lacks</span></td><td><span class="tag cpu">has</span></td><td><span class="tag gpu">lacks</span></td><td><span class="tag me">diff</span></td><td><span class="tag gpu">lacks</span></td></tr>
+<tr><td>Ordered stage folders (Jake Van Clief)</td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag me">diff</span></td><td><span class="tag me">diff</span></td><td><span class="tag gpu">lacks</span></td><td><span class="tag gpu">lacks</span></td><td><span class="tag me">diff</span></td><td><span class="tag me">diff</span></td><td><span class="tag cpu">has</span></td><td><span class="tag gpu">lacks</span></td><td><span class="tag me">diff</span></td><td><span class="tag est">est</span></td></tr>
+<tr><td>Google Harness-squared</td><td><span class="tag gpu">lacks</span></td><td><span class="tag me">diff</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag me">diff</span></td><td><span class="tag gpu">lacks</span></td><td><span class="tag me">diff</span></td><td><span class="tag me">diff</span></td><td><span class="tag gpu">lacks</span></td><td><span class="tag cpu">has</span></td><td><span class="tag gpu">lacks</span></td><td><span class="tag gpu">lacks</span></td></tr>
+<tr><td>Pi</td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag cpu">has</span></td><td><span class="tag me">diff</span></td><td><span class="tag me">diff</span></td><td><span class="tag gpu">lacks</span></td><td><span class="tag gpu">lacks</span></td><td><span class="tag gpu">lacks</span></td><td><span class="tag gpu">lacks</span></td><td><span class="tag gpu">lacks</span></td><td><span class="tag me">diff</span></td><td><span class="tag gpu">lacks</span></td></tr>
+<tr><td>Stanford Meta-Harness</td><td><span class="tag gpu">lacks</span></td><td><span class="tag me">diff</span></td><td><span class="tag gpu">lacks</span></td><td><span class="tag me">diff</span></td><td><span class="tag gpu">lacks</span></td><td><span class="tag est">est</span></td><td><span class="tag me">diff</span></td><td><span class="tag me">diff</span></td><td><span class="tag me">diff</span></td><td><span class="tag cpu">has</span></td><td><span class="tag gpu">lacks</span></td><td><span class="tag me">diff</span></td></tr>
+</tbody>
+</table>
+<p class="test">Test: each row adds up to its bar above (Professor 10 has and 2 diff; Warp 5 has, 1 diff, 5 lacks and 1 est). Every cell in the 27 October report carries a source; the sources are listed under "Where I looked".</p>
+
+<h3 id="s5-stands-out">What stands out: four problems others solve with less</h3>
+<p>Reading the grid part by part, four problems come up where another setup does the same job with less. For each: the problem, what others do, and where we stand.</p>
+<ul>
+<li><strong>Problem: instructions cost tokens before any work starts.</strong> Ordered stage folders (Jake Van Clief) give a stage only the files its inputs table names. Layers 0 to 2 are about 1.3 to 1.6k tokens, and one stage gets 2 to 8k, against 40k for one big file (the paper's figures, Van Clief and McDermott, arXiv 2603.16021). Claude Code caps each skill description at 1,536 characters and advises keeping its instruction file under 200 lines. Our base map is small, about 1.5k tokens.</li>
+<li><strong>Problem: approval rules written as prose can be ignored.</strong> Omnigent writes "ask before a shell command", "cap tool calls" and "hard spend cap" as short policies at three levels: server, agent and session. Claude Code's own docs call its instruction file "context, not enforced configuration" and point to a PreToolUse hook to block an action. We write the same ideas as prose rules ("drafts, not sends", "ask before destructive"), which the model may or may not follow.</li>
+<li><strong>Problem: worktrees isolate files, not the network or credentials.</strong> Omnigent wraps each agent in a sandbox, with nine providers plus <code>bwrap</code> and <code>seatbelt</code>. We rely on worktrees only.</li>
+<li><strong>Problem: stages need a contract.</strong> Ordered stage folders use a one-page contract per stage (inputs, process, outputs) that anyone can edit in a text editor. We reached the same design for our own factory stages.</li>
+</ul>
+<p>Where ours carries more than the others:</p>
+<ul>
+<li><strong>Coverage.</strong> Professor (our setup) and the Kun Chen stack are the only two with no "lacks": all twelve parts are has or diff. Professor has 10 outright has to Kun's 8. The reason is plain: it contains Kun's tools, so it inherits those rows. What it adds is the folder map and its routing, a goals layer, and a link layer that serves several tools. Next best are Troupe (7 has, a design only) and Claude Code (7 has, with no gate, no self-improvement and no goals).</li>
+<li><strong>One file serves five tools.</strong> The base rules file is linked into Claude Code, Codex, OpenCode, Gemini and backpass. OpenCode also reads Claude Code's file as a fallback, but no other setup treats the instruction file as a port that tools plug into.</li>
+<li><strong>Structural checks that cost no tokens.</strong> Checks and CI run on the map itself. I saw no test of the instruction files in any other setup. That is an absence in what I read, not proof.</li>
+<li><strong>A goals layer.</strong> Only Troupe and ours have one.</li>
+</ul>
+
+<h3 id="s5-harness2">Harness-squared: a harness that edits itself</h3>
+<p><strong>The problem.</strong> A rules file is only as good as the last time someone updated it. Our rule-fixing tool, backpass, runs offline over saved transcripts, edits one file, and a person applies each edit. It argues for an edit from past evidence; it never tests the edit.</p>
+<p><strong>What Google's project does.</strong> <a href="https://github.com/google-research/harness2">Harness-squared</a> (Apache-2.0, last pushed 14 October 2026; paper <a href="https://arxiv.org/abs/2610.14224">arXiv 2610.14224</a>, submitted 9 October 2026) works inside a task. It proposes, probes and composes edits to eight parts of the harness: system prompt, guardrails, memory, tool guidance, subagents, skills, scripts and plugins. After the task, a reflection step keeps the adopted harness and the lessons that have evidence, per domain, for next time. The reported gains are up to 11.5, 4.5 and 11.8 points on three benchmarks, on GLM-5 and Gemini 3.5 Flash. I found no independent replication, and the README and abstract describe no human step.</p>
+<p><strong>What I would borrow.</strong> Two ideas, both my own design suggestions; neither project does them for us.</p>
+<ul>
+<li><strong>Probe.</strong> Before an edit is accepted, run the candidates on the same task and compare the executions, with no ground-truth verifier. For backpass: replay one past task with and without a proposed rule, and show both outcomes on the review page.</li>
+<li><strong>A lessons library per domain.</strong> One lessons file per area of work, such as the blog or the factory, instead of one global map. Harness-squared's <a href="https://github.com/google-research/harness2/blob/main/docs/EXPERIMENTS.md">experiments notes</a> describe the same per-domain idea.</li>
+</ul>
+<p><strong>Why not adopt the tool.</strong> It lists Linux, Python 3.12 and Vertex AI by default. Its Codex executor runs with the sandbox off and the network open. It is "not an officially supported Google product". And it has no human approval, which is the property our "drafts, not sends" and "ask before destructive" rules exist to keep.</p>
+<p><strong>Same family: Stanford Meta-Harness.</strong> It searches harness code using full execution traces; its examples use Claude Code as the proposer, and the authors include Omar Khattab and Chelsea Finn. The abstract reports +7.7 points on text classification and +4.7 on IMO math. If backpass is ever automated further, its filesystem-of-traces design is the closest match to our logs. Repo: <a href="https://github.com/stanford-iris-lab/meta-harness">stanford-iris-lab/meta-harness</a> (MIT); paper: <a href="https://arxiv.org/abs/2603.28052">arXiv 2603.28052</a>.</p>
+
+<h3 id="s5-estimates">What is estimated or not read</h3>
+<ul>
+<li>Every "est" mark is an estimate: no primary source answers it.</li>
+<li>Warp rests on one vendor article and one docs page. I did not run it.</li>
+<li>The Meta-Harness figures come from a search summary of its abstract. I read the repo README, not the paper body.</li>
+<li>The stage-folder layer sizes come from the paper's arXiv HTML, and its "goals" mark is an estimate.</li>
+<li>Harness-squared's safety points (sandbox off, network open) come from its README. I have not read the paper's limitations section.</li>
+<li>Troupe is a design, not shipped software, so its "has" means "designed".</li>
+<li>Still to read: the stage-folder paper in full, the Meta-Harness paper body, Warp's sandbox and hooks pages, OpenCode's skills page, and Claude Code's sandbox page.</li>
+</ul>
 
 <h3 id="s5-types">Harness types</h3>
 <p>The tier list ranks setups. It doesn't say what <em>kind</em> each one is. Here they are grouped by the four types from section 4, plus one that sits off that line. This grouping is my reading.</p>
@@ -490,6 +555,18 @@ svg .arrowhead.me{fill:var(--accent)}
 <li><a href="https://github.com/Picrew/awesome-agent-harness">Picrew/awesome-agent-harness</a>: an awesome list of agent harness engineering resources (GitHub projects, tools, benchmarks and practical guides); about 1.9k stars, last push 7 October 2026.</li>
 <li><a href="https://aiharnesses.ai">aiharnesses.ai</a>: a six-harness, 17-row feature matrix with a source and read date on every cell.</li>
 </ul>
+<details class="more" id="tier-sources"><summary>Primary sources for the 27 October tier list</summary>
+<ul>
+<li>Ordered stage folders: Van Clief and McDermott, <a href="https://arxiv.org/abs/2603.16021">arXiv 2603.16021</a> (the HTML version, for layer sizes).</li>
+<li>Warp: <a href="https://www.warp.dev/articles/choosing-coding-agent-harness-claude-code-codex">how to choose between Claude Code, Codex and other harnesses</a> and the <a href="https://docs.warp.dev/platform/harnesses/warp-agent.md">Warp Agent harness page</a>.</li>
+<li>Databricks Omnigent: <a href="https://www.databricks.com/blog/introducing-omnigent-meta-harness-combine-control-and-share-your-agents">Introducing Omnigent</a> (13 June 2026) and the <a href="https://github.com/omnigent-ai/omnigent">repo</a> (Apache-2.0, alpha; read 27 October 2026).</li>
+<li>Google Harness-squared: the <a href="https://github.com/google-research/harness2">repo</a>, <a href="https://github.com/google-research/harness2/blob/main/docs/EXPERIMENTS.md">EXPERIMENTS.md</a> and <a href="https://arxiv.org/abs/2610.14224">arXiv 2610.14224</a>.</li>
+<li>Stanford Meta-Harness: the <a href="https://github.com/stanford-iris-lab/meta-harness">repo</a> and <a href="https://arxiv.org/abs/2603.28052">arXiv 2603.28052</a> (abstract figures from a search summary).</li>
+<li>Pi: <a href="https://github.com/earendil-works/pi">earendil-works/pi</a>, README and docs.</li>
+<li>OpenCode docs: <a href="https://opencode.ai/docs/rules/">rules</a>, <a href="https://opencode.ai/docs/permissions/">permissions</a> and <a href="https://opencode.ai/docs/plugins/">plugins</a>.</li>
+<li>Claude Code docs: <a href="https://code.claude.com/docs/en/memory.md">memory</a> and <a href="https://code.claude.com/docs/en/skills.md">skills</a>.</li>
+</ul>
+</details>
 <p>Credits: thanks to the Picrew list's maintainers and to aiharnesses.ai, the lists I looked at. The per-cell source rule comes from aiharnesses.ai. Thanks also to the commenters in the 35 Hacker News threads, who wrote down what worked and what did not (every idea from them is in my words); to Nous Research, the OpenClaw project and Anthropic, for public docs and launch pages detailed enough to compare; and to Hacker News and its public Algolia search, which made the threads easy to find.</p>
 
 <h2 id="sources">Sources for the opening</h2>
