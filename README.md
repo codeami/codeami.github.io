@@ -38,6 +38,5 @@ End-to-end tests (Playwright, in `tests/`) walk the repo for every HTML page, so
     npm test              # run everything (needs Docker)
     npm run test:update   # on purpose: rewrite the baseline screenshots, then commit them
 
-The tests run inside the Playwright Docker image, the same one CI uses, because fonts render differently on each OS and the baselines are Linux ones. `npm run test:host` runs without Docker; screenshot checks will fail on a Mac, the other checks stay valid. After a look change, run `npm run test:update` and review the changed PNGs in the diff. CI (`.github/workflows/e2e.yml`) runs on every PR and push to `main` and uploads the diff images as the `playwright-diffs` artifact when a check fails. Known issue: `ai-life-os/arena.html` links to pages that left the site; it is listed in `tests/site.spec.js` until pull request 20 repoints those links.
-
+The tests run inside the Playwright Docker image, the same one CI uses, because fonts render differently on each OS and the baselines are Linux ones. `npm run test:host` runs without Docker; screenshot checks will fail on a Mac, the other checks stay valid. After a look change, run `npm run test:update` and review the changed PNGs in the diff. CI (`.github/workflows/e2e.yml`) runs on every PR and push to `main` and uploads the diff images as the `playwright-diffs` artifact when a check fails.
 The supervisor and most crew mechanics are upstream [Firstmate](https://github.com/kunchenguid/firstmate) by Kun Chen and contributors. See `ai-life-os/LICENSE`.

@@ -1,5 +1,5 @@
 /* The second brain: the AIO prototype's ring map, fed only public data (brain-data.json).
-   It is the chart of Chart & Cards, the base layer of the whole site. brain/index.html shows it alone; on every other
+   It is the chart of Chart & Cards, the base layer of the whole site. the demo (index.html) shows it with a chat; on every other
    page hud.js mounts it behind the page, which then reads as an overlay on top of it.
    var g=AIOBrain({base:"<url of brain/>", framed:bool, onPage:fn(url)->bool});
    g.select(url) marks a page's node as "you are here" (that node alone is lit, with a ring); g.state() and g.screenOf(label) are for the tests; g.setInsets(bottom) keeps the map clear of a bottom sheet;
