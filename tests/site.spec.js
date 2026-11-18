@@ -169,9 +169,10 @@ test('build: a link-only page gets a static noindex and no robots.txt line, a re
 
 // ---- the blog: index cards from share.json, and the Calm panel post ----
 test('blog index: lists exactly the public posts, newest first inside each group, no hidden post', async ({ page }) => {
+  // The harness arena is a post too: it keeps its own address one folder up, so its card links to ../arena.html.
   const posts = share
-    .filter((r) => /^ai-life-os\/blog\/(?!index\.html)[^/]+\.html$/.test(r.path))
-    .map((r) => ({ ...r, file: r.path.split('/').pop() }));
+    .filter((r) => /^ai-life-os\/(blog\/(?!index\.html)[^/]+|arena)\.html$/.test(r.path))
+    .map((r) => ({ ...r, file: r.path.endsWith('/arena.html') ? '../arena.html' : r.path.split('/').pop() }));
   await page.goto('/ai-life-os/blog/index.html');
   const listed = await page.$$eval('.p-post h3 a', (as) => as.map((a) => a.getAttribute('href')));
   expect([...listed].sort()).toEqual(posts.filter((p) => p.level === 'public').map((p) => p.file).sort());
@@ -300,6 +301,19 @@ test('converted posts: each one is a covered page, public in share.json and list
   for (const gone of ['how-it-fits-together', 'guides-and-sensors', 'rules-from-chat-history']) {
     expect(await page.locator(`.p-posts a[href*="${gone}"]`).count(), `${gone} left the site`).toBe(0);
   }
+});
+
+// The harness arena is a post: problem, then solution with its evidence, then gaps, then the full tier list and radar.
+test('arena post: problem, solution and gaps in that order before the full table; the skip link and the blog kicker work', async ({ page }) => {
+  await page.goto('/ai-life-os/arena.html');
+  const heads = await page.$$eval('.k-article > h2', (hs) => hs.map((h) => h.textContent.trim()));
+  expect(heads.slice(0, 4)).toEqual(['The problem: picking an agent harness is hard', 'The solution and the evidence', 'Gaps and tech debt', 'The full scoring table and radar']);
+  await expect(page.locator('.k-kicker a'), 'kicker links to the Blog').toHaveAttribute('href', 'blog/index.html');
+  await page.locator('a[href="#full-table"]').first().click();
+  await expect(page).toHaveURL(/#full-table$/);
+  await expect(page.locator('#full-table')).toHaveCount(1);
+  for (const id of ['arena-table', 'head-to-head', 'open-vs-locked', 'grid-table']) await expect(page.locator(`#${id}`), id).toHaveCount(1);
+  expect(await page.locator('.k-article').innerText(), 'no insider acronym on the page').not.toMatch(/\bICM\b/i);
 });
 
 // The trimmed posts: no file layout or routing table, and the second brain post shows a picture, not a live page.
@@ -650,8 +664,6 @@ test('landing: the hook shows until the reader moves on; a typed #trip address s
 const barPages = () => pages.filter((f) => !share.some((r) => r.path === f && r.level !== 'public') && f !== 'blog/index.html');
 const barItems = ['Me', 'Blog', 'Intent', 'Course'];
 const barPaths = ['/index.html', '/ai-life-os/blog/index.html', '/intent/index.html', '/ai-life-os/course/index.html'];
-// The arena still carries the old Menu button, hidden by topbar.css, until its own pull request is rebased.
-const oldMenuButton = new Set(['ai-life-os/arena.html']);
 
 // What a page's bar says: the site name, then each item's text and target.
 const barOf = (page) => page.locator('header.tb').evaluate((b) => ({
@@ -677,7 +689,7 @@ test('top bar: Me, Blog, Intent, Course and a GitHub icon on every public page, 
     expect(await bar.evaluate((b) => b.scrollWidth <= b.clientWidth + 1), `${file}: bar fits the width`).toBe(true);
     // no Menu button: all five items are in view at this width, and the site name is on the bar
     for (let i = 0; i < 5; i++) await expect(links.nth(i), `${file}: item ${i} in view`).toBeVisible();
-    if (!oldMenuButton.has(file)) await expect(bar.locator('.tb-menu'), `${file}: no Menu button`).toHaveCount(0);
+    await expect(bar.locator('.tb-menu'), `${file}: no Menu button`).toHaveCount(0);
     await expect(bar.locator('.tb-brand'), file).toHaveText('Ashish Raina');
     const inView = await links.evaluateAll((as) => as.every((a) => { const r = a.getBoundingClientRect(); return r.left >= 0 && r.right <= document.documentElement.clientWidth; }));
     expect(inView, `${file}: every item inside the screen width`).toBe(true);
