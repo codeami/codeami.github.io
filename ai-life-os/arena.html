@@ -95,13 +95,38 @@ svg .arrowhead.me{fill:var(--accent)}
 
 <div class="note" id="codename-note"><strong>Professor is our codename for our own setup.</strong> Its roles carry city names from the series Money Heist: Professor plans and hands out the work, Moscow builds, Nairobi checks the result, Lisbon asks a person before anything risky, and Tokyo keeps the record. The names are only labels.</div>
 
-<h2 id="short-answer">The question, and the short answer</h2>
+<h2 id="problem">The problem: picking an agent harness is hard</h2>
 <p>Most comparisons of AI agents are written by someone selling one of them. I have a stake too: I run my own setup. So I put it in the ring with the others, under a codename, and I show the test where it could have lost.</p>
-<p>Think of six kitchens. Some can buy from any supplier. Some must buy everything from one. The food may be just as good. But only the first kind can buy the cheap onions for the soup and save the expensive ones for the main course.</p>
-<p id="answer"><strong>The short answer:</strong> the biggest split is not features. It is whether you can choose the model. Claude Duet, Meta's Muse and Grok Bot each run on their maker's own models. That rules out sending easy work to a cheaper model, which is the main way people in the Hacker News threads save tokens. Hermes and OpenClaw are open source and work with many providers. Of those two, Hermes is the one we tested head to head, and I see it as the main rival. In that test our setup passed 5 of 5 runs and Hermes passed 3 of 5, at about the same cost. The sample was tiny.</p>
+<p>Think of six kitchens. Some can buy from any supplier. Some must buy everything from one. The food may be just as good. But only the first kind can buy the cheap onions for the soup and save the expensive ones for the main course. That is provider lock-in, and it is the first thing that makes the choice hard: the feature list looks the same either way.</p>
+<h3 id="problem-cost">Lock-in and the token bill</h3>
+<p>The second thing is cost. Token cost was the most common complaint in the Hacker News threads, from about 70 people. The most common fix, from about 31, was to send routine work to cheaper models. You can only do that if the harness lets you choose the model.</p>
 <div class="callout" id="caveat"><strong>Read this as one builder's evaluation, not a benchmark.</strong> Only one head-to-head test was run, with one or two runs per task. The rest comes from public docs, launch pages and Hacker News comments. Each cell in the table says which.</div>
 
-<h2 id="contenders">The six contenders</h2>
+<h3 id="hn-threads-summary">What 35 Hacker News threads say</h3>
+<p>Before the test, I read 35 Hacker News threads from the last twelve months about agent setups, multi-agent tools and the Muse and Grok Bot launches. I quote no one and name no one. The counts are how many different people said something, made by hand, good to about two either way, and they overlap. They are opinions from one community, not proof.</p>
+<details class="more" id="hn-counts"><summary>The counts as a table: eight tips and eight problems</summary>
+<table>
+<thead><tr><th>Tip</th><th>People</th><th>Problem</th><th>People</th></tr></thead>
+<tbody>
+<tr><td>Build your own small harness</td><td class="n">46</td><td>Token cost, plan limits</td><td class="n">70</td></tr>
+<tr><td>One copy per task</td><td class="n">43</td><td>The human is the bottleneck</td><td class="n">60</td></tr>
+<tr><td>Short sessions, notes on disk</td><td class="n">36</td><td>Agents hold your keys</td><td class="n">45</td></tr>
+<tr><td>Plan first</td><td class="n">31</td><td>Too much orchestration</td><td class="n">36</td></tr>
+<tr><td>Cheap models for most work</td><td class="n">31</td><td>Ports and databases collide</td><td class="n">24</td></tr>
+<tr><td>A second model reviews</td><td class="n">27</td><td>Spending you were not told about</td><td class="n">20</td></tr>
+<tr><td>A check must pass first</td><td class="n">27</td><td>"Done" that is not done</td><td class="n">17</td></tr>
+<tr><td>Know when an agent needs you</td><td class="n">25</td><td>Quality drifts</td><td class="n">12</td></tr>
+</tbody>
+</table>
+</details>
+<p>Three things from the threads shape the arena:</p>
+<ul>
+<li><strong>Less swarm, more gate.</strong> Many tried big many-agent setups and went back to one main session with a few helpers. What they said worked is boring: plan first, give each task its own copy, make a check pass before anything counts as done, have a second reviewer, keep a person on the merge.</li>
+<li><strong>People leave big frameworks.</strong> In the largest setup thread, 21 people said they had dropped a large framework such as OpenClaw, Hermes or Gas Town, mostly because updates broke things. Four still liked theirs. About 22 said: keep a personal fork instead.</li>
+<li><strong>The closed launches were judged on trust.</strong> For both Muse (at least 44 people) and Grok Bot (15), the top complaint was who made it, not what it did. One widely shared security claim about Muse was disputed in the threads, and I treat it as unproven.</li>
+</ul>
+
+<h3 id="contenders">The six contenders</h3>
 <ul>
 <li><strong>Professor (our setup).</strong> A self-hosted setup that runs everyday assistants and a small team of coding agents. It picks a model for each request.</li>
 <li><strong>Hermes Agent.</strong> An open-source agent from Nous Research, under the MIT licence. It runs on your own machine or server and talks to you through the terminal or chat apps. In our trial it refused any model with less than a 64,000-token context window.</li>
@@ -111,8 +136,90 @@ svg .arrowhead.me{fill:var(--accent)}
 <li><strong>Grok Bot.</strong> An agent teammate from SpaceXAI, launched in August 2026. Each bot gets its own always-on computer, and bots can talk to each other.</li>
 </ul>
 
-<h2 id="arena-table">The arena table</h2>
-<p>One row per contender. The small grey tag says where each cell comes from: <span class="src">test</span> our own run, <span class="src">docs</span> the product's docs, <span class="src">launch</span> the maker's launch page, <span class="src">HN</span> Hacker News commenters, <span class="src">ours</span> our own marks for our setup. "No source read" means I found nothing to base a mark on.</p>
+<h2 id="solution">The solution and the evidence</h2>
+<p id="answer"><strong>The short answer:</strong> the biggest split is not features. It is whether you can choose the model. Claude Duet, Meta's Muse and Grok Bot each run on their maker's own models. That rules out sending easy work to a cheaper model, which is the main way people in the Hacker News threads save tokens. Hermes and OpenClaw are open source and work with many providers. Of those two, Hermes is the one we tested head to head, and I see it as the main rival. In that test our setup passed 5 of 5 runs and Hermes passed 3 of 5, at about the same cost. The sample was tiny.</p>
+
+<h3 id="open-vs-locked">Open or locked: why lock-in decides the token bill</h3>
+<p>The cheap-model fix from the problem section only works where the harness lets you choose. Open harnesses do. Locked ones make the choice for you.</p>
+<figure id="fig-lockin">
+<svg viewBox="0 0 720 280" role="img" aria-labelledby="fl-t fl-d">
+<title id="fl-t">Open harnesses can route; locked ones cannot</title>
+<desc id="fl-d">Left: Professor, Hermes and OpenClaw each send requests to a cheap, a mid-size or a strong model from any provider. Right: Claude Duet, Muse and Grok Bot each send every request to their maker's own model.</desc>
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="arrowhead" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<g id="fl-open"><title>Open: route any model</title>
+<rect class="zone" x="6" y="30" width="340" height="230" rx="10"/>
+<text class="t" x="20" y="22">Open: you pick the model</text>
+<g id="fl-open-h"><title>Professor (our setup), Hermes, OpenClaw</title><rect class="box me" x="24" y="104" width="128" height="74" rx="8"/><text class="t" x="88" y="128" text-anchor="middle">Harness</text><text class="s" x="88" y="146" text-anchor="middle">Professor (our setup)</text><text class="s" x="88" y="162" text-anchor="middle">Hermes · OpenClaw</text></g>
+<g id="fl-cheap"><title>Cheap or free model for easy work</title><rect class="box cpu" x="214" y="52" width="118" height="44" rx="8"/><text class="t" x="273" y="72" text-anchor="middle">Cheap model</text><text class="s" x="273" y="88" text-anchor="middle">easy work</text></g>
+<g id="fl-mid"><title>Mid-size model</title><rect class="box" x="214" y="119" width="118" height="44" rx="8"/><text class="t" x="273" y="139" text-anchor="middle">Mid model</text><text class="s" x="273" y="155" text-anchor="middle">most work</text></g>
+<g id="fl-strong"><title>Strong model for hard work</title><rect class="box" x="214" y="186" width="118" height="44" rx="8"/><text class="t" x="273" y="206" text-anchor="middle">Strong model</text><text class="s" x="273" y="222" text-anchor="middle">hard work</text></g>
+<path class="edge" d="M152,130 C185,110 185,80 212,76" marker-end="url(#ah)"/>
+<line class="edge" x1="152" y1="141" x2="212" y2="141" marker-end="url(#ah)"/>
+<path class="edge" d="M152,152 C185,172 185,202 212,206" marker-end="url(#ah)"/>
+</g>
+<g id="fl-locked"><title>Locked: one provider</title>
+<rect class="zone" x="374" y="30" width="340" height="230" rx="10"/>
+<text class="t" x="388" y="22">Locked: the maker picks the model</text>
+<g id="fl-locked-h"><title>Claude Duet, Muse, Grok Bot</title><rect class="box" x="392" y="110" width="128" height="62" rx="8"/><text class="t" x="456" y="136" text-anchor="middle">Harness</text><text class="s" x="456" y="154" text-anchor="middle">Duet · Muse · Grok Bot</text></g>
+<g id="fl-own"><title>The maker's own model, for every request</title><rect class="box gpu" x="582" y="114" width="118" height="54" rx="8"/><text class="t" x="641" y="138" text-anchor="middle">Maker's model</text><text class="s" x="641" y="155" text-anchor="middle">every request</text></g>
+<line class="edge" x1="520" y1="141" x2="580" y2="141" marker-end="url(#ah)"/>
+</g>
+</svg>
+<figcaption>Routing is a choice per request. A locked harness makes that choice for you, every time.</figcaption>
+</figure>
+<p><strong>One correction to my own starting point.</strong> I went in thinking Hermes was the only open rival, because the others were locked to one provider. OpenClaw is not locked. Its docs list a dozen providers and local models. So the open camp has two outside contenders, not one.</p>
+<p><strong>Why I still name Hermes the main rival.</strong> It is the one we ran side by side with ours, and the one we keep borrowing ideas from. In the threads, many people said they had left large frameworks such as OpenClaw after updates kept breaking. That is a reason to watch OpenClaw less closely, not a test result.</p>
+<p><strong>Routing is not the whole bill.</strong> In our test, Hermes sent a smaller prompt for a plain chat: about 2,900 tokens to our 5,200. A lean prompt saves tokens on every call. Routing saves on the expensive calls. A good harness needs both.</p>
+
+<h3 id="head-to-head">Head to head: Professor vs Hermes</h3>
+<p>A driving test is short. It does not prove you are a good driver. It shows whether you can do a few set things without help. This was a driving test.</p>
+<p>Both harnesses got the same four tasks, word for word, on the same small free model, on 12 November 2026. A logging proxy sat in front of the model, so both were counted the same way. Each task had a written pass check.</p>
+<figure id="fig-bench">
+<svg viewBox="0 0 720 300" role="img" aria-labelledby="fb-t fb-d">
+<title id="fb-t">Head-to-head results, four tasks</title>
+<desc id="fb-d">Chat: both passed. Web reading: Professor passed, Hermes failed after looping. Hand-off: Professor passed, Hermes did the work alone and failed the check. Schedule: both passed. Totals: Professor 5 of 5, Hermes 3 of 5.</desc>
+<text class="t" x="300" y="22" text-anchor="middle">Professor (our setup)</text>
+<text class="t" x="520" y="22" text-anchor="middle">Hermes</text>
+<g id="fb-t1"><title>Chat: plan a small herb garden in a set format. Both passed twice</title>
+<text class="t" x="10" y="58">Chat</text><text class="s" x="10" y="74">plan in a set format</text>
+<rect class="box cpu" x="210" y="40" width="180" height="40" rx="6"/><text class="t ok" x="300" y="65" text-anchor="middle">✓ pass 2/2</text>
+<rect class="box cpu" x="430" y="40" width="180" height="40" rx="6"/><text class="t ok" x="520" y="65" text-anchor="middle">✓ pass 2/2</text></g>
+<g id="fb-t2"><title>Web: read two shop pages and compare prices. Professor passed in 3 calls; Hermes looped for 13 calls and gave no answer</title>
+<text class="t" x="10" y="114">Web reading</text><text class="s" x="10" y="130">compare two prices</text>
+<rect class="box cpu" x="210" y="96" width="180" height="40" rx="6"/><text class="t ok" x="300" y="121" text-anchor="middle">✓ pass 1/1</text>
+<rect class="box bad" x="430" y="96" width="180" height="40" rx="6"/><text class="t no" x="520" y="121" text-anchor="middle">✗ fail: looped</text></g>
+<g id="fb-t3"><title>Hand-off: a planner hands a checklist to a doer. Professor ran both agents; Hermes wrote good text but no second agent ran</title>
+<text class="t" x="10" y="170">Hand-off</text><text class="s" x="10" y="186">planner to doer</text>
+<rect class="box cpu" x="210" y="152" width="180" height="40" rx="6"/><text class="t ok" x="300" y="177" text-anchor="middle">✓ pass 1/1</text>
+<rect class="box bad" x="430" y="152" width="180" height="40" rx="6"/><text class="t no" x="520" y="177" text-anchor="middle">✗ fail: no hand-off</text></g>
+<g id="fb-t4"><title>Schedule: a job runs once about two minutes later. Both passed</title>
+<text class="t" x="10" y="226">Schedule</text><text class="s" x="10" y="242">run once, later</text>
+<rect class="box cpu" x="210" y="208" width="180" height="40" rx="6"/><text class="t ok" x="300" y="233" text-anchor="middle">✓ pass 1/1</text>
+<rect class="box cpu" x="430" y="208" width="180" height="40" rx="6"/><text class="t ok" x="520" y="233" text-anchor="middle">✓ pass 1/1</text></g>
+<g id="fb-total"><title>Totals over valid runs</title>
+<line class="ring" x1="10" y1="264" x2="710" y2="264"/>
+<text class="t" x="10" y="288">Total</text>
+<text class="t" x="300" y="288" text-anchor="middle">5 of 5</text>
+<text class="t" x="520" y="288" text-anchor="middle">3 of 5</text></g>
+</svg>
+<figcaption>One or two runs per task. That is a signal, not a rate.</figcaption>
+</figure>
+<table id="bench-numbers">
+<thead><tr><th>Measure</th><th>Professor</th><th>Hermes</th></tr></thead>
+<tbody>
+<tr><td>Valid runs passed</td><td class="n">5 of 5</td><td class="n">3 of 5</td></tr>
+<tr><td>Tokens in, all 5 runs</td><td class="n">72,227</td><td class="n">76,010</td></tr>
+<tr><td>Cost of all 5 runs at a small paid model's list price</td><td class="n">$0.009</td><td class="n">$0.010</td></tr>
+<tr><td>Plain chat prompt size</td><td class="n">5,226 tokens</td><td class="n">2,943 tokens</td></tr>
+<tr><td>Maintainability for a second person (7 items, 35 points)</td><td class="n">24</td><td class="n">24</td></tr>
+</tbody>
+</table>
+<p><strong>Where Hermes won.</strong> A leaner chat prompt. An easier install: one command. Scheduled jobs that can run a script with no model at all, so they cost no tokens. A one-command backup. These are on my list to borrow.</p>
+<p><strong>Where it lost.</strong> On the web task it called tools in a loop and ran out of time. On the hand-off task it did the whole job itself, so the second agent never ran.</p>
+<p><strong>What made the test thin.</strong> The free model capped tokens per day and per minute. That allowed one run per task (two for chat), not the three I planned. Neither harness fit the free tier out of the box: both needed their tool lists cut first.</p>
+
+<h3 id="arena-table">The arena table</h3>
+<p>All six side by side. The small grey tag says where each cell comes from: <span class="src">test</span> our own run, <span class="src">docs</span> the product's docs, <span class="src">launch</span> the maker's launch page, <span class="src">HN</span> Hacker News commenters, <span class="src">ours</span> our own marks for our setup. "No source read" means I found nothing to base a mark on.</p>
 <table class="arena" id="compare-table">
 <thead><tr><th>Contender</th><th>Provider lock-in</th><th>Model routing, token saving</th><th>Multi-agent</th><th>Memory</th><th>Hooks and gates</th><th>Cost</th><th>Who it suits</th></tr></thead>
 <tbody>
@@ -168,114 +275,14 @@ svg .arrowhead.me{fill:var(--accent)}
 </table>
 <p>My reading of the table: the three closed products compete on reach and polish. Duet has thousands of connectors. Muse is fast. Grok Bot gives each bot a computer. The two open ones, and ours, compete on control: which model, which gate, who decides.</p>
 
-<h2 id="open-vs-locked">Open or locked: why lock-in decides the token bill</h2>
-<p>Cost was the most common complaint in the Hacker News threads, from about 70 people. The most common fix, from about 31, was to send routine work to cheaper models. You can only do that if the harness lets you choose.</p>
-<figure id="fig-lockin">
-<svg viewBox="0 0 720 280" role="img" aria-labelledby="fl-t fl-d">
-<title id="fl-t">Open harnesses can route; locked ones cannot</title>
-<desc id="fl-d">Left: Professor, Hermes and OpenClaw each send requests to a cheap, a mid-size or a strong model from any provider. Right: Claude Duet, Muse and Grok Bot each send every request to their maker's own model.</desc>
-<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="arrowhead" d="M0,0 L10,5 L0,10 z"/></marker></defs>
-<g id="fl-open"><title>Open: route any model</title>
-<rect class="zone" x="6" y="30" width="340" height="230" rx="10"/>
-<text class="t" x="20" y="22">Open: you pick the model</text>
-<g id="fl-open-h"><title>Professor (our setup), Hermes, OpenClaw</title><rect class="box me" x="24" y="104" width="128" height="74" rx="8"/><text class="t" x="88" y="128" text-anchor="middle">Harness</text><text class="s" x="88" y="146" text-anchor="middle">Professor (our setup)</text><text class="s" x="88" y="162" text-anchor="middle">Hermes · OpenClaw</text></g>
-<g id="fl-cheap"><title>Cheap or free model for easy work</title><rect class="box cpu" x="214" y="52" width="118" height="44" rx="8"/><text class="t" x="273" y="72" text-anchor="middle">Cheap model</text><text class="s" x="273" y="88" text-anchor="middle">easy work</text></g>
-<g id="fl-mid"><title>Mid-size model</title><rect class="box" x="214" y="119" width="118" height="44" rx="8"/><text class="t" x="273" y="139" text-anchor="middle">Mid model</text><text class="s" x="273" y="155" text-anchor="middle">most work</text></g>
-<g id="fl-strong"><title>Strong model for hard work</title><rect class="box" x="214" y="186" width="118" height="44" rx="8"/><text class="t" x="273" y="206" text-anchor="middle">Strong model</text><text class="s" x="273" y="222" text-anchor="middle">hard work</text></g>
-<path class="edge" d="M152,130 C185,110 185,80 212,76" marker-end="url(#ah)"/>
-<line class="edge" x1="152" y1="141" x2="212" y2="141" marker-end="url(#ah)"/>
-<path class="edge" d="M152,152 C185,172 185,202 212,206" marker-end="url(#ah)"/>
-</g>
-<g id="fl-locked"><title>Locked: one provider</title>
-<rect class="zone" x="374" y="30" width="340" height="230" rx="10"/>
-<text class="t" x="388" y="22">Locked: the maker picks the model</text>
-<g id="fl-locked-h"><title>Claude Duet, Muse, Grok Bot</title><rect class="box" x="392" y="110" width="128" height="62" rx="8"/><text class="t" x="456" y="136" text-anchor="middle">Harness</text><text class="s" x="456" y="154" text-anchor="middle">Duet · Muse · Grok Bot</text></g>
-<g id="fl-own"><title>The maker's own model, for every request</title><rect class="box gpu" x="582" y="114" width="118" height="54" rx="8"/><text class="t" x="641" y="138" text-anchor="middle">Maker's model</text><text class="s" x="641" y="155" text-anchor="middle">every request</text></g>
-<line class="edge" x1="520" y1="141" x2="580" y2="141" marker-end="url(#ah)"/>
-</g>
-</svg>
-<figcaption>Routing is a choice per request. A locked harness makes that choice for you, every time.</figcaption>
-</figure>
-<p><strong>One correction to my own starting point.</strong> I went in thinking Hermes was the only open rival, because the others were locked to one provider. OpenClaw is not locked. Its docs list a dozen providers and local models. So the open camp has two outside contenders, not one.</p>
-<p><strong>Why I still name Hermes the main rival.</strong> It is the one we ran side by side with ours, and the one we keep borrowing ideas from. In the threads, many people said they had left large frameworks such as OpenClaw after updates kept breaking. That is a reason to watch OpenClaw less closely, not a test result.</p>
-<p><strong>Routing is not the whole bill.</strong> In our test, Hermes sent a smaller prompt for a plain chat: about 2,900 tokens to our 5,200. A lean prompt saves tokens on every call. Routing saves on the expensive calls. A good harness needs both.</p>
-
-<h2 id="head-to-head">Head to head: Professor vs Hermes</h2>
-<p>A driving test is short. It does not prove you are a good driver. It shows whether you can do a few set things without help. This was a driving test.</p>
-<p>Both harnesses got the same four tasks, word for word, on the same small free model, on 12 November 2026. A logging proxy sat in front of the model, so both were counted the same way. Each task had a written pass check.</p>
-<figure id="fig-bench">
-<svg viewBox="0 0 720 300" role="img" aria-labelledby="fb-t fb-d">
-<title id="fb-t">Head-to-head results, four tasks</title>
-<desc id="fb-d">Chat: both passed. Web reading: Professor passed, Hermes failed after looping. Hand-off: Professor passed, Hermes did the work alone and failed the check. Schedule: both passed. Totals: Professor 5 of 5, Hermes 3 of 5.</desc>
-<text class="t" x="300" y="22" text-anchor="middle">Professor (our setup)</text>
-<text class="t" x="520" y="22" text-anchor="middle">Hermes</text>
-<g id="fb-t1"><title>Chat: plan a small herb garden in a set format. Both passed twice</title>
-<text class="t" x="10" y="58">Chat</text><text class="s" x="10" y="74">plan in a set format</text>
-<rect class="box cpu" x="210" y="40" width="180" height="40" rx="6"/><text class="t ok" x="300" y="65" text-anchor="middle">✓ pass 2/2</text>
-<rect class="box cpu" x="430" y="40" width="180" height="40" rx="6"/><text class="t ok" x="520" y="65" text-anchor="middle">✓ pass 2/2</text></g>
-<g id="fb-t2"><title>Web: read two shop pages and compare prices. Professor passed in 3 calls; Hermes looped for 13 calls and gave no answer</title>
-<text class="t" x="10" y="114">Web reading</text><text class="s" x="10" y="130">compare two prices</text>
-<rect class="box cpu" x="210" y="96" width="180" height="40" rx="6"/><text class="t ok" x="300" y="121" text-anchor="middle">✓ pass 1/1</text>
-<rect class="box bad" x="430" y="96" width="180" height="40" rx="6"/><text class="t no" x="520" y="121" text-anchor="middle">✗ fail: looped</text></g>
-<g id="fb-t3"><title>Hand-off: a planner hands a checklist to a doer. Professor ran both agents; Hermes wrote good text but no second agent ran</title>
-<text class="t" x="10" y="170">Hand-off</text><text class="s" x="10" y="186">planner to doer</text>
-<rect class="box cpu" x="210" y="152" width="180" height="40" rx="6"/><text class="t ok" x="300" y="177" text-anchor="middle">✓ pass 1/1</text>
-<rect class="box bad" x="430" y="152" width="180" height="40" rx="6"/><text class="t no" x="520" y="177" text-anchor="middle">✗ fail: no hand-off</text></g>
-<g id="fb-t4"><title>Schedule: a job runs once about two minutes later. Both passed</title>
-<text class="t" x="10" y="226">Schedule</text><text class="s" x="10" y="242">run once, later</text>
-<rect class="box cpu" x="210" y="208" width="180" height="40" rx="6"/><text class="t ok" x="300" y="233" text-anchor="middle">✓ pass 1/1</text>
-<rect class="box cpu" x="430" y="208" width="180" height="40" rx="6"/><text class="t ok" x="520" y="233" text-anchor="middle">✓ pass 1/1</text></g>
-<g id="fb-total"><title>Totals over valid runs</title>
-<line class="ring" x1="10" y1="264" x2="710" y2="264"/>
-<text class="t" x="10" y="288">Total</text>
-<text class="t" x="300" y="288" text-anchor="middle">5 of 5</text>
-<text class="t" x="520" y="288" text-anchor="middle">3 of 5</text></g>
-</svg>
-<figcaption>One or two runs per task. That is a signal, not a rate.</figcaption>
-</figure>
-<table id="bench-numbers">
-<thead><tr><th>Measure</th><th>Professor</th><th>Hermes</th></tr></thead>
-<tbody>
-<tr><td>Valid runs passed</td><td class="n">5 of 5</td><td class="n">3 of 5</td></tr>
-<tr><td>Tokens in, all 5 runs</td><td class="n">72,227</td><td class="n">76,010</td></tr>
-<tr><td>Cost of all 5 runs at a small paid model's list price</td><td class="n">$0.009</td><td class="n">$0.010</td></tr>
-<tr><td>Plain chat prompt size</td><td class="n">5,226 tokens</td><td class="n">2,943 tokens</td></tr>
-<tr><td>Maintainability for a second person (7 items, 35 points)</td><td class="n">24</td><td class="n">24</td></tr>
-</tbody>
-</table>
-<p><strong>Where Hermes won.</strong> A leaner chat prompt. An easier install: one command. Scheduled jobs that can run a script with no model at all, so they cost no tokens. A one-command backup. These are on my list to borrow.</p>
-<p><strong>Where it lost.</strong> On the web task it called tools in a loop and ran out of time. On the hand-off task it did the whole job itself, so the second agent never ran.</p>
-<p><strong>What made the test thin.</strong> The free model capped tokens per day and per minute. That allowed one run per task (two for chat), not the three I planned. Neither harness fit the free tier out of the box: both needed their tool lists cut first.</p>
-
-<h2 id="hn-threads-summary">What 35 Hacker News threads say</h2>
-<p>Before the test, I read 35 Hacker News threads from the last twelve months about agent setups, multi-agent tools and the Muse and Grok Bot launches. I quote no one and name no one. The counts are how many different people said something, made by hand, good to about two either way, and they overlap. They are opinions from one community, not proof.</p>
-<details class="more" id="hn-counts"><summary>The counts as a table: eight tips and eight problems</summary>
-<table>
-<thead><tr><th>Tip</th><th>People</th><th>Problem</th><th>People</th></tr></thead>
-<tbody>
-<tr><td>Build your own small harness</td><td class="n">46</td><td>Token cost, plan limits</td><td class="n">70</td></tr>
-<tr><td>One copy per task</td><td class="n">43</td><td>The human is the bottleneck</td><td class="n">60</td></tr>
-<tr><td>Short sessions, notes on disk</td><td class="n">36</td><td>Agents hold your keys</td><td class="n">45</td></tr>
-<tr><td>Plan first</td><td class="n">31</td><td>Too much orchestration</td><td class="n">36</td></tr>
-<tr><td>Cheap models for most work</td><td class="n">31</td><td>Ports and databases collide</td><td class="n">24</td></tr>
-<tr><td>A second model reviews</td><td class="n">27</td><td>Spending you were not told about</td><td class="n">20</td></tr>
-<tr><td>A check must pass first</td><td class="n">27</td><td>"Done" that is not done</td><td class="n">17</td></tr>
-<tr><td>Know when an agent needs you</td><td class="n">25</td><td>Quality drifts</td><td class="n">12</td></tr>
-</tbody>
-</table>
-</details>
-<p>Three things from the threads shape the arena:</p>
-<ul>
-<li><strong>Less swarm, more gate.</strong> Many tried big many-agent setups and went back to one main session with a few helpers. What they said worked is boring: plan first, give each task its own copy, make a check pass before anything counts as done, have a second reviewer, keep a person on the merge.</li>
-<li><strong>People leave big frameworks.</strong> In the largest setup thread, 21 people said they had dropped a large framework such as OpenClaw, Hermes or Gas Town, mostly because updates broke things. Four still liked theirs. About 22 said: keep a personal fork instead.</li>
-<li><strong>The closed launches were judged on trust.</strong> For both Muse (at least 44 people) and Grok Bot (15), the top complaint was who made it, not what it did. One widely shared security claim about Muse was disputed in the threads, and I treat it as unproven.</li>
-</ul>
-
-<h2 id="limits">What this does not show</h2>
+<h2 id="gaps">Gaps and tech debt</h2>
+<p>What the evidence above does not cover, and the weak spots I know about.</p>
 <ul>
 <li><strong>One small test.</strong> One or two runs per task, on one free model. A lean, not a proof.</li>
 <li><strong>Two halves of Professor.</strong> The head-to-head ran its everyday-assistant side. The tier list below scores the setup as a whole, coding side included.</li>
-<li><strong>Three contenders were not run.</strong> Duet, Muse and Grok Bot are described from launch pages and comments. OpenClaw is described from its docs.</li>
+<li><strong>Four contenders were not run.</strong> Duet, Muse and Grok Bot are described from launch pages and comments. OpenClaw is described from its docs, and three of its cells have no source read.</li>
+<li><strong>Our own gaps.</strong> Old sessions are kept but not yet searchable. Against our own 30-point checklist, Professor scores 6 have, 18 partly, 2 lack and 4 not needed, and 14 of those marks still need a test. The biggest gaps are retrying failed calls with a growing delay, and packaging an agent so it installs on another machine. I have not scored the other five on all 30 yet.</li>
+<li><strong>Still to borrow from Hermes.</strong> A leaner chat prompt, scheduled jobs that need no model, and a one-command backup.</li>
 <li><strong>I built one of the six.</strong> I have tried to mark where each claim comes from so you can discount mine.</li>
 <li><strong>The comments are one community.</strong> Hacker News leans toward people who build their own tools.</li>
 </ul>
@@ -490,7 +497,7 @@ svg .arrowhead.me{fill:var(--accent)}
 <li><a href="https://github.com/NousResearch/hermes-agent">Hermes Agent on GitHub</a> and <a href="https://hermes-agent.nousresearch.com/docs/">its docs</a> (checked 2026-11-05)</li>
 <li><a href="https://docs.openclaw.ai/concepts/model-providers">OpenClaw: model providers</a> (checked 2026-11-17)</li>
 <li><a href="https://claude.com/blog/claude-duet">Introducing Claude Duet</a>, Anthropic, 21 October 2026 (checked 2026-11-17)</li>
-<li>Our head-to-head test, 12 November 2026: not public</li>
+<li>Our head-to-head test, 12 November 2026, and our 30-point checklist: not public</li>
 <li>The Muse and Grok Bot launch threads, and the 35 Hacker News threads below (the big setup thread, <a href="https://news.ycombinator.com/item?id=50366117">50366117</a>, is the best single read)</li>
 </ul>
 <details class="more" id="hn-threads"><summary>The 35 Hacker News threads, December 2025 to November 2026</summary>
