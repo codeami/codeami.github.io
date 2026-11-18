@@ -838,7 +838,7 @@
     },
     {
      "name": "borrowed",
-     "count": 4,
+     "count": 3,
      "files": [
       {
        "id": "b-grill",
@@ -856,21 +856,6 @@
        "rel": [
         "pocock-steers-with-skills-kun-builds-machinery"
        ]
-      },
-      {
-       "id": "b-shell",
-       "n": "Map shell",
-       "line": "borrowed idea · borrowed from EricTechPro/super-board",
-       "body": [
-        "The interactive Skill map and Harness flow map use the map shell from super-board by EricTechPro (MIT)."
-       ],
-       "links": [
-        {
-         "label": "super-board",
-         "href": "https://github.com/EricTechPro/super-board"
-        }
-       ],
-       "rel": []
       },
       {
        "id": "b-arms",
