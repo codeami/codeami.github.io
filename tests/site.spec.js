@@ -16,7 +16,8 @@ for (const file of pages) {
     const problems = [];
     page.on('console', (m) => m.type() === 'error' && problems.push(`console: ${m.text()}`));
     page.on('pageerror', (e) => problems.push(`exception: ${e.message}`));
-    page.on('requestfailed', (r) => r.url().startsWith(origin) && problems.push(`failed: ${r.url()}`));
+    // The HUD moves the page body into its overlay on load, which reloads an embedded iframe and aborts its first requests; an abort is not a failure (a missing file still shows as a 4xx below).
+    page.on('requestfailed', (r) => r.url().startsWith(origin) && r.failure()?.errorText !== 'net::ERR_ABORTED' && problems.push(`failed: ${r.url()}`));
     page.on('response', (r) => r.url().startsWith(origin) && r.status() >= 400 && problems.push(`${r.status()}: ${r.url()}`));
 
     // Only our own files are tested; external requests get an empty answer so runs do not depend on the network.
