@@ -471,7 +471,7 @@ function mountTour(){
       {rect:ring(guide(1)),before:mapView,title:"Memory: rooms of notes",text:"Each coloured arc is a room, like Wiki notes or Blog. One dot is one note, part or post. Click a dot for its card; double-click a room to fold it."},
       {rect:ring(guide(2)),before:mapView,title:"Outer ring: pages and projects",text:"Hexagons are this site's pages and public projects. A page or post opens on top of the map, and its node lights up."}];
   if(FRAMED)steps.push(
-      {sel:doc(".k-nav"),before:mapView,title:"Site tabs",text:"The same bar on every page: Me, Blog, Intent, Course and GitHub. Each page opens over this same map."},
+      {sel:doc(".k-nav"),before:mapView,title:"Site tabs",text:"The same bar on every page: The factory, Case studies, Blog, About and Work with me. Each page opens over this same map."},
       {sel:doc("#pageov"),before:function(){setLegend(false);fold(true)},title:"The page overlay",text:"Every page of the site reads in this panel, on top of the live map. Minimise it to see the whole map, or close it; the button that is left brings it back."});
   steps.push(
       {sel:sh("motionBtn"),before:mapView,title:"Buttons",text:"Turn the motion on or off (remembered on this device), show or hide the side lists, and open the menu."},

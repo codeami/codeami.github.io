@@ -121,7 +121,7 @@ skills = []
 
 out = {"meta": {"name": "Public second brain of the software factory", "invented": False,
                 "note": "Public data only: the approved wiki notes, this site's pages and posts, the harness tier list. No private files, paths, routines or links."},
-       "root": site["root"], "rooms": [notes_room, fm_room, areas_room, tier_room, posts_room, course_room], "skills": skills, "routines": [],
+       "root": site["root"], "rooms": [notes_room, fm_room, areas_room, tier_room, posts_room] + ([course_room] if live("../course/index.html") else []), "skills": skills, "routines": [],
        "apps": [], "projects": [dict(p, kind="project") for p in site["projects"]], "pages": [dict(p, kind="page") for p in site["pages"] if live(p["url"])],
        "reading": [r for r in site["reading"] if live(r["url"])]}
 (HERE / "brain-data.json").write_text(json.dumps(out, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")

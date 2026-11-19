@@ -662,8 +662,8 @@ test('landing: the hook shows until the reader moves on; a typed #trip address s
 // ---- one top bar on every page, and a last-line hand-off to the next page in the bar order ----
 // No skip list: every public page carries the bar. The one exception is blog/index.html, a redirect that never shows.
 const barPages = () => pages.filter((f) => !share.some((r) => r.path === f && r.level !== 'public') && f !== 'blog/index.html');
-const barItems = ['Me', 'Blog', 'Intent', 'Course'];
-const barPaths = ['/index.html', '/ai-life-os/blog/index.html', '/intent/index.html', '/ai-life-os/course/index.html'];
+const barItems = ['The factory', 'Case studies', 'Blog', 'About', 'Work with me'];
+const barPaths = ['/ai-life-os/index.html', '/case-studies/index.html', '/ai-life-os/blog/index.html', '/about/index.html', '/work-with-me/index.html'];
 
 // What a page's bar says: the site name, then each item's text and target.
 const barOf = (page) => page.locator('header.tb').evaluate((b) => ({
@@ -672,18 +672,16 @@ const barOf = (page) => page.locator('header.tb').evaluate((b) => ({
   items: [...b.querySelectorAll('.tb-links > a')].map((a) => [a.textContent.trim() || a.getAttribute('aria-label'), new URL(a.href).origin === location.origin ? new URL(a.href).pathname : a.href]),
 }));
 
-test('top bar: Me, Blog, Intent, Course and a GitHub icon on every public page, all in view, current page marked', async ({ page }) => {
-  expect(barPages().length, 'pages checked').toBe(pages.length - 1);
+test('top bar: The factory, Case studies, Blog, About and Work with me on every page, all in view, current page marked', async ({ page }) => {
+  expect(barPages().length, 'pages checked').toBe(pages.length - 2); // the redirect stub and the link-only Course
   for (const file of barPages()) {
     await page.goto(`/${file}`);
     const bar = page.locator('header.tb');
     await expect(bar, file).toHaveCount(1);
     const links = bar.locator('.tb-links > a');
     await expect(links, file).toHaveCount(5);
-    expect(await links.evaluateAll((as) => as.slice(0, 4).map((a) => a.textContent.trim())), file).toEqual(barItems);
-    await expect(links.nth(4), file).toHaveAttribute('href', 'https://github.com/codeami');
-    await expect(links.nth(4), file).toHaveAttribute('aria-label', 'GitHub: github.com/codeami');
-    const paths = await links.evaluateAll((as) => as.slice(0, 4).map((a) => new URL(a.href).pathname));
+    expect(await links.evaluateAll((as) => as.map((a) => a.textContent.trim())), file).toEqual(barItems);
+    const paths = await links.evaluateAll((as) => as.map((a) => new URL(a.href).pathname));
     expect(paths, file).toEqual(barPaths);
     expect(await bar.locator('.tb-links > a[aria-current]').count(), `${file}: one current item at most`).toBeLessThanOrEqual(1);
     expect(await bar.evaluate((b) => b.scrollWidth <= b.clientWidth + 1), `${file}: bar fits the width`).toBe(true);
@@ -702,7 +700,7 @@ test('top bar: clicking each item on every public page lands on a page with the 
   await page.goto('/index.html');
   const same = await barOf(page);
   expect(same.brand).toBe('Ashish Raina');
-  expect(same.items.map((i) => i[0])).toEqual([...barItems, 'GitHub: github.com/codeami']);
+  expect(same.items.map((i) => i[0])).toEqual(barItems);
   for (const file of barPages()) {
     for (const [n, label] of barItems.entries()) {
       await page.goto(`/${file}`);
@@ -718,19 +716,24 @@ test('top bar: clicking each item on every public page lands on a page with the 
 });
 
 test('top bar: the current page is marked in each part of the bar', async ({ page }) => {
-  const current = { 'index.html': 'Me', 'cv.html': 'Me', 'ai-life-os/blog/index.html': 'Blog', 'ai-life-os/arena.html': 'Blog', 'intent/index.html': 'Intent', 'ai-life-os/index.html': 'Intent', 'ai-life-os/course/index.html': 'Course' };
+  const current = { 'cv.html': 'About', 'about/index.html': 'About', 'work-with-me/index.html': 'Work with me', 'case-studies/index.html': 'Case studies', 'ai-life-os/arena.html': 'Case studies', 'ai-life-os/blog/index.html': 'Blog', 'ai-life-os/blog/second-brain-page.html': 'Blog', 'intent/index.html': 'The factory', 'ai-life-os/index.html': 'The factory' };
   for (const [file, label] of Object.entries(current)) {
     await page.goto(`/${file}`);
     await expect(page.locator('header.tb .tb-links > a[aria-current]'), file).toHaveText(label);
   }
+  // the Home page and the Course are not in the bar, so neither marks an item
+  for (const file of ['index.html', 'ai-life-os/course/index.html']) {
+    await page.goto(`/${file}`);
+    await expect(page.locator('header.tb .tb-links > a[aria-current]'), file).toHaveCount(0);
+  }
 });
 
-test('hand-off: the last line of Me, Blog, Intent and Course leads to the next page in the bar order', async ({ page }) => {
+test('hand-off: the last line of each bar page leads to the next page in the bar order', async ({ page }) => {
   const chain = [
-    ['index.html#me', '#me .k-btn.primary', /ai-life-os\/blog\/index\.html$/],
-    ['ai-life-os/blog/index.html', '.handoff a', /\/intent\/index\.html$/],
-    ['intent/index.html', '.handoff a', /\/ai-life-os\/course\/index\.html$/],
-    ['ai-life-os/course/index.html', '.handoff a', /^https:\/\/github\.com\/codeami$/],
+    ['ai-life-os/index.html#pages', '.handoff a', /\/case-studies\/index\.html$/], // a hash opens the folded card
+    ['case-studies/index.html', '.handoff a', /\/ai-life-os\/blog\/index\.html$/],
+    ['ai-life-os/blog/index.html', '.handoff a', /\/about\/index\.html$/],
+    ['about/index.html', '.handoff a', /\/work-with-me\/index\.html$/],
   ];
   await returning(page);
   for (const [file, sel, target] of chain) {

@@ -42,8 +42,7 @@ body { --ow: clamp(420px, 48vw, 700px); }
   /* the ask bar fills the bottom edge: the reopen button sits above it, level with the legend button */
   #povOpen { bottom: 64px; }
   body.framed.ovopen { --ob: 58vh; }
-  /* one header row: the tabs scroll sideways, so the chart keeps the room above the sheet */
-  html[data-skin] body.framed .k-nav { flex-wrap: nowrap; padding: 6px 10px; }
-  html[data-skin] body.framed .k-nav nav { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; white-space: nowrap; min-width: 0; }
-  body.framed .k-nav nav::-webkit-scrollbar { display: none; }
+  /* the header takes two rows (mark, then the five tabs); the chart measures it and keeps the rest */
+  html[data-skin] body.framed .k-nav { flex-wrap: wrap; padding: 6px 10px; }
+  html[data-skin] body.framed .k-nav nav { flex-wrap: nowrap; white-space: nowrap; min-width: 0; }
 }
