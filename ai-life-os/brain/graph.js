@@ -793,16 +793,24 @@ function draw(t){
 
   // text in screen space
   ctx.setTransform(DPR,0,0,DPR,0,0);ctx.textAlign="center";ctx.textBaseline="alphabetic";
-  function label(txt,wx,wy,color,size,dy,al){
+  // a label keeps inside the stage, and a soft one (a ring name) gives way to any label already drawn
+  var placed=[];
+  function label(txt,wx,wy,color,size,dy,al,soft){
     var x=view.x+wx*k,y=view.y+wy*k+dy;if(x<-80||x>W+80||y<-20||y>H+20)return;
-    ctx.globalAlpha=al;ctx.fillStyle=color;ctx.font=size+"px ui-monospace,monospace";ctx.fillText(txt,x,y);
+    ctx.font=size+"px ui-monospace,monospace";
+    var w=ctx.measureText(txt).width;
+    x=Math.max(w/2+6,Math.min(W-w/2-6,x));
+    if(soft){for(var p=0;p<placed.length;p++){var o=placed[p];if(x-w/2<o[2]&&x+w/2>o[0]&&y-size<o[3]&&y>o[1])return}}
+    placed.push([x-w/2-4,y-size-2,x+w/2+4,y+2]);
+    ctx.globalAlpha=al;ctx.fillStyle=color;ctx.fillText(txt,x,y);
   }
   label(root.label,root.x,root.y,"#e9e6e0",11,root.r*k+16,flagMode&&!flags[root.i]?.25:1);
   hubs.forEach(function(h){
     var R=rooms[h.room];
     label(R.label.toUpperCase()+(R.collapsed?" · "+R.count:""),h.x,h.y,h.color,10,-h.r*k-8,flagMode?(flags[h.i]?1:.3):.95);
   });
-  if(guideA>.05)L.guides.forEach(function(gd){label(gd.label,0,gd.ly,gd.lc,12,0,guideA*(flagMode?.4:.9))});
+  // on a narrow stage the ring names show only while a node is hovered or picked
+  if(guideA>.05&&(W>=520||S.hover||S.sel))L.guides.forEach(function(gd){label(gd.label,0,gd.ly,gd.lc,12,0,guideA*(flagMode?.4:.9),true)});
   if(S.hover&&S.hover.type!=="dot"&&S.hover.type!=="hub"&&S.hover.type!=="root")label(S.hover.label,S.hover.x,S.hover.y,"#e9e6e0",11,-S.hover.r*k-8,1);
   else if(S.sel&&S.sel!==S.hover&&S.sel.type!=="dot"&&S.sel.type!=="hub"&&S.sel.type!=="root")label(S.sel.label+(S.here?" · you are here":""),S.sel.x,S.sel.y,"#e9e6e0",11,-S.sel.r*k-8,1);
   if(S.names||(S.q&&matchCount>0&&matchCount<=40)){

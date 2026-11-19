@@ -28,6 +28,8 @@ body { --ow: clamp(420px, 48vw, 700px); }
 #pageov .pov-body { flex: 1; min-height: 0; overflow: auto; overscroll-behavior: contain; }
 #pageov.min { bottom: auto; }
 #pageov.min .pov-body { display: none; }
+#pageov .pov-line { margin: 0; padding: 8px 12px 10px; font-size: 14px; line-height: 1.4; color: var(--ink); }
+#pageov .pov-line[hidden] { display: none; }
 #povOpen { position: fixed; z-index: 6; right: 12px; bottom: 12px; background: rgba(5, 6, 10, .95); }
 #povOpen[hidden] { display: none; }
 /* the page's own panels fill the overlay instead of sitting to one side */

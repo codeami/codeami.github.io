@@ -88,15 +88,24 @@
       try { tripped = !!localStorage.getItem("trip:v1"); } catch (e) { /* storage blocked: stay calm */ }
       state = /^#(step-|explain|whoami|me|trip)/.test(location.hash) || kept === "open" || (!tripped && !location.hash) ? "open" : "closed";
     }
+    /* A page can start with its card folded (meta panel-start="min") so the map is the first thing seen;
+       meta panel-line is the one explainer line the folded card keeps. A deep link to a part of the page opens it. */
+    var ps = document.querySelector('meta[name="panel-start"]'), pl = document.querySelector('meta[name="panel-line"]');
+    if (!calm && ps && ps.content === "min" && !location.hash) state = "min";
+    var line = mk("p", "pov-line", pl ? pl.content : ""); line.hidden = true; ov.insertBefore(line, body);
     function phone() { return window.innerWidth <= 760; }
     function layout() {
       document.body.style.setProperty("--navh", (nav ? nav.offsetHeight : 0) + "px");
+      line.hidden = !(state === "min" && pl);
       title.textContent = document.title.split(" · ")[0];
       ov.hidden = state === "closed"; reopen.hidden = state !== "closed";
       ov.classList.toggle("min", state === "min");
       min.textContent = state === "min" ? "▴ Show" : "▾ Minimise";
       min.setAttribute("aria-label", state === "min" ? "Show the page" : "Minimise the page to see the map");
       document.body.classList.toggle("ovopen", state === "open");
+      // a folded card on a wide screen sits over the map's top-right buttons: they step down below it
+      if (state === "min" && !phone()) document.body.style.setProperty("--tt", (ov.offsetHeight + 18) + "px");
+      else document.body.style.removeProperty("--tt");
       if (G) { G.overlay(state === "open" && !phone()); G.setInsets(state === "open" && phone() ? ov.offsetHeight : 0); }
     }
     function set(s) { state = s; layout(); }
