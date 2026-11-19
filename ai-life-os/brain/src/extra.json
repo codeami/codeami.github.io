@@ -7,8 +7,7 @@
    "hub": true,
    "label": "Second brain",
    "text": [
-    "A public slice of the owner's private notes wiki, drawn as a map. Only notes on an approved list are copied, and a build step drops any line that names a private term, a local path, an email or a user name.",
-    "Planned, not built: daily news items and job notes, added as drafts that go live only on the owner's weekly OK."
+    "A public slice of the owner's private notes wiki, drawn as a map. Only notes on an approved list are copied, and a build step drops any line that names a private term, a local path, an email or a user name."
    ],
    "links": [
     [
