@@ -415,6 +415,30 @@ function openNode(n){
   var c=nodeCard(n),i=n.info&&n.info.url?drawer.readIndex(n.info.url):-1;
   if(i>=0)drawer.read(i,{status:c.status,statusCls:c.statusCls,related:c.related});else drawer.card(c);
 }
+// the Wiki notes card: each interest tag sized by its note count, an empty tag dashed; a tap lists that tag's notes
+function interestCloud(tags){
+  var wrap=el("div","cloud-w"),cloud=el("div","cloud"),list=el("div","cloud-l"),pressed=null,max=Math.max.apply(null,tags.map(function(t){return t.count}))||1;
+  cloud.setAttribute("role","group");cloud.setAttribute("aria-label","Interest tags");list.setAttribute("aria-live","polite");
+  tags.forEach(function(t){
+    var b=el("button","ctag",t.name),c=el("span","cn",String(t.count));b.type="button";b.appendChild(c);
+    b.style.fontSize=(12+Math.round(t.count/max*10))+"px";b.title=t.what;b.setAttribute("aria-pressed","false");
+    if(!t.count)b.classList.add("empty");
+    b.addEventListener("click",function(){
+      var on=pressed!==b;
+      Array.prototype.forEach.call(cloud.children,function(x){x.setAttribute("aria-pressed","false")});
+      list.textContent="";pressed=on?b:null;
+      if(!on)return;
+      b.setAttribute("aria-pressed","true");
+      list.appendChild(el("div","lg",t.name+" · "+(t.count?t.count+" note"+(t.count===1?"":"s"):"no notes yet")));
+      if(!t.count)list.appendChild(el("p","none","A direction I want to build up. Nothing here yet."));
+      t.notes.forEach(function(x){
+        var nb=el("button",null,x.n);nb.type="button";nb.addEventListener("click",function(){if(byId[x.id])openNode(byId[x.id])});list.appendChild(nb);
+      });
+    });
+    cloud.appendChild(b);
+  });
+  wrap.appendChild(cloud);wrap.appendChild(list);return wrap;
+}
 function nodeCard(n){
   function go(m){return{label:m.label||"a file",go:function(){openNode(m)}}}
   var c={title:n.label,related:[],links:[]},inf=n.info||{};
@@ -426,9 +450,12 @@ function nodeCard(n){
     c.links=(inf.links||[]).map(function(l){return{label:l[0],href:l[1]}});c.related=hubs.map(go);
   }else if(n.type==="hub"){
     var R=rooms[n.room],w=el("div"),ul=el("ul");c.kind="Room";c.line="room · "+R.count+" items in "+R.folders.length+" folder"+(R.folders.length===1?"":"s");
+    if(inf.cloud)c.line="room · "+R.count+" notes · "+inf.cloud.filter(function(t){return t.count}).length+" of "+inf.cloud.length+" interests have notes";
     c.status=R.collapsed?"folded on the map":"open on the map";c.statusCls="a";
+    if(inf.summary)w.appendChild(el("p",null,inf.summary));
+    if(inf.cloud)w.appendChild(interestCloud(inf.cloud));
     if(inf.note)w.appendChild(el("p",null,inf.note));
-    R.folders.forEach(function(f){var li=el("li");li.textContent=f.name+" · "+f.count;ul.appendChild(li)});
+    if(!inf.cloud)R.folders.forEach(function(f){var li=el("li");li.textContent=f.name+" · "+f.count;ul.appendChild(li)});
     w.appendChild(ul);c.body=w;c.related=[go(root)].concat(R.dots.slice(0,12).map(go));c.links=inf.links||[];
   }else if(n.type==="dot"){
     var Rd=rooms[n.room],f=Rd.folders[n.folder];c.kind=Rd.label;

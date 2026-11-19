@@ -848,6 +848,29 @@ test('the demo chat holds the story and tour branches', () => {
   for (const n of t.nodes) for (const x of n.next) expect(ids.has(x), `${n.id} -> ${x}`).toBe(true);
 });
 
+test('wiki notes card: a summary, a cloud of interest tags sized by note count, empty tags dashed, each tag lists its notes', async ({ page }) => {
+  await page.goto('/ai-life-os/index.html#pocock-steers-with-skills-kun-builds-machinery');
+  const drawer = page.locator('#drawer');
+  await drawer.getByRole('tab', { name: 'Related' }).click();
+  await drawer.locator('.rel button', { hasText: 'Wiki notes' }).click();
+  await expect(drawer.locator('h2.t')).toHaveText('Wiki notes');
+  await expect(drawer.locator('.pane p').first()).toContainText('25 notes');
+  const tags = await drawer.locator('.ctag').evaluateAll((bs) => bs.map((b) => ({ name: b.firstChild.textContent, n: +b.querySelector('.cn').textContent, size: parseFloat(getComputedStyle(b).fontSize), dashed: getComputedStyle(b).borderTopStyle === 'dashed' })));
+  expect(tags.length, 'the interest list').toBeGreaterThanOrEqual(8);
+  expect(tags.length).toBeLessThanOrEqual(14);
+  for (const t of tags) expect(t.dashed, `${t.name}: dashed only when empty`).toBe(t.n === 0);
+  expect(tags.filter((t) => t.n === 0).length, 'empty tags are shown').toBeGreaterThan(0);
+  const big = tags.reduce((a, b) => (b.n > a.n ? b : a)), small = tags.filter((t) => t.n > 0).reduce((a, b) => (b.n < a.n ? b : a));
+  expect(big.size, 'more notes, bigger tag').toBeGreaterThan(small.size);
+  expect(tags.reduce((s, t) => s + t.n, 0), 'a note can carry more than one tag').toBeGreaterThan(25);
+  const first = drawer.locator('.ctag').filter({ hasText: big.name });
+  await first.click();
+  expect(await drawer.locator('.cloud-l button').count(), 'the tag lists its notes').toBe(big.n);
+  await drawer.locator('.cloud-l button').first().click();
+  await expect(drawer.locator('h2.t')).not.toHaveText('Wiki notes');
+  await expect(drawer.locator('.ln')).toContainText('kind:');
+});
+
 test('room drawer: every Related chip is one line, at most 28 px tall, with its full text in the title', async ({ page }) => {
   await page.goto('/ai-life-os/index.html#pocock-steers-with-skills-kun-builds-machinery'); // the demo opens the card of the note in the hash
   const drawer = page.locator('#drawer');

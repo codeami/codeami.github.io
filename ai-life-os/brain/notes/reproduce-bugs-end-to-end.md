@@ -1,5 +1,6 @@
 ---
-tags: [method]
+tags: [Evals, Dev tooling]
+kind: [method]
 links: []
 source: Kun Chen, "Agent Engineering Workflow" (global memory rule)
 ---

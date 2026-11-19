@@ -1,5 +1,6 @@
 ---
-tags: [skills]
+tags: [Skills, Context engineering]
+kind: [skills]
 links: [icm-layer-ladder]
 source: Jake Van Clief, "Second Brain" talk (14:40)
 ---

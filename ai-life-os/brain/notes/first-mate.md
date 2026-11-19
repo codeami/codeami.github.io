@@ -1,5 +1,6 @@
 ---
-tags: [workflow]
+tags: [AI agents, Dev tooling]
+kind: [workflow]
 links: [worktree-pooling, validate-dont-review]
 source: Kun Chen, "Agent Engineering Workflow" (first mate)
 ---

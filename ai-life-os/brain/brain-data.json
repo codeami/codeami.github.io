@@ -101,15 +101,500 @@
      "newTab": true
     }
    ],
+   "summary": "25 notes from my own wiki, sorted by what they are about. A bigger tag has more notes. A dashed tag has none yet: it is a direction I want to build, not something I know.",
+   "cloud": [
+    {
+     "name": "AI agents",
+     "what": "Agents that act for you: how to run, steer and trust a crew of them.",
+     "count": 7,
+     "notes": [
+      {
+       "id": "compaction-is-an-implementation-detail",
+       "n": "Compaction is an implementation detail"
+      },
+      {
+       "id": "first-mate",
+       "n": "First mate"
+      },
+      {
+       "id": "human-in-the-loop",
+       "n": "Build with a human in the loop"
+      },
+      {
+       "id": "kun-chen-agent-policy",
+       "n": "Kun Chen's agent policy (a distilled self)"
+      },
+      {
+       "id": "long-running-loops",
+       "n": "Long-running loops need caps"
+      },
+      {
+       "id": "pocock-steers-with-skills-kun-builds-machinery",
+       "n": "Pocock steers with skills and prompts; Kun builds deterministic machinery"
+      },
+      {
+       "id": "worktree-pooling",
+       "n": "Worktree pooling"
+      }
+     ]
+    },
+    {
+     "name": "Context engineering",
+     "what": "What the agent reads, when, and in what order.",
+     "count": 10,
+     "notes": [
+      {
+       "id": "compaction-is-an-implementation-detail",
+       "n": "Compaction is an implementation detail"
+      },
+      {
+       "id": "dialogue-freezes-into-skills",
+       "n": "Dialogue freezes into skills"
+      },
+      {
+       "id": "global-memory-is-minimal",
+       "n": "Global memory is minimal"
+      },
+      {
+       "id": "icm-layer-ladder",
+       "n": "ICM layer ladder"
+      },
+      {
+       "id": "icm-routing-table-is-the-core-pattern",
+       "n": "ICM: the routing table is the core pattern"
+      },
+      {
+       "id": "icm-storage-is-not-active-context",
+       "n": "ICM: storage is not active context, and context is not authority"
+      },
+      {
+       "id": "kun-chen-agent-policy",
+       "n": "Kun Chen's agent policy (a distilled self)"
+      },
+      {
+       "id": "progressive-disclosure",
+       "n": "Progressive disclosure"
+      },
+      {
+       "id": "second-brain-is-a-context-layer",
+       "n": "A second brain is a context layer"
+      },
+      {
+       "id": "structure-decides-what-matters",
+       "n": "Structure decides what matters"
+      }
+     ]
+    },
+    {
+     "name": "Skills",
+     "what": "Small packaged instructions an agent loads when it needs them.",
+     "count": 4,
+     "notes": [
+      {
+       "id": "dialogue-freezes-into-skills",
+       "n": "Dialogue freezes into skills"
+      },
+      {
+       "id": "pocock-steers-with-skills-kun-builds-machinery",
+       "n": "Pocock steers with skills and prompts; Kun builds deterministic machinery"
+      },
+      {
+       "id": "popular-skills-are-not-good-skills",
+       "n": "Popular skills are not good skills"
+      },
+      {
+       "id": "progressive-disclosure",
+       "n": "Progressive disclosure"
+      }
+     ]
+    },
+    {
+     "name": "Knowledge bases",
+     "what": "Notes and wikis kept as plain files that AI can read.",
+     "count": 4,
+     "notes": [
+      {
+       "id": "llmwiki-vs-rag",
+       "n": "LLMwiki (plain files) before RAG"
+      },
+      {
+       "id": "mini-brains-not-one-brain",
+       "n": "Mini brains, not one brain of everything"
+      },
+      {
+       "id": "second-brain-is-a-context-layer",
+       "n": "A second brain is a context layer"
+      },
+      {
+       "id": "structure-decides-what-matters",
+       "n": "Structure decides what matters"
+      }
+     ]
+    },
+    {
+     "name": "Inference and cost",
+     "what": "Picking the model and keeping the token bill small.",
+     "count": 4,
+     "notes": [
+      {
+       "id": "agent-ergonomics",
+       "n": "Agent ergonomics (AXI)"
+      },
+      {
+       "id": "global-memory-is-minimal",
+       "n": "Global memory is minimal"
+      },
+      {
+       "id": "long-running-loops",
+       "n": "Long-running loops need caps"
+      },
+      {
+       "id": "right-size-the-model",
+       "n": "Right-size the model"
+      }
+     ]
+    },
+    {
+     "name": "Security and safety",
+     "what": "Keeping agents inside limits, and a person in the loop.",
+     "count": 3,
+     "notes": [
+      {
+       "id": "human-in-the-loop",
+       "n": "Build with a human in the loop"
+      },
+      {
+       "id": "icm-storage-is-not-active-context",
+       "n": "ICM: storage is not active context, and context is not authority"
+      },
+      {
+       "id": "popular-skills-are-not-good-skills",
+       "n": "Popular skills are not good skills"
+      }
+     ]
+    },
+    {
+     "name": "Dev tooling",
+     "what": "Tools and pipelines that make agent-written code easier to ship.",
+     "count": 5,
+     "notes": [
+      {
+       "id": "agent-ergonomics",
+       "n": "Agent ergonomics (AXI)"
+      },
+      {
+       "id": "first-mate",
+       "n": "First mate"
+      },
+      {
+       "id": "reproduce-bugs-end-to-end",
+       "n": "Reproduce bugs end-to-end"
+      },
+      {
+       "id": "validate-dont-review",
+       "n": "Validate, don't review"
+      },
+      {
+       "id": "worktree-pooling",
+       "n": "Worktree pooling"
+      }
+     ]
+    },
+    {
+     "name": "Evals",
+     "what": "Checking that agent work is right, by running it.",
+     "count": 2,
+     "notes": [
+      {
+       "id": "reproduce-bugs-end-to-end",
+       "n": "Reproduce bugs end-to-end"
+      },
+      {
+       "id": "validate-dont-review",
+       "n": "Validate, don't review"
+      }
+     ]
+    },
+    {
+     "name": "Communication",
+     "what": "Ways of writing and talking that make AI answers easier to read.",
+     "count": 3,
+     "notes": [
+      {
+       "id": "adhd-mode",
+       "n": "ADHD mode"
+      },
+      {
+       "id": "caveman-mode",
+       "n": "Caveman mode"
+      },
+      {
+       "id": "ste100-mode",
+       "n": "STE100 mode"
+      }
+     ]
+    },
+    {
+     "name": "Health",
+     "what": "Using AI in a way that suits how a person's mind works.",
+     "count": 1,
+     "notes": [
+      {
+       "id": "adhd-mode",
+       "n": "ADHD mode"
+      }
+     ]
+    },
+    {
+     "name": "Finance",
+     "what": "Not yet: no note on this.",
+     "count": 0,
+     "notes": []
+    },
+    {
+     "name": "LLM training",
+     "what": "Not yet: no note on this.",
+     "count": 0,
+     "notes": []
+    },
+    {
+     "name": "Research",
+     "what": "Not yet: no note on this.",
+     "count": 0,
+     "notes": []
+    },
+    {
+     "name": "Collusion and swarm",
+     "what": "Not yet: no note on this.",
+     "count": 0,
+     "notes": []
+    }
+   ],
    "folders": [
     {
-     "name": "agentic-stack",
-     "count": 3,
+     "name": "AI agents",
+     "count": 4,
      "files": [
+      {
+       "id": "first-mate",
+       "n": "First mate",
+       "line": "wiki note · AI agents, Dev tooling · kind: workflow",
+       "body": [
+        "The endgame is a first mate — one agent you talk to that dispatches, supervises, and validates a crew across worktrees, so you focus on direction.",
+        "Evidence: \"I needed a first mate, someone I can talk to as a captain that will carry out all my directions and manage all the crewmates.\"",
+        "Source: Kun Chen, \"Agent Engineering Workflow\" (first mate)"
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/first-mate.md"
+        }
+       ],
+       "rel": [
+        "worktree-pooling",
+        "validate-dont-review"
+       ]
+      },
+      {
+       "id": "human-in-the-loop",
+       "n": "Build with a human in the loop",
+       "line": "wiki note · AI agents, Security and safety · kind: method",
+       "body": [
+        "Design systems assuming a human is in the loop; the human's abstraction is the efficient part, so amplify it rather than replace it.",
+        "Evidence: \"You want to build your systems with the understanding that a human is in the loop... The human is very good at abstracting.\"",
+        "Source: Jake Van Clief, \"Second Brain\" talk (27:13)"
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/human-in-the-loop.md"
+        }
+       ],
+       "rel": [
+        "structure-decides-what-matters"
+       ]
+      },
+      {
+       "id": "kun-chen-agent-policy",
+       "n": "Kun Chen's agent policy (a distilled self)",
+       "line": "wiki note · AI agents, Context engineering · kind: people",
+       "body": [
+        "Kun's shared AGENTS.md is a concrete distilled operating policy — six rules that let any agent act with his judgment.",
+        "Evidence: \"Verify before claiming... Prefer the smallest change... Do not silently revert a deliberate decision... Ask before anything destructive... Never commit secrets... Report what changed, what was verified, and what is still open.\"",
+        "Source: kunchenguid/dotfiles, home/AGENTS.md (this repo)"
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/kun-chen-agent-policy.md"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "long-running-loops",
+       "n": "Long-running loops need caps",
+       "line": "wiki note · AI agents, Inference and cost · kind: workflow",
+       "body": [
+        "Autonomous overnight loops are safe when given precise caps and a verifiable objective; otherwise they can burn the weekly quota.",
+        "Evidence: \"give it an objective and it will keep going until it meets some stop condition... I can set a token cap or iteration cap or stop condition more precisely.\"",
+        "Source: Kun Chen, \"Agent Engineering Workflow\" (long running tasks)"
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/long-running-loops.md"
+        }
+       ],
+       "rel": [
+        "validate-dont-review"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Context engineering",
+     "count": 6,
+     "files": [
+      {
+       "id": "compaction-is-an-implementation-detail",
+       "n": "Compaction is an implementation detail",
+       "line": "wiki note · Context engineering, AI agents · kind: workflow",
+       "body": [
+        "Context compaction is now an implementation detail; rely on server-side compaction and let the agent keep going across long sessions.",
+        "Evidence: \"compaction... is really becoming an implementation detail that most people should not worry about anymore. Just let the agent run, let the agent compact when needed and it will just keep going.\"",
+        "Source: Kun Chen, \"Full Stack App\" video (compaction)"
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/compaction-is-an-implementation-detail.md"
+        }
+       ],
+       "rel": [
+        "first-mate"
+       ]
+      },
+      {
+       "id": "global-memory-is-minimal",
+       "n": "Global memory is minimal",
+       "line": "wiki note · Context engineering, Inference and cost · kind: memory",
+       "body": [
+        "The always-loaded global memory file must stay tiny because it is loaded into every session's system prompt and silently burns tokens.",
+        "Evidence: \"There is only 27 lines. Because everything in this file gets loaded into the system prompt of every single agent session across all our projects.\"",
+        "Source: Kun Chen, \"Agent Engineering Workflow\" (global memory file)"
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/global-memory-is-minimal.md"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "icm-layer-ladder",
+       "n": "ICM layer ladder",
+       "line": "wiki note · Context engineering · kind: agentic-stack, context",
+       "body": [
+        "Agent context is best delivered in five numbered layers, each read only when needed — prevention, not compression.",
+        "Evidence: \"Agents read down five layers and stop when they have what they need.\" (ICM README)",
+        "Source: RinDig/Interpretable-Context-Methodology (arXiv:2603.16021)"
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/icm-layer-ladder.md"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "icm-routing-table-is-the-core-pattern",
+       "n": "ICM: the routing table is the core pattern",
+       "line": "wiki note · Context engineering · kind: icm, context, agentic-stack",
+       "body": [
+        "The most important thing in the entry file is a short explicit table — for this task, go to this workspace, read these files, maybe use these skills — and a rule that the agent reports which files it actually used, because a file's existence or name never guarantees it was read.",
+        "Evidence: \"This is the most important pattern in the whole system… a simple table that tells the AI: for this task, read these files, skip those files, you might need these skills.\" Mistake 2 in 3.3: \"The routing is implicit.\" 4.4: \"A file called CONTEXT.md needs an instruction to read it; the filename alone is not a promise of automatic loading.\" Every Module 4 prompt ends with \"tell me which source you used.\"",
+        "Source: Clief Notes Foundation 0.2, 3.3 (mistake 2), 4.4, 4.5"
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/icm-routing-table-is-the-core-pattern.md"
+        }
+       ],
+       "rel": [
+        "icm-storage-is-not-active-context"
+       ]
+      },
+      {
+       "id": "icm-storage-is-not-active-context",
+       "n": "ICM: storage is not active context, and context is not authority",
+       "line": "wiki note · Context engineering, Security and safety · kind: icm, context, memory, security",
+       "body": [
+        "A file on disk, a saved chat or a project folder is storage; only what is read or supplied for this request is context. Inside the context, instructions and source material sit side by side but do not carry equal authority — which is exactly why prompt injection exists and why a document must be treated as evidence, not permission.",
+        "Evidence: \"Saved history and current context are different: material on disk or in a previous chat is not necessarily included in this request.\" \"Their presence in context does not give them the same authority or turn every sentence into executable code.\" Memory hierarchy analogy: weights (fixed in inference), context window (RAM), system instructions, retrieved context (disk→RAM on demand), persistent memory (across sessions).",
+        "Source: Clief Notes Foundation 2.3 \"How a 1953 Word Game Explains AI Memory\""
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/icm-storage-is-not-active-context.md"
+        }
+       ],
+       "rel": [
+        "icm-routing-table-is-the-core-pattern"
+       ]
+      },
+      {
+       "id": "structure-decides-what-matters",
+       "n": "Structure decides what matters",
+       "line": "wiki note · Context engineering, Knowledge bases · kind: method",
+       "body": [
+        "Do not let the model decide what is important; encode importance in the folder structure, which the model then follows.",
+        "Evidence: \"The structure forces what is important... letting the AI decide what is important is what you shouldn't be doing.\"",
+        "Source: Jake Van Clief, \"Second Brain\" talk (31:09)"
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/structure-decides-what-matters.md"
+        }
+       ],
+       "rel": [
+        "second-brain-is-a-context-layer"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Skills",
+     "count": 4,
+     "files": [
+      {
+       "id": "dialogue-freezes-into-skills",
+       "n": "Dialogue freezes into skills",
+       "line": "wiki note · Skills, Context engineering · kind: skills",
+       "body": [
+        "A skill and an ICM are both frozen conversations — real dialogue crystallized into a file that can be replayed.",
+        "Evidence: \"A skill is technically a frozen conversation, a frozen workflow. An ICM is a frozen conversation.\"",
+        "Source: Jake Van Clief, \"Second Brain\" talk (14:40)"
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/dialogue-freezes-into-skills.md"
+        }
+       ],
+       "rel": [
+        "icm-layer-ladder"
+       ]
+      },
       {
        "id": "pocock-steers-with-skills-kun-builds-machinery",
        "n": "Pocock steers with skills and prompts; Kun builds deterministic machinery",
-       "line": "wiki note · agentic-stack, skills, workflow",
+       "line": "wiki note · Skills, AI agents · kind: agentic-stack, skills, workflow",
        "body": [
         "Pocock's repo steers the agent with small skills and grilling prompts, while Kun Chen's repos put the exact steps in scripts and gates the agent cannot skip.",
         "Evidence: - \"My agent skills that I use every day to do real engineering - not vibe coding.\" [Matt Pocock]\n- \"These skills are designed to be small, easy to adapt, and composable.\" [Matt Pocock]\n- \"Approaches like GSD, BMAD, and Spec-Kit try to help by owning the process. But while doing so, they take away your control and make bugs in the process hard to resolve.\" [Matt Pocock]\n- \"getting the agent to ask you detailed questions about what you're building\" [Matt Pocock]\n- \"Logic that can be exact lives in deterministic scripts; work that requires understanding lives in an agent; the two never mix.\" [Kun Chen]\n- \"A denied name is removed from the model's schema entirely.\" [Kun Chen]\n- \"This is removal, not interception, and it is strictly stronger than any hook.\" [Kun Chen]\n- \"The initial change reaches the configured push target only after every local gate is green.\" [Kun Chen]\n- \"He prefers deterministic harnesses for repeated long-running loops instead of asking one context window to remember everything.\" [Kun Chen]",
@@ -129,289 +614,9 @@
        ]
       },
       {
-       "id": "icm-layer-ladder",
-       "n": "ICM layer ladder",
-       "line": "wiki note · agentic-stack, context",
-       "body": [
-        "Agent context is best delivered in five numbered layers, each read only when needed — prevention, not compression.",
-        "Evidence: \"Agents read down five layers and stop when they have what they need.\" (ICM README)",
-        "Source: RinDig/Interpretable-Context-Methodology (arXiv:2603.16021)"
-       ],
-       "links": [
-        {
-         "label": "Read the public copy of this note",
-         "href": "notes/icm-layer-ladder.md"
-        }
-       ],
-       "rel": []
-      },
-      {
-       "id": "agent-ergonomics",
-       "n": "Agent ergonomics (AXI)",
-       "line": "wiki note · agentic-stack",
-       "body": [
-        "The ergonomics of the tools you hand an agent dominate its cost and quality; AXI's ten principles (TOON output, minimal schemas, truncation, aggregates) beat MCP on tokens and latency.",
-        "Evidence: \"GitHub MCP server will cost you to spend three times more on token cost, and more than double the latency compared to using the CLI... axi... lowest cost but highest success rate.\"",
-        "Source: Kun Chen, \"Agent Engineering Workflow\" (the importance of agent ergonomics)"
-       ],
-       "links": [
-        {
-         "label": "Read the public copy of this note",
-         "href": "notes/agent-ergonomics.md"
-        }
-       ],
-       "rel": [
-        "popular-skills-are-not-good-skills"
-       ]
-      }
-     ]
-    },
-    {
-     "name": "context-layer",
-     "count": 1,
-     "files": [
-      {
-       "id": "second-brain-is-a-context-layer",
-       "n": "A second brain is a context layer",
-       "line": "wiki note · context-layer",
-       "body": [
-        "A second brain is not a notes pile; it is a context layer — organized information built to feed context to an AI.",
-        "Evidence: \"The whole idea anytime you hear a second brain at its core is just a layer to feed context to your AI. My method is a way of organizing that context layer.\"",
-        "Source: Jake Van Clief, \"Second Brain\" talk (04:35)"
-       ],
-       "links": [
-        {
-         "label": "Read the public copy of this note",
-         "href": "notes/second-brain-is-a-context-layer.md"
-        }
-       ],
-       "rel": [
-        "icm-layer-ladder"
-       ]
-      }
-     ]
-    },
-    {
-     "name": "decision",
-     "count": 1,
-     "files": [
-      {
-       "id": "llmwiki-vs-rag",
-       "n": "LLMwiki (plain files) before RAG",
-       "line": "wiki note · decision",
-       "body": [
-        "Plain-file notes (an LLMwiki) stay the default memory until roughly a hundred\nsources; move to RAG only when search and scale demand it, never by default.",
-        "Evidence: Rule of thumb: plain files work up to about a hundred sources, which gives\na non-technical reader a real number. It is an estimate, not a measured limit. The second brain (62 notes) is the working\ninstance; nothing here needs a database yet.",
-        "Source: Ashish Raina, rule of thumb (an estimate, no outside source); see the post \"Write it down once: a folder your AI can read\" on this site"
-       ],
-       "links": [
-        {
-         "label": "Read the public copy of this note",
-         "href": "notes/llmwiki-vs-rag.md"
-        }
-       ],
-       "rel": [
-        "global-memory-is-minimal",
-        "mini-brains-not-one-brain"
-       ]
-      }
-     ]
-    },
-    {
-     "name": "icm",
-     "count": 2,
-     "files": [
-      {
-       "id": "icm-routing-table-is-the-core-pattern",
-       "n": "ICM: the routing table is the core pattern",
-       "line": "wiki note · icm, context, agentic-stack",
-       "body": [
-        "The most important thing in the entry file is a short explicit table — for this task, go to this workspace, read these files, maybe use these skills — and a rule that the agent reports which files it actually used, because a file's existence or name never guarantees it was read.",
-        "Evidence: \"This is the most important pattern in the whole system… a simple table that tells the AI: for this task, read these files, skip those files, you might need these skills.\" Mistake 2 in 3.3: \"The routing is implicit.\" 4.4: \"A file called CONTEXT.md needs an instruction to read it; the filename alone is not a promise of automatic loading.\" Every Module 4 prompt ends with \"tell me which source you used.\"",
-        "Source: Clief Notes Foundation 0.2, 3.3 (mistake 2), 4.4, 4.5"
-       ],
-       "links": [
-        {
-         "label": "Read the public copy of this note",
-         "href": "notes/icm-routing-table-is-the-core-pattern.md"
-        }
-       ],
-       "rel": [
-        "icm-storage-is-not-active-context"
-       ]
-      },
-      {
-       "id": "icm-storage-is-not-active-context",
-       "n": "ICM: storage is not active context, and context is not authority",
-       "line": "wiki note · icm, context, memory, security",
-       "body": [
-        "A file on disk, a saved chat or a project folder is storage; only what is read or supplied for this request is context. Inside the context, instructions and source material sit side by side but do not carry equal authority — which is exactly why prompt injection exists and why a document must be treated as evidence, not permission.",
-        "Evidence: \"Saved history and current context are different: material on disk or in a previous chat is not necessarily included in this request.\" \"Their presence in context does not give them the same authority or turn every sentence into executable code.\" Memory hierarchy analogy: weights (fixed in inference), context window (RAM), system instructions, retrieved context (disk→RAM on demand), persistent memory (across sessions).",
-        "Source: Clief Notes Foundation 2.3 \"How a 1953 Word Game Explains AI Memory\""
-       ],
-       "links": [
-        {
-         "label": "Read the public copy of this note",
-         "href": "notes/icm-storage-is-not-active-context.md"
-        }
-       ],
-       "rel": [
-        "icm-routing-table-is-the-core-pattern"
-       ]
-      }
-     ]
-    },
-    {
-     "name": "memory",
-     "count": 1,
-     "files": [
-      {
-       "id": "global-memory-is-minimal",
-       "n": "Global memory is minimal",
-       "line": "wiki note · memory",
-       "body": [
-        "The always-loaded global memory file must stay tiny because it is loaded into every session's system prompt and silently burns tokens.",
-        "Evidence: \"There is only 27 lines. Because everything in this file gets loaded into the system prompt of every single agent session across all our projects.\"",
-        "Source: Kun Chen, \"Agent Engineering Workflow\" (global memory file)"
-       ],
-       "links": [
-        {
-         "label": "Read the public copy of this note",
-         "href": "notes/global-memory-is-minimal.md"
-        }
-       ],
-       "rel": []
-      }
-     ]
-    },
-    {
-     "name": "method",
-     "count": 5,
-     "files": [
-      {
-       "id": "mini-brains-not-one-brain",
-       "n": "Mini brains, not one brain of everything",
-       "line": "wiki note · method",
-       "body": [
-        "Build many small, per-workflow brains, each bespoke to one high-value operation, instead of one brain of everything.",
-        "Evidence: \"I actually make multiple second brains based on workflows, not based on everything I'm doing.\"",
-        "Source: Jake Van Clief, \"Second Brain\" talk (27:02, 11:10)"
-       ],
-       "links": [
-        {
-         "label": "Read the public copy of this note",
-         "href": "notes/mini-brains-not-one-brain.md"
-        }
-       ],
-       "rel": [
-        "second-brain-is-a-context-layer"
-       ]
-      },
-      {
-       "id": "structure-decides-what-matters",
-       "n": "Structure decides what matters",
-       "line": "wiki note · method",
-       "body": [
-        "Do not let the model decide what is important; encode importance in the folder structure, which the model then follows.",
-        "Evidence: \"The structure forces what is important... letting the AI decide what is important is what you shouldn't be doing.\"",
-        "Source: Jake Van Clief, \"Second Brain\" talk (31:09)"
-       ],
-       "links": [
-        {
-         "label": "Read the public copy of this note",
-         "href": "notes/structure-decides-what-matters.md"
-        }
-       ],
-       "rel": [
-        "second-brain-is-a-context-layer"
-       ]
-      },
-      {
-       "id": "right-size-the-model",
-       "n": "Right-size the model",
-       "line": "wiki note · method",
-       "body": [
-        "You don't need the best model for everything; efficient models do most work, and the strongest is reserved for the hard parts.",
-        "Evidence: \"a lot of the time we try to use the best model possible for everything... you actually can get a lot out of these more efficient models.\"",
-        "Source: Kun Chen, \"Full Stack App\" video (intro)"
-       ],
-       "links": [
-        {
-         "label": "Read the public copy of this note",
-         "href": "notes/right-size-the-model.md"
-        }
-       ],
-       "rel": []
-      },
-      {
-       "id": "reproduce-bugs-end-to-end",
-       "n": "Reproduce bugs end-to-end",
-       "line": "wiki note · method",
-       "body": [
-        "Start bug fixes by reproducing the bug end-to-end as the user experiences it, not with unit tests.",
-        "Evidence: \"always starts with reproducing the bug in an end to end setting... AI models today by default like to write unit tests, which are often not sufficient and not really covering the product behaviors we want to guard.\"",
-        "Source: Kun Chen, \"Agent Engineering Workflow\" (global memory rule)"
-       ],
-       "links": [
-        {
-         "label": "Read the public copy of this note",
-         "href": "notes/reproduce-bugs-end-to-end.md"
-        }
-       ],
-       "rel": []
-      },
-      {
-       "id": "human-in-the-loop",
-       "n": "Build with a human in the loop",
-       "line": "wiki note · method",
-       "body": [
-        "Design systems assuming a human is in the loop; the human's abstraction is the efficient part, so amplify it rather than replace it.",
-        "Evidence: \"You want to build your systems with the understanding that a human is in the loop... The human is very good at abstracting.\"",
-        "Source: Jake Van Clief, \"Second Brain\" talk (27:13)"
-       ],
-       "links": [
-        {
-         "label": "Read the public copy of this note",
-         "href": "notes/human-in-the-loop.md"
-        }
-       ],
-       "rel": [
-        "structure-decides-what-matters"
-       ]
-      }
-     ]
-    },
-    {
-     "name": "people",
-     "count": 1,
-     "files": [
-      {
-       "id": "kun-chen-agent-policy",
-       "n": "Kun Chen's agent policy (a distilled self)",
-       "line": "wiki note · people",
-       "body": [
-        "Kun's shared AGENTS.md is a concrete distilled operating policy — six rules that let any agent act with his judgment.",
-        "Evidence: \"Verify before claiming... Prefer the smallest change... Do not silently revert a deliberate decision... Ask before anything destructive... Never commit secrets... Report what changed, what was verified, and what is still open.\"",
-        "Source: kunchenguid/dotfiles, home/AGENTS.md (this repo)"
-       ],
-       "links": [
-        {
-         "label": "Read the public copy of this note",
-         "href": "notes/kun-chen-agent-policy.md"
-        }
-       ],
-       "rel": []
-      }
-     ]
-    },
-    {
-     "name": "skills",
-     "count": 3,
-     "files": [
-      {
        "id": "popular-skills-are-not-good-skills",
        "n": "Popular skills are not good skills",
-       "line": "wiki note · skills",
+       "line": "wiki note · Skills, Security and safety · kind: skills",
        "body": [
         "Skill popularity is not quality; some widely-shared skills make agents slower and worse, so only install skills with rigorous published evaluations.",
         "Evidence: \"the agent will use 5% more tokens while making the results worse... being popular is not the same as actually being good.\"",
@@ -430,7 +635,7 @@
       {
        "id": "progressive-disclosure",
        "n": "Progressive disclosure",
-       "line": "wiki note · skills",
+       "line": "wiki note · Skills, Context engineering · kind: skills",
        "body": [
         "Skills load only a tiny description into the system prompt; the full body is read only when the agent decides it needs the skill.",
         "Evidence: \"when your agent starts, it only loads this tiny description field from your skills into the system prompt... only when it actually decides that it needs to use a certain skill, it will then reads the rest of this file.\"",
@@ -446,20 +651,65 @@
         "icm-layer-ladder",
         "global-memory-is-minimal"
        ]
-      },
+      }
+     ]
+    },
+    {
+     "name": "Knowledge bases",
+     "count": 3,
+     "files": [
       {
-       "id": "dialogue-freezes-into-skills",
-       "n": "Dialogue freezes into skills",
-       "line": "wiki note · skills",
+       "id": "llmwiki-vs-rag",
+       "n": "LLMwiki (plain files) before RAG",
+       "line": "wiki note · Knowledge bases · kind: decision",
        "body": [
-        "A skill and an ICM are both frozen conversations — real dialogue crystallized into a file that can be replayed.",
-        "Evidence: \"A skill is technically a frozen conversation, a frozen workflow. An ICM is a frozen conversation.\"",
-        "Source: Jake Van Clief, \"Second Brain\" talk (14:40)"
+        "Plain-file notes (an LLMwiki) stay the default memory until roughly a hundred\nsources; move to RAG only when search and scale demand it, never by default.",
+        "Evidence: Rule of thumb: plain files work up to about a hundred sources, which gives\na non-technical reader a real number. It is an estimate, not a measured limit. The second brain (62 notes) is the working\ninstance; nothing here needs a database yet.",
+        "Source: the author's rule of thumb (an estimate, no outside source); see the post \"Write it down once: a folder your AI can read\" on this site"
        ],
        "links": [
         {
          "label": "Read the public copy of this note",
-         "href": "notes/dialogue-freezes-into-skills.md"
+         "href": "notes/llmwiki-vs-rag.md"
+        }
+       ],
+       "rel": [
+        "global-memory-is-minimal",
+        "mini-brains-not-one-brain"
+       ]
+      },
+      {
+       "id": "mini-brains-not-one-brain",
+       "n": "Mini brains, not one brain of everything",
+       "line": "wiki note · Knowledge bases · kind: method",
+       "body": [
+        "Build many small, per-workflow brains, each bespoke to one high-value operation, instead of one brain of everything.",
+        "Evidence: \"I actually make multiple second brains based on workflows, not based on everything I'm doing.\"",
+        "Source: Jake Van Clief, \"Second Brain\" talk (27:02, 11:10)"
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/mini-brains-not-one-brain.md"
+        }
+       ],
+       "rel": [
+        "second-brain-is-a-context-layer"
+       ]
+      },
+      {
+       "id": "second-brain-is-a-context-layer",
+       "n": "A second brain is a context layer",
+       "line": "wiki note · Knowledge bases, Context engineering · kind: context-layer",
+       "body": [
+        "A second brain is not a notes pile; it is a context layer — organized information built to feed context to an AI.",
+        "Evidence: \"The whole idea anytime you hear a second brain at its core is just a layer to feed context to your AI. My method is a way of organizing that context layer.\"",
+        "Source: Jake Van Clief, \"Second Brain\" talk (04:35)"
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/second-brain-is-a-context-layer.md"
         }
        ],
        "rel": [
@@ -469,17 +719,127 @@
      ]
     },
     {
-     "name": "talk-modes",
+     "name": "Inference and cost",
+     "count": 1,
+     "files": [
+      {
+       "id": "right-size-the-model",
+       "n": "Right-size the model",
+       "line": "wiki note · Inference and cost · kind: method",
+       "body": [
+        "You don't need the best model for everything; efficient models do most work, and the strongest is reserved for the hard parts.",
+        "Evidence: \"a lot of the time we try to use the best model possible for everything... you actually can get a lot out of these more efficient models.\"",
+        "Source: Kun Chen, \"Full Stack App\" video (intro)"
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/right-size-the-model.md"
+        }
+       ],
+       "rel": []
+      }
+     ]
+    },
+    {
+     "name": "Dev tooling",
+     "count": 2,
+     "files": [
+      {
+       "id": "agent-ergonomics",
+       "n": "Agent ergonomics (AXI)",
+       "line": "wiki note · Dev tooling, Inference and cost · kind: agentic-stack",
+       "body": [
+        "The ergonomics of the tools you hand an agent dominate its cost and quality; AXI's ten principles (TOON output, minimal schemas, truncation, aggregates) beat MCP on tokens and latency.",
+        "Evidence: \"GitHub MCP server will cost you to spend three times more on token cost, and more than double the latency compared to using the CLI... axi... lowest cost but highest success rate.\"",
+        "Source: Kun Chen, \"Agent Engineering Workflow\" (the importance of agent ergonomics)"
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/agent-ergonomics.md"
+        }
+       ],
+       "rel": [
+        "popular-skills-are-not-good-skills"
+       ]
+      },
+      {
+       "id": "worktree-pooling",
+       "n": "Worktree pooling",
+       "line": "wiki note · Dev tooling, AI agents · kind: workflow",
+       "body": [
+        "Manual git worktrees become unmanaged debt; a pool that reuses idle worktrees frees you from tracking them.",
+        "Evidence: \"So this work tree basically becomes a debt... Treehouse... will try to reuse one of the idle work trees instead of creating a brand new one.\"",
+        "Source: Kun Chen, \"Agent Engineering Workflow\" (parallel worktrees)"
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/worktree-pooling.md"
+        }
+       ],
+       "rel": [
+        "first-mate"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Evals",
+     "count": 2,
+     "files": [
+      {
+       "id": "reproduce-bugs-end-to-end",
+       "n": "Reproduce bugs end-to-end",
+       "line": "wiki note · Evals, Dev tooling · kind: method",
+       "body": [
+        "Start bug fixes by reproducing the bug end-to-end as the user experiences it, not with unit tests.",
+        "Evidence: \"always starts with reproducing the bug in an end to end setting... AI models today by default like to write unit tests, which are often not sufficient and not really covering the product behaviors we want to guard.\"",
+        "Source: Kun Chen, \"Agent Engineering Workflow\" (global memory rule)"
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/reproduce-bugs-end-to-end.md"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "validate-dont-review",
+       "n": "Validate, don't review",
+       "line": "wiki note · Evals, Dev tooling · kind: workflow",
+       "body": [
+        "Do not review diffs by hand (you become the bottleneck); run changes through an automated pipeline and apply judgment only at the PR, sized by risk.",
+        "Evidence: \"in order to really scale ourselves with AI, we have to think of ourselves more as an engineering manager... I sense the change into a pipeline I built called No Mistakes.\"",
+        "Source: Kun Chen, \"Agent Engineering Workflow\" (validating code changes)"
+       ],
+       "links": [
+        {
+         "label": "Read the public copy of this note",
+         "href": "notes/validate-dont-review.md"
+        }
+       ],
+       "rel": [
+        "long-running-loops",
+        "worktree-pooling"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Communication",
      "count": 3,
      "files": [
       {
        "id": "adhd-mode",
        "n": "ADHD mode",
-       "line": "wiki note · talk-modes",
+       "line": "wiki note · Communication, Health · kind: talk-modes",
        "body": [
         "ADHD mode puts the key point first, in bold, then gives one idea per line, short lists and one clear next step.",
         "Evidence: The rules are a reading layout for people who scan: the answer is in the first line, nothing important hides in a long paragraph, and the reply ends with what to do now.",
-        "Source: Front-agent talk modes, written for this site"
+        "Source: EA-bot talk modes, written for this site"
        ],
        "links": [
         {
@@ -496,11 +856,11 @@
       {
        "id": "caveman-mode",
        "n": "Caveman mode",
-       "line": "wiki note · talk-modes",
+       "line": "wiki note · Communication · kind: talk-modes",
        "body": [
         "Caveman mode answers in as few words as possible, with no filler, no greetings and no repeats of the question.",
         "Evidence: The rule is to keep only the words that carry meaning. Fewer words also means fewer tokens to read and pay for.",
-        "Source: Front-agent talk modes, written for this site"
+        "Source: EA-bot talk modes, written for this site"
        ],
        "links": [
         {
@@ -517,11 +877,11 @@
       {
        "id": "ste100-mode",
        "n": "STE100 mode",
-       "line": "wiki note · talk-modes",
+       "line": "wiki note · Communication · kind: talk-modes",
        "body": [
         "STE100 mode writes in Simplified Technical English: short sentences, active voice, and one meaning for each word.",
         "Evidence: ASD-STE100 is a controlled language first written for aircraft maintenance texts. It limits sentence length, asks for one instruction per sentence, and uses a dictionary where each approved word has one meaning.",
-        "Source: Front-agent talk modes, after ASD-STE100 Simplified Technical English"
+        "Source: EA-bot talk modes, after ASD-STE100 Simplified Technical English"
        ],
        "links": [
         {
@@ -533,109 +893,6 @@
         "adhd-mode",
         "caveman-mode",
         "progressive-disclosure"
-       ]
-      }
-     ]
-    },
-    {
-     "name": "workflow",
-     "count": 5,
-     "files": [
-      {
-       "id": "first-mate",
-       "n": "First mate",
-       "line": "wiki note · workflow",
-       "body": [
-        "The endgame is a first mate — one agent you talk to that dispatches, supervises, and validates a crew across worktrees, so you focus on direction.",
-        "Evidence: \"I needed a first mate, someone I can talk to as a captain that will carry out all my directions and manage all the crewmates.\"",
-        "Source: Kun Chen, \"Agent Engineering Workflow\" (first mate)"
-       ],
-       "links": [
-        {
-         "label": "Read the public copy of this note",
-         "href": "notes/first-mate.md"
-        }
-       ],
-       "rel": [
-        "worktree-pooling",
-        "validate-dont-review"
-       ]
-      },
-      {
-       "id": "worktree-pooling",
-       "n": "Worktree pooling",
-       "line": "wiki note · workflow",
-       "body": [
-        "Manual git worktrees become unmanaged debt; a pool that reuses idle worktrees frees you from tracking them.",
-        "Evidence: \"So this work tree basically becomes a debt... Treehouse... will try to reuse one of the idle work trees instead of creating a brand new one.\"",
-        "Source: Kun Chen, \"Agent Engineering Workflow\" (parallel worktrees)"
-       ],
-       "links": [
-        {
-         "label": "Read the public copy of this note",
-         "href": "notes/worktree-pooling.md"
-        }
-       ],
-       "rel": [
-        "first-mate"
-       ]
-      },
-      {
-       "id": "validate-dont-review",
-       "n": "Validate, don't review",
-       "line": "wiki note · workflow",
-       "body": [
-        "Do not review diffs by hand (you become the bottleneck); run changes through an automated pipeline and apply judgment only at the PR, sized by risk.",
-        "Evidence: \"in order to really scale ourselves with AI, we have to think of ourselves more as an engineering manager... I sense the change into a pipeline I built called No Mistakes.\"",
-        "Source: Kun Chen, \"Agent Engineering Workflow\" (validating code changes)"
-       ],
-       "links": [
-        {
-         "label": "Read the public copy of this note",
-         "href": "notes/validate-dont-review.md"
-        }
-       ],
-       "rel": [
-        "long-running-loops",
-        "worktree-pooling"
-       ]
-      },
-      {
-       "id": "long-running-loops",
-       "n": "Long-running loops need caps",
-       "line": "wiki note · workflow",
-       "body": [
-        "Autonomous overnight loops are safe when given precise caps and a verifiable objective; otherwise they can burn the weekly quota.",
-        "Evidence: \"give it an objective and it will keep going until it meets some stop condition... I can set a token cap or iteration cap or stop condition more precisely.\"",
-        "Source: Kun Chen, \"Agent Engineering Workflow\" (long running tasks)"
-       ],
-       "links": [
-        {
-         "label": "Read the public copy of this note",
-         "href": "notes/long-running-loops.md"
-        }
-       ],
-       "rel": [
-        "validate-dont-review"
-       ]
-      },
-      {
-       "id": "compaction-is-an-implementation-detail",
-       "n": "Compaction is an implementation detail",
-       "line": "wiki note · workflow",
-       "body": [
-        "Context compaction is now an implementation detail; rely on server-side compaction and let the agent keep going across long sessions.",
-        "Evidence: \"compaction... is really becoming an implementation detail that most people should not worry about anymore. Just let the agent run, let the agent compact when needed and it will just keep going.\"",
-        "Source: Kun Chen, \"Full Stack App\" video (compaction)"
-       ],
-       "links": [
-        {
-         "label": "Read the public copy of this note",
-         "href": "notes/compaction-is-an-implementation-detail.md"
-        }
-       ],
-       "rel": [
-        "first-mate"
        ]
       }
      ]

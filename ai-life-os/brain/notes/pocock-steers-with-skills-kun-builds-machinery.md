@@ -1,5 +1,6 @@
 ---
-tags: [agentic-stack, skills, workflow]
+tags: [Skills, AI agents]
+kind: [agentic-stack, skills, workflow]
 links: [popular-skills-are-not-good-skills, kun-chen-agent-policy, validate-dont-review, progressive-disclosure]
 source: Matt Pocock, skills repo README (https://github.com/mattpocock/skills (README.md), retrieved 2026-10-17); Kun Chen, firstmate VISION.md (https://github.com/kunchenguid/firstmate/blob/main/VISION.md, retrieved 2026-10-17); Kun Chen, firstmate docs/subagent-guard.md (https://github.com/kunchenguid/firstmate/blob/main/docs/subagent-guard.md, retrieved 2026-10-17); Kun Chen, no-mistakes README (https://github.com/kunchenguid/no-mistakes (README.md), retrieved 2026-10-17); Kun Chen, kun repo OPINIONS.md (a map of his views inferred from public posts and talks, not his own first-person text) (https://github.com/kunchenguid/kun/blob/main/OPINIONS.md, retrieved 2026-10-17)
 status: reviewed

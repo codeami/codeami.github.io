@@ -1,5 +1,6 @@
 ---
-tags: [workflow]
+tags: [Context engineering, AI agents]
+kind: [workflow]
 links: [first-mate]
 source: Kun Chen, "Full Stack App" video (compaction)
 ---

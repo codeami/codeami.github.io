@@ -1,7 +1,8 @@
 ---
-tags: [decision]
+tags: [Knowledge bases]
+kind: [decision]
 links: [global-memory-is-minimal, mini-brains-not-one-brain]
-source: Ashish Raina, rule of thumb (an estimate, no outside source); see the post "Write it down once: a folder your AI can read" on this site
+source: the author's rule of thumb (an estimate, no outside source); see the post "Write it down once: a folder your AI can read" on this site
 ---
 
 # LLMwiki (plain files) before RAG

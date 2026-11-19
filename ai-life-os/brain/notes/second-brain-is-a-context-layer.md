@@ -1,5 +1,6 @@
 ---
-tags: [context-layer]
+tags: [Knowledge bases, Context engineering]
+kind: [context-layer]
 links: [icm-layer-ladder]
 source: Jake Van Clief, "Second Brain" talk (04:35)
 ---

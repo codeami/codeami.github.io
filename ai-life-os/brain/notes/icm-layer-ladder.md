@@ -1,5 +1,6 @@
 ---
-tags: [agentic-stack, context]
+tags: [Context engineering]
+kind: [agentic-stack, context]
 links: []
 source: RinDig/Interpretable-Context-Methodology (arXiv:2603.16021)
 ---

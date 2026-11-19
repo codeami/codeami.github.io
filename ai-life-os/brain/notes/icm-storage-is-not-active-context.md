@@ -1,5 +1,6 @@
 ---
-tags: [icm, context, memory, security]
+tags: [Context engineering, Security and safety]
+kind: [icm, context, memory, security]
 links: [icm-routing-table-is-the-core-pattern]
 source: Clief Notes Foundation 2.3 "How a 1953 Word Game Explains AI Memory"
 ---

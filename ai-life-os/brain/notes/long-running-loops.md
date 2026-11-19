@@ -1,5 +1,6 @@
 ---
-tags: [workflow]
+tags: [AI agents, Inference and cost]
+kind: [workflow]
 links: [validate-dont-review]
 source: Kun Chen, "Agent Engineering Workflow" (long running tasks)
 ---

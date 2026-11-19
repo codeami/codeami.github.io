@@ -1,5 +1,6 @@
 ---
-tags: [talk-modes]
+tags: [Communication, Health]
+kind: [talk-modes]
 links: [caveman-mode, ste100-mode, progressive-disclosure]
 source: EA-bot talk modes, written for this site
 ---

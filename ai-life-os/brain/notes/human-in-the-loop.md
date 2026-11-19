@@ -1,5 +1,6 @@
 ---
-tags: [method]
+tags: [AI agents, Security and safety]
+kind: [method]
 links: [structure-decides-what-matters]
 source: Jake Van Clief, "Second Brain" talk (27:13)
 ---

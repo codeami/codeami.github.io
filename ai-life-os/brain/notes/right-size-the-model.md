@@ -1,5 +1,6 @@
 ---
-tags: [method]
+tags: [Inference and cost]
+kind: [method]
 links: []
 source: Kun Chen, "Full Stack App" video (intro)
 ---

@@ -1,5 +1,6 @@
 ---
-tags: [people]
+tags: [AI agents, Context engineering]
+kind: [people]
 links: []
 source: kunchenguid/dotfiles, home/AGENTS.md (this repo)
 ---

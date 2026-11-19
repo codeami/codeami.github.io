@@ -1,5 +1,6 @@
 ---
-tags: [workflow]
+tags: [Dev tooling, AI agents]
+kind: [workflow]
 links: [first-mate]
 source: Kun Chen, "Agent Engineering Workflow" (parallel worktrees)
 ---
