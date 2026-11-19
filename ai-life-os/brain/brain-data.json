@@ -131,8 +131,8 @@
        "line": "wiki note · decision",
        "body": [
         "Plain-file notes (an LLMwiki) stay the default memory until roughly a hundred\nsources; move to RAG only when search and scale demand it, never by default.",
-        "Evidence: \"It says plain files work up to about a hundred sources, which gives your\nnon-technical friends a real number.\" The second brain (62 notes) is the working\ninstance; nothing here needs a database yet.",
-        "Source: Captain, Troupe session 2026-10-22 (\"Folders to RAG\" in the Knowledge Universe)"
+        "Evidence: Rule of thumb: plain files work up to about a hundred sources, which gives\na non-technical reader a real number. It is an estimate, not a measured limit. The second brain (62 notes) is the working\ninstance; nothing here needs a database yet.",
+        "Source: Ashish Raina, rule of thumb (an estimate, no outside source); see the post \"Write it down once: a folder your AI can read\" on this site"
        ],
        "links": [
         {
@@ -1272,8 +1272,24 @@
     },
     {
      "name": "Safe AI crews",
-     "count": 1,
+     "count": 2,
      "files": [
+      {
+       "id": "../arena",
+       "n": "Hermes vs OpenClaw vs Claude Duet, Muse and Grok Bot: an AI agent arena",
+       "line": "post · 18 Nov 2026",
+       "body": [
+        "Picking an agent harness is hard: lock-in and token cost. Six contenders compared, one head-to-head test, then twelve setups scored on the same parts and my own radar"
+       ],
+       "url": "../blog/../arena.html",
+       "links": [
+        {
+         "label": "Read the post",
+         "href": "../blog/../arena.html"
+        }
+       ],
+       "rel": []
+      },
       {
        "id": "when-the-notes-are-wrong",
        "n": "When the notes are wrong",
@@ -1445,7 +1461,7 @@
   },
   {
    "n": "reels4mphotos",
-   "state": "live",
+   "state": "pre-MVP",
    "url": "https://codeami.github.io/reels4mphotos/",
    "kind": "project"
   },

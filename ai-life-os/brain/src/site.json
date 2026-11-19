@@ -14,7 +14,7 @@
  "projects": [
   {"n": "Firstmate (upstream)", "state": "Kun Chen, MIT", "url": "https://github.com/kunchenguid/firstmate"},
   {"n": "codeami.github.io", "state": "this site", "url": "https://github.com/codeami/codeami.github.io"},
-  {"n": "reels4mphotos", "state": "live", "url": "https://codeami.github.io/reels4mphotos/"},
+  {"n": "reels4mphotos", "state": "pre-MVP", "url": "https://codeami.github.io/reels4mphotos/"},
   {"n": "swarm-referee", "state": "public repo", "url": "https://github.com/codeami/swarm-referee"}
  ],
  "reading": [

@@ -475,17 +475,15 @@ stays).
 ## Graphs and Charts
 
 - **Graph views:** rings (the default: root at the centre, skills on the inner
-  ring, rooms in sectors, routines and apps on the outer rings), force, hex and
-  3D. All four use the same node kinds, colours, labels, hover label and
+  ring, rooms in sectors, routines and apps on the outer rings), force, circle
+  and hex. All four use the same node kinds, colours, labels, hover label and
   click-to-card.
 - **Chart marks:** the rings view draws 32 faint rhumb lines from the root and
   a degree ring on the outer edge (a tick every 10°, labelled 000, 090, 180,
   270), taken from the portolan charts and the astrolabe in References. They
   sit in `--line`, under the links.
-- **3D:** `3d-force-graph` 1.79.0 from `cdn.jsdelivr.net`, pinned, loaded only
-  when the 3D view is opened. In 3D the hover label carries the kind word,
-  because spheres cannot carry the shape. If it fails to load, show the error
-  state and keep the 2D view.
+- **3D:** not built. The public chart is 2D only, in four layouts. A 3D view
+  needs a third-party script and is not planned for this site.
 - **Charts:** line, bar, donut and meter in inline SVG. Axes and grid in
   `--line`, data in `--accent`, other series in `--mute`. Donut segments use
   graph colours and are always labelled with words and numbers. A meter shows
@@ -508,8 +506,7 @@ stays).
 - Don't put a base-layer graph behind Calm.
 - Don't spread uppercase spaced labels beyond widget headings.
 - Don't use middle-dot meta strings or arrow suffixes as decoration.
-- Don't load web fonts or icon fonts. The only external script allowed is the
-  pinned 3D graph library, loaded on demand.
+- Don't load web fonts or icon fonts. No external script is loaded.
 - Don't cover more than half of the graph with cards on a wide screen.
 
 ### Never

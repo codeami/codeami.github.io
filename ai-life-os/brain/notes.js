@@ -120,9 +120,9 @@ var BRAIN_NOTES = [
    "global-memory-is-minimal",
    "mini-brains-not-one-brain"
   ],
-  "source": "Captain, Troupe session 2026-10-22 (\"Folders to RAG\" in the Knowledge Universe)",
+  "source": "Ashish Raina, rule of thumb (an estimate, no outside source); see the post \"Write it down once: a folder your AI can read\" on this site",
   "claim": "Plain-file notes (an LLMwiki) stay the default memory until roughly a hundred\nsources; move to RAG only when search and scale demand it, never by default.",
-  "evidence": "\"It says plain files work up to about a hundred sources, which gives your\nnon-technical friends a real number.\" The second brain (62 notes) is the working\ninstance; nothing here needs a database yet."
+  "evidence": "Rule of thumb: plain files work up to about a hundred sources, which gives\na non-technical reader a real number. It is an estimate, not a measured limit. The second brain (62 notes) is the working\ninstance; nothing here needs a database yet."
  },
  {
   "id": "second-brain-is-a-context-layer",
