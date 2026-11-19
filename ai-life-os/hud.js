@@ -91,7 +91,7 @@
     /* A page can start with its card folded (meta panel-start="min") so the map is the first thing seen;
        meta panel-line is the one explainer line the folded card keeps. A deep link to a part of the page opens it. */
     var ps = document.querySelector('meta[name="panel-start"]'), pl = document.querySelector('meta[name="panel-line"]');
-    if (!calm && ps && ps.content === "min" && !location.hash) state = "min";
+    if (!calm && ps && ps.content === "min" && (!location.hash || location.hash === "#map")) state = "min";
     var line = mk("p", "pov-line", pl ? pl.content : ""); line.hidden = true; ov.insertBefore(line, body);
     function phone() { return window.innerWidth <= 760; }
     function layout() {
@@ -163,6 +163,8 @@
       if (u.origin !== location.origin) return false; // public projects open from their card
       // A link to the page the reader is already on never reloads it: it opens the card, and a page that listens
       // for "samepage" (the landing) shows its own first section.
+      // "#map" is a link to the map itself: fold the card so the whole chart shows
+      if (pathOf(u) === pathOf(location) && u.hash === "#map") { set("min"); return true; }
       if (pathOf(u) === pathOf(location)) {
         if (u.hash) location.hash = u.hash; else { body.scrollTop = 0; window.dispatchEvent(new Event("samepage")); }
         set("open"); if (calm) remember("open"); if (G) G.select(u.href);
@@ -180,7 +182,7 @@
         if (nav) [].forEach.call(nav.querySelectorAll("a[href]"), function (a) {
           if (a.href.split("#")[0] === u.href.split("#")[0]) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
         settle();
-        body.scrollTop = 0; set("open"); if (G) G.select(u.href);
+        body.scrollTop = 0; set(u.hash === "#map" ? "min" : "open"); if (G) G.select(u.href);
         var t = u.hash && document.getElementById(decodeURIComponent(u.hash.slice(1))); if (t) t.scrollIntoView();
       }).catch(function () { location.href = u.href; });
       return true;

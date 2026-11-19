@@ -131,7 +131,7 @@
      "cite": {"label": "BlueDot Impact: The Future of AI", "href": "https://bluedot.org/courses/future-of-ai"}}
    ],
    "read": {"label": "LearnHarness: an agent harness for learning", "href": "https://github.com/amosblomqvist/learnharness", "note": "The project page: how it measures, plans, teaches and sets practice. About 5 minutes."},
-   "more": [{"label": "BlueDot Impact: The Future of AI (free, self-paced)", "href": "https://bluedot.org/courses/future-of-ai"}, {"label": "A map of my mind you can read without leaving it", "href": "../blog/second-brain-page.html"}],
+   "more": [{"label": "BlueDot Impact: The Future of AI (free, self-paced)", "href": "https://bluedot.org/courses/future-of-ai"}, {"label": "A map of my mind you can read without leaving it", "href": "../index.html#map"}],
    "check": {"q": "What is the first step on this route?",
     "options": ["Install every AI tool you can find", "Pick one need and one good free read for it", "Write your whole life plan before you start"],
     "answer": 1,

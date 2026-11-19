@@ -23,7 +23,7 @@
  "reading": [
   {"title": "Write it down once: a folder your AI can read", "url": "../blog/everything-is-a-file.html", "line": "Context · Blog"},
   {"title": "One harness for every agent", "url": "../blog/one-harness-for-every-agent.html", "line": "Setup · Blog"},
-  {"title": "A map of my mind", "url": "../blog/second-brain-page.html", "line": "Setup · Blog"},
+  {"title": "A map of my mind", "url": "../index.html#map", "line": "Map · live"},
   {"title": "When the notes are wrong", "url": "../blog/when-the-notes-are-wrong.html", "line": "Alignment · Blog"}
  ]
 }

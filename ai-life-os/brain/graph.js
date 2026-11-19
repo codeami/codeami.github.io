@@ -86,7 +86,8 @@ function start(d,srcLabel){
   data=d;
   $("src").textContent="public data · "+srcLabel;
   window.AIO_READING=d.reading||[];
-  drawer=AIODrawer({reading:window.AIO_READING,onClose:function(){S.sel=null;applyFocus();dirty=true}});
+  // the "#map" entry opens the chart itself, so it is not a reading page in the drawer's "n of m" run
+  drawer=AIODrawer({reading:window.AIO_READING.filter(function(r){return r.url.indexOf("#map")<0}),onClose:function(){S.sel=null;applyFocus();dirty=true}});
   readLit();build(d);buildLegend();wire();renderSides();
   resize();setLayout(S.layout,true);mountTour();
   requestAnimationFrame(frame);
