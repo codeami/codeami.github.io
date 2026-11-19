@@ -733,6 +733,23 @@ test('one dropdown under the name holds Look, Map, Layout, View and Help; the fl
   await expect(page.locator('#tbSheet').getByRole('button', { name: 'Motion', exact: true })).toHaveAttribute('aria-pressed', 'true');
 });
 
+test('the factory page tour and the map cards show the idea, not the internal tool names', async ({ request }) => {
+  const terms = /backpass|no-mistakes|herdr|treehouse|lavish|worktree|launchd|\bnix\b/i;
+  const tour = JSON.parse(await (await request.get('/ai-life-os/tour/tour.json')).text());
+  const bad = [];
+  (function walk(o, key) {
+    if (typeof o === 'string') { if (!['id', 'next'].includes(key) && terms.test(o)) bad.push(o.slice(0, 60)); }
+    else if (Array.isArray(o)) o.forEach((x) => walk(x, key));
+    else if (o) Object.entries(o).forEach(([k, v]) => walk(v, k));
+  })(tour, '');
+  expect(bad, 'tour strings').toEqual([]);
+  const data = await (await request.get('/ai-life-os/brain/brain-data.json')).text();
+  // the room parts are our own words; the wiki notes quote their sources and keep a tool name where the source does
+  const fm = JSON.parse(data).rooms.find((r) => r.id === 'fm');
+  const prose = JSON.stringify(fm, (k, v) => (['rel', 'id', 'links'].includes(k) ? undefined : v)); // ids and links point at notes by name
+  expect(prose.match(terms), 'FirstMate room').toBeNull();
+});
+
 test('left pane tabs: Read, Pages and FirstMate show one list at a time; the empty Skills pane is not drawn', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.goto('/ai-life-os/index.html');

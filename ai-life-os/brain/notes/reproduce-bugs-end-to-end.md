@@ -14,4 +14,4 @@ Evidence: "always starts with reproducing the bug in an end to end setting... AI
 Elaboration:
 - Unit tests guard internals; an e2e repro guards the product behavior the user actually hit.
 - Leaning into e2e testing is more reliable for agent changes.
-- This is the same "record evidence" instinct no-mistakes formalizes (screenshot / video / log).
+- This is the same "record evidence" instinct a pre-push check formalizes (screenshot / video / log).

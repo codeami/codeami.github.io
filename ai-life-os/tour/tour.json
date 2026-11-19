@@ -41,7 +41,7 @@
       },
       {
         "id": "worktree", "folder": "work", "title": "A copy each", "chip": "Why don't workers collide?",
-        "fact": "Each worker gets its own git worktree: a separate copy of the code. A worker cannot break the main copy, and nobody trips over anybody.",
+        "fact": "Each worker gets its own copy of the code. A worker cannot break the main copy, and nobody trips over anybody.",
         "see": { "label": "How I work with agents", "href": "index.html#how" },
         "next": ["pipeline", "buttons", "scripts", "running"]
       },
@@ -53,7 +53,7 @@
       },
       {
         "id": "models", "folder": "work", "title": "Not tied to one model", "chip": "Which AI model are you?",
-        "fact": "More than one. A short rules file, called the map, is linked into Claude Code, Codex, OpenCode, Gemini CLI and backpass. Change it once and all five see it next session.",
+        "fact": "More than one. A short rules file, called the map, is linked into Claude Code, Codex, OpenCode, Gemini CLI and my own review tool. Change it once and all five see it next session.",
         "see": { "label": "Post: one rules file for every tool", "href": "blog/everything-is-a-file.html" },
         "next": ["pipeline", "skills", "vendor", "scripts"]
       },
@@ -119,7 +119,7 @@
       },
       {
         "id": "learn", "folder": "memory", "title": "Rules that improve", "chip": "Do you get better over time?",
-        "fact": "A tool called backpass reads my old sessions every day and proposes edits to my own rules. It never writes them. You approve each one.",
+        "fact": "A review tool reads my old sessions every day and proposes edits to my own rules. It never writes them. You approve each one.",
         "see": { "label": "How I work with agents", "href": "index.html#how" },
         "next": ["teachback", "skills", "honest"]
       },
@@ -396,7 +396,7 @@
         "id": "security",
         "title": "Security: what I can touch, who approves, and secrets",
         "points": [
-          { "text": "Each worker gets its own copy of the code (a git worktree), so a worker cannot break the main copy." },
+          { "text": "Each worker gets its own copy of the code, so a worker cannot break the main copy." },
           { "text": "Every worker runs in its own window that you can open and watch, and its tool calls are logged." },
           { "text": "Control mode today: workers skip permission checks by default. That is the standing setting, and the owner knows it." },
           { "text": "A safer, model-reviewed permission mode is a one-line switch. It is not switched on yet.", "status": "coming" },
@@ -441,7 +441,7 @@
         {
           "title": "Run them side by side",
           "plain": "I hand the jobs to workers and run them at once. Each worker has its own copy of the work, so nobody trips over anybody.",
-          "tech": "One git worktree and one brief per worker. Workers report status lines back to me. Each claim is backed by a command or a file read.",
+          "tech": "One copy of the code and one brief per worker. Workers report status lines back to me. Each claim is backed by a command or a file read.",
           "prompt": "Run these jobs in parallel where they do not depend on each other. Tell me which ones must wait for another, and why: <jobs>",
           "see": { "label": "How I work with agents", "href": "index.html#how" }
         },
@@ -479,7 +479,7 @@
         {
           "title": "Keep mine up to date too",
           "plain": "I learn as well. At night, a tool reads my old sessions and proposes changes to my own rules. It never writes them. You approve each one.",
-          "tech": "backpass reads tool logs and proposes rule edits backed by quotes from two or more sessions. It runs daily; it proposes rule edits; the owner approves.",
+          "tech": "A review tool reads tool logs and proposes rule edits backed by quotes from two or more sessions. It runs daily; it proposes rule edits; the owner approves.",
           "prompt": "Look back at our chats this week. List each time I corrected you. For each, say whether the fix belongs in your rules, a skill, or nowhere, and write the exact wording. Change nothing until I approve.",
           "see": { "label": "How I work with agents", "href": "index.html#how" }
         }
@@ -503,7 +503,7 @@
             {
               "title": "Pipeline and roles",
               "plain": "You ask once. First Mate splits the ask into small jobs and hands each one to a worker. Scouts find facts. Builders change code. You decide at the start and at the end.",
-              "tech": "One orchestrator session writes a brief per task and starts each worker in its own git worktree. Each role has written permissions: a scout reports, a builder opens a pull request, and only the owner merges.",
+              "tech": "One orchestrator session writes a brief per task and gives each worker its own copy of the code. Each role has written permissions: a scout reports, a builder opens a pull request, and only the owner merges.",
               "prompt": "Split this goal into small jobs. For each job, say who should do it (a scout to find facts, or a builder to make a change) and what proof of done looks like: <your goal>",
               "see": { "label": "How I work with agents", "href": "index.html#how" }
             },

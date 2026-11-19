@@ -988,8 +988,8 @@
        "n": "Isolation",
        "line": "harness part · gap",
        "body": [
-        "Each worker gets its own disposable git worktree. Each second mate gets its own home folder.",
-        "Gap: A worktree isolates files only. It does not fence the network or credentials.",
+        "Each worker gets its own disposable copy of the code. Each second mate gets its own home folder.",
+        "Gap: A separate copy isolates files only. It does not fence the network or credentials.",
         "From the Core logic page. The comparison there comes from two scout reports dated 2026-10-27 that read public docs, repos and papers."
        ],
        "links": [],
@@ -1045,7 +1045,7 @@
        "n": "Self-improvement",
        "line": "harness part · advantage, gap",
        "body": [
-        "A tool called backpass reads past transcripts and proposes rule edits. The owner applies each one by hand.",
+        "A review tool reads past transcripts and proposes rule edits. The owner applies each one by hand.",
         "On the Core logic page, Claude Code, OpenCode, Pi and Omnigent lack this. Harness-squared has it with no human step; Meta-Harness searches harness code instead.",
         "Gap: A proposed edit is argued from past evidence. It is never tested by replaying a task.",
         "From the Core logic page. The comparison there comes from two scout reports dated 2026-10-27 that read public docs, repos and papers."
