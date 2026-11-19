@@ -1,7 +1,7 @@
 ---
 version: alpha
 name: Software Meta-Factory Chart & Cards
-description: The design system for every front end of the Software Meta-Factory. Three skins and one saved choice. "Chart & Cards" puts a live graph under everything and slides content over it as cards, in two colour variants, HUD (warm orange, the default) and Matrix (green). "Calm" is a quiet light skin for reading, with no graph. The reader picks a skin once and every page follows.
+description: The design system for every front end of the Software Meta-Factory. Three skins and one saved choice. "Chart & Cards" puts a live graph under everything and slides content over it as cards, in two colour variants, HUD (warm orange, the default) and Matrix (green). "Calm" is a quiet light skin for reading; the graph under it keeps its dark panel so its controls stay readable. The reader picks a skin once and every page follows.
 colors:
   primary: "#e9e6e0"
   secondary: "#8f8b84"
@@ -424,6 +424,9 @@ stays).
   not proven items use a dashed border.
 - **Nav bar:** the top bar above.
 - **Side panel:** graph controls: layout, spin, node size, labels, motion, legend.
+  On a framed page they sit behind one dropdown under the site name (Look, Map,
+  Layout, View, Help; a full-width sheet on a phone), not as floating buttons.
+  The left list pane has tabs (Read, Pages, FirstMate). No heading glow.
 - **Node card:** glyph of its kind, name in bold, kind and status, then tabs:
   Overview, Links (`comes from`, `leads to`, each a button that jumps to that
   node), Source (file path with a copy button). Opens in the right panel or
