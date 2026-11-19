@@ -1,7 +1,7 @@
 ---
 version: alpha
 name: Software factory Chart & Cards
-description: The design system for every front end of the software factory. Two themes. "Chart & Cards" puts a live graph under everything and slides content over it as cards, in two colour variants, HUD (warm orange) and Matrix (green). "Calm" is a quiet reading theme with no graph.
+description: The design system for every front end of the software factory. Three skins and one saved choice. "Chart & Cards" puts a live graph under everything and slides content over it as cards, in two colour variants, HUD (warm orange, the default) and Matrix (green). "Calm" is a quiet light skin for reading, with no graph. The reader picks a skin once and every page follows.
 colors:
   primary: "#e9e6e0"
   secondary: "#8f8b84"
@@ -255,7 +255,7 @@ components:
 
 ## Overview
 
-One design system, two themes.
+One design system, three skins, one saved choice.
 
 **Chart & Cards** is the default for every screen of the software factory. A live graph
 is always the base layer. It fills the screen, drifts slowly, and is never hidden
@@ -271,13 +271,16 @@ never playful. It has two colour variants that share every other token:
 - **HUD** (default): orange `tertiary` #ff7a1a on near-black.
 - **Matrix**: the `matrix-*` set, phosphor green #00ff41 on black-green.
 
-**Calm** is the reading theme: warm off-white paper, Georgia headings, small-caps
+**Calm** is the reading skin: warm off-white paper, Georgia headings, small-caps
 labels, 8px corners. It has no base-layer graph. Cards sit in one centred column,
 and a graph appears only as a framed figure when the content needs one.
 
-The theme is set on `<html>`: `data-skin="hud"` or `data-skin="matrix"`, or
-`data-skin="calm"`. A switcher in the top bar (`.theme`) changes it, and the
-page remembers the choice in `localStorage` (`skin`, wrapped in try/catch).
+The skin is set on `<html>`: `data-skin="hud"`, `"matrix"` or `"calm"`. One file,
+`ai-life-os/skin.js`, owns it. Every page loads that file first in the head, so the
+saved skin is on `<html>` before the body is drawn and no page flashes white. It
+reads `localStorage` (`skin`, wrapped in try/catch) and falls back to HUD. The
+top-bar button (`.theme`) cycles HUD, Matrix, Calm and saves the choice; a change
+in one tab reaches the others. No page sets `data-skin` in its markup.
 
 ### The idea
 
@@ -430,8 +433,8 @@ stays).
 - **Table:** 1px row rules, secondary header, a sort mark on the sorted column,
   status as badges.
 - **Calm panel post:** the reusable blog layout, in `ai-life-os/panel.css`
-  (link it after `hud.css` and `kit/kit.css`, with `data-skin="calm"` on
-  `<html>` in the markup; load no `article.js` or `hud.js`). Pages use the
+  (link it after `hud.css` and `kit/kit.css`, and load `skin.js` in the head;
+  it works in all three skins, and loads no `article.js` or `hud.js`). Pages use the
   classes only; no inline style. Top to bottom:
   - **Kicker** (`.p-kicker`): the series or topic, in `calm-label`, parts split
     by a 1px rule.

@@ -7,28 +7,8 @@
 (function () {
   var root = document.documentElement;
   var base = document.currentScript ? document.currentScript.src.replace(/[^\/]*$/, "") : "";
-  function skin() { return root.getAttribute("data-skin") === "matrix" ? "matrix" : "hud"; }
-
-  function bindToggle() {
-    var btns = document.querySelectorAll("#theme, button.theme");
-    function label() {
-      var m = skin() === "matrix";
-      btns.forEach(function (b) {
-        b.textContent = m ? "HUD" : "Matrix";
-        b.setAttribute("aria-label", m ? "Switch to the HUD colours" : "Switch to the Matrix green colours");
-        b.setAttribute("aria-pressed", m ? "true" : "false");
-      });
-    }
-    btns.forEach(function (b) {
-      b.addEventListener("click", function () {
-        var next = skin() === "matrix" ? "hud" : "matrix";
-        root.setAttribute("data-skin", next);
-        try { localStorage.setItem("skin", next); } catch (e) { /* storage blocked: lasts for this page only */ }
-        label();
-      });
-    });
-    label();
-  }
+  // the skin switch (HUD, Matrix, Calm) lives in skin.js; the header button is bound there
+  function bindToggle() { if (window.AIOSkin) window.AIOSkin.bind(); }
 
   /* Top bar extras, the same on every page: the site version, Course and Second Brain
      tabs, a link up to the whoami home (the folder above this one) and the GitHub repo. */

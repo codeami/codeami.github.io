@@ -1,5 +1,5 @@
 /* The one top bar: logo, The factory, Case studies, Blog, About, Work with me. Same list and look on every page, with no Menu button.
-   GitHub and the Course are in the footer. Under 560px the site name is spoken but not drawn, and the five items take a row of their own.
+   GitHub and the Course are in the footer. Under 560px the site name is spoken but not drawn, the five items take a row of their own and the skin button sits top right.
    The page's own stylesheet sets the colours; this file sets the layout. */
 header.tb { position: relative; display: flex; flex-wrap: nowrap; align-items: center; gap: 4px 14px; padding: 10px var(--gutter, 20px); background: var(--panel, var(--surface, transparent)); border-bottom: 1px solid var(--line); }
 header.tb .tb-brand { display: flex; align-items: center; gap: 10px; min-width: 0; margin-right: auto; color: var(--ink); text-decoration: none; font: 700 18px/1 var(--font-display, var(--f-head, inherit)); letter-spacing: -.02em; white-space: nowrap; }
@@ -15,5 +15,5 @@ header.tb .tb-links a[aria-current] { color: var(--ink); font-weight: 700; box-s
   header.tb { flex-wrap: wrap; gap: 4px 12px; padding-left: 14px; padding-right: 14px; }
   header.tb .tb-brand span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   header.tb .tb-links { flex: 1 0 100%; justify-content: space-between; gap: 8px; font-size: 14px; }
-  header.tb .tb-links .theme { display: none; }
+  header.tb .tb-links .theme { position: absolute; top: 12px; right: 14px; min-height: 30px; padding: 0 10px; }
 }

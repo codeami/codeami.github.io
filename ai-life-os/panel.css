@@ -1,8 +1,8 @@
 /* The Calm panel post: kicker, editorial title, tag chips, series index, side cards,
    numbered panels, principle box, post cards. DESIGN.md "Calm panel post" names every
-   class here. Link after hud.css and kit/kit.css, on a page whose <html> carries
-   data-skin="calm" (set in the markup: the Calm pages load no article.js or hud.js,
-   so no graph is drawn). Colours are the role tokens of hud.css only; the three
+   class here. Link after hud.css and kit/kit.css, with skin.js in the head (it sets
+   the saved skin; these pages load no article.js or hud.js, so no graph is drawn).
+   They read in all three skins. Colours are the role tokens of hud.css only; the three
    layout and corner values below are the panel tokens listed in DESIGN.md. */
 :root { --radius-calm: 8px; --page-max: 74rem; --panel-gap: 16px; }
 html[data-skin="calm"] { scroll-behavior: smooth; }

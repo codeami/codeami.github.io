@@ -188,7 +188,7 @@ test('blog index: lists exactly the public posts, newest first inside each group
 
 test('panel post: header, index, side cards, numbered panels; columns follow the width; no inline styles', async ({ page }) => {
   await page.goto('/ai-life-os/blog/everything-is-a-file.html');
-  await expect(page.locator('html')).toHaveAttribute('data-skin', 'calm');
+  await expect(page.locator('html')).toHaveAttribute('data-skin', 'hud'); // no saved choice: the default skin
   await expect(page.locator('.p-kicker')).toBeVisible();
   await expect(page.locator('.p-title .p-hl')).toHaveCount(1);
   await expect(page.locator('.p-sub')).toBeVisible();
@@ -333,7 +333,7 @@ for (const { slug, series, panels: expected } of convertedPosts) {
   test(`converted post ${slug}: series label, problem first, why it matters last, panels capped, one try-it box, no inline style, no private links`, async ({ page }) => {
     const file = `ai-life-os/blog/${slug}.html`;
     await page.goto(`/${file}`);
-    await expect(page.locator('html')).toHaveAttribute('data-skin', 'calm');
+    await expect(page.locator('html')).toHaveAttribute('data-skin', 'hud');
     await expect(page.locator('.p-head .p-kicker span')).toHaveText(series);
     await expect(page.locator('.p-title .p-hl')).toHaveCount(1);
     await expect(page.locator('.p-sub')).toBeVisible();
@@ -713,6 +713,27 @@ test('top bar: clicking each item on every public page lands on a page with the 
       await expect(page.locator('header.tb .tb-links > a[aria-current]'), `${label} marks itself`).toHaveText(label);
     }
   }
+});
+
+test('skin: one saved choice. Switch once and every page follows, before first paint; the default is HUD', async ({ page }) => {
+  const all = ['index.html', 'ai-life-os/index.html', 'case-studies/index.html', 'ai-life-os/blog/index.html', 'ai-life-os/blog/everything-is-a-file.html', 'about/index.html', 'cv.html', 'work-with-me/index.html', 'intent/index.html', 'ai-life-os/arena.html', 'ai-life-os/course/index.html'];
+  const skinOf = () => page.evaluate(() => document.documentElement.dataset.skin);
+  await page.goto('/cv.html');
+  expect(await skinOf()).toBe('hud');
+  await page.locator('#theme').click();
+  expect(await skinOf()).toBe('matrix');
+  await page.locator('#theme').click();
+  expect(await skinOf()).toBe('calm');
+  for (const file of all) {
+    // the attribute is set by a script in the head, so it is on <html> as soon as the DOM starts
+    await page.goto(`/${file}`, { waitUntil: 'commit' });
+    await page.waitForFunction(() => !!document.documentElement.dataset.skin);
+    expect(await skinOf(), file).toBe('calm');
+  }
+  await page.locator('#theme').click();
+  expect(await skinOf(), 'Calm, then the next click, is HUD again').toBe('hud');
+  await page.goto('/about/index.html');
+  expect(await skinOf(), 'the choice was saved').toBe('hud');
 });
 
 test('top bar: the current page is marked in each part of the bar', async ({ page }) => {
