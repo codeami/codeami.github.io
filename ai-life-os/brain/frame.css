@@ -5,7 +5,7 @@
    the map's own look is graph.css, inside its shadow root. Colours are hud.css tokens. */
 html.brain, html.brain body { margin: 0; height: 100%; overflow: hidden; background: var(--bg); }
 body { --lw: 0px; --rw: 0px; --ob: 0px; --navh: 0px; }
-@media (min-width: 900px) { body.side { --lw: 260px; --rw: 300px; } }
+@media (min-width: 900px) { body.side { --lw: 260px; --rw: 300px; } body.side.noskills { --rw: 0px; } }
 /* transform: the map's fixed parts sit inside this box, under the site header */
 #brainHost { position: fixed; top: var(--navh); left: 0; right: 0; bottom: 0; z-index: 0; transform: translateZ(0); }
 body.framed .k-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 8; }

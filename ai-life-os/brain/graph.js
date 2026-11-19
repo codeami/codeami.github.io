@@ -398,7 +398,9 @@ function renderSides(){
   apps.forEach(function(n){$(n.info.group==="firstmate"?"sFm":"sApps").appendChild(item(n,n.info.state||"",n.on?"ok":"warn"))});
   // the FirstMate parts room sits under its pages, so the left column reaches it too
   rooms.filter(function(R){return R.id==="fm"}).forEach(function(R){R.dots.forEach(function(d){$("sFm").appendChild(item(d,rooms[d.room].folders[d.folder].name))})});
-  skills.forEach(function(n){$("sSkills").appendChild(item(n,"details"))});
+  // an empty deck is not drawn, so the map keeps the width
+  if(skills.length)skills.forEach(function(n){$("sSkills").appendChild(item(n,"details"))});
+  else{$("wr").remove();document.body.classList.add("noskills")}
 }
 /* ---------- open a node: its card in the right-side drawer; a reading page opens its text there ---------- */
 var drawer=null;
