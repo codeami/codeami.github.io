@@ -13,6 +13,8 @@ html[data-skin="calm"] #brainHost { background: #05060a; --ink: #e9e6e0; --mute:
 body.framed .k-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 8; }
 body.framed #drawer { top: var(--navh); z-index: 7; }
 /* drawer.js and tour.js live outside the shadow root: give them the map's type */
+/* the ask chips live in the dropdown's Help row (hud.js) and click these hidden ones */
+#askBar { display: none !important; }
 #drawer, #askBar, #tourCap { font: 12px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--ink); }
 
 /* the page overlay */

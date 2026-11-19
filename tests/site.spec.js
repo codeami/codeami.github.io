@@ -692,3 +692,62 @@ test('room drawer: every Related chip is one line, at most 28 px tall, with its 
   expect(await drawer.locator('.stt').evaluate((e) => getComputedStyle(e).borderTopWidth), 'status is a dot and text, not a box').toBe('0px');
   await expect(drawer).toHaveScreenshot('wiki-notes-related.png');
 });
+
+test('one dropdown under the name holds Look, Map, Layout, View and Help; the floating map buttons are gone; m still toggles motion', async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem('brain-motion', 'on'));
+  await page.goto('/ai-life-os/index.html');
+  const map = page.locator('#brainHost');
+  await expect(map.locator('canvas')).toBeVisible();
+  // the buttons that used to float over the map are hidden; the ask chips are too
+  for (const id of ['#motionBtn', '#sideBtn', '#menuBtn', '#legendBtn']) await expect(map.locator(id)).toBeHidden();
+  await expect(page.locator('#askBar')).toBeHidden();
+  const drop = page.locator('#tbDrop');
+  await expect(drop).toHaveAttribute('aria-expanded', 'false');
+  await drop.click();
+  const sheet = page.locator('#tbSheet');
+  await expect(sheet.locator('h3')).toHaveText(['Look', 'Map', 'Layout', 'View', 'Help']);
+  await expect(sheet.locator('.tb-sec').first().locator('.tb-item')).toHaveText(['HUD', 'Matrix', 'Calm']);
+  // Look: the skin changes and the sheet stays open
+  await sheet.getByRole('button', { name: 'Calm', exact: true }).click();
+  expect(await page.evaluate(() => document.documentElement.dataset.skin)).toBe('calm');
+  await expect(sheet).toBeVisible();
+  await sheet.getByRole('button', { name: 'HUD', exact: true }).click();
+  // Map: Motion flips and says so
+  const motion = sheet.getByRole('button', { name: 'Motion', exact: true });
+  await expect(motion).toHaveAttribute('aria-pressed', 'true');
+  await motion.click();
+  await expect(sheet.getByRole('button', { name: 'Motion', exact: true })).toHaveAttribute('aria-pressed', 'false');
+  // View: hide the page card, then show it again
+  await sheet.getByRole('button', { name: 'Hide page' }).click();
+  await expect(sheet).toBeHidden();
+  await expect(page.locator('#pageov')).toBeHidden();
+  await drop.click();
+  await page.locator('#tbSheet').getByRole('button', { name: 'Show page' }).click();
+  await expect(page.locator('#pageov')).toBeVisible();
+  // Escape closes it; the m key flips motion back on without the sheet
+  await drop.click();
+  await page.keyboard.press('Escape');
+  await expect(sheet).toBeHidden();
+  await page.keyboard.press('m');
+  await drop.click();
+  await expect(page.locator('#tbSheet').getByRole('button', { name: 'Motion', exact: true })).toHaveAttribute('aria-pressed', 'true');
+});
+
+test('left pane tabs: Read, Pages and FirstMate show one list at a time; the empty Skills pane is not drawn', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto('/ai-life-os/index.html');
+  const map = page.locator('#brainHost');
+  await expect(map.locator('canvas')).toBeVisible();
+  if (await map.locator('#side').evaluate((e) => e.hidden)) { // the widgets start open on a wide screen, closed on a phone
+    await page.locator('#tbDrop').click();
+    await page.locator('#tbSheet').getByRole('button', { name: 'Widgets', exact: true }).click();
+  }
+  await expect(map.getByRole('tab')).toHaveText(['Read', 'Pages', 'FirstMate']);
+  await expect(map.locator('#wr')).toHaveCount(0);
+  await expect(map.locator('#sRead')).toBeVisible();
+  await expect(map.locator('#sApps')).toBeHidden();
+  await map.getByRole('tab', { name: 'FirstMate' }).click();
+  await expect(map.locator('#sFm')).toBeVisible();
+  await expect(map.locator('#sRead')).toBeHidden();
+  await expect(map.getByRole('tab', { name: 'FirstMate' })).toHaveAttribute('aria-selected', 'true');
+});

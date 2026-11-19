@@ -14,8 +14,9 @@ var shadow=host.attachShadow({mode:"open"});
 shadow.innerHTML='<link rel="stylesheet" href="'+BASE+'graph.css">'+
   '<div id="stage"><div id="g3d" hidden></div><canvas id="cv" role="img" aria-label="Second brain map: a centre rules file linked to rooms of public notes, harness parts and posts, with a ring of skills and a ring of pages and projects. The side lists hold the same items as buttons."></canvas></div>'+
   '<div id="side" hidden><aside class="side-col" id="wl" aria-label="Reading order, pages and projects">'+
-  '<section class="wd"><h2>Reading order</h2><ul id="sRead"></ul></section><section class="wd"><h2>Pages and projects</h2><ul id="sApps"></ul></section>'+
-  '<section class="wd"><h2>FirstMate in detail</h2><ul id="sFm"></ul></section></aside>'+
+  '<div class="tabs" role="tablist" aria-label="Left pane"><button class="tab" type="button" role="tab" data-p="sRead">Read</button><button class="tab" type="button" role="tab" data-p="sApps">Pages</button><button class="tab" type="button" role="tab" data-p="sFm">FirstMate</button></div>'+
+  '<section class="wd" role="tabpanel" aria-label="Reading order"><ul id="sRead"></ul></section><section class="wd" role="tabpanel" aria-label="Pages and projects"><ul id="sApps"></ul></section>'+
+  '<section class="wd" role="tabpanel" aria-label="FirstMate in detail"><ul id="sFm"></ul></section></aside>'+
   '<aside class="side-col" id="wr" aria-label="Skills"><section class="wd"><h2>Skills deck</h2><ul id="sSkills"></ul></section></aside></div>'+
   '<div class="title"'+(FRAMED?' hidden':'')+'><b>THE SOFTWARE META-FACTORY</b><span>SECOND BRAIN</span><small id="src">loading…</small></div>'+
   '<div class="top"><button class="btn" id="dimBtn" type="button" aria-pressed="false" title="Switch between the flat map and a 3D view">3D</button>'+
@@ -113,6 +114,17 @@ var API={
   setInsets:function(bottom){INS.bottom=bottom||0;if(!view.user)fitView();dirty=true},
   overlay:function(on){host.classList.toggle("ov",!!on);setTimeout(resize,0)},
   lit:readLit, // the course page calls this after a lesson is done
+  // the site's one dropdown reads and drives the map's controls through these two
+  get:function(){return{motion:!!S.motion,widgets:!$("side").hidden,legend:!!S.legend,layout:S.dim3?"3d":S.layout,menu:!$("panel").hidden}},
+  act:function(name){
+    if(name==="motion")setMotion(!S.motion,true);
+    else if(name==="widgets")setSides($("side").hidden);
+    else if(name==="legend")setLegend(!S.legend);
+    else if(name==="menu"){var open=$("panel").hidden;setPanel(open)}
+    else if(name==="search"){setPanel(true);$("q").focus()}
+    else if(name==="3d")setDim(true);
+    else if(/^(force|circle|hex|rings)$/.test(name)){setDim(false,true);setLayout(name)}
+  },
 
   host:host,root:shadow
 };
@@ -365,6 +377,7 @@ function wire(){
     var typing=/^(input|textarea|select)$/i.test(t.tagName||"")||t.isContentEditable;
     if((e.key==="/"&&!typing)||((e.metaKey||e.ctrlKey)&&(e.key||"").toLowerCase()==="k")){e.preventDefault();setPanel(true);$("q").focus();$("q").select()}
     else if(e.key==="Escape"){$("q").value="";S.q="";S.sel=null;hideCard();applyFocus();dirty=true}
+    else if(e.key==="m"&&!typing&&!e.metaKey&&!e.ctrlKey&&!e.altKey)setMotion(!S.motion,true);
   });
   cv.addEventListener("pointermove",onMove);
   cv.addEventListener("pointerdown",onDown);
@@ -402,6 +415,11 @@ function renderSides(){
   apps.forEach(function(n){$(n.info.group==="firstmate"?"sFm":"sApps").appendChild(item(n,n.info.state||"",n.on?"ok":"warn"))});
   // the FirstMate parts room sits under its pages, so the left column reaches it too
   rooms.filter(function(R){return R.id==="fm"}).forEach(function(R){R.dots.forEach(function(d){$("sFm").appendChild(item(d,rooms[d.room].folders[d.folder].name))})});
+  // the left pane shows one list at a time: Read, Pages or FirstMate
+  var tabs=[].slice.call($("wl").querySelectorAll(".tab"));
+  function pickTab(p){tabs.forEach(function(t){var on=t.dataset.p===p;t.setAttribute("aria-selected",String(on));$(t.dataset.p).parentNode.hidden=!on})}
+  tabs.forEach(function(t){t.addEventListener("click",function(){pickTab(t.dataset.p)})});
+  pickTab("sRead");
   // an empty deck is not drawn, so the map keeps the width
   if(skills.length)skills.forEach(function(n){$("sSkills").appendChild(item(n,"details"))});
   else{$("wr").remove();document.body.classList.add("noskills")}

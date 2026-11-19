@@ -165,6 +165,47 @@
       s.onload = function () { load(list.slice(1), done); }; s.onerror = function () { /* the page stays readable without the map */ };
       document.head.appendChild(s);
     }
+    /* The one dropdown, under the name: Look (the skin), Map, View and Help. It replaces the floating buttons
+       (Motion, Widgets, Menu, Legend, the ask chips, Show page and the skin button). The map keeps the m key for motion. */
+    function dropdown() {
+      var brand = nav && nav.querySelector(".tb-brand"); if (!brand || nav.querySelector(".tb-drop")) return;
+      var wrap = mk("div", "tb-drop"), btn = mk("button", "tb-drop-btn", "▾"), menu = mk("div", "tb-sheet");
+      btn.type = "button"; btn.id = "tbDrop"; btn.setAttribute("aria-haspopup", "true"); btn.setAttribute("aria-expanded", "false"); btn.setAttribute("aria-controls", "tbSheet");
+      btn.setAttribute("aria-label", "Menu: look, map, view, help"); menu.id = "tbSheet"; menu.hidden = true;
+      wrap.appendChild(btn); wrap.appendChild(menu); brand.after(wrap); nav.classList.add("has-drop");
+      function close() { menu.hidden = true; btn.setAttribute("aria-expanded", "false"); }
+      function section(title) { var s = mk("div", "tb-sec"), r = mk("div", "tb-row"); s.appendChild(mk("h3", "", title)); s.appendChild(r); menu.appendChild(s); return r; }
+      function item(row, label, fn, pressed, keep) {
+        var b = mk("button", "tb-item", label); b.type = "button"; if (pressed != null) b.setAttribute("aria-pressed", String(!!pressed));
+        b.addEventListener("click", function () { fn(); if (keep) build(); else close(); }); row.appendChild(b);
+      }
+      function ask(text) { var c = [].filter.call(document.querySelectorAll("#askBar .chip"), function (b) { return b.textContent === text; })[0]; if (c) c.click(); }
+      function build() {
+        menu.textContent = ""; var m = G ? G.get() : {}, skin = window.AIOSkin ? window.AIOSkin.current() : "hud", r;
+        r = section("Look");
+        [["hud", "HUD"], ["matrix", "Matrix"], ["calm", "Calm"]].forEach(function (s) { item(r, s[1], function () { if (window.AIOSkin) window.AIOSkin.set(s[0]); }, skin === s[0], true); });
+        if (G) {
+          r = section("Map");
+          item(r, "Motion", function () { G.act("motion"); }, m.motion, true);
+          item(r, "Widgets", function () { G.act("widgets"); }, m.widgets, true);
+          item(r, "Legend", function () { G.act("legend"); }, m.legend, true);
+          item(r, "All settings", function () { G.act("menu"); }, m.menu, true);
+          r = section("Layout");
+          [["rings", "Rings"], ["force", "Force"], ["circle", "Circle"], ["hex", "Hex"], ["3d", "3D"]].forEach(function (l) { item(r, l[1], function () { G.act(l[0]); }, m.layout === l[0], true); });
+        }
+        r = section("View");
+        item(r, state === "closed" ? "Show page" : "Hide page", function () { set(state === "closed" ? "open" : "closed"); });
+        if (G) item(r, "Search", function () { G.act("search"); });
+        if (G) {
+          r = section("Help");
+          [["Explain this screen"], ["What do the shapes mean?"], ["How do I find something?"]].forEach(function (h) { item(r, h[0], function () { ask(h[0]); }); });
+        }
+      }
+      btn.addEventListener("click", function () { if (menu.hidden) { build(); menu.hidden = false; btn.setAttribute("aria-expanded", "true"); } else close(); });
+      document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !menu.hidden) { close(); btn.focus(); } });
+      document.addEventListener("click", function (e) { if (!menu.hidden && e.composedPath().indexOf(wrap) < 0) close(); }); // the path, not the target: an item is rebuilt under the click
+    }
+    dropdown();
     layout();
     load(["drawer.js", "tour.js", "graph.js"], function () {
       G = window.AIOBrain({ base: B, framed: true, onPage: go, overlayShown: shown });
