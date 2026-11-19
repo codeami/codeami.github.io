@@ -1,7 +1,7 @@
 ---
 version: alpha
-name: Software factory Chart & Cards
-description: The design system for every front end of the software factory. Three skins and one saved choice. "Chart & Cards" puts a live graph under everything and slides content over it as cards, in two colour variants, HUD (warm orange, the default) and Matrix (green). "Calm" is a quiet light skin for reading, with no graph. The reader picks a skin once and every page follows.
+name: Software Meta-Factory Chart & Cards
+description: The design system for every front end of the Software Meta-Factory. Three skins and one saved choice. "Chart & Cards" puts a live graph under everything and slides content over it as cards, in two colour variants, HUD (warm orange, the default) and Matrix (green). "Calm" is a quiet light skin for reading, with no graph. The reader picks a skin once and every page follows.
 colors:
   primary: "#e9e6e0"
   secondary: "#8f8b84"
@@ -251,13 +251,13 @@ components:
     padding: 16px
 ---
 
-# Software factory Chart & Cards
+# Software Meta-Factory Chart & Cards
 
 ## Overview
 
 One design system, three skins, one saved choice.
 
-**Chart & Cards** is the default for every screen of the software factory. A live graph
+**Chart & Cards** is the default for every screen of the Software Meta-Factory. A live graph
 is always the base layer. It fills the screen, drifts slowly, and is never hidden
 for good. All content slides over it as cards: a reading card for posts, notes and
 chat; a side panel for controls; a node card when a node is picked. On desktop the
@@ -581,7 +581,7 @@ by, never copied. Each line says what we take from it.
 
 The look is not yours to decide. It lives in this file and in `ai-life-os/hud.css`.
 
-1. Read this file before writing or changing any front end of the software factory.
+1. Read this file before writing or changing any front end of the Software Meta-Factory.
 2. Link or inline `hud.css`; use only its classes and custom properties.
 3. If a screen needs something the file lacks, use the closest existing component
    and say so in your report. Do not invent new styles.

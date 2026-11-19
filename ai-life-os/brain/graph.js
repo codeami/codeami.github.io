@@ -17,7 +17,7 @@ shadow.innerHTML='<link rel="stylesheet" href="'+BASE+'graph.css">'+
   '<section class="wd"><h2>Reading order</h2><ul id="sRead"></ul></section><section class="wd"><h2>Pages and projects</h2><ul id="sApps"></ul></section>'+
   '<section class="wd"><h2>FirstMate in detail</h2><ul id="sFm"></ul></section></aside>'+
   '<aside class="side-col" id="wr" aria-label="Skills"><section class="wd"><h2>Skills deck</h2><ul id="sSkills"></ul></section></aside></div>'+
-  '<div class="title"'+(FRAMED?' hidden':'')+'><b>THE SOFTWARE FACTORY</b><span>SECOND BRAIN</span><small id="src">loading…</small></div>'+
+  '<div class="title"'+(FRAMED?' hidden':'')+'><b>THE SOFTWARE META-FACTORY</b><span>SECOND BRAIN</span><small id="src">loading…</small></div>'+
   '<div class="top"><button class="btn" id="dimBtn" type="button" aria-pressed="false" title="Switch between the flat map and a 3D view">3D</button>'+
   '<button class="btn" id="motionBtn" type="button" aria-pressed="true">Motion on</button>'+
   '<button class="btn" id="sideBtn" type="button" aria-expanded="false" aria-controls="side">&#9638; Widgets</button>'+
@@ -502,7 +502,7 @@ function mountTour(){
       {rect:ring(guide(1)),before:mapView,title:"Memory: rooms of notes",text:"Each coloured arc is a room, like Wiki notes or Blog. One dot is one note, part or post. Click a dot for its card; double-click a room to fold it."},
       {rect:ring(guide(2)),before:mapView,title:"Outer ring: pages and projects",text:"Hexagons are this site's pages and public projects. A page or post opens on top of the map, and its node lights up."}];
   if(FRAMED)steps.push(
-      {sel:doc(".k-nav"),before:mapView,title:"Site tabs",text:"The same bar on every page: The factory, Case studies, Blog, About and Work with me. Each page opens over this same map."},
+      {sel:doc(".k-nav"),before:mapView,title:"Site tabs",text:"The same bar on every page: Meta-Factory, Case studies, Blog, About and Work with me. Each page opens over this same map."},
       {sel:doc("#pageov"),before:function(){setLegend(false);fold(true)},title:"The page overlay",text:"Every page of the site reads in this panel, on top of the live map. Minimise it to see the whole map, or close it; the button that is left brings it back."});
   steps.push(
       {sel:sh("motionBtn"),before:mapView,title:"Buttons",text:"Turn the motion on or off (remembered on this device), show or hide the side lists, and open the menu."},

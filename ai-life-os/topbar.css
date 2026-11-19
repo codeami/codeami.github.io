@@ -1,4 +1,4 @@
-/* The one top bar: logo, The factory, Case studies, Blog, About, Work with me. Same list and look on every page, with no Menu button.
+/* The one top bar: logo, Meta-Factory, Case studies, Blog, About, Work with me. Same list and look on every page, with no Menu button.
    GitHub and the Course are in the footer. Under 560px the site name is spoken but not drawn, the five items take a row of their own and the skin button sits top right.
    The page's own stylesheet sets the colours; this file sets the layout. */
 header.tb { position: relative; display: flex; flex-wrap: nowrap; align-items: center; gap: 4px 14px; padding: 10px var(--gutter, 20px); background: var(--panel, var(--surface, transparent)); border-bottom: 1px solid var(--line); }

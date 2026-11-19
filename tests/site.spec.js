@@ -490,7 +490,7 @@ test('landing: Me is a short block with the title, the About and CV links, and t
 // ---- one top bar on every page, and a last-line hand-off to the next page in the bar order ----
 // No skip list: every public page carries the bar. The one exception is blog/index.html, a redirect that never shows.
 const barPages = () => pages.filter((f) => !share.some((r) => r.path === f && r.level !== 'public') && f !== 'blog/index.html');
-const barItems = ['The factory', 'Case studies', 'Blog', 'About', 'Work with me'];
+const barItems = ['Meta-Factory', 'Case studies', 'Blog', 'About', 'Work with me'];
 const barPaths = ['/ai-life-os/index.html', '/case-studies/index.html', '/ai-life-os/blog/index.html', '/about/index.html', '/work-with-me/index.html'];
 
 // What a page's bar says: the site name, then each item's text and target.
@@ -500,7 +500,7 @@ const barOf = (page) => page.locator('header.tb').evaluate((b) => ({
   items: [...b.querySelectorAll('.tb-links > a')].map((a) => [a.textContent.trim() || a.getAttribute('aria-label'), new URL(a.href).origin === location.origin ? new URL(a.href).pathname : a.href]),
 }));
 
-test('top bar: The factory, Case studies, Blog, About and Work with me on every page, all in view, current page marked', async ({ page }) => {
+test('top bar: Meta-Factory, Case studies, Blog, About and Work with me on every page, all in view, current page marked', async ({ page }) => {
   expect(barPages().length, 'pages checked').toBe(pages.length - 3); // the redirect stub, the link-only Course and the link-only pipeline clip
   for (const file of barPages()) {
     await page.goto(`/${file}`);
@@ -564,7 +564,7 @@ test('skin: one saved choice. Switch once and every page follows, before first p
 });
 
 test('top bar: the current page is marked in each part of the bar', async ({ page }) => {
-  const current = { 'cv.html': 'About', 'about/index.html': 'About', 'work-with-me/index.html': 'Work with me', 'case-studies/index.html': 'Case studies', 'ai-life-os/arena.html': 'Case studies', 'ai-life-os/blog/index.html': 'Blog', 'ai-life-os/blog/second-brain-page.html': 'Blog', 'intent/index.html': 'The factory', 'ai-life-os/index.html': 'The factory' };
+  const current = { 'cv.html': 'About', 'about/index.html': 'About', 'work-with-me/index.html': 'Work with me', 'case-studies/index.html': 'Case studies', 'ai-life-os/arena.html': 'Case studies', 'ai-life-os/blog/index.html': 'Blog', 'ai-life-os/blog/second-brain-page.html': 'Blog', 'intent/index.html': 'Meta-Factory', 'ai-life-os/index.html': 'Meta-Factory' };
   for (const [file, label] of Object.entries(current)) {
     await page.goto(`/${file}`);
     await expect(page.locator('header.tb .tb-links > a[aria-current]'), file).toHaveText(label);

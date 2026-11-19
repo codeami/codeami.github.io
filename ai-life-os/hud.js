@@ -18,7 +18,7 @@
     if (!bar || bar.querySelector(".vtag") || bar.classList.contains("tb")) return; // the one top bar carries its own links
     var home = bar.querySelector(".k-home, .where");
     var v = document.createElement("span");
-    v.className = "vtag"; v.textContent = VERSION; v.title = "The software factory " + VERSION;
+    v.className = "vtag"; v.textContent = VERSION; v.title = "The Software Meta-Factory " + VERSION;
     if (home) home.parentNode.insertBefore(v, home.nextSibling);
     var toggle = bar.querySelector("#theme, button.theme");
     var at = toggle ? toggle.parentNode : bar;

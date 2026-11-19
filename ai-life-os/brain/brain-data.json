@@ -1,6 +1,6 @@
 {
  "meta": {
-  "name": "Public second brain of the software factory",
+  "name": "Public second brain of the Software Meta-Factory",
   "invented": false,
   "note": "Public data only: the approved wiki notes, this site's pages and posts, the harness tier list. No private files, paths, routines or links."
  },
@@ -1681,7 +1681,7 @@
    "kind": "page"
   },
   {
-   "n": "The software factory",
+   "n": "The Software Meta-Factory",
    "state": "start here",
    "url": "../index.html",
    "kind": "page"
