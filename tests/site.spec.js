@@ -6,7 +6,7 @@ const { join, dirname, extname, relative, sep } = require('node:path');
 const { root, pages, templates } = require('./pages');
 
 const origin = 'http://127.0.0.1:4173';
-const mission = 'I help people and companies write down what they actually want, then build the software that closes the gap.';
+const mission = 'A software factory made of AI helpers, shown open: what it does, how it is checked, and how to ask me for one.';
 
 // Overflow that exists today and is waiting for a page fix. Delete the entry when the page is fixed.
 const knownOverflow = {};
@@ -393,155 +393,49 @@ for (const { slug, series, panels: expected } of convertedPosts) {
   });
 }
 
-// ---- the landing at / ----
-test('landing: eight steps with the fork, no sideways scroll, no console errors, no capture', async ({ page }) => {
+// ---- the landing at /: one purpose line, a clip of the pipeline, three dated numbers, two buttons ----
+test('landing: the purpose line, the pipeline clip, three numbers that each name a source and a date, two buttons; no walk, no trip', async ({ page }) => {
   const problems = [];
   page.on('console', (m) => m.type() === 'error' && problems.push(m.text()));
   page.on('pageerror', (e) => problems.push(e.message));
   await page.route('**/*', (route) => (route.request().url().startsWith(origin) ? route.continue() : route.fulfill({ status: 200, body: '' })));
-  await page.goto('/#step-1'); // a step link opens the page card; plain "/" stays calm
-  await expect(page.locator('#flowN')).toHaveText('1');
-  await page.getByRole('button', { name: 'What can AI do now?' }).click();
-  await page.getByRole('button', { name: "So what's the catch?" }).click();
-  await expect(page.getByRole('button', { name: 'Walk me through it (about 10 min)' })).toBeVisible();
-  await expect(page.getByRole('button', { name: "I'm hiring or evaluating" })).toBeVisible();
-  for (let n = 1; n <= 8; n++) {
-    await page.goto('about:blank');
-    await page.goto(`/#step-${n}`);
-    await expect(page.locator('#flowN')).toHaveText(String(n));
-    const w = await page.evaluate(() => ({ s: document.documentElement.scrollWidth, c: document.documentElement.clientWidth, o: [...document.querySelectorAll('.pov-body')].map((b) => b.scrollWidth - b.clientWidth) }));
-    expect(w.s, `step ${n} page width`).toBeLessThanOrEqual(w.c);
-    expect(Math.max(0, ...w.o), `step ${n} card width`).toBeLessThanOrEqual(0);
+  await page.goto('/');
+  await expect(page).toHaveTitle('Ashish Raina · Me');
+  const hook = page.locator('#hook');
+  await expect(page.locator('#pageov')).toBeVisible();
+  await expect(hook.locator('h1')).toHaveText(mission);
+  await expect(hook.locator('iframe')).toHaveAttribute('src', 'ai-life-os/pipeline/index.html');
+  const nums = hook.locator('.stats li');
+  await expect(nums).toHaveCount(3);
+  for (const li of await nums.all()) {
+    await expect(li.locator('.num')).toHaveText(/^\d+$/);
+    await expect(li.locator('.src')).toContainText(/Source: .*\b(20\d\d)\b/);
+    await expect(li.locator('.src')).toContainText(/\d{1,2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) 20\d\d/);
   }
-  await page.goto('/#step-1');
-  await page.getByRole('button', { name: "I'm hiring. Show me the work." }).click();
-  await expect(page.locator('#flowN')).toHaveText('8');
+  await expect(hook.locator('.next-links a')).toHaveText(['See it work', 'Talk to me']);
+  expect(await hook.locator('.next-links a').evaluateAll((as) => as.map((a) => a.getAttribute('href')))).toEqual(['ai-life-os/index.html', 'work-with-me/index.html']);
+  // the old first-visit trip and the eight-step walk are gone
+  for (const gone of ['#trip', '#explain', '#flow', '#step-1', '#step-8', '#replay']) await expect(page.locator(gone), gone).toHaveCount(0);
   const html = await page.content();
+  expect(html).not.toMatch(/\bSam\b|~230/);
   expect(html).not.toMatch(/type="email"|<form|<input/i);
   expect(html).not.toMatch(/\$\d|\bprice|\bsubscribe|\bsign up\b|\bnewsletter/i);
+  expect(await page.evaluate(() => localStorage.getItem('trip:v1'))).toBeNull();
+  const w = await page.evaluate(() => ({ s: document.documentElement.scrollWidth, c: document.documentElement.clientWidth, o: [...document.querySelectorAll('.pov-body')].map((b) => b.scrollWidth - b.clientWidth) }));
+  expect(w.s, 'page width').toBeLessThanOrEqual(w.c);
+  expect(Math.max(0, ...w.o), 'card width').toBeLessThanOrEqual(0);
   expect(problems).toEqual([]);
 });
 
-test("landing: the first reply shows Sam's made-up personality chart", async ({ page }) => {
-  await page.goto('/#step-1');
-  await page.getByRole('button', { name: 'What can AI do now?' }).click();
-  const chart = page.locator('.pchart');
-  await expect(chart).toContainText('made-up example: Sam');
-  await expect(chart.locator('li')).toHaveCount(11);
-  await expect(chart.locator('.pconf')).toHaveCount(11);
-  for (const w of ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism', 'Pace', 'Delegation', 'Novelty appetite', 'Need for structure', 'Review and control', 'Outside memory']) {
-    await expect(chart).toContainText(w);
-  }
-  const over = await chart.evaluate((c) => c.scrollWidth - c.clientWidth);
-  expect(over).toBeLessThanOrEqual(0);
-});
-
-test('landing: the CV lists the approved roles and years, with one external link', async ({ page }) => {
-  await page.goto('/#step-8');
-  const cv = page.locator('#cv-roles');
-  await expect(cv.locator('li')).toHaveCount(9);
-  await expect(cv).toContainText('Senior Software Engineer, a global sportswear brand (Dec 2020 - present)');
-  await expect(cv).toContainText('QA Engineer, Mindfire Solutions (2006-2008)');
-  await expect(cv).toContainText('University of Pune (2005)');
-  await expect(page.locator('#step-8')).not.toContainText('coming soon');
-  const ext = await page.$$eval('#step-8 a[href^="http"]', (as) => as.map((a) => a.href));
-  expect(ext).toEqual(['https://github.com/codeami']);
-});
-
-test('landing: How I work shows the six work traits as a radar, links each to a post, and keeps the private profile out', async ({ page }) => {
-  await page.goto('/#step-8');
-  const how = page.locator('#how-i-work');
-  await expect(how.locator('svg[role="img"]')).toBeVisible();
-  const traits = ['Pace 18', 'Delegation 19', 'Curiosity 18', 'Structure 16', 'Quality review 16', 'Outside memory 17'];
-  await expect(how.locator('.radar .lbl text')).toHaveText(traits);
-  await expect(how.locator('.how-list li')).toHaveCount(6);
-  await expect(how.locator('figcaption')).toHaveText('Built from my own AI working sessions, Oct-Nov 2026.');
-  for (const t of ['Openness', 'Extravert', 'Agreeable', 'Stress', 'Neurotic']) await expect(how).not.toContainText(t);
-  // Every interest link opens a public page, and every public series post is listed.
-  const hrefs = await how.locator('a').evaluateAll((as) => as.map((a) => new URL(a.href).pathname.slice(1)));
-  for (const h of hrefs) expect(share.find((r) => r.path === h)?.level, h).toBe('public');
-  const posts = share.filter((r) => /^ai-life-os\/blog\/(?!index\.html)/.test(r.path) && r.level === 'public').map((r) => r.path);
-  expect(hrefs).toEqual(expect.arrayContaining(posts));
-  const w = await page.evaluate(() => ({ s: document.documentElement.scrollWidth, c: document.documentElement.clientWidth }));
-  expect(w.s, 'sideways scroll').toBeLessThanOrEqual(w.c);
-  // The page sits in a scrolling card, so the radar figure (not the whole section) is captured.
-  await how.locator('.radar').scrollIntoViewIfNeeded();
-  await expect(how.locator('.radar')).toHaveScreenshot('landing-how-i-work.png');
-});
-
-test("landing: the dog interview ends on Sam's criterion", async ({ page }) => {
-  await page.goto('/#step-3');
-  await page.getByRole('button', { name: 'Start the interview.' }).click();
-  for (let i = 0; i < 3; i++) await page.locator('.chat .k-chip:not([disabled])', { hasText: 'Take the suggested answers.' }).click();
-  await expect(page.locator('.chat-card')).toContainText('Done when a two-week foster fits the weekday schedule.');
-});
-
-// ---- the calm landing: chart first, one Explain this button, the journey ----
-const explainBtn = (page) => page.locator('#askBar').getByRole('button', { name: 'Explain this', exact: true });
-
-// A first visit opens the page card on the landing hook; a return visit (trip:v1 set) opens on the chart alone.
-const returning = (page) => page.addInitScript(() => { try { localStorage.setItem('trip:v1', '1'); } catch (e) { /* blocked */ } });
-
-test('landing: a return visit opens on the chart alone, with the nav label Blog and one Explain this button', async ({ page }) => {
-  await returning(page);
-  await page.goto('/');
-  await expect(page.locator('#pageov')).toBeHidden();
-  await expect(page.getByRole('button', { name: 'Show page' })).toBeVisible();
-  await expect(page.locator('.k-nav a[href$="ai-life-os/blog/index.html"]')).toHaveAttribute('href', 'http://127.0.0.1:4173/ai-life-os/blog/index.html');
-  await expect(explainBtn(page)).toBeVisible();
-  const others = ['Tour the map', 'What do the shapes mean?', 'How do I find something?'];
-  for (const q of others) await expect(page.locator('#askBar').getByText(q)).toBeHidden();
-  await page.locator('#askBar').getByRole('button', { name: 'More' }).click();
-  for (const q of others) await expect(page.locator('#askBar').getByText(q)).toBeVisible();
-});
-
-test('landing: the visitor\'s choice to show or hide the page is remembered', async ({ page }) => {
-  await returning(page);
-  await page.goto('/');
-  await page.getByRole('button', { name: 'Show page' }).click();
-  await expect(page.locator('#pageov')).toBeVisible();
-  await page.reload();
-  await expect(page.locator('#pageov')).toBeVisible();
-  await page.getByRole('button', { name: 'Close the page and show the whole map' }).click();
-  await page.reload();
-  await expect(page.locator('#pageov')).toBeHidden();
-});
-
-// The Explain this script is a short, warm conversation in plain prose: no lists, numbers or labels, a few short sentences per turn.
-test('landing: Explain this is a short conversation in plain prose, then the walk', async ({ page }) => {
-  await returning(page);
-  await page.goto('/');
-  await explainBtn(page).click();
-  const chat = page.locator('#journeyChat');
-  const shot = (n) => expect(page).toHaveScreenshot(`landing-journey-${n}.png`, { mask: [page.locator('canvas')] });
-  await expect(chat).toContainText("Hi, I'm the front agent");
-  await expect(chat).toContainText("we can't tell progress from motion");
-  await shot(1);
-  await chat.getByRole('button', { name: 'What goes wrong without that?' }).click();
-  for (const p of ['Too much noise', 'separate piles', 'confident guess', "can't see what they did"]) await expect(chat).toContainText(p);
-  await shot(2);
-  await chat.getByRole('button', { name: 'How do you fix that?' }).click();
-  await expect(chat).toContainText('Write the target down first, then let the tool work toward it.');
-  await shot(3);
-  await chat.getByRole('button', { name: 'What do you stand for?' }).click();
-  await expect(chat).toContainText('Signal over noise');
-  await chat.getByRole('button', { name: 'Who is it for?' }).click();
-  for (const l of ['a life pointed at something they chose', 'one agreed goal', 'sorted by quality instead of popularity', 'AI explained without the panic']) await expect(chat).toContainText(l);
-  await shot(4);
-  // plain prose: no list, no numbering, no "Label:" openers, no leftover caveat line, at most three short sentences a turn
-  await expect(chat.locator('li, ol, ul')).toHaveCount(0);
-  await expect(chat).not.toContainText('Some of this is built');
-  const turns = await chat.locator('.k-row:not(:has(.me)) .k-bubble').evaluateAll((bs) => bs.map((b) => b.innerText));
-  expect(turns).toHaveLength(5);
-  for (const t of turns) {
-    expect(t, 'no "Label:" opener').not.toMatch(/^\s*[A-Z][a-z]+:/m);
-    expect(t, 'no numbering').not.toMatch(/^\s*\d+[.)]/m);
-    expect(t.split(/(?<=[.!?])\s+/).length, `short turn: ${t}`).toBeLessThanOrEqual(3);
-  }
-  await chat.getByRole('button', { name: 'Show me how it works' }).click();
-  await expect(page.locator('#explain')).toBeHidden();
-  await expect(page.locator('#flowN')).toHaveText('1');
-  await expect(page.locator('#step-1')).toContainText("I'm the front agent");
+test('landing: the pipeline clip has no private names, paths or fetches', async ({ page }) => {
+  const asked = [];
+  page.on('request', (r) => asked.push(r.url()));
+  await page.goto('/ai-life-os/pipeline/index.html');
+  await page.waitForSelector('#stages .stage, #stages > *');
+  const html = readFileSync(join(root, 'ai-life-os/pipeline/index.html'), 'utf8') + readFileSync(join(root, 'ai-life-os/pipeline/flow-anim.js'), 'utf8');
+  expect(html).not.toMatch(/fm-inbox|operational-inbox|data\/<task>|\/Users\/|\.ts\.net|127\.0\.0\.1|localhost|@[a-z0-9-]+\.[a-z]|lavish/i);
+  expect(asked.filter((u) => !u.startsWith(origin)), 'only this site is asked').toEqual([]);
+  await page.getByRole('button', { name: /Replay/ }).click();
 });
 
 // ---- whoami first: one lit node, a short CV, a way past it, and no click that only reloads ----
@@ -573,90 +467,24 @@ const settle = async (page) => {
 const stays = (page) => page.evaluate(() => { window.__stay = true; });
 const stayed = (page) => page.evaluate(() => window.__stay === true);
 
-test('landing: the chart lights one node, whoami, whichever view the reader is in', async ({ page }) => {
-  const views = ['/', '/#me', '/#trip', '/#explain', '/#step-3', '/#step-8'];
-  for (const url of views) {
+test('landing: the chart lights one node, whoami', async ({ page }) => {
+  for (const url of ['/', '/#me']) {
     await page.goto('about:blank');
     await page.goto(url);
     expect(await mapState(page), url).toEqual({ here: 'whoami', lit: ['whoami'] });
   }
 });
 
-test('landing: Me opens a short CV with the full CV, a Next to the Blog and a Skip', async ({ page }) => {
+test('landing: Me is a short block with the title, the About and CV links, and the contact line', async ({ page }) => {
   await page.goto('/#me');
   const who = page.locator('#me');
   await expect(who).toBeVisible();
-  await expect(who.locator('h1')).toHaveText('Ashish Raina');
-  await expect(who.locator('.k-dek')).toHaveText('Technical Program Manager · AI-native delivery');
-  await expect(who.getByText('Technical program lead with 20 years in software')).toBeVisible();
-  // the mission line and the three things a visitor can do
-  await expect(who.locator('.mission')).toHaveText(mission);
-  const actions = who.locator('.actions a');
-  await expect(actions).toHaveText(['Read one post', 'Try the demo', 'Take the course', 'Follow on GitHub']);
-  expect(await actions.evaluateAll((as) => as.map((a) => a.getAttribute('href')))).toEqual(['ai-life-os/blog/when-the-notes-are-wrong.html', 'ai-life-os/index.html', 'ai-life-os/course/index.html', 'https://github.com/codeami']);
-  await expect(who.locator('.outcomes')).toHaveText(/^~3,000 wholesale accounts onboarded · 4 regions · .* satisfaction \(internal NPS\) 5 → 7 \/ 10$/);
+  await expect(who.locator('h2')).toHaveText('Ashish Raina');
+  await expect(who.locator('.k-dek')).toContainText('Technical Program Manager · AI-native delivery');
+  await expect(who.getByRole('link', { name: 'About me' })).toHaveAttribute('href', 'about/index.html');
   await expect(who.getByRole('link', { name: 'Full CV' })).toHaveAttribute('href', 'cv.html');
-  await expect(who.getByRole('link', { name: 'Next: what I write' })).toHaveAttribute('href', 'ai-life-os/blog/index.html');
-  await expect(who.getByRole('link', { name: 'Skip', exact: true })).toHaveAttribute('href', 'ai-life-os/blog/index.html');
-  for (const hidden of ['#hook', '#explain', '#flow', '#intro']) await expect(page.locator(hidden), hidden).toBeHidden();
-  await settle(page);
-  // the card alone: on a phone the chart canvas fills the screen behind it, so a canvas mask would hide the card
-  await expect(page.locator('#pageov')).toHaveScreenshot('landing-whoami.png');
-});
-
-// ---- the first visit: hook, then Me; the hook is shown once, and "Replay the trip" brings it back ----
-test('landing: a first visit opens on the hook with a sample star-map; Next and Skip lead to Me', async ({ page }) => {
-  await page.goto('/');
-  const hook = page.locator('#hook');
-  await expect(page.locator('#pageov')).toBeVisible();
-  await expect(hook).toBeVisible();
-  await expect(hook.locator('h1')).toHaveText(mission);
-  expect(await page.locator('#intro, #hook, #me').locator('h1').allTextContents(), 'Me never opens with the headline of Intent').not.toContain('Write down what you actually want.');
-  const radar = hook.locator('svg[role="img"]');
-  await expect(radar).toBeVisible();
-  await expect(radar.locator('.lbl text')).toHaveText(['Pace 12', 'Delegation 6', 'Curiosity 14', 'Structure 18', 'Quality review 16', 'Outside memory 5']);
-  await expect(radar.locator('.yours')).toHaveCount(1);
-  await expect(radar.locator('.mark text')).toHaveText('yours');
-  await expect(hook.locator('figcaption')).toContainText('Sam is made up');
-  await expect(hook.locator('figcaption')).toContainText('you get your own');
-  // no private score reaches the page: the radar carries only Sam's six work traits
-  await expect(hook).not.toContainText(/Openness|Extravert|Agreeable|Neurotic|Stress/);
-  await expect(hook.getByRole('link', { name: 'Skip', exact: true })).toHaveAttribute('href', '#me');
-  await settle(page);
-  await expect(page.locator('#pageov')).toHaveScreenshot('landing-hook.png');
-  await stays(page);
-  await hook.getByRole('link', { name: /^Next: who I am/ }).click();
-  await expect(page.locator('#me')).toBeVisible();
-  await expect(hook).toBeHidden();
-  await expect(page).toHaveURL(/#me$/);
-  expect(await stayed(page), 'same document').toBe(true);
-  expect(await page.evaluate(() => localStorage.getItem('trip:v1'))).toBe('1');
-});
-
-test('landing: a return visit lands on Me, and Replay the trip shows the hook again', async ({ page }) => {
-  await returning(page);
-  await page.goto('/');
-  await page.getByRole('button', { name: 'Show page' }).click();
-  await expect(page.locator('#me')).toBeVisible();
-  await expect(page.locator('#hook')).toBeHidden();
-  await page.getByRole('link', { name: 'Replay the trip' }).click();
-  await expect(page.locator('#hook')).toBeVisible();
-  await expect(page).toHaveURL(/#trip$/);
-  await page.locator('#hook').getByRole('link', { name: 'Skip', exact: true }).click();
-  await expect(page.locator('#me')).toBeVisible();
-});
-
-test('landing: the hook shows until the reader moves on; a typed #trip address shows it again', async ({ page }) => {
-  await page.goto('/');
-  await expect(page.locator('#hook')).toBeVisible();
-  await page.reload();
-  await expect(page.locator('#hook')).toBeVisible();
-  await page.locator('#hook').getByRole('link', { name: 'Skip', exact: true }).click();
-  await page.reload();
-  await expect(page.locator('#hook')).toBeHidden();
-  await page.goto('about:blank');
-  await page.goto('/#trip');
-  await expect(page.locator('#hook')).toBeVisible();
+  await expect(who.locator('.contact a')).toHaveText(['rainaash@gmail.com', 'LinkedIn']);
+  await expect(who.locator('.contact a').first()).toHaveAttribute('href', 'mailto:rainaash@gmail.com');
 });
 
 // ---- one top bar on every page, and a last-line hand-off to the next page in the bar order ----
@@ -673,7 +501,7 @@ const barOf = (page) => page.locator('header.tb').evaluate((b) => ({
 }));
 
 test('top bar: The factory, Case studies, Blog, About and Work with me on every page, all in view, current page marked', async ({ page }) => {
-  expect(barPages().length, 'pages checked').toBe(pages.length - 2); // the redirect stub and the link-only Course
+  expect(barPages().length, 'pages checked').toBe(pages.length - 3); // the redirect stub, the link-only Course and the link-only pipeline clip
   for (const file of barPages()) {
     await page.goto(`/${file}`);
     const bar = page.locator('header.tb');
@@ -696,7 +524,6 @@ test('top bar: The factory, Case studies, Blog, About and Work with me on every 
 
 test('top bar: clicking each item on every public page lands on a page with the same bar and the same site name', async ({ page }) => {
   await page.route('**/*', (route) => (route.request().url().startsWith(origin) ? route.continue() : route.fulfill({ status: 200, body: '' })));
-  await returning(page);
   await page.goto('/index.html');
   const same = await barOf(page);
   expect(same.brand).toBe('Ashish Raina');
@@ -756,7 +583,6 @@ test('hand-off: the last line of each bar page leads to the next page in the bar
     ['ai-life-os/blog/index.html', '.handoff a', /\/about\/index\.html$/],
     ['about/index.html', '.handoff a', /\/work-with-me\/index\.html$/],
   ];
-  await returning(page);
   for (const [file, sel, target] of chain) {
     await page.goto(`/${file}`);
     const link = page.locator(`${sel}:visible`).last();
@@ -785,42 +611,21 @@ test('Intent: the four doors in his words, the causes, the dated harness line an
   expect(await page.locator('script[src*="hud.js"], script[src*="article.js"], script:not([src])').count()).toBe(0);
 });
 
-test('landing: a click on the Me node, the logo or the page card never reloads the page', async ({ page }) => {
-  // from the calm chart: the node opens the Me section
-  await returning(page);
+test('landing: the logo and the page card never reload the page', async ({ page }) => {
   await page.goto('/');
-  await expect(page.locator('#pageov')).toBeHidden();
-  await stays(page);
-  await clickNode(page, 'whoami');
   await expect(page.locator('#pageov')).toBeVisible();
-  await expect(page.locator('#me')).toBeVisible();
-  expect(await mapState(page)).toEqual({ here: 'whoami', lit: ['whoami'] });
-  // a second click on the same node does not switch it off
-  await clickNode(page, 'whoami');
-  await expect(page.locator('#me')).toBeVisible();
-  expect(await mapState(page)).toEqual({ here: 'whoami', lit: ['whoami'] });
-  // from the journey: the node and the logo both lead back to Me
-  for (const back of ['node', 'logo']) {
-    await page.evaluate(() => window.dispatchEvent(new Event('explain'))); // what the Explain this button sends
-    await expect(page.locator('#explain')).toBeVisible();
-    if (back === 'node') {
-      // on a phone the sheet can cover the node: fold it away first, as a reader would
-      if (page.viewportSize().width <= 760) await page.getByRole('button', { name: 'Minimise the page to see the map' }).click();
-      await clickNode(page, 'whoami');
-    }
-    else await page.locator('.k-nav .k-home').click();
-    await expect(page.locator('#me'), back).toBeVisible();
-    await expect(page.locator('#explain'), back).toBeHidden();
-    expect(await stayed(page), `${back}: same document`).toBe(true);
-  }
-  // from the walk (a typed address with a new hash reloads the page by design, so start from a blank one)
-  await page.goto('about:blank');
-  await page.goto('/#step-4');
   await stays(page);
+  // on a phone the sheet can cover the map: fold it away first, as a reader would
   await page.locator('.k-nav .k-home').click();
-  await expect(page.locator('#me')).toBeVisible();
-  await expect(page.locator('#flow')).toBeHidden();
-  expect(await stayed(page)).toBe(true);
+  await expect(page.locator('#hook')).toBeVisible();
+  expect(await mapState(page)).toEqual({ here: 'whoami', lit: ['whoami'] });
+  expect(await stayed(page), 'the logo: same document').toBe(true);
+  // the page is a card over the map: close it, the whole map shows, and the page can come back
+  await page.getByRole('button', { name: 'Close the page and show the whole map' }).click();
+  await expect(page.locator('#pageov')).toBeHidden();
+  await page.getByRole('button', { name: 'Show page' }).click();
+  await expect(page.locator('#hook')).toBeVisible();
+  expect(await stayed(page), 'the card: same document').toBe(true);
 });
 
 test('cv.html: the plain web CV is the v5 text without a phone number, an email, the employer name or a file to download', async ({ page }) => {

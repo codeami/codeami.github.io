@@ -56,22 +56,10 @@
     [].slice.call(document.body.childNodes).forEach(function (n) { if (n !== nav && n.nodeName !== "SCRIPT") body.appendChild(n); });
     document.body.appendChild(ov); document.body.appendChild(reopen);
     var state = "open", held = null; // open | min | closed
-    /* The landing (meta calm-landing) opens on the chart alone, with the page one tap away.
-       A deep link to a step opens the page; otherwise the visitor's last pick (open or closed) is kept in this browser. */
-    var calm = !!document.querySelector('meta[name="calm-landing"]');
-    function remember(v) { try { localStorage.setItem("landing-page", v); } catch (e) { /* storage blocked: the pick lasts for this visit only */ } }
-    if (calm) {
-      var kept = null;
-      try { kept = localStorage.getItem("landing-page"); } catch (e) { /* storage blocked: calm by default */ }
-      // A first visit (no "trip:v1" yet, no address hash) opens on the landing hook, so the card starts open.
-      var tripped = true;
-      try { tripped = !!localStorage.getItem("trip:v1"); } catch (e) { /* storage blocked: stay calm */ }
-      state = /^#(step-|explain|whoami|me|trip)/.test(location.hash) || kept === "open" || (!tripped && !location.hash) ? "open" : "closed";
-    }
     /* A page can start with its card folded (meta panel-start="min") so the map is the first thing seen;
        meta panel-line is the one explainer line the folded card keeps. A deep link to a part of the page opens it. */
     var ps = document.querySelector('meta[name="panel-start"]'), pl = document.querySelector('meta[name="panel-line"]');
-    if (!calm && ps && ps.content === "min" && (!location.hash || location.hash === "#map")) state = "min";
+    if (ps && ps.content === "min" && (!location.hash || location.hash === "#map")) state = "min";
     var line = mk("p", "pov-line", pl ? pl.content : ""); line.hidden = true; ov.insertBefore(line, body);
     function phone() { return window.innerWidth <= 760; }
     function layout() {
@@ -92,11 +80,8 @@
     min.onclick = function () { set(state === "min" ? "open" : "min"); };
     x.onclick = function () {
       set("closed"); reopen.focus();
-      if (calm) { remember("closed"); try { history.replaceState(null, "", location.pathname + location.search); } catch (e) { /* sandbox may refuse */ } }
     };
-    reopen.onclick = function () { set("open"); if (calm) remember("open"); };
-    // "Explain this" on the landing: open the page and tell it to start the journey
-    function explain() { set("open"); remember("open"); window.dispatchEvent(new Event("explain")); }
+    reopen.onclick = function () { set("open"); };
     window.addEventListener("resize", layout);
     // the tour folds the card away for the map's steps, and puts it back as it was
     function shown(on) { if (!on) { if (held === null) held = state; if (state === "open") set("min"); } else if (held !== null) { set(held); held = null; } }
@@ -141,13 +126,12 @@
     function go(url) {
       var u = new URL(url, location.href);
       if (u.origin !== location.origin) return false; // public projects open from their card
-      // A link to the page the reader is already on never reloads it: it opens the card, and a page that listens
-      // for "samepage" (the landing) shows its own first section.
+      // A link to the page the reader is already on never reloads it: it opens the card.
       // "#map" is a link to the map itself: fold the card so the whole chart shows
       if (pathOf(u) === pathOf(location) && u.hash === "#map") { set("min"); return true; }
       if (pathOf(u) === pathOf(location)) {
         if (u.hash) location.hash = u.hash; else { body.scrollTop = 0; window.dispatchEvent(new Event("samepage")); }
-        set("open"); if (calm) remember("open"); if (G) G.select(u.href);
+        set("open"); if (G) G.select(u.href);
         return true;
       }
       fetch(u.href).then(function (r) { if (!r.ok) throw 0; return r.text(); }).then(function (html) {
@@ -183,7 +167,7 @@
     }
     layout();
     load(["drawer.js", "tour.js", "graph.js"], function () {
-      G = window.AIOBrain({ base: B, framed: true, onPage: go, overlayShown: shown, explain: calm ? explain : null });
+      G = window.AIOBrain({ base: B, framed: true, onPage: go, overlayShown: shown });
       G.select(location.href); layout();
       // the course page lights its lesson dots through this handle
       window.AIOMap = G; window.dispatchEvent(new Event("aiomap"));

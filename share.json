@@ -10,6 +10,7 @@
   {"path": "blog/index.html", "level": "public"},
   {"path": "ai-life-os/index.html", "level": "public"},
   {"path": "ai-life-os/arena.html", "level": "public"},
+  {"path": "ai-life-os/pipeline/index.html", "level": "link-only"},
   {"path": "ai-life-os/course/index.html", "level": "link-only"},
   {"path": "ai-life-os/blog/index.html", "level": "public"},
   {"path": "ai-life-os/blog/everything-is-a-file.html", "level": "public"},
