@@ -1,7 +1,7 @@
 ---
 version: alpha
-name: AIO Chart & Cards
-description: The design system for every AIO and Chart Room front end. Two themes. "Chart & Cards" puts a live graph under everything and slides content over it as cards, in two colour variants, HUD (warm orange) and Matrix (green). "Calm" is a quiet reading theme with no graph.
+name: Software factory Chart & Cards
+description: The design system for every front end of the software factory. Two themes. "Chart & Cards" puts a live graph under everything and slides content over it as cards, in two colour variants, HUD (warm orange) and Matrix (green). "Calm" is a quiet reading theme with no graph.
 colors:
   primary: "#e9e6e0"
   secondary: "#8f8b84"
@@ -251,13 +251,13 @@ components:
     padding: 16px
 ---
 
-# AIO Chart & Cards
+# Software factory Chart & Cards
 
 ## Overview
 
 One design system, two themes.
 
-**Chart & Cards** is the default for every AIO and Chart Room screen. A live graph
+**Chart & Cards** is the default for every screen of the software factory. A live graph
 is always the base layer. It fills the screen, drifts slowly, and is never hidden
 for good. All content slides over it as cards: a reading card for posts, notes and
 chat; a side panel for controls; a node card when a node is picked. On desktop the
@@ -574,7 +574,7 @@ by, never copied. Each line says what we take from it.
 
 The look is not yours to decide. It lives in this file and in `ai-life-os/hud.css`.
 
-1. Read this file before writing or changing any front end in AIO or the Chart Room.
+1. Read this file before writing or changing any front end of the software factory.
 2. Link or inline `hud.css`; use only its classes and custom properties.
 3. If a screen needs something the file lacks, use the closest existing component
    and say so in your report. Do not invent new styles.

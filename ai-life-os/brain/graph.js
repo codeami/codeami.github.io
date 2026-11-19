@@ -17,7 +17,7 @@ shadow.innerHTML='<link rel="stylesheet" href="'+BASE+'graph.css">'+
   '<section class="wd"><h2>Reading order</h2><ul id="sRead"></ul></section><section class="wd"><h2>Pages and projects</h2><ul id="sApps"></ul></section>'+
   '<section class="wd"><h2>FirstMate in detail</h2><ul id="sFm"></ul></section></aside>'+
   '<aside class="side-col" id="wr" aria-label="Skills"><section class="wd"><h2>Skills deck</h2><ul id="sSkills"></ul></section></aside></div>'+
-  '<div class="title"'+(FRAMED?' hidden':'')+'><b>A<i>I</i>-LIFE-OS</b><span>SECOND BRAIN</span><small id="src">loading…</small></div>'+
+  '<div class="title"'+(FRAMED?' hidden':'')+'><b>THE SOFTWARE FACTORY</b><span>SECOND BRAIN</span><small id="src">loading…</small></div>'+
   '<div class="top"><button class="btn" id="motionBtn" type="button" aria-pressed="true">Motion on</button>'+
   '<button class="btn" id="sideBtn" type="button" aria-expanded="false" aria-controls="side">&#9638; Widgets</button>'+
   '<button class="btn" id="menuBtn" type="button" aria-expanded="true" aria-controls="panel">&#9776; Menu</button></div>'+

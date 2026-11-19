@@ -1,5 +1,5 @@
 /* The site's one shared style file: the tokens of DESIGN.md (repo root) and the
-   Chart Room's HUD skin. Every page links it in the head. nav.js and article.js
+   software factory's HUD skin. Every page links it in the head. nav.js and article.js
    add it only when a page does not, as pages built outside this repo may not.
    Skins on <html data-skin>: "hud" (warm accent, the default, also with no
    attribute), "matrix" (green) and "calm" (the reading theme; its tokens are
