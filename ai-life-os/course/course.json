@@ -3,12 +3,9 @@
  "title": "Ashish's AI introductory course",
  "opening": "AI or no AI. Let's get real. Let's lock in and let's learn how to balance our wants and needs.",
  "law": {
-  "quote": "While Parkinson's Law states that work expands to fill the time available for its completion, its inverse - Horstman's Law, the Law of Forced Efficiency - states that work contracts to fit the time allocated for its completion.",
-  "line": "This is how we expect you to use AI: give the work a short, fixed time box and let the AI crew help it contract to fit. This course is built that way: seven short lessons, a few minutes each.",
-  "cites": [
-   {"label": "Parkinson's Law: C. Northcote Parkinson, The Economist, 1955", "href": "https://en.wikipedia.org/wiki/Parkinson%27s_law"},
-   {"label": "Horstman's Corollary to Parkinson's Law, among the Manager Tools podcast's principles (Mark Horstman)", "href": "https://en.wikipedia.org/wiki/Manager_Tools_Podcast"}
-  ]
+  "kick": "What we build",
+  "line": "We build a team of AI helpers. They do computer jobs for you. A person checks the work. This course is the short way in: seven lessons, a few minutes each.",
+  "link": {"label": "See what we build", "href": "../index.html"}
  },
  "intro": "This is Ashish's AI introductory course: seven short lessons in a fixed order. In each one I explain a little, hand you one thing to read, and ask one question. It is modelled on BlueDot Impact's free AI courses. Each lesson you finish lights up on the map behind this page.",
  "model": {"label": "BlueDot Impact's courses", "href": "https://bluedot.org/courses"},

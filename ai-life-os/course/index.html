@@ -253,10 +253,9 @@
 
   function lawRow() {
     var row = botRow(""), b = row.lastChild;
-    b.appendChild(el("span", "kick", "First, how to use AI"));
-    b.appendChild(el("blockquote", "", "“" + C.law.quote + "”"));
+    b.appendChild(el("span", "kick", C.law.kick));
     b.appendChild(el("p", "", C.law.line));
-    C.law.cites.forEach(function (c) { var s = el("span", "cite", "Source: "); s.appendChild(link(c)); b.appendChild(s); });
+    var s = el("span", "cite", ""); s.appendChild(link(C.law.link)); b.appendChild(s);
     return row;
   }
   function greet() {

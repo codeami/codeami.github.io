@@ -102,13 +102,22 @@ html { scroll-behavior: smooth; }
 .foot p { margin: 0 0 6px; }
 .warnbox { padding: var(--space-3) var(--space-4); background: var(--surface); border: 1px solid var(--line); box-shadow: inset 4px 0 0 var(--warn); border-radius: var(--radius); }
 .warnbox p { margin: 0 0 6px; }
-/* How we expect you to use AI: the owner's quote, above the chat. */
+/* What we build: the plain explainer above the chat. */
 .law { max-width: 1120px; margin: var(--space-4) auto 0; padding: 0 var(--space-4); }
 .law > div { padding: var(--space-3) var(--space-4); background: var(--surface); border: 1px solid var(--line); box-shadow: inset 4px 0 0 var(--pop); border-radius: var(--radius); }
 .law h2 { margin: 0 0 6px; font-size: 13px; color: var(--mute); text-transform: uppercase; letter-spacing: .06em; }
-.law blockquote { margin: 0 0 8px; font-style: italic; }
+.law h3 { margin: var(--space-3) 0 4px; font-size: 15px; }
 .law p { margin: 0 0 6px; }
+.law ul { margin: 0 0 6px; padding-left: 20px; }
+.law li { margin: 0 0 4px; }
 .law .src { font-size: 13px; color: var(--mute); }
+.law svg { display: block; width: 100%; max-width: 700px; height: auto; margin: var(--space-2) 0; }
+.law .wb-box { fill: var(--bg); stroke: var(--line); stroke-width: 1.5; }
+.law .wb-frame { fill: none; stroke: var(--pop); stroke-width: 2; stroke-dasharray: 6 4; }
+.law .wb-arrow { stroke: var(--mute); stroke-width: 1.5; fill: none; }
+.law .wb-head { fill: var(--mute); }
+.law .wb-t { fill: var(--ink); font: 700 19px/1 var(--font-body); }
+.law .wb-s { fill: var(--mute); font: 15px/1 var(--font-body); }
 .k-home { display: flex; align-items: center; gap: var(--space-3); min-width: 0; color: var(--ink); text-decoration: none; }
 .k-nav nav a { white-space: nowrap; }
 
@@ -159,10 +168,42 @@ html { scroll-behavior: smooth; }
 </header>
 
 <aside class="law" aria-labelledby="law-h"><div>
-  <h2 id="law-h">How we expect you to use AI</h2>
-  <blockquote>“While Parkinson's Law states that work expands to fill the time available for its completion, its inverse - Horstman's Law, the Law of Forced Efficiency - states that work contracts to fit the time allocated for its completion.”</blockquote>
-  <p>This is how we expect you to use AI: give the work a short, fixed time box and let the AI crew help it contract to fit. New here? <a href="course/index.html">Take the AI introductory course</a>.</p>
-  <p class="src">Parkinson's Law: C. Northcote Parkinson, <a href="https://en.wikipedia.org/wiki/Parkinson%27s_law">The Economist, 1955</a>. Horstman's Law: listed as “Horstman's Corollary to Parkinson's Law” among the <a href="https://en.wikipedia.org/wiki/Manager_Tools_Podcast">Manager Tools podcast's principles</a> (Mark Horstman).</p>
+  <h2 id="law-h">What we build</h2>
+  <p>We build a team of AI helpers. They do computer jobs for you. A person checks the work.</p>
+  <p>A helper has three parts.</p>
+  <ul>
+    <li><strong>A brain.</strong> That is an AI model. You can swap it for another one.</li>
+    <li><strong>Your things.</strong> That is your notes and files. The helper reads them where they are.</li>
+    <li><strong>A safe play box.</strong> The helper tries its work on a copy. It cannot break the real thing.</li>
+  </ul>
+  <p>We call the frame around these three parts a harness. Hermes Agent and OpenClaw are the same kind of thing. Ours asks a person before anything big.</p>
+  <svg viewBox="0 0 700 250" role="img" aria-labelledby="wb-t wb-d">
+    <title id="wb-t">Three parts inside one harness, giving two kinds of helper</title>
+    <desc id="wb-d">Models, your data and a safe play box go into a frame called the harness, where a person says yes. Two arrows leave it: a personal helper and a work helper.</desc>
+    <defs><marker id="wb-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path class="wb-head" d="M0 0L10 5L0 10z"/></marker></defs>
+    <rect class="wb-frame" x="8" y="8" width="400" height="234" rx="8"/>
+    <text class="wb-s" x="20" y="31">Harness: a person says yes</text>
+    <rect class="wb-box" x="28" y="46" width="360" height="52" rx="6"/><text class="wb-t" x="44" y="68">Models</text><text class="wb-s" x="44" y="86">The brain. Swap it any time.</text>
+    <rect class="wb-box" x="28" y="108" width="360" height="52" rx="6"/><text class="wb-t" x="44" y="130">Your data</text><text class="wb-s" x="44" y="148">Notes and files, read in place.</text>
+    <rect class="wb-box" x="28" y="170" width="360" height="52" rx="6"/><text class="wb-t" x="44" y="192">Safe play box</text><text class="wb-s" x="44" y="210">Work on a copy, not the real thing.</text>
+    <path class="wb-arrow" d="M408 90L462 60" marker-end="url(#wb-ah)"/>
+    <path class="wb-arrow" d="M408 160L462 190" marker-end="url(#wb-ah)"/>
+    <rect class="wb-box" x="466" y="30" width="226" height="56" rx="6"/><text class="wb-t" x="480" y="56">Personal AI</text><text class="wb-s" x="480" y="76">Knows you</text>
+    <rect class="wb-box" x="466" y="164" width="226" height="56" rx="6"/><text class="wb-t" x="480" y="190">Domain-specific AI</text><text class="wb-s" x="480" y="210">Knows one job</text>
+  </svg>
+  <p>There are two kinds of helper.</p>
+  <ul>
+    <li><strong>A personal helper.</strong> It knows you and your things.</li>
+    <li><strong>A work helper.</strong> It knows one job, like building software or running a shop.</li>
+  </ul>
+  <h3>Four cases from real work</h3>
+  <ul>
+    <li><strong>My notes helper (personal).</strong> All my notes are plain files that any AI can read. Two posts on the <a href="blog/index.html">blog</a> explain it.</li>
+    <li><strong>The software crew (work).</strong> Helpers write and test code on copies. A person says yes before it joins the real code. In the <a href="arena.html">arena test</a> it passed 5 of 5 runs, and Hermes passed 3 of 5. The sample is tiny.</li>
+    <li><strong>Kestrel Machinery (work).</strong> A made-up company of 200 people that makes equipment. It has an ERP system and a voice helper that you can interrupt. It is in build.</li>
+    <li><strong>The referee (work, AI safety).</strong> A helper that watches other AI helpers play games and spots cheating. Over 16 games it flagged all 6 planted colluding pairs. It also flagged 5 of 10 clean games. This was sprint work, not a publication.</li>
+  </ul>
+  <p class="src">New here? <a href="course/index.html">Take the AI introductory course</a>.</p>
 </div></aside>
 
 <div class="shell">
