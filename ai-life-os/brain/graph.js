@@ -12,13 +12,14 @@ var BASE=opts.base||"",FRAMED=!!opts.framed;
 var host=document.createElement("div");host.id="brainHost";if(FRAMED)host.className="framed";
 var shadow=host.attachShadow({mode:"open"});
 shadow.innerHTML='<link rel="stylesheet" href="'+BASE+'graph.css">'+
-  '<div id="stage"><canvas id="cv" role="img" aria-label="Second brain map: a centre rules file linked to rooms of public notes, harness parts and posts, with a ring of skills and a ring of pages and projects. The side lists hold the same items as buttons."></canvas></div>'+
+  '<div id="stage"><div id="g3d" hidden></div><canvas id="cv" role="img" aria-label="Second brain map: a centre rules file linked to rooms of public notes, harness parts and posts, with a ring of skills and a ring of pages and projects. The side lists hold the same items as buttons."></canvas></div>'+
   '<div id="side" hidden><aside class="side-col" id="wl" aria-label="Reading order, pages and projects">'+
   '<section class="wd"><h2>Reading order</h2><ul id="sRead"></ul></section><section class="wd"><h2>Pages and projects</h2><ul id="sApps"></ul></section>'+
   '<section class="wd"><h2>FirstMate in detail</h2><ul id="sFm"></ul></section></aside>'+
   '<aside class="side-col" id="wr" aria-label="Skills"><section class="wd"><h2>Skills deck</h2><ul id="sSkills"></ul></section></aside></div>'+
   '<div class="title"'+(FRAMED?' hidden':'')+'><b>THE SOFTWARE FACTORY</b><span>SECOND BRAIN</span><small id="src">loading…</small></div>'+
-  '<div class="top"><button class="btn" id="motionBtn" type="button" aria-pressed="true">Motion on</button>'+
+  '<div class="top"><button class="btn" id="dimBtn" type="button" aria-pressed="false" title="Switch between the flat map and a 3D view">3D</button>'+
+  '<button class="btn" id="motionBtn" type="button" aria-pressed="true">Motion on</button>'+
   '<button class="btn" id="sideBtn" type="button" aria-expanded="false" aria-controls="side">&#9638; Widgets</button>'+
   '<button class="btn" id="menuBtn" type="button" aria-expanded="true" aria-controls="panel">&#9776; Menu</button></div>'+
   '<aside id="panel" aria-label="Second brain controls"><h3>Search</h3>'+
@@ -328,6 +329,7 @@ function resize(){
   DPR=Math.min(2,window.devicePixelRatio||1);
   W=cv.clientWidth||window.innerWidth;H=cv.clientHeight||window.innerHeight;
   cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);
+  if(g3&&S.dim3){var sz=g3Size();g3.width(sz[0]).height(sz[1])}
   if(!view.user)fitView();dirty=true;
 }
 
@@ -344,6 +346,7 @@ function wire(){
   setMotion(S.motion,false);
   $("motion").addEventListener("change",function(){setMotion(this.checked,true)});
   $("motionBtn").addEventListener("click",function(){setMotion(!S.motion,true)});
+  $("dimBtn").addEventListener("click",function(){setDim(!S.dim3)});
   $("names").addEventListener("change",function(){S.names=this.checked;dirty=true});
   $("expand").addEventListener("click",function(){setAll(false)});
   $("collapse").addEventListener("click",function(){setAll(true)});
@@ -645,8 +648,53 @@ var last=0;
 function frame(t){
   var dt=Math.min(.05,(t-last)/1000||0);last=t;
   var moving=step(dt);
-  if(dirty||moving||S.motion){draw(t);dirty=false}
+  if(!S.dim3&&(dirty||moving||S.motion)){draw(t);dirty=false}
   requestAnimationFrame(frame);
+}
+
+/* ---------- the 3D view: the same public nodes, drawn by 3d-force-graph (pinned, loaded only when 3D is opened) ---------- */
+var G3D_SRC="https://cdn.jsdelivr.net/npm/3d-force-graph@1.79.0/dist/3d-force-graph.min.js",g3=null,g3Loading=false;
+var KINDWORD={root:"rules file",hub:"room",dot:"note, part or post",skill:"skill",routine:"routine",app:"page or project"};
+function g3Data(){
+  var ns=nodes.map(function(n){return{id:n.i,name:n.label||"",kind:KINDWORD[n.type]||n.type,color:n.color,val:n.type==="root"?30:n.type==="hub"?12:n.type==="dot"?1:6}});
+  var ls=[];
+  nodes.forEach(function(n){
+    if(n.type==="hub")ls.push({source:root.i,target:n.i});
+    else if(n.type==="dot"&&n.hub)ls.push({source:n.hub.i,target:n.i});
+    else if(n.type==="skill"||n.type==="app"||n.type==="routine")ls.push({source:root.i,target:n.i});
+  });
+  return{nodes:ns,links:ls};
+}
+function g3Size(){var s=$("stage");return[s.clientWidth||W,s.clientHeight||H]}
+function g3Fail(){
+  setDim(false,true);say("The 3D view did not load. The flat map stays.");
+}
+function g3Build(){
+  var box=$("g3d"),sz=g3Size();
+  g3=window.ForceGraph3D()(box).width(sz[0]).height(sz[1]).backgroundColor("#05060a").showNavInfo(false)
+    .graphData(g3Data()).nodeLabel(function(n){return n.kind+" · "+n.name}).nodeColor("color").nodeVal("val").nodeRelSize(4).nodeOpacity(.9)
+    .linkColor(function(){return "rgba(120,130,150,.35)"}).linkWidth(.4)
+    .onNodeClick(function(n){var m=nodes[n.id];if(m)openNode(m)});
+  if(!S.motion)g3.cooldownTime(0);
+}
+function setDim(on,quiet){
+  if(on===!!S.dim3)return;
+  if(on&&!g3){
+    if(g3Loading)return;
+    var go=function(){g3Loading=false;if(window.ForceGraph3D){try{g3Build();showDim(true,quiet)}catch(e){g3Fail()}}else g3Fail()};
+    if(window.ForceGraph3D){go();return}
+    g3Loading=true;var s=document.createElement("script");s.src=G3D_SRC;s.onload=go;s.onerror=function(){g3Loading=false;g3Fail()};
+    document.head.appendChild(s);say("Loading the 3D view");return;
+  }
+  showDim(on,quiet);
+}
+function showDim(on,quiet){
+  S.dim3=on;$("g3d").hidden=!on;cv.hidden=on;
+  var b=$("dimBtn");b.textContent=on?"2D":"3D";b.setAttribute("aria-pressed",String(on));
+  b.title=on?"Back to the flat map":"Switch between the flat map and a 3D view";
+  if(g3){if(on){var sz=g3Size();g3.width(sz[0]).height(sz[1]);g3.resumeAnimation()}else g3.pauseAnimation()}
+  if(!on){resize();dirty=true}
+  if(!quiet)say(on?"3D view":"Flat map");
 }
 
 function step(dt){

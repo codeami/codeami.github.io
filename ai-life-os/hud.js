@@ -103,8 +103,8 @@
       min.textContent = state === "min" ? "▴ Show" : "▾ Minimise";
       min.setAttribute("aria-label", state === "min" ? "Show the page" : "Minimise the page to see the map");
       document.body.classList.toggle("ovopen", state === "open");
-      // a folded card on a wide screen sits over the map's top-right buttons: they step down below it
-      if (state === "min" && !phone()) document.body.style.setProperty("--tt", (ov.offsetHeight + 18) + "px");
+      // a folded card sits over the map's top buttons: they step down below it
+      if (state === "min") document.body.style.setProperty("--tt", (ov.offsetHeight + 18) + "px");
       else document.body.style.removeProperty("--tt");
       if (G) { G.overlay(state === "open" && !phone()); G.setInsets(state === "open" && phone() ? ov.offsetHeight : 0); }
     }
