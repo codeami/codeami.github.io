@@ -66,7 +66,7 @@ window.AIODrawer=function(o){
     if(l.doc){var bd=el("button",null,l.label);bd.type="button";bd.addEventListener("click",function(){doc(l)});return bd}
     var i=l.newTab?-1:readIndex(l.href);
     if(i>=0){var b=el("button",null,"Read: "+l.label);b.type="button";b.addEventListener("click",function(){read(i)});return b}
-    var ext=l.newTab||/^https?:/.test(l.href),a=el("a",null,l.label+(ext?" ↗":""));a.href=l.href;
+    var ext=l.newTab||/^https?:/.test(l.href),a=el("a",null,l.label+(ext?" ↗":""));a.href=l.href;if(l.title)a.title=l.title;
     if(ext){a.target="_blank";a.rel="noopener noreferrer"}
     return a;
   }

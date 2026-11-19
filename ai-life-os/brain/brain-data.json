@@ -29,6 +29,76 @@
     {
      "label": "Build script",
      "href": "build.py"
+    },
+    {
+     "label": "Map of GitHub",
+     "href": "https://anvaka.github.io/map-of-github/",
+     "title": "Each dot is a project; dots that share stargazers sit close. A frozen snapshot from May 2025.",
+     "group": "Maps and wikis",
+     "newTab": true
+    },
+    {
+     "label": "Map of Reddit",
+     "href": "https://anvaka.github.io/map-of-reddit/",
+     "title": "The same idea for subreddits.",
+     "group": "Maps and wikis",
+     "newTab": true
+    },
+    {
+     "label": "DeepWiki",
+     "href": "https://deepwiki.com/",
+     "title": "An AI-written wiki for any GitHub repository, with an MCP server.",
+     "group": "Maps and wikis",
+     "newTab": true
+    },
+    {
+     "label": "Simple English Wikipedia",
+     "href": "https://simple.wikipedia.org/",
+     "title": "A plain-language encyclopedia.",
+     "group": "Maps and wikis",
+     "newTab": true
+    },
+    {
+     "label": "Embedding Atlas",
+     "href": "https://apple.github.io/embedding-atlas/",
+     "title": "Apple's tool to map text by meaning, in the browser.",
+     "group": "Maps and wikis",
+     "newTab": true
+    },
+    {
+     "label": "WizMap",
+     "href": "https://poloclub.github.io/wizmap/",
+     "title": "Embedding maps with search and zoom.",
+     "group": "Maps and wikis",
+     "newTab": true
+    },
+    {
+     "label": "Connected Papers",
+     "href": "https://www.connectedpapers.com/",
+     "title": "A graph around one seed paper. A model for a Research tag.",
+     "group": "Maps and wikis",
+     "newTab": true
+    },
+    {
+     "label": "God's Eye View",
+     "href": "https://github.com/bilawalsidhu/gods-eye-view",
+     "title": "Live open data on a 3D globe. An open-source repository, not a hosted page.",
+     "group": "Maps and wikis",
+     "newTab": true
+    },
+    {
+     "label": "Kumu",
+     "href": "https://kumu.io/",
+     "title": "Relationship maps with filters.",
+     "group": "Maps and wikis",
+     "newTab": true
+    },
+    {
+     "label": "Argos Atlas",
+     "href": "https://argosatlas.com/map/",
+     "title": "A world map of public live cameras, flights, ships and satellites. Spanish-language site. The map page only.",
+     "group": "Maps and wikis",
+     "newTab": true
     }
    ],
    "folders": [

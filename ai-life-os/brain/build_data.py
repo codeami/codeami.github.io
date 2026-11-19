@@ -4,6 +4,7 @@ Run from anywhere: python3 -I ai-life-os/brain/build_data.py
 Reads only public files of this site:
   brain/notes.js            the approved wiki notes (built by build.py)
   brain/src/extra.json      hand-written nodes: areas, FirstMate parts and tricks, the harness tier list
+  brain/src/maps.json       the "Maps and wikis" links on the Wiki notes card (other people's maps, link-only)
   brain/src/site.json       the centre file, this site's pages, public projects, the reading order
   blog/index.html           the Blog posts
   course/course.json        the AI introductory course's lessons
@@ -28,6 +29,7 @@ def live(url):
 site = json.loads(rd("brain/src/site.json"))
 extra = json.loads(rd("brain/src/extra.json"))
 notes = json.loads(rd("brain/notes.js").split("=", 1)[1].strip().rstrip(";"))
+maps = json.loads(rd("brain/src/maps.json"))
 
 
 def links(pairs):
@@ -44,7 +46,8 @@ for n in notes:
         "rel": n.get("links", [])})
 notes_room = {"id": "notes", "label": "Wiki notes", "color": "#b57bff",
               "note": "A public slice of the owner's private notes wiki: only notes on an approved list are copied, and a build step drops any line with a private term, a local path, an email or a user name.",
-              "links": links([["Approved list", "allowlist.txt"], ["Build script", "build.py"]]),
+              "links": links([["Approved list", "allowlist.txt"], ["Build script", "build.py"]]) + [
+                  {"label": m["n"], "href": m["url"], "title": m["what"], "group": maps["group"], "newTab": True} for m in maps["maps"]],
               "folders": [{"name": t, "count": len(fs), "files": fs} for t, fs in sorted(by_tag.items())]}
 
 # Rooms 2 and 3: FirstMate in detail, and areas of interest (src/extra.json)
