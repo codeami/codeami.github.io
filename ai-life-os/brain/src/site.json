@@ -5,7 +5,6 @@
   "links": [["Post: one rules file for every tool", "../blog/everything-is-a-file.html"]]},
  "pages": [
   {"n": "whoami", "state": "home", "url": "../../index.html"},
-  {"n": "Intent", "state": "what I do", "url": "../../intent/index.html"},
   {"n": "The Software Meta-Factory", "state": "start here", "url": "../index.html"},
   {"n": "AI introductory course", "state": "7 lessons", "url": "../course/index.html"},
   {"n": "Case studies", "state": "1 case", "url": "../../case-studies/index.html"},

@@ -109,6 +109,8 @@ html { scroll-behavior: smooth; }
 .law > div { padding: var(--space-3) var(--space-4); background: var(--surface); border: 1px solid var(--line); box-shadow: inset 4px 0 0 var(--pop); border-radius: var(--radius); }
 .law h2 { margin: 0 0 6px; font-size: 13px; color: var(--mute); text-transform: uppercase; letter-spacing: .06em; }
 .law h3 { margin: var(--space-3) 0 4px; font-size: 15px; }
+.law h2#works-h { margin-top: 24px; padding-top: 12px; border-top: 1px solid var(--line); }
+.law blockquote { margin: 0 0 8px; padding-left: 10px; border-left: 2px solid var(--accent); color: var(--mute); }
 .law p { margin: 0 0 6px; }
 .law ul { margin: 0 0 6px; padding-left: 20px; }
 .law li { margin: 0 0 4px; }
@@ -223,6 +225,44 @@ html { scroll-behavior: smooth; }
     <li><strong>Kestrel Machinery (work).</strong> A made-up company of 200 people that makes equipment. It has an ERP system and a voice helper that you can interrupt. It is in build.</li>
     <li><strong>The referee (work, AI safety).</strong> A helper that watches other AI helpers play games and spots cheating. Over 16 games it flagged all 6 planted colluding pairs. It also flagged 5 of 10 clean games. This was sprint work, not a publication.</li>
   </ul>
+  <h2 id="works-h">How it works</h2>
+  <h3 id="how">How I work with agents</h3>
+  <blockquote>"Managing a complex AI agentic bot system is sort of like managing a contract with different vendors."</blockquote>
+  <p>Each agent is a vendor with a brief, a scope and a deliverable. I write down what I want, check what comes back, and decide what happens when it goes wrong. Every task starts as a brief with the intent, the rules and a definition of done. Work leaves a phase only when its check passes, and a claim with no passing check is "in trial", not a feature.</p>
+  <p>The method comes from <a href="https://github.com/RinDig/Interpretable-Context-Methodology">ICM</a> by Jake Van Clief (a short map and numbered stages), <a href="https://github.com/kunchenguid">Kun Chen's agent stack</a> (one dispatcher, throwaway copies of the code, a gate before every push) and <a href="https://github.com/mattpocock/skills">Matt Pocock's skills</a> (capture the intent before the spec).</p>
+  <h3 id="safety">What the crew may do, and what waits for me</h3>
+  <p>A good contractor can use the tools on site without asking, asks before knocking down a wall, and never does some things whoever asks. My agents work the same way.</p>
+  <p><strong>On its own</strong></p>
+  <ul>
+    <li>Read files and write code, in a throwaway copy of the repo, one per task.</li>
+    <li>Run tests, linters and a browser to check its own work.</li>
+    <li>Research, and write reports and drafts for me to read.</li>
+    <li>Push its own branch and open a pull request.</li>
+  </ul>
+  <p><strong>Waits for me</strong></p>
+  <ul>
+    <li>Merging, and any push to the main branch.</li>
+    <li>Deleting data, rewriting history, force-pushing.</li>
+    <li>Spending money or changing an account.</li>
+    <li>Anything that leaves the machine: a post, an email, a message.</li>
+    <li>New rules for the agents: they propose, I approve each one.</li>
+  </ul>
+  <p><strong>Never</strong></p>
+  <ul>
+    <li>Put secrets in files, commits, logs or prompts.</li>
+    <li>Send, post or publish without my OK.</li>
+    <li>Edit its own rules.</li>
+  </ul>
+  <p>Some of these limits are scripts, such as the separate copy per task and the gate before a push. Others are written rules every agent loads. A rule is a request and a script is a lock, so I move rules into scripts when the same miss comes back.</p>
+  <h3 id="doors">Who it is for</h3>
+  <ul>
+    <li>A person: a life pointed at something you chose.</li>
+    <li>A company: one agreed goal.</li>
+    <li>A reader: the internet sorted by quality instead of popularity.</li>
+    <li>A beginner: AI explained without the panic. <a href="course/index.html">Start with the course</a>.</li>
+  </ul>
+  <h3 id="credits">Credits</h3>
+  <p>The idea that people split into those who write down their ideal state and those who do not, and the parts of a personal AI harness (a harness that remembers you, a written ideal state, a verification loop, intent engineering, a personal API, reusable skills), come from Daniel Miessler's work: <a href="https://github.com/danielmiessler/Telos">TELOS</a>, <a href="https://github.com/danielmiessler/TheAlgorithm">TheAlgorithm</a>, <a href="https://github.com/danielmiessler/LifeOS">LifeOS</a>, <a href="https://danielmiessler.com/blog/intent-engineering">Intent Engineering</a>, <a href="https://danielmiessler.com/blog/general-hill-climbing">General Hill-Climbing</a>, <a href="https://github.com/danielmiessler/Fabric">Fabric</a> and <a href="https://daemon.danielmiessler.com">his daemon</a>. The demos on this page are mine.</p>
   <p class="src">New here? <a href="course/index.html">Take the AI introductory course</a>.</p>
 </div></aside>
 
@@ -256,7 +296,7 @@ html { scroll-behavior: smooth; }
 
 <p class="handoff"><a href="../case-studies/index.html">Next: see the proof →</a></p>
 <footer class="foot">
-  <p id="pages">Prefer to read? <a href="blog/index.html">Blog</a> · <a href="../intent/index.html">Intent</a> · <a href="../intent/index.html#safety">What the crew may do</a> · <a href="arena.html">Harness arena</a> · <a href="course/index.html">Course</a> · <a href="https://github.com/codeami">GitHub</a></p>
+  <p id="pages">Prefer to read? <a href="blog/index.html">Blog</a> · <a href="#how">How I work with agents</a> · <a href="#safety">What the crew may do</a> · <a href="arena.html">Harness arena</a> · <a href="course/index.html">Course</a> · <a href="https://github.com/codeami">GitHub</a></p>
   <p>The supervisor and most crew mechanics are upstream <a href="https://github.com/kunchenguid/firstmate">Firstmate</a>, MIT licence, by Kun Chen and contributors.</p>
 </footer>
 

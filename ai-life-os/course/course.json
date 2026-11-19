@@ -59,7 +59,7 @@
     {"text": "The fix is to say the why and what done looks like, not only the what. “Fix my links” is a request. “Every link on the hub page opens at phone width, with a screenshot as proof” is a check anyone can run."}
    ],
    "read": {"label": "One harness for every agent: keeping the model's intent aligned with mine", "href": "../blog/one-harness-for-every-agent.html", "note": "Blog: one set of rules that every agent reads, so “did it do what I meant?” has one answer."},
-   "more": [{"label": "Intent: how I work with agents, from brief to check", "href": "../../intent/index.html#how"}],
+   "more": [{"label": "How I work with agents, from brief to check", "href": "../index.html#how"}],
    "check": {"q": "Which ask carries the most intent?",
     "options": ["Fix the website.", "Make the site faster.", "Make the hub links open on my phone; done when every link opens at 375px, with a screenshot."],
     "answer": 2,

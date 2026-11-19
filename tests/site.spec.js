@@ -489,7 +489,8 @@ test('landing: Me is a short block with the title, the About and CV links, and t
 
 // ---- one top bar on every page, and a last-line hand-off to the next page in the bar order ----
 // No skip list: every public page carries the bar. The one exception is blog/index.html, a redirect that never shows.
-const barPages = () => pages.filter((f) => !share.some((r) => r.path === f && r.level !== 'public') && f !== 'blog/index.html');
+const redirects = ['blog/index.html', 'intent/index.html']; // stubs that never show: the Blog list and Intent both moved
+const barPages = () => pages.filter((f) => !share.some((r) => r.path === f && r.level !== 'public') && !redirects.includes(f));
 const barItems = ['Meta-Factory', 'Case studies', 'Blog', 'About', 'Work with me'];
 const barPaths = ['/ai-life-os/index.html', '/case-studies/index.html', '/ai-life-os/blog/index.html', '/about/index.html', '/work-with-me/index.html'];
 
@@ -501,7 +502,7 @@ const barOf = (page) => page.locator('header.tb').evaluate((b) => ({
 }));
 
 test('top bar: Meta-Factory, Case studies, Blog, About and Work with me on every page, all in view, current page marked', async ({ page }) => {
-  expect(barPages().length, 'pages checked').toBe(pages.length - 3); // the redirect stub, the link-only Course and the link-only pipeline clip
+  expect(barPages().length, 'pages checked').toBe(pages.length - 4); // the two redirect stubs, the link-only Course and the link-only pipeline clip
   for (const file of barPages()) {
     await page.goto(`/${file}`);
     const bar = page.locator('header.tb');
@@ -543,7 +544,7 @@ test('top bar: clicking each item on every public page lands on a page with the 
 });
 
 test('skin: one saved choice. Switch once and every page follows, before first paint; the default is HUD', async ({ page }) => {
-  const all = ['index.html', 'ai-life-os/index.html', 'case-studies/index.html', 'ai-life-os/blog/index.html', 'ai-life-os/blog/everything-is-a-file.html', 'about/index.html', 'cv.html', 'work-with-me/index.html', 'intent/index.html', 'ai-life-os/arena.html', 'ai-life-os/course/index.html'];
+  const all = ['index.html', 'ai-life-os/index.html', 'case-studies/index.html', 'ai-life-os/blog/index.html', 'ai-life-os/blog/everything-is-a-file.html', 'about/index.html', 'cv.html', 'work-with-me/index.html', 'ai-life-os/arena.html', 'ai-life-os/course/index.html'];
   const skinOf = () => page.evaluate(() => document.documentElement.dataset.skin);
   await page.goto('/cv.html');
   expect(await skinOf()).toBe('hud');
@@ -564,7 +565,7 @@ test('skin: one saved choice. Switch once and every page follows, before first p
 });
 
 test('top bar: the current page is marked in each part of the bar', async ({ page }) => {
-  const current = { 'cv.html': 'About', 'about/index.html': 'About', 'work-with-me/index.html': 'Work with me', 'case-studies/index.html': 'Case studies', 'ai-life-os/arena.html': 'Case studies', 'ai-life-os/blog/index.html': 'Blog', 'ai-life-os/blog/second-brain-page.html': 'Blog', 'intent/index.html': 'Meta-Factory', 'ai-life-os/index.html': 'Meta-Factory' };
+  const current = { 'cv.html': 'About', 'about/index.html': 'About', 'work-with-me/index.html': 'Work with me', 'case-studies/index.html': 'Case studies', 'ai-life-os/arena.html': 'Case studies', 'ai-life-os/blog/index.html': 'Blog', 'ai-life-os/blog/second-brain-page.html': 'Blog', 'ai-life-os/index.html': 'Meta-Factory' };
   for (const [file, label] of Object.entries(current)) {
     await page.goto(`/${file}`);
     await expect(page.locator('header.tb .tb-links > a[aria-current]'), file).toHaveText(label);
@@ -591,24 +592,22 @@ test('hand-off: the last line of each bar page leads to the next page in the bar
   }
 });
 
-test('Intent: the four doors in his words, the causes, the dated harness line and the credits', async ({ page }) => {
+test('Meta-Factory page: how it works holds how I work with agents, what the crew may do, who it is for and the credits; Intent is a redirect that keeps its anchors', async ({ page }) => {
+  await page.goto('/ai-life-os/index.html#safety');
+  const law = page.locator('aside.law');
+  await expect(law.locator('#how')).toHaveText('How I work with agents');
+  await expect(law.locator('#safety')).toHaveText('What the crew may do, and what waits for me');
+  await expect(law.locator('#how ~ p strong').filter({ hasText: /^(On its own|Waits for me|Never)$/ })).toHaveText(['On its own', 'Waits for me', 'Never']);
+  await expect(law).toContainText('throwaway copy of the repo, one per task');
+  await expect(law.locator('#doors ~ ul').first().locator('li')).toHaveCount(4);
+  await expect(law.locator('#credits ~ p').first().locator('a')).toHaveCount(7);
+  const text = await law.innerText();
+  for (const name of ['AI-Life-OS', 'AIO OS', 'EA-bot', 'Chart Room']) expect(text, name).not.toContain(name);
+  // the old Intent address still works, and a section anchor survives the redirect
+  await page.goto('/intent/index.html#how');
+  await page.waitForURL(/ai-life-os\/index\.html#how$/);
   await page.goto('/intent/index.html');
-  await expect(page.locator('h1')).toHaveText('Write down what you actually want.');
-  await expect(page.locator('.in-doors h3')).toHaveText(['Your life, pointed at something you chose.', 'Your company, pointed at one agreed goal.', 'The internet, sorted by quality instead of popularity.', 'AI, explained without the panic.']);
-  await expect(page.locator('#care')).toContainText('effective altruism and 80,000 Hours, and AI safety');
-  await expect(page.locator('#care')).toContainText('harnesses and validators');
-  await expect(page.locator('#harness')).toContainText('role-scoped and run in isolated copies, validators gate every push, and merges happen only on my word');
-  await expect(page.locator('#harness')).not.toContainText('RBAC');
-  await expect(page.locator('#credits a')).toHaveCount(7);
-  await expect(page.locator('#os a[href*="ai-life-os/index.html"]')).toHaveCount(1);
-  await expect(page.locator('#offer tbody tr')).toHaveCount(5);
-  // About and Safety live here now: how I work with agents, and what the crew may do, what waits for me, what it never does
-  await expect(page.locator('#how h2')).toHaveText('How I work with agents');
-  await expect(page.locator('#safety h3')).toHaveText(['On its own', 'Waits for me', 'Never']);
-  await expect(page.locator('#safety li').first()).toContainText('throwaway copy');
-  for (const name of ['AI-Life-OS', 'AIO OS', 'EA-bot', 'Chart Room']) expect(await page.locator('main').innerText(), name).not.toContain(name);
-  // the page runs no script of its own and loads no frame script
-  expect(await page.locator('script[src*="hud.js"], script[src*="article.js"], script:not([src])').count()).toBe(0);
+  await page.waitForURL(/ai-life-os\/index\.html$/);
 });
 
 test('landing: the logo and the page card never reload the page', async ({ page }) => {
