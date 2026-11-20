@@ -12,13 +12,15 @@ var BASE=opts.base||"",FRAMED=!!opts.framed;
 var host=document.createElement("div");host.id="brainHost";if(FRAMED)host.className="framed";
 var shadow=host.attachShadow({mode:"open"});
 shadow.innerHTML='<link rel="stylesheet" href="'+BASE+'graph.css">'+
-  '<div id="stage"><canvas id="cv" role="img" aria-label="Second brain map: a centre rules file linked to rooms of public notes, harness parts and posts, with a ring of skills and a ring of pages and projects. The side lists hold the same items as buttons."></canvas></div>'+
+  '<div id="stage"><div id="g3d" hidden></div><canvas id="cv" role="img" aria-label="Second brain map: a centre rules file linked to rooms of public notes, harness parts and posts, with a ring of skills and a ring of pages and projects. The side lists hold the same items as buttons."></canvas></div>'+
   '<div id="side" hidden><aside class="side-col" id="wl" aria-label="Reading order, pages and projects">'+
-  '<section class="wd"><h2>Reading order</h2><ul id="sRead"></ul></section><section class="wd"><h2>Pages and projects</h2><ul id="sApps"></ul></section>'+
-  '<section class="wd"><h2>FirstMate in detail</h2><ul id="sFm"></ul></section></aside>'+
+  '<div class="tabs" role="tablist" aria-label="Left pane"><button class="tab" type="button" role="tab" data-p="sRead">Read</button><button class="tab" type="button" role="tab" data-p="sApps">Pages</button><button class="tab" type="button" role="tab" data-p="sFm">FirstMate</button></div>'+
+  '<section class="wd" role="tabpanel" aria-label="Reading order"><ul id="sRead"></ul></section><section class="wd" role="tabpanel" aria-label="Pages and projects"><ul id="sApps"></ul></section>'+
+  '<section class="wd" role="tabpanel" aria-label="FirstMate in detail"><ul id="sFm"></ul></section></aside>'+
   '<aside class="side-col" id="wr" aria-label="Skills"><section class="wd"><h2>Skills deck</h2><ul id="sSkills"></ul></section></aside></div>'+
-  '<div class="title"'+(FRAMED?' hidden':'')+'><b>A<i>I</i>-LIFE-OS</b><span>SECOND BRAIN</span><small id="src">loading…</small></div>'+
-  '<div class="top"><button class="btn" id="motionBtn" type="button" aria-pressed="true">Motion on</button>'+
+  '<div class="title"'+(FRAMED?' hidden':'')+'><b>THE SOFTWARE META-FACTORY</b><span>SECOND BRAIN</span><small id="src">loading…</small></div>'+
+  '<div class="top"><button class="btn" id="dimBtn" type="button" aria-pressed="false" title="Switch between the flat map and a 3D view">3D</button>'+
+  '<button class="btn" id="motionBtn" type="button" aria-pressed="true">Motion on</button>'+
   '<button class="btn" id="sideBtn" type="button" aria-expanded="false" aria-controls="side">&#9638; Widgets</button>'+
   '<button class="btn" id="menuBtn" type="button" aria-expanded="true" aria-controls="panel">&#9776; Menu</button></div>'+
   '<aside id="panel" aria-label="Second brain controls"><h3>Search</h3>'+
@@ -86,7 +88,8 @@ function start(d,srcLabel){
   data=d;
   $("src").textContent="public data · "+srcLabel;
   window.AIO_READING=d.reading||[];
-  drawer=AIODrawer({reading:window.AIO_READING,onClose:function(){S.sel=null;applyFocus();dirty=true}});
+  // the "#map" entry opens the chart itself, so it is not a reading page in the drawer's "n of m" run
+  drawer=AIODrawer({reading:window.AIO_READING.filter(function(r){return r.url.indexOf("#map")<0}),onClose:function(){S.sel=null;applyFocus();dirty=true}});
   readLit();build(d);buildLegend();wire();renderSides();
   resize();setLayout(S.layout,true);mountTour();
   requestAnimationFrame(frame);
@@ -111,6 +114,17 @@ var API={
   setInsets:function(bottom){INS.bottom=bottom||0;if(!view.user)fitView();dirty=true},
   overlay:function(on){host.classList.toggle("ov",!!on);setTimeout(resize,0)},
   lit:readLit, // the course page calls this after a lesson is done
+  // the site's one dropdown reads and drives the map's controls through these two
+  get:function(){return{motion:!!S.motion,widgets:!$("side").hidden,legend:!!S.legend,layout:S.dim3?"3d":S.layout,menu:!$("panel").hidden}},
+  act:function(name){
+    if(name==="motion")setMotion(!S.motion,true);
+    else if(name==="widgets")setSides($("side").hidden);
+    else if(name==="legend")setLegend(!S.legend);
+    else if(name==="menu"){var open=$("panel").hidden;setPanel(open)}
+    else if(name==="search"){setPanel(true);$("q").focus()}
+    else if(name==="3d")setDim(true);
+    else if(/^(force|circle|hex|rings)$/.test(name)){setDim(false,true);setLayout(name)}
+  },
 
   host:host,root:shadow
 };
@@ -327,6 +341,7 @@ function resize(){
   DPR=Math.min(2,window.devicePixelRatio||1);
   W=cv.clientWidth||window.innerWidth;H=cv.clientHeight||window.innerHeight;
   cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);
+  if(g3&&S.dim3){var sz=g3Size();g3.width(sz[0]).height(sz[1])}
   if(!view.user)fitView();dirty=true;
 }
 
@@ -343,6 +358,7 @@ function wire(){
   setMotion(S.motion,false);
   $("motion").addEventListener("change",function(){setMotion(this.checked,true)});
   $("motionBtn").addEventListener("click",function(){setMotion(!S.motion,true)});
+  $("dimBtn").addEventListener("click",function(){setDim(!S.dim3)});
   $("names").addEventListener("change",function(){S.names=this.checked;dirty=true});
   $("expand").addEventListener("click",function(){setAll(false)});
   $("collapse").addEventListener("click",function(){setAll(true)});
@@ -361,6 +377,7 @@ function wire(){
     var typing=/^(input|textarea|select)$/i.test(t.tagName||"")||t.isContentEditable;
     if((e.key==="/"&&!typing)||((e.metaKey||e.ctrlKey)&&(e.key||"").toLowerCase()==="k")){e.preventDefault();setPanel(true);$("q").focus();$("q").select()}
     else if(e.key==="Escape"){$("q").value="";S.q="";S.sel=null;hideCard();applyFocus();dirty=true}
+    else if(e.key==="m"&&!typing&&!e.metaKey&&!e.ctrlKey&&!e.altKey)setMotion(!S.motion,true);
   });
   cv.addEventListener("pointermove",onMove);
   cv.addEventListener("pointerdown",onDown);
@@ -398,7 +415,14 @@ function renderSides(){
   apps.forEach(function(n){$(n.info.group==="firstmate"?"sFm":"sApps").appendChild(item(n,n.info.state||"",n.on?"ok":"warn"))});
   // the FirstMate parts room sits under its pages, so the left column reaches it too
   rooms.filter(function(R){return R.id==="fm"}).forEach(function(R){R.dots.forEach(function(d){$("sFm").appendChild(item(d,rooms[d.room].folders[d.folder].name))})});
-  skills.forEach(function(n){$("sSkills").appendChild(item(n,"details"))});
+  // the left pane shows one list at a time: Read, Pages or FirstMate
+  var tabs=[].slice.call($("wl").querySelectorAll(".tab"));
+  function pickTab(p){tabs.forEach(function(t){var on=t.dataset.p===p;t.setAttribute("aria-selected",String(on));$(t.dataset.p).parentNode.hidden=!on})}
+  tabs.forEach(function(t){t.addEventListener("click",function(){pickTab(t.dataset.p)})});
+  pickTab("sRead");
+  // an empty deck is not drawn, so the map keeps the width
+  if(skills.length)skills.forEach(function(n){$("sSkills").appendChild(item(n,"details"))});
+  else{$("wr").remove();document.body.classList.add("noskills")}
 }
 /* ---------- open a node: its card in the right-side drawer; a reading page opens its text there ---------- */
 var drawer=null;
@@ -408,6 +432,30 @@ function openNode(n){
   if(n.info&&n.info.url&&opts.onPage&&opts.onPage(n.info.url)){drawer.close();S.sel=n;S.here=true;applyFocus();return}
   var c=nodeCard(n),i=n.info&&n.info.url?drawer.readIndex(n.info.url):-1;
   if(i>=0)drawer.read(i,{status:c.status,statusCls:c.statusCls,related:c.related});else drawer.card(c);
+}
+// the Wiki notes card: each interest tag sized by its note count, an empty tag dashed; a tap lists that tag's notes
+function interestCloud(tags){
+  var wrap=el("div","cloud-w"),cloud=el("div","cloud"),list=el("div","cloud-l"),pressed=null,max=Math.max.apply(null,tags.map(function(t){return t.count}))||1;
+  cloud.setAttribute("role","group");cloud.setAttribute("aria-label","Interest tags");list.setAttribute("aria-live","polite");
+  tags.forEach(function(t){
+    var b=el("button","ctag",t.name),c=el("span","cn",String(t.count));b.type="button";b.appendChild(c);
+    b.style.fontSize=(12+Math.round(t.count/max*10))+"px";b.title=t.what;b.setAttribute("aria-pressed","false");
+    if(!t.count)b.classList.add("empty");
+    b.addEventListener("click",function(){
+      var on=pressed!==b;
+      Array.prototype.forEach.call(cloud.children,function(x){x.setAttribute("aria-pressed","false")});
+      list.textContent="";pressed=on?b:null;
+      if(!on)return;
+      b.setAttribute("aria-pressed","true");
+      list.appendChild(el("div","lg",t.name+" · "+(t.count?t.count+" note"+(t.count===1?"":"s"):"no notes yet")));
+      if(!t.count)list.appendChild(el("p","none","A direction I want to build up. Nothing here yet."));
+      t.notes.forEach(function(x){
+        var nb=el("button",null,x.n);nb.type="button";nb.addEventListener("click",function(){if(byId[x.id])openNode(byId[x.id])});list.appendChild(nb);
+      });
+    });
+    cloud.appendChild(b);
+  });
+  wrap.appendChild(cloud);wrap.appendChild(list);return wrap;
 }
 function nodeCard(n){
   function go(m){return{label:m.label||"a file",go:function(){openNode(m)}}}
@@ -420,9 +468,12 @@ function nodeCard(n){
     c.links=(inf.links||[]).map(function(l){return{label:l[0],href:l[1]}});c.related=hubs.map(go);
   }else if(n.type==="hub"){
     var R=rooms[n.room],w=el("div"),ul=el("ul");c.kind="Room";c.line="room · "+R.count+" items in "+R.folders.length+" folder"+(R.folders.length===1?"":"s");
+    if(inf.cloud)c.line="room · "+R.count+" notes · "+inf.cloud.filter(function(t){return t.count}).length+" of "+inf.cloud.length+" interests have notes";
     c.status=R.collapsed?"folded on the map":"open on the map";c.statusCls="a";
+    if(inf.summary)w.appendChild(el("p",null,inf.summary));
+    if(inf.cloud)w.appendChild(interestCloud(inf.cloud));
     if(inf.note)w.appendChild(el("p",null,inf.note));
-    R.folders.forEach(function(f){var li=el("li");li.textContent=f.name+" · "+f.count;ul.appendChild(li)});
+    if(!inf.cloud)R.folders.forEach(function(f){var li=el("li");li.textContent=f.name+" · "+f.count;ul.appendChild(li)});
     w.appendChild(ul);c.body=w;c.related=[go(root)].concat(R.dots.slice(0,12).map(go));c.links=inf.links||[];
   }else if(n.type==="dot"){
     var Rd=rooms[n.room],f=Rd.folders[n.folder];c.kind=Rd.label;
@@ -469,7 +520,7 @@ function mountTour(){
       {rect:ring(guide(1)),before:mapView,title:"Memory: rooms of notes",text:"Each coloured arc is a room, like Wiki notes or Blog. One dot is one note, part or post. Click a dot for its card; double-click a room to fold it."},
       {rect:ring(guide(2)),before:mapView,title:"Outer ring: pages and projects",text:"Hexagons are this site's pages and public projects. A page or post opens on top of the map, and its node lights up."}];
   if(FRAMED)steps.push(
-      {sel:doc(".k-nav"),before:mapView,title:"Site tabs",text:"The same bar on every page: Me, Blog, Intent, Course and GitHub. Each page opens over this same map."},
+      {sel:doc(".k-nav"),before:mapView,title:"Site tabs",text:"The same bar on every page: Meta-Factory, Case studies, Blog, About and Work with me. Each page opens over this same map."},
       {sel:doc("#pageov"),before:function(){setLegend(false);fold(true)},title:"The page overlay",text:"Every page of the site reads in this panel, on top of the live map. Minimise it to see the whole map, or close it; the button that is left brings it back."});
   steps.push(
       {sel:sh("motionBtn"),before:mapView,title:"Buttons",text:"Turn the motion on or off (remembered on this device), show or hide the side lists, and open the menu."},
@@ -642,8 +693,53 @@ var last=0;
 function frame(t){
   var dt=Math.min(.05,(t-last)/1000||0);last=t;
   var moving=step(dt);
-  if(dirty||moving||S.motion){draw(t);dirty=false}
+  if(!S.dim3&&(dirty||moving||S.motion)){draw(t);dirty=false}
   requestAnimationFrame(frame);
+}
+
+/* ---------- the 3D view: the same public nodes, drawn by 3d-force-graph (pinned, loaded only when 3D is opened) ---------- */
+var G3D_SRC="https://cdn.jsdelivr.net/npm/3d-force-graph@1.79.0/dist/3d-force-graph.min.js",g3=null,g3Loading=false;
+var KINDWORD={root:"rules file",hub:"room",dot:"note, part or post",skill:"skill",routine:"routine",app:"page or project"};
+function g3Data(){
+  var ns=nodes.map(function(n){return{id:n.i,name:n.label||"",kind:KINDWORD[n.type]||n.type,color:n.color,val:n.type==="root"?30:n.type==="hub"?12:n.type==="dot"?1:6}});
+  var ls=[];
+  nodes.forEach(function(n){
+    if(n.type==="hub")ls.push({source:root.i,target:n.i});
+    else if(n.type==="dot"&&n.hub)ls.push({source:n.hub.i,target:n.i});
+    else if(n.type==="skill"||n.type==="app"||n.type==="routine")ls.push({source:root.i,target:n.i});
+  });
+  return{nodes:ns,links:ls};
+}
+function g3Size(){var s=$("stage");return[s.clientWidth||W,s.clientHeight||H]}
+function g3Fail(){
+  setDim(false,true);say("The 3D view did not load. The flat map stays.");
+}
+function g3Build(){
+  var box=$("g3d"),sz=g3Size();
+  g3=window.ForceGraph3D()(box).width(sz[0]).height(sz[1]).backgroundColor("#05060a").showNavInfo(false)
+    .graphData(g3Data()).nodeLabel(function(n){return n.kind+" · "+n.name}).nodeColor("color").nodeVal("val").nodeRelSize(4).nodeOpacity(.9)
+    .linkColor(function(){return "rgba(120,130,150,.35)"}).linkWidth(.4)
+    .onNodeClick(function(n){var m=nodes[n.id];if(m)openNode(m)});
+  if(!S.motion)g3.cooldownTime(0);
+}
+function setDim(on,quiet){
+  if(on===!!S.dim3)return;
+  if(on&&!g3){
+    if(g3Loading)return;
+    var go=function(){g3Loading=false;if(window.ForceGraph3D){try{g3Build();showDim(true,quiet)}catch(e){g3Fail()}}else g3Fail()};
+    if(window.ForceGraph3D){go();return}
+    g3Loading=true;var s=document.createElement("script");s.src=G3D_SRC;s.onload=go;s.onerror=function(){g3Loading=false;g3Fail()};
+    document.head.appendChild(s);say("Loading the 3D view");return;
+  }
+  showDim(on,quiet);
+}
+function showDim(on,quiet){
+  S.dim3=on;$("g3d").hidden=!on;cv.hidden=on;
+  var b=$("dimBtn");b.textContent=on?"2D":"3D";b.setAttribute("aria-pressed",String(on));
+  b.title=on?"Back to the flat map":"Switch between the flat map and a 3D view";
+  if(g3){if(on){var sz=g3Size();g3.width(sz[0]).height(sz[1]);g3.resumeAnimation()}else g3.pauseAnimation()}
+  if(!on){resize();dirty=true}
+  if(!quiet)say(on?"3D view":"Flat map");
 }
 
 function step(dt){
@@ -791,16 +887,24 @@ function draw(t){
 
   // text in screen space
   ctx.setTransform(DPR,0,0,DPR,0,0);ctx.textAlign="center";ctx.textBaseline="alphabetic";
-  function label(txt,wx,wy,color,size,dy,al){
+  // a label keeps inside the stage, and a soft one (a ring name) gives way to any label already drawn
+  var placed=[];
+  function label(txt,wx,wy,color,size,dy,al,soft){
     var x=view.x+wx*k,y=view.y+wy*k+dy;if(x<-80||x>W+80||y<-20||y>H+20)return;
-    ctx.globalAlpha=al;ctx.fillStyle=color;ctx.font=size+"px ui-monospace,monospace";ctx.fillText(txt,x,y);
+    ctx.font=size+"px ui-monospace,monospace";
+    var w=ctx.measureText(txt).width;
+    x=Math.max(w/2+6,Math.min(W-w/2-6,x));
+    if(soft){for(var p=0;p<placed.length;p++){var o=placed[p];if(x-w/2<o[2]&&x+w/2>o[0]&&y-size<o[3]&&y>o[1])return}}
+    placed.push([x-w/2-4,y-size-2,x+w/2+4,y+2]);
+    ctx.globalAlpha=al;ctx.fillStyle=color;ctx.fillText(txt,x,y);
   }
   label(root.label,root.x,root.y,"#e9e6e0",11,root.r*k+16,flagMode&&!flags[root.i]?.25:1);
   hubs.forEach(function(h){
     var R=rooms[h.room];
     label(R.label.toUpperCase()+(R.collapsed?" · "+R.count:""),h.x,h.y,h.color,10,-h.r*k-8,flagMode?(flags[h.i]?1:.3):.95);
   });
-  if(guideA>.05)L.guides.forEach(function(gd){label(gd.label,0,gd.ly,gd.lc,12,0,guideA*(flagMode?.4:.9))});
+  // on a narrow stage the ring names show only while a node is hovered or picked
+  if(guideA>.05&&(W>=520||S.hover||S.sel))L.guides.forEach(function(gd){label(gd.label,0,gd.ly,gd.lc,12,0,guideA*(flagMode?.4:.9),true)});
   if(S.hover&&S.hover.type!=="dot"&&S.hover.type!=="hub"&&S.hover.type!=="root")label(S.hover.label,S.hover.x,S.hover.y,"#e9e6e0",11,-S.hover.r*k-8,1);
   else if(S.sel&&S.sel!==S.hover&&S.sel.type!=="dot"&&S.sel.type!=="hub"&&S.sel.type!=="root")label(S.sel.label+(S.here?" · you are here":""),S.sel.x,S.sel.y,"#e9e6e0",11,-S.sel.r*k-8,1);
   if(S.names||(S.q&&matchCount>0&&matchCount<=40)){

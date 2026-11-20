@@ -1,5 +1,6 @@
 ---
-tags: [skills]
+tags: [Skills, Security and safety]
+kind: [skills]
 links: [agent-ergonomics]
 source: Kun Chen, "Agent Engineering Workflow" (how skills may hurt)
 ---

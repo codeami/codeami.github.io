@@ -1,5 +1,6 @@
 ---
-tags: [method]
+tags: [AI agents, Security and safety]
+kind: [method]
 links: [structure-decides-what-matters]
 source: Jake Van Clief, "Second Brain" talk (27:13)
 ---
@@ -13,4 +14,4 @@ Evidence: "You want to build your systems with the understanding that a human is
 Elaboration:
 - The human knows when, how, and what questions to ask; capture that, not everything in the head.
 - Systems that amplify human judgment get more return for less infrastructure.
-- This is the same stance as backpass's human apply gate.
+- This is the same stance as my own review tool's human apply gate.

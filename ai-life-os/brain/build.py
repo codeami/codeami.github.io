@@ -2,7 +2,11 @@
 """Copy the allowlisted wiki notes into this site: python3 -I brain/build.py --src <wiki nodes dir> --never-send <terms file>
 Reads only the slugs in brain/allowlist.txt. A privacy pass drops every line that holds a never-send term, the local
 user's names, a local path or an email address. Writes brain/notes/<slug>.md (public copies) and brain/notes.js (the
-data the map page reads), then prints counts. The source folder is never written to. Stdlib only."""
+data the map page reads), then prints counts. The source folder is never written to. Stdlib only.
+Each note's interest tags come from brain/src/interests.json (a note with no entry stops the build); the note's own
+tags are kept as its "kind". python3 -I brain/build.py --from-copies re-reads the public copies in brain/notes/ instead
+of the private wiki, to apply a change to interests.json without the private source (no never-send file is needed: the
+copies already passed it, and the names, path and email checks still run)."""
 import argparse, getpass, json, re, subprocess, sys
 from collections import Counter
 from pathlib import Path
@@ -79,21 +83,36 @@ def listval(v):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument("--src", required=True, help="the wiki's nodes/ folder (read only)")
-    ap.add_argument("--never-send", required=True, help="file of terms that must never leave the machine")
+    ap.add_argument("--src", help="the wiki's nodes/ folder (read only)")
+    ap.add_argument("--never-send", help="file of terms that must never leave the machine")
+    ap.add_argument("--from-copies", action="store_true", help="re-read brain/notes/ instead of the private wiki")
     ap.add_argument("--allowlist", default=str(HERE / "allowlist.txt"))
     a = ap.parse_args()
 
-    src = Path(a.src)
+    interests = json.loads((HERE / "src" / "interests.json").read_text(encoding="utf-8"))
+    known = {i["name"] for i in interests["interests"]}
     allow = [s.strip() for s in Path(a.allowlist).read_text(encoding="utf-8").splitlines()
              if s.strip() and not s.lstrip().startswith("#")]
-    terms, names = read_terms(a.never_send), user_names()
-    paths = {s: src / f"{s}.md" for s in allow if (src / f"{s}.md").is_file()}
-    missing = [s for s in allow if s not in paths]
-    # Notes written for this site (brain/site-notes/) are always copied, through the same privacy pass.
-    paths.update({p.stem: p for p in sorted((HERE / "site-notes").glob("*.md"))})
+    if a.from_copies:
+        terms, names = set(), user_names()
+        paths = {p.stem: p for p in sorted(NOTES.glob("*.md"))}
+        missing = []
+    else:
+        if not (a.src and a.never_send):
+            ap.error("--src and --never-send are needed unless --from-copies is given")
+        src = Path(a.src)
+        terms, names = read_terms(a.never_send), user_names()
+        paths = {s: src / f"{s}.md" for s in allow if (src / f"{s}.md").is_file()}
+        missing = [s for s in allow if s not in paths]
+        # Notes written for this site (brain/site-notes/) are always copied, through the same privacy pass.
+        paths.update({p.stem: p for p in sorted((HERE / "site-notes").glob("*.md"))})
     present = list(paths)
     keep = set(present)
+    for slug in present:
+        tags = interests["notes"].get(slug)
+        if not tags or not set(tags) <= known:
+            sys.exit(f"{slug}: give it one to three interests from brain/src/interests.json")
+    texts = {slug: paths[slug].read_text(encoding="utf-8") for slug in present}  # read before the old copies go
 
     NOTES.mkdir(exist_ok=True)
     for old in NOTES.glob("*.md"):
@@ -102,11 +121,18 @@ def main():
     dropped, data = Counter(), []
     for slug in present:
         out = []
-        for ln in paths[slug].read_text(encoding="utf-8").splitlines():
+        fm0 = parse(texts[slug])[0]
+        kind = listval(fm0.get("kind") or fm0.get("tags", ""))  # a copy already retagged keeps its kind
+        for ln in texts[slug].splitlines():
             why = reason(ln, terms, names)
             if why:
                 dropped[why] += 1
                 continue
+            if ln.startswith("kind:"):
+                continue
+            if ln.startswith("tags:"):
+                out.append("tags: [%s]" % ", ".join(interests["notes"][slug]))
+                ln = "kind: [%s]" % ", ".join(kind)
             if ln.startswith("links:"):
                 # Links to notes that are not public would only name private notes.
                 ln = "links: [%s]" % ", ".join(l for l in listval(ln[6:]) if l in keep)
@@ -114,10 +140,10 @@ def main():
         text = "\n".join(out) + "\n"
         (NOTES / f"{slug}.md").write_text(text, encoding="utf-8")
         fm, title, secs = parse(text)
-        data.append({"id": slug, "title": title or slug, "tags": listval(fm.get("tags", "")),
+        data.append({"id": slug, "title": title or slug, "tags": listval(fm.get("tags", "")), "kind": listval(fm.get("kind", "")),
                      "links": listval(fm.get("links", "")), "source": fm.get("source", ""),
                      "claim": secs.get("Claim", ""), "evidence": secs.get("Evidence", ""),
-                     **({"site": True} if paths[slug].parent.name == "site-notes" else {})})
+                     **({"site": True} if (HERE / "site-notes" / f"{slug}.md").is_file() else {})})
 
     js = json.dumps(data, ensure_ascii=False, indent=1).replace("</", "<\\/")
     (HERE / "notes.js").write_text("/* Built by brain/build.py from brain/allowlist.txt. Do not edit by hand. */\n"
@@ -126,6 +152,8 @@ def main():
     # Re-scan what was written: the pass must leave nothing behind.
     left = sum(1 for f in [*NOTES.glob("*.md"), HERE / "notes.js"]
                for ln in f.read_text(encoding="utf-8").splitlines() if reason(ln, terms, names))
+    count = Counter(t for d in data for t in d["tags"])
+    print("notes per interest: " + ", ".join(f"{i['name']} {count[i['name']]}" for i in interests["interests"]))
     print(f"allowlisted: {len(allow)}  copied: {len(present)} (site notes included)  missing: {len(missing)}")
     for s in missing:
         print(f"  missing: {s}")

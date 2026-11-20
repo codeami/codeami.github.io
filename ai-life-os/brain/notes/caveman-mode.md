@@ -1,5 +1,6 @@
 ---
-tags: [talk-modes]
+tags: [Communication]
+kind: [talk-modes]
 links: [adhd-mode, ste100-mode, progressive-disclosure]
 source: EA-bot talk modes, written for this site
 ---

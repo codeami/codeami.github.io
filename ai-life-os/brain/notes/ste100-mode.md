@@ -1,5 +1,6 @@
 ---
-tags: [talk-modes]
+tags: [Communication]
+kind: [talk-modes]
 links: [adhd-mode, caveman-mode, progressive-disclosure]
 source: EA-bot talk modes, after ASD-STE100 Simplified Technical English
 ---

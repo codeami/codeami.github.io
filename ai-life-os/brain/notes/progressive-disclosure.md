@@ -1,5 +1,6 @@
 ---
-tags: [skills]
+tags: [Skills, Context engineering]
+kind: [skills]
 links: [icm-layer-ladder, global-memory-is-minimal]
 source: Kun Chen, "Agent Engineering Workflow" (using skills)
 ---

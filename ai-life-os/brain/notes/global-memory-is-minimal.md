@@ -1,5 +1,6 @@
 ---
-tags: [memory]
+tags: [Context engineering, Inference and cost]
+kind: [memory]
 links: []
 source: Kun Chen, "Agent Engineering Workflow" (global memory file)
 ---

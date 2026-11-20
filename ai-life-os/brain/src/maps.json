@@ -1,0 +1,15 @@
+{
+ "group": "Maps and wikis",
+ "maps": [
+  {"n": "Map of GitHub", "what": "Each dot is a project; dots that share stargazers sit close. A frozen snapshot from May 2025.", "url": "https://anvaka.github.io/map-of-github/"},
+  {"n": "Map of Reddit", "what": "The same idea for subreddits.", "url": "https://anvaka.github.io/map-of-reddit/"},
+  {"n": "DeepWiki", "what": "An AI-written wiki for any GitHub repository, with an MCP server.", "url": "https://deepwiki.com/"},
+  {"n": "Simple English Wikipedia", "what": "A plain-language encyclopedia.", "url": "https://simple.wikipedia.org/"},
+  {"n": "Embedding Atlas", "what": "Apple's tool to map text by meaning, in the browser.", "url": "https://apple.github.io/embedding-atlas/"},
+  {"n": "WizMap", "what": "Embedding maps with search and zoom.", "url": "https://poloclub.github.io/wizmap/"},
+  {"n": "Connected Papers", "what": "A graph around one seed paper. A model for a Research tag.", "url": "https://www.connectedpapers.com/"},
+  {"n": "God's Eye View", "what": "Live open data on a 3D globe. An open-source repository, not a hosted page.", "url": "https://github.com/bilawalsidhu/gods-eye-view"},
+  {"n": "Kumu", "what": "Relationship maps with filters.", "url": "https://kumu.io/"},
+  {"n": "Argos Atlas", "what": "A world map of public live cameras, flights, ships and satellites. Spanish-language site. The map page only.", "url": "https://argosatlas.com/map/"}
+ ]
+}

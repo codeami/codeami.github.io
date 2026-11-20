@@ -3,7 +3,9 @@
 Run from anywhere: python3 -I ai-life-os/brain/build_data.py
 Reads only public files of this site:
   brain/notes.js            the approved wiki notes (built by build.py)
+  brain/src/interests.json  the interest tags of those notes, empty ones too (the cloud on the Wiki notes card)
   brain/src/extra.json      hand-written nodes: areas, FirstMate parts and tricks, the harness tier list
+  brain/src/maps.json       the "Maps and wikis" links on the Wiki notes card (other people's maps, link-only)
   brain/src/site.json       the centre file, this site's pages, public projects, the reading order
   blog/index.html           the Blog posts
   course/course.json        the AI introductory course's lessons
@@ -28,24 +30,31 @@ def live(url):
 site = json.loads(rd("brain/src/site.json"))
 extra = json.loads(rd("brain/src/extra.json"))
 notes = json.loads(rd("brain/notes.js").split("=", 1)[1].strip().rstrip(";"))
+maps = json.loads(rd("brain/src/maps.json"))
 
 
 def links(pairs):
     return [{"label": l, "href": h} for l, h in pairs or [] if live(h)]
 
 
-# Room 1: the wiki notes, one folder per first tag
+# Room 1: the wiki notes. One folder (one group of dots on the map) per first interest tag; the card's cloud counts every tag.
+interests = json.loads(rd("brain/src/interests.json"))
+cloud = [{"name": i["name"], "what": i["what"], "count": sum(i["name"] in n["tags"] for n in notes),
+          "notes": [{"id": n["id"], "n": n["title"]} for n in notes if i["name"] in n["tags"]]} for i in interests["interests"]]
+summary = "%d notes from my own wiki, sorted by what they are about. A bigger tag has more notes. A dashed tag has none yet: it is a direction I want to build, not something I know." % len(notes)
 by_tag = {}
 for n in notes:
     by_tag.setdefault(n["tags"][0] if n["tags"] else "other", []).append({
-        "id": n["id"], "n": n["title"], "line": "wiki note · " + ", ".join(n["tags"]),
+        "id": n["id"], "n": n["title"], "line": "wiki note · " + ", ".join(n["tags"]) + (" · kind: " + ", ".join(n["kind"]) if n.get("kind") else ""),
         "body": [n["claim"]] + (["Evidence: " + n["evidence"]] if n.get("evidence") else []) + (["Source: " + n["source"]] if n.get("source") else []),
         "links": links([["Read the public copy of this note", "notes/" + n["id"] + ".md"]]),
         "rel": n.get("links", [])})
 notes_room = {"id": "notes", "label": "Wiki notes", "color": "#b57bff",
               "note": "A public slice of the owner's private notes wiki: only notes on an approved list are copied, and a build step drops any line with a private term, a local path, an email or a user name.",
-              "links": links([["Approved list", "allowlist.txt"], ["Build script", "build.py"]]),
-              "folders": [{"name": t, "count": len(fs), "files": fs} for t, fs in sorted(by_tag.items())]}
+              "links": links([["Approved list", "allowlist.txt"], ["Build script", "build.py"]]) + [
+                  {"label": m["n"], "href": m["url"], "title": m["what"], "group": maps["group"], "newTab": True} for m in maps["maps"]],
+              "summary": summary, "cloud": cloud,
+              "folders": [{"name": c["name"], "count": len(by_tag[c["name"]]), "files": by_tag[c["name"]]} for c in cloud if c["name"] in by_tag]}
 
 # Rooms 2 and 3: FirstMate in detail, and areas of interest (src/extra.json)
 X = {e["id"]: e for e in extra["extra"]}
@@ -116,9 +125,9 @@ course_room = {"id": "course", "label": "Course", "color": "#7dff8a",
 
 skills = []
 
-out = {"meta": {"name": "Public second brain of the software factory", "invented": False,
+out = {"meta": {"name": "Public second brain of the Software Meta-Factory", "invented": False,
                 "note": "Public data only: the approved wiki notes, this site's pages and posts, the harness tier list. No private files, paths, routines or links."},
-       "root": site["root"], "rooms": [notes_room, fm_room, areas_room, tier_room, posts_room, course_room], "skills": skills, "routines": [],
+       "root": site["root"], "rooms": [notes_room, fm_room, areas_room, tier_room, posts_room] + ([course_room] if live("../course/index.html") else []), "skills": skills, "routines": [],
        "apps": [], "projects": [dict(p, kind="project") for p in site["projects"]], "pages": [dict(p, kind="page") for p in site["pages"] if live(p["url"])],
        "reading": [r for r in site["reading"] if live(r["url"])]}
 (HERE / "brain-data.json").write_text(json.dumps(out, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")

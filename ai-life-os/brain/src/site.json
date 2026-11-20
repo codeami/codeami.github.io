@@ -5,22 +5,24 @@
   "links": [["Post: one rules file for every tool", "../blog/everything-is-a-file.html"]]},
  "pages": [
   {"n": "whoami", "state": "home", "url": "../../index.html"},
-  {"n": "Intent", "state": "what I do", "url": "../../intent/index.html"},
-  {"n": "The software factory demo", "state": "start here", "url": "../index.html"},
+  {"n": "The Software Meta-Factory", "state": "start here", "url": "../index.html"},
   {"n": "AI introductory course", "state": "7 lessons", "url": "../course/index.html"},
-  {"n": "Blog", "state": "4 posts", "url": "../blog/index.html"},
-  {"n": "Harness arena", "state": "11 setups scored", "url": "../arena.html"}
+  {"n": "Case studies", "state": "1 case", "url": "../../case-studies/index.html"},
+  {"n": "Blog", "state": "5 posts", "url": "../blog/index.html"},
+  {"n": "Harness arena", "state": "11 setups scored", "url": "../arena.html"},
+  {"n": "About", "state": "who I am", "url": "../../about/index.html"},
+  {"n": "Work with me", "state": "contact", "url": "../../work-with-me/index.html"}
  ],
  "projects": [
   {"n": "Firstmate (upstream)", "state": "Kun Chen, MIT", "url": "https://github.com/kunchenguid/firstmate"},
   {"n": "codeami.github.io", "state": "this site", "url": "https://github.com/codeami/codeami.github.io"},
-  {"n": "reels4mphotos", "state": "live", "url": "https://codeami.github.io/reels4mphotos/"},
+  {"n": "reels4mphotos", "state": "pre-MVP", "url": "https://codeami.github.io/reels4mphotos/"},
   {"n": "swarm-referee", "state": "public repo", "url": "https://github.com/codeami/swarm-referee"}
  ],
  "reading": [
   {"title": "Write it down once: a folder your AI can read", "url": "../blog/everything-is-a-file.html", "line": "Context · Blog"},
   {"title": "One harness for every agent", "url": "../blog/one-harness-for-every-agent.html", "line": "Setup · Blog"},
-  {"title": "A map of my mind", "url": "../blog/second-brain-page.html", "line": "Setup · Blog"},
+  {"title": "A map of my mind", "url": "../index.html#map", "line": "Map · live"},
   {"title": "When the notes are wrong", "url": "../blog/when-the-notes-are-wrong.html", "line": "Alignment · Blog"}
  ]
 }

@@ -1,5 +1,6 @@
 ---
-tags: [agentic-stack]
+tags: [Dev tooling, Inference and cost]
+kind: [agentic-stack]
 links: [popular-skills-are-not-good-skills]
 source: Kun Chen, "Agent Engineering Workflow" (the importance of agent ergonomics)
 ---

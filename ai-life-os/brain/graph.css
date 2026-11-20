@@ -4,12 +4,14 @@
 :host{display:block;color:var(--ink);font:12px/1.45 ui-monospace,SFMono-Regular,Menlo,monospace}
 #stage{position:fixed;inset:0}
 canvas{display:block;width:100%;height:100%;cursor:grab;touch-action:none}
+canvas[hidden],#g3d[hidden]{display:none}
+#g3d{position:absolute;inset:0;touch-action:none}
 canvas.drag{cursor:grabbing}canvas.hit{cursor:pointer}
 .title{position:fixed;left:20px;top:16px;pointer-events:none}
 .title b{letter-spacing:.3em;font-size:15px}.title b i{color:var(--accent);font-style:normal}
 .title span{letter-spacing:.3em;color:var(--mute);font-size:13px;margin-left:10px}
 .title small{display:block;margin-top:4px;font-size:10px;letter-spacing:.14em;color:var(--mute);text-transform:uppercase}
-.top{position:fixed;right:16px;top:14px;display:flex;gap:8px;z-index:3}
+.top{position:fixed;right:16px;top:var(--tt,14px);display:flex;gap:8px;z-index:3}
 .btn{background:rgba(12,14,17,.85);color:var(--ink);border:1px solid var(--line);font:inherit;font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:6px 12px;cursor:pointer;text-decoration:none;display:inline-block}
 .btn:hover,.btn:focus-visible{border-color:var(--accent);color:var(--accent);outline:none}
 .btn[aria-pressed=true],.btn.on{border-color:var(--accent);color:var(--accent)}
@@ -53,7 +55,7 @@ label.ck{display:flex;gap:8px;align-items:center;margin:8px 0;color:var(--ink);f
 .title{left:calc(var(--lw) + 20px)}
 .top,#panel{right:calc(var(--rw) + 16px)}
 #legendBtn,#legend{left:calc(var(--lw) + 16px)}
-.hint{left:calc(50% + (var(--lw) - var(--rw)) / 2)}
+.hint{left:calc(50% + (var(--lw) - var(--rw)) / 2);max-width:calc(100% - var(--lw) - var(--rw) - 32px);overflow:hidden;text-overflow:ellipsis}
 #side[hidden]{display:none}
 .side-col{position:fixed;top:0;bottom:0;overflow:auto;background:var(--panel);padding:14px;z-index:3}
 #wl{left:0;width:260px;border-right:1px solid var(--line)}
@@ -73,7 +75,14 @@ label.ck{display:flex;gap:8px;align-items:center;margin:8px 0;color:var(--ink);f
 #card a{color:var(--accent)}
 /* --lw and --rw are set on the page's body (frame.css) and inherit into this shadow root */
 :host(.ov) #wr{display:none}
-:host(.framed) #panel{top:56px;max-height:calc(100% - 76px)}
+/* On a framed page the site's one dropdown (under the name) holds Motion, Widgets, Legend, 3D and the rest, so the floating buttons stay out of sight */
+:host(.framed) .top,:host(.framed) #legendBtn{display:none}
+:host(.framed) #panel{top:calc(var(--tt,14px));max-height:calc(100% - var(--tt,14px) - 20px)}
+.tabs{display:flex;gap:2px;margin:0 0 12px;border-bottom:1px solid var(--line)}
+.tab{flex:1;background:none;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;color:var(--mute);font:inherit;font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:8px 6px;cursor:pointer}
+@media (max-width:899px){:host(.framed) #side{top:max(52px,var(--tt,0px))}} /* the lists start under the folded page card, with their tabs in view */
+.tab[aria-selected=true]{color:var(--ink);border-bottom-color:var(--accent)}
+.tab:hover,.tab:focus-visible{color:var(--accent);outline:none}
 @media (max-width:760px){#legendBtn{bottom:calc(var(--ob,0px) + 64px)}#legend{bottom:calc(var(--ob,0px) + 104px)}}
 @media (max-width:899px){#side{position:fixed;top:52px;left:0;right:0;bottom:0;overflow:auto;background:var(--panel);z-index:5;border-top:1px solid var(--line)}
   #wl,#wr{position:static;width:auto;border:0;overflow:visible}}

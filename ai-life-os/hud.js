@@ -7,28 +7,8 @@
 (function () {
   var root = document.documentElement;
   var base = document.currentScript ? document.currentScript.src.replace(/[^\/]*$/, "") : "";
-  function skin() { return root.getAttribute("data-skin") === "matrix" ? "matrix" : "hud"; }
-
-  function bindToggle() {
-    var btns = document.querySelectorAll("#theme, button.theme");
-    function label() {
-      var m = skin() === "matrix";
-      btns.forEach(function (b) {
-        b.textContent = m ? "HUD" : "Matrix";
-        b.setAttribute("aria-label", m ? "Switch to the HUD colours" : "Switch to the Matrix green colours");
-        b.setAttribute("aria-pressed", m ? "true" : "false");
-      });
-    }
-    btns.forEach(function (b) {
-      b.addEventListener("click", function () {
-        var next = skin() === "matrix" ? "hud" : "matrix";
-        root.setAttribute("data-skin", next);
-        try { localStorage.setItem("skin", next); } catch (e) { /* storage blocked: lasts for this page only */ }
-        label();
-      });
-    });
-    label();
-  }
+  // the skin switch (HUD, Matrix, Calm) lives in skin.js; the header button is bound there
+  function bindToggle() { if (window.AIOSkin) window.AIOSkin.bind(); }
 
   /* Top bar extras, the same on every page: the site version, Course and Second Brain
      tabs, a link up to the whoami home (the folder above this one) and the GitHub repo. */
@@ -38,7 +18,7 @@
     if (!bar || bar.querySelector(".vtag") || bar.classList.contains("tb")) return; // the one top bar carries its own links
     var home = bar.querySelector(".k-home, .where");
     var v = document.createElement("span");
-    v.className = "vtag"; v.textContent = VERSION; v.title = "The software factory " + VERSION;
+    v.className = "vtag"; v.textContent = VERSION; v.title = "The Software Meta-Factory " + VERSION;
     if (home) home.parentNode.insertBefore(v, home.nextSibling);
     var toggle = bar.querySelector("#theme, button.theme");
     var at = toggle ? toggle.parentNode : bar;
@@ -76,38 +56,32 @@
     [].slice.call(document.body.childNodes).forEach(function (n) { if (n !== nav && n.nodeName !== "SCRIPT") body.appendChild(n); });
     document.body.appendChild(ov); document.body.appendChild(reopen);
     var state = "open", held = null; // open | min | closed
-    /* The landing (meta calm-landing) opens on the chart alone, with the page one tap away.
-       A deep link to a step opens the page; otherwise the visitor's last pick (open or closed) is kept in this browser. */
-    var calm = !!document.querySelector('meta[name="calm-landing"]');
-    function remember(v) { try { localStorage.setItem("landing-page", v); } catch (e) { /* storage blocked: the pick lasts for this visit only */ } }
-    if (calm) {
-      var kept = null;
-      try { kept = localStorage.getItem("landing-page"); } catch (e) { /* storage blocked: calm by default */ }
-      // A first visit (no "trip:v1" yet, no address hash) opens on the landing hook, so the card starts open.
-      var tripped = true;
-      try { tripped = !!localStorage.getItem("trip:v1"); } catch (e) { /* storage blocked: stay calm */ }
-      state = /^#(step-|explain|whoami|me|trip)/.test(location.hash) || kept === "open" || (!tripped && !location.hash) ? "open" : "closed";
-    }
+    /* A page can start with its card folded (meta panel-start="min") so the map is the first thing seen;
+       meta panel-line is the one explainer line the folded card keeps. A deep link to a part of the page opens it. */
+    var ps = document.querySelector('meta[name="panel-start"]'), pl = document.querySelector('meta[name="panel-line"]');
+    if (ps && ps.content === "min" && (!location.hash || location.hash === "#map")) state = "min";
+    var line = mk("p", "pov-line", pl ? pl.content : ""); line.hidden = true; ov.insertBefore(line, body);
     function phone() { return window.innerWidth <= 760; }
     function layout() {
       document.body.style.setProperty("--navh", (nav ? nav.offsetHeight : 0) + "px");
+      line.hidden = !(state === "min" && pl);
       title.textContent = document.title.split(" · ")[0];
       ov.hidden = state === "closed"; reopen.hidden = state !== "closed";
       ov.classList.toggle("min", state === "min");
       min.textContent = state === "min" ? "▴ Show" : "▾ Minimise";
       min.setAttribute("aria-label", state === "min" ? "Show the page" : "Minimise the page to see the map");
       document.body.classList.toggle("ovopen", state === "open");
+      // a folded card sits over the map's top buttons: they step down below it
+      if (state === "min") document.body.style.setProperty("--tt", (ov.offsetHeight + 18) + "px");
+      else document.body.style.removeProperty("--tt");
       if (G) { G.overlay(state === "open" && !phone()); G.setInsets(state === "open" && phone() ? ov.offsetHeight : 0); }
     }
     function set(s) { state = s; layout(); }
     min.onclick = function () { set(state === "min" ? "open" : "min"); };
     x.onclick = function () {
       set("closed"); reopen.focus();
-      if (calm) { remember("closed"); try { history.replaceState(null, "", location.pathname + location.search); } catch (e) { /* sandbox may refuse */ } }
     };
-    reopen.onclick = function () { set("open"); if (calm) remember("open"); };
-    // "Explain this" on the landing: open the page and tell it to start the journey
-    function explain() { set("open"); remember("open"); window.dispatchEvent(new Event("explain")); }
+    reopen.onclick = function () { set("open"); };
     window.addEventListener("resize", layout);
     // the tour folds the card away for the map's steps, and puts it back as it was
     function shown(on) { if (!on) { if (held === null) held = state; if (state === "open") set("min"); } else if (held !== null) { set(held); held = null; } }
@@ -152,11 +126,12 @@
     function go(url) {
       var u = new URL(url, location.href);
       if (u.origin !== location.origin) return false; // public projects open from their card
-      // A link to the page the reader is already on never reloads it: it opens the card, and a page that listens
-      // for "samepage" (the landing) shows its own first section.
+      // A link to the page the reader is already on never reloads it: it opens the card.
+      // "#map" is a link to the map itself: fold the card so the whole chart shows
+      if (pathOf(u) === pathOf(location) && u.hash === "#map") { set("min"); return true; }
       if (pathOf(u) === pathOf(location)) {
         if (u.hash) location.hash = u.hash; else { body.scrollTop = 0; window.dispatchEvent(new Event("samepage")); }
-        set("open"); if (calm) remember("open"); if (G) G.select(u.href);
+        set("open"); if (G) G.select(u.href);
         return true;
       }
       fetch(u.href).then(function (r) { if (!r.ok) throw 0; return r.text(); }).then(function (html) {
@@ -171,7 +146,7 @@
         if (nav) [].forEach.call(nav.querySelectorAll("a[href]"), function (a) {
           if (a.href.split("#")[0] === u.href.split("#")[0]) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
         settle();
-        body.scrollTop = 0; set("open"); if (G) G.select(u.href);
+        body.scrollTop = 0; set(u.hash === "#map" ? "min" : "open"); if (G) G.select(u.href);
         var t = u.hash && document.getElementById(decodeURIComponent(u.hash.slice(1))); if (t) t.scrollIntoView();
       }).catch(function () { location.href = u.href; });
       return true;
@@ -190,9 +165,50 @@
       s.onload = function () { load(list.slice(1), done); }; s.onerror = function () { /* the page stays readable without the map */ };
       document.head.appendChild(s);
     }
+    /* The one dropdown, under the name: Look (the skin), Map, View and Help. It replaces the floating buttons
+       (Motion, Widgets, Menu, Legend, the ask chips, Show page and the skin button). The map keeps the m key for motion. */
+    function dropdown() {
+      var brand = nav && nav.querySelector(".tb-brand"); if (!brand || nav.querySelector(".tb-drop")) return;
+      var wrap = mk("div", "tb-drop"), btn = mk("button", "tb-drop-btn", "▾"), menu = mk("div", "tb-sheet");
+      btn.type = "button"; btn.id = "tbDrop"; btn.setAttribute("aria-haspopup", "true"); btn.setAttribute("aria-expanded", "false"); btn.setAttribute("aria-controls", "tbSheet");
+      btn.setAttribute("aria-label", "Menu: look, map, view, help"); menu.id = "tbSheet"; menu.hidden = true;
+      wrap.appendChild(btn); wrap.appendChild(menu); brand.after(wrap); nav.classList.add("has-drop");
+      function close() { menu.hidden = true; btn.setAttribute("aria-expanded", "false"); }
+      function section(title) { var s = mk("div", "tb-sec"), r = mk("div", "tb-row"); s.appendChild(mk("h3", "", title)); s.appendChild(r); menu.appendChild(s); return r; }
+      function item(row, label, fn, pressed, keep) {
+        var b = mk("button", "tb-item", label); b.type = "button"; if (pressed != null) b.setAttribute("aria-pressed", String(!!pressed));
+        b.addEventListener("click", function () { fn(); if (keep) build(); else close(); }); row.appendChild(b);
+      }
+      function ask(text) { var c = [].filter.call(document.querySelectorAll("#askBar .chip"), function (b) { return b.textContent === text; })[0]; if (c) c.click(); }
+      function build() {
+        menu.textContent = ""; var m = G ? G.get() : {}, skin = window.AIOSkin ? window.AIOSkin.current() : "hud", r;
+        r = section("Look");
+        [["hud", "HUD"], ["matrix", "Matrix"], ["calm", "Calm"]].forEach(function (s) { item(r, s[1], function () { if (window.AIOSkin) window.AIOSkin.set(s[0]); }, skin === s[0], true); });
+        if (G) {
+          r = section("Map");
+          item(r, "Motion", function () { G.act("motion"); }, m.motion, true);
+          item(r, "Widgets", function () { G.act("widgets"); }, m.widgets, true);
+          item(r, "Legend", function () { G.act("legend"); }, m.legend, true);
+          item(r, "All settings", function () { G.act("menu"); }, m.menu, true);
+          r = section("Layout");
+          [["rings", "Rings"], ["force", "Force"], ["circle", "Circle"], ["hex", "Hex"], ["3d", "3D"]].forEach(function (l) { item(r, l[1], function () { G.act(l[0]); }, m.layout === l[0], true); });
+        }
+        r = section("View");
+        item(r, state === "closed" ? "Show page" : "Hide page", function () { set(state === "closed" ? "open" : "closed"); });
+        if (G) item(r, "Search", function () { G.act("search"); });
+        if (G) {
+          r = section("Help");
+          [["Explain this screen"], ["What do the shapes mean?"], ["How do I find something?"]].forEach(function (h) { item(r, h[0], function () { ask(h[0]); }); });
+        }
+      }
+      btn.addEventListener("click", function () { if (menu.hidden) { build(); menu.hidden = false; btn.setAttribute("aria-expanded", "true"); } else close(); });
+      document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !menu.hidden) { close(); btn.focus(); } });
+      document.addEventListener("click", function (e) { if (!menu.hidden && e.composedPath().indexOf(wrap) < 0) close(); }); // the path, not the target: an item is rebuilt under the click
+    }
+    dropdown();
     layout();
     load(["drawer.js", "tour.js", "graph.js"], function () {
-      G = window.AIOBrain({ base: B, framed: true, onPage: go, overlayShown: shown, explain: calm ? explain : null });
+      G = window.AIOBrain({ base: B, framed: true, onPage: go, overlayShown: shown });
       G.select(location.href); layout();
       // the course page lights its lesson dots through this handle
       window.AIOMap = G; window.dispatchEvent(new Event("aiomap"));

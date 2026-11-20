@@ -1,5 +1,6 @@
 ---
-tags: [icm, context, agentic-stack]
+tags: [Context engineering]
+kind: [icm, context, agentic-stack]
 links: [icm-storage-is-not-active-context]
 source: Clief Notes Foundation 0.2, 3.3 (mistake 2), 4.4, 4.5
 ---

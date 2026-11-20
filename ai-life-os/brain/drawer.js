@@ -43,6 +43,14 @@ var CSS=
 "#drawer .tabs{display:flex;gap:2px;margin:12px 0 6px;border-bottom:1px solid var(--line,#23262b)}"+
 "#drawer .tab{background:none;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;color:var(--mute,#7d7a74);font:inherit;font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:8px 10px;cursor:pointer}"+
 "#drawer .tab[aria-selected=true]{color:var(--ink,#e9e6e0);border-bottom-color:var(--accent,#ff7a1a)}"+
+"#drawer .cloud{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 10px;margin:4px 0 12px}"+
+"#drawer .ctag{background:none;color:var(--ink,#e9e6e0);border:1px solid var(--line-2,#3a3f46);font:inherit;line-height:1.3;padding:2px 8px;cursor:pointer}"+
+"#drawer .ctag .cn{margin-left:6px;font-size:10px;color:var(--mute,#7d7a74)}"+
+"#drawer .ctag.empty{border-style:dashed;color:var(--mute,#7d7a74)}"+
+"#drawer .ctag:hover,#drawer .ctag:focus-visible,#drawer .ctag[aria-pressed=true]{border-color:var(--accent,#ff7a1a);color:var(--accent,#ff7a1a)}"+
+"#drawer .cloud-l{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}#drawer .cloud-l:empty{display:none}#drawer .cloud-l .lg{flex:1 0 100%;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--mute,#7d7a74)}"+
+"#drawer .cloud-l button{background:#07080a;color:var(--ink,#e9e6e0);border:1px solid var(--line,#23262b);font:inherit;font-size:11px;padding:4px 10px;cursor:pointer;max-width:100%;text-align:left}"+
+"#drawer .cloud-l button:hover,#drawer .cloud-l button:focus-visible{border-color:var(--accent,#ff7a1a);color:var(--accent,#ff7a1a)}"+
 "#drawer .tab:focus-visible{outline:1px solid var(--accent,#ff7a1a)}#drawer .pane[hidden]{display:none}#drawer .pane p{margin:0 0 10px}";
 
 function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
@@ -66,7 +74,7 @@ window.AIODrawer=function(o){
     if(l.doc){var bd=el("button",null,l.label);bd.type="button";bd.addEventListener("click",function(){doc(l)});return bd}
     var i=l.newTab?-1:readIndex(l.href);
     if(i>=0){var b=el("button",null,"Read: "+l.label);b.type="button";b.addEventListener("click",function(){read(i)});return b}
-    var ext=l.newTab||/^https?:/.test(l.href),a=el("a",null,l.label+(ext?" ↗":""));a.href=l.href;
+    var ext=l.newTab||/^https?:/.test(l.href),a=el("a",null,l.label+(ext?" ↗":""));a.href=l.href;if(l.title)a.title=l.title;
     if(ext){a.target="_blank";a.rel="noopener noreferrer"}
     return a;
   }

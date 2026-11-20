@@ -1,5 +1,6 @@
 ---
-tags: [method]
+tags: [Context engineering, Knowledge bases]
+kind: [method]
 links: [second-brain-is-a-context-layer]
 source: Jake Van Clief, "Second Brain" talk (31:09)
 ---

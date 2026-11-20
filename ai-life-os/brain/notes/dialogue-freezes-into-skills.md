@@ -1,5 +1,6 @@
 ---
-tags: [skills]
+tags: [Skills, Context engineering]
+kind: [skills]
 links: [icm-layer-ladder]
 source: Jake Van Clief, "Second Brain" talk (14:40)
 ---
@@ -12,5 +13,5 @@ Evidence: "A skill is technically a frozen conversation, a frozen workflow. An I
 
 Elaboration:
 - The value is your opinion and the way you do the work, not a generic prompt.
-- This is the same mechanism backpass exploits: transcripts are the raw signal that becomes instructions.
+- This is the same mechanism my review tool uses: transcripts are the raw signal that becomes instructions.
 - "We said, this is how I work, this is when I do it, this is what I do."

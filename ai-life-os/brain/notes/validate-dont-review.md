@@ -1,5 +1,6 @@
 ---
-tags: [workflow]
+tags: [Evals, Dev tooling]
+kind: [workflow]
 links: [long-running-loops, worktree-pooling]
 source: Kun Chen, "Agent Engineering Workflow" (validating code changes)
 ---

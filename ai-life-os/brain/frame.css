@@ -5,18 +5,23 @@
    the map's own look is graph.css, inside its shadow root. Colours are hud.css tokens. */
 html.brain, html.brain body { margin: 0; height: 100%; overflow: hidden; background: var(--bg); }
 body { --lw: 0px; --rw: 0px; --ob: 0px; --navh: 0px; }
-@media (min-width: 900px) { body.side { --lw: 260px; --rw: 300px; } }
+@media (min-width: 900px) { body.side { --lw: 260px; --rw: 300px; } body.side.noskills { --rw: 0px; } }
 /* transform: the map's fixed parts sit inside this box, under the site header */
 #brainHost { position: fixed; top: var(--navh); left: 0; right: 0; bottom: 0; z-index: 0; transform: translateZ(0); }
+/* The map is always dark. In the Calm skin its own buttons and labels keep the HUD colours, so they stay readable on it. */
+html[data-skin="calm"] #brainHost { background: #05060a; --ink: #e9e6e0; --mute: #8f8b84; --line: #23262b; --accent: #ff7a1a; --panel: #0c0e11; --ok: #5ec27a; --warn: #e0554a; }
 body.framed .k-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 8; }
 body.framed #drawer { top: var(--navh); z-index: 7; }
 /* drawer.js and tour.js live outside the shadow root: give them the map's type */
+/* the ask chips live in the dropdown's Help row (hud.js) and click these hidden ones */
+#askBar { display: none !important; }
 #drawer, #askBar, #tourCap { font: 12px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--ink); }
 
 /* the page overlay */
 #pageov { position: fixed; z-index: 6; top: calc(var(--navh) + 10px); right: 10px; bottom: 10px; width: var(--ow);
   display: flex; flex-direction: column; background: rgba(5, 6, 10, .95); border: 1px solid var(--line);
   border-top: 2px solid var(--accent); box-shadow: -12px 0 32px rgba(0, 0, 0, .5); transform: translateZ(0); }
+html[data-skin="calm"] #pageov { background: var(--panel); box-shadow: -12px 0 32px rgba(43, 38, 32, .25); }
 body { --ow: clamp(420px, 48vw, 700px); }
 #pageov[hidden] { display: none; }
 #pageov .pov-bar { flex: none; display: flex; gap: 6px; align-items: center; padding: 6px 8px 6px 12px; border-bottom: 1px solid var(--line); }
@@ -28,6 +33,8 @@ body { --ow: clamp(420px, 48vw, 700px); }
 #pageov .pov-body { flex: 1; min-height: 0; overflow: auto; overscroll-behavior: contain; }
 #pageov.min { bottom: auto; }
 #pageov.min .pov-body { display: none; }
+#pageov .pov-line { margin: 0; padding: 8px 12px 10px; font-size: 14px; line-height: 1.4; color: var(--ink); }
+#pageov .pov-line[hidden] { display: none; }
 #povOpen { position: fixed; z-index: 6; right: 12px; bottom: 12px; background: rgba(5, 6, 10, .95); }
 #povOpen[hidden] { display: none; }
 /* the page's own panels fill the overlay instead of sitting to one side */
@@ -36,12 +43,11 @@ body { --ow: clamp(420px, 48vw, 700px); }
 /* phones: a bottom sheet over the lower part of the map */
 @media (max-width: 760px) {
   #pageov { top: auto; left: 0; right: 0; bottom: 0; width: auto; height: 58vh; height: 58dvh; border-radius: 12px 12px 0 0; border-left: 0; border-right: 0; }
-  #pageov.min { height: auto; }
+  #pageov.min { top: calc(var(--navh) + 6px); bottom: auto; height: auto; border-radius: 0; }
   /* the ask bar fills the bottom edge: the reopen button sits above it, level with the legend button */
   #povOpen { bottom: 64px; }
   body.framed.ovopen { --ob: 58vh; }
-  /* one header row: the tabs scroll sideways, so the chart keeps the room above the sheet */
-  html[data-skin] body.framed .k-nav { flex-wrap: nowrap; padding: 6px 10px; }
-  html[data-skin] body.framed .k-nav nav { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; white-space: nowrap; min-width: 0; }
-  body.framed .k-nav nav::-webkit-scrollbar { display: none; }
+  /* the header takes two rows (mark, then the five tabs); the chart measures it and keeps the rest */
+  html[data-skin] body.framed .k-nav { flex-wrap: wrap; padding: 6px 10px; }
+  html[data-skin] body.framed .k-nav nav { flex-wrap: nowrap; white-space: nowrap; min-width: 0; }
 }

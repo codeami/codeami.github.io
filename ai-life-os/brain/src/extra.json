@@ -7,8 +7,7 @@
    "hub": true,
    "label": "Second brain",
    "text": [
-    "A public slice of the owner's private notes wiki, drawn as a map. Only notes on an approved list are copied, and a build step drops any line that names a private term, a local path, an email or a user name.",
-    "Planned, not built: daily news items and job notes, added as drafts that go live only on the owner's weekly OK."
+    "A public slice of the owner's private notes wiki, drawn as a map. Only notes on an approved list are copied, and a build step drops any line that names a private term, a local path, an email or a user name."
    ],
    "links": [
     [
@@ -258,9 +257,9 @@
     "gap"
    ],
    "text": [
-    "Each worker gets its own disposable git worktree. Each second mate gets its own home folder."
+    "Each worker gets its own disposable copy of the code. Each second mate gets its own home folder."
    ],
-   "gap": "A worktree isolates files only. It does not fence the network or credentials.",
+   "gap": "A separate copy isolates files only. It does not fence the network or credentials.",
    "edges": [
     "worktree-pooling"
    ]
@@ -317,7 +316,7 @@
     "gap"
    ],
    "text": [
-    "A tool called backpass reads past transcripts and proposes rule edits. The owner applies each one by hand.",
+    "A review tool reads past transcripts and proposes rule edits. The owner applies each one by hand.",
     "On the Core logic page, Claude Code, OpenCode, Pi and Omnigent lack this. Harness-squared has it with no human step; Meta-Harness searches harness code instead."
    ],
    "gap": "A proposed edit is argued from past evidence. It is never tested by replaying a task.",

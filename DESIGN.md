@@ -1,7 +1,7 @@
 ---
 version: alpha
-name: AIO Chart & Cards
-description: The design system for every AIO and Chart Room front end. Two themes. "Chart & Cards" puts a live graph under everything and slides content over it as cards, in two colour variants, HUD (warm orange) and Matrix (green). "Calm" is a quiet reading theme with no graph.
+name: Software Meta-Factory Chart & Cards
+description: The design system for every front end of the Software Meta-Factory. Three skins and one saved choice. "Chart & Cards" puts a live graph under everything and slides content over it as cards, in two colour variants, HUD (warm orange, the default) and Matrix (green). "Calm" is a quiet light skin for reading; the graph under it keeps its dark panel so its controls stay readable. The reader picks a skin once and every page follows.
 colors:
   primary: "#e9e6e0"
   secondary: "#8f8b84"
@@ -251,13 +251,13 @@ components:
     padding: 16px
 ---
 
-# AIO Chart & Cards
+# Software Meta-Factory Chart & Cards
 
 ## Overview
 
-One design system, two themes.
+One design system, three skins, one saved choice.
 
-**Chart & Cards** is the default for every AIO and Chart Room screen. A live graph
+**Chart & Cards** is the default for every screen of the Software Meta-Factory. A live graph
 is always the base layer. It fills the screen, drifts slowly, and is never hidden
 for good. All content slides over it as cards: a reading card for posts, notes and
 chat; a side panel for controls; a node card when a node is picked. On desktop the
@@ -271,13 +271,16 @@ never playful. It has two colour variants that share every other token:
 - **HUD** (default): orange `tertiary` #ff7a1a on near-black.
 - **Matrix**: the `matrix-*` set, phosphor green #00ff41 on black-green.
 
-**Calm** is the reading theme: warm off-white paper, Georgia headings, small-caps
+**Calm** is the reading skin: warm off-white paper, Georgia headings, small-caps
 labels, 8px corners. It has no base-layer graph. Cards sit in one centred column,
 and a graph appears only as a framed figure when the content needs one.
 
-The theme is set on `<html>`: `data-skin="hud"` or `data-skin="matrix"`, or
-`data-skin="calm"`. A switcher in the top bar (`.theme`) changes it, and the
-page remembers the choice in `localStorage` (`skin`, wrapped in try/catch).
+The skin is set on `<html>`: `data-skin="hud"`, `"matrix"` or `"calm"`. One file,
+`ai-life-os/skin.js`, owns it. Every page loads that file first in the head, so the
+saved skin is on `<html>` before the body is drawn and no page flashes white. It
+reads `localStorage` (`skin`, wrapped in try/catch) and falls back to HUD. The
+top-bar button (`.theme`) cycles HUD, Matrix, Calm and saves the choice; a change
+in one tab reaches the others. No page sets `data-skin` in its markup.
 
 ### The idea
 
@@ -421,6 +424,9 @@ stays).
   not proven items use a dashed border.
 - **Nav bar:** the top bar above.
 - **Side panel:** graph controls: layout, spin, node size, labels, motion, legend.
+  On a framed page they sit behind one dropdown under the site name (Look, Map,
+  Layout, View, Help; a full-width sheet on a phone), not as floating buttons.
+  The left list pane has tabs (Read, Pages, FirstMate). No heading glow.
 - **Node card:** glyph of its kind, name in bold, kind and status, then tabs:
   Overview, Links (`comes from`, `leads to`, each a button that jumps to that
   node), Source (file path with a copy button). Opens in the right panel or
@@ -430,8 +436,8 @@ stays).
 - **Table:** 1px row rules, secondary header, a sort mark on the sorted column,
   status as badges.
 - **Calm panel post:** the reusable blog layout, in `ai-life-os/panel.css`
-  (link it after `hud.css` and `kit/kit.css`, with `data-skin="calm"` on
-  `<html>` in the markup; load no `article.js` or `hud.js`). Pages use the
+  (link it after `hud.css` and `kit/kit.css`, and load `skin.js` in the head;
+  it works in all three skins, and loads no `article.js` or `hud.js`). Pages use the
   classes only; no inline style. Top to bottom:
   - **Kicker** (`.p-kicker`): the series or topic, in `calm-label`, parts split
     by a 1px rule.
@@ -475,17 +481,18 @@ stays).
 ## Graphs and Charts
 
 - **Graph views:** rings (the default: root at the centre, skills on the inner
-  ring, rooms in sectors, routines and apps on the outer rings), force, hex and
-  3D. All four use the same node kinds, colours, labels, hover label and
+  ring, rooms in sectors, routines and apps on the outer rings), force, circle,
+  hex and 3D. All use the same node kinds, colours, labels, hover label and
   click-to-card.
 - **Chart marks:** the rings view draws 32 faint rhumb lines from the root and
   a degree ring on the outer edge (a tick every 10°, labelled 000, 090, 180,
   270), taken from the portolan charts and the astrolabe in References. They
   sit in `--line`, under the links.
-- **3D:** `3d-force-graph` 1.79.0 from `cdn.jsdelivr.net`, pinned, loaded only
-  when the 3D view is opened. In 3D the hover label carries the kind word,
-  because spheres cannot carry the shape. If it fails to load, show the error
-  state and keep the 2D view.
+- **3D:** a toggle on the map (the 3D button, 2D by default). It uses
+  `3d-force-graph` 1.79.0 from `cdn.jsdelivr.net`, pinned, loaded only when 3D
+  is first opened, and draws the same public nodes from `brain-data.json`. The
+  hover label carries the kind word, because spheres cannot carry the shape.
+  If the script fails to load, say so and keep the 2D view.
 - **Charts:** line, bar, donut and meter in inline SVG. Axes and grid in
   `--line`, data in `--accent`, other series in `--mute`. Donut segments use
   graph colours and are always labelled with words and numbers. A meter shows
@@ -577,7 +584,7 @@ by, never copied. Each line says what we take from it.
 
 The look is not yours to decide. It lives in this file and in `ai-life-os/hud.css`.
 
-1. Read this file before writing or changing any front end in AIO or the Chart Room.
+1. Read this file before writing or changing any front end of the Software Meta-Factory.
 2. Link or inline `hud.css`; use only its classes and custom properties.
 3. If a screen needs something the file lacks, use the closest existing component
    and say so in your report. Do not invent new styles.
