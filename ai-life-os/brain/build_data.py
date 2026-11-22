@@ -119,7 +119,7 @@ course_room = {"id": "course", "label": "Course", "color": "#7dff8a",
                "note": course["title"] + ": %d short lessons in a fixed order, read in a guided chat. A lesson's dot lights up once you finish it in this browser." % len(lessons),
                "links": links([["Open the course", "../course/index.html"]]),
                "folders": [{"name": "lessons", "count": len(lessons), "files": [
-                   {"id": "course-" + l["id"], "n": "%d. %s" % (i, l["title"]), "line": "course · lesson %d of %d" % (i, len(lessons)),
+                   {"id": "course-" + l["id"], "n": "%d. %s" % (i, l["title"]), "line": "course · part %d · lesson %d of %d" % (l.get("part", 1), i, len(lessons)),
                     "body": [l["summary"]], "links": links([["Open this lesson", "../course/index.html#" + l["id"]]]), "rel": [], "lesson": l["id"]}
                    for i, l in enumerate(lessons, 1)]}]}
 
