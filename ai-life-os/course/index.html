@@ -297,7 +297,7 @@ form.hello .acts { display: flex; flex-wrap: wrap; align-items: center; gap: var
       return i;
     }
     var you = field(H.youLabel, "hello-you", ""), bt = field(H.botLabel, "hello-bot", H.botDefault);
-    var go = el("button", "k-btn", H.submit), sk = el("button", "k-chip", H.skip);
+    var go = el("button", "k-btn primary", H.submit), sk = el("button", "k-chip", H.skip);
     go.type = "submit"; sk.type = "button";
     var acts = el("div", "acts"); acts.appendChild(go); acts.appendChild(sk);
     f.appendChild(acts);
