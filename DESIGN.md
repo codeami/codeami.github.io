@@ -300,7 +300,7 @@ centred column, and a graph also appears as a framed figure when the content
 needs one.
 
 The skin is set on `<html>`: `data-skin="hud"`, `"matrix"` or `"calm"`. One file,
-`ai-life-os/skin.js`, owns it. Every page loads that file first in the head, so the
+`broman-os/skin.js`, owns it. Every page loads that file first in the head, so the
 saved skin is on `<html>` before the body is drawn and no page flashes white. It
 reads `localStorage` (`skin`, wrapped in try/catch) and falls back to HUD. The
 top-bar button (`.theme`) cycles HUD, Matrix, Calm and saves the choice; a change
@@ -323,7 +323,7 @@ never uses an exclamation mark, and marks a guess as "not proven".
 ## Colors
 
 Each theme fills the same roles, and each role is named for what it is for.
-The CSS custom properties in the shared `ai-life-os/hud.css` follow the roles:
+The CSS custom properties in the shared `broman-os/hud.css` follow the roles:
 `--bg --panel --glass --ink --mute --line --line-2 --accent --on-accent
 --accent-dim --ok --warn --info`.
 
@@ -468,7 +468,7 @@ stays).
 - **Bottom sheet:** handle, title, close button; content scrolls inside it.
 - **Table:** 1px row rules, secondary header, a sort mark on the sorted column,
   status as badges.
-- **Calm panel post:** the reusable blog layout, in `ai-life-os/panel.css`
+- **Calm panel post:** the reusable blog layout, in `broman-os/panel.css`
   (link it after `hud.css` and `kit/kit.css`, and load `skin.js` in the head;
   it works in all three skins, and loads no `article.js` or `hud.js`). Pages use the
   classes only; no inline style. Top to bottom:
@@ -621,7 +621,7 @@ by, never copied. Each line says what we take from it.
 
 ## Agent Contract
 
-The look is not yours to decide. It lives in this file and in `ai-life-os/hud.css`.
+The look is not yours to decide. It lives in this file and in `broman-os/hud.css`.
 
 1. Read this file before writing or changing any front end of the Software Meta-Factory.
 2. Link or inline `hud.css`; use only its classes and custom properties.

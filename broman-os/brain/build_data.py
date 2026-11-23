@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Build brain/brain-data.json, the public data of the chart behind every page (graph.js).
-Run from anywhere: python3 -I ai-life-os/brain/build_data.py
+Run from anywhere: python3 -I broman-os/brain/build_data.py
 Reads only public files of this site:
   brain/notes.js            the approved wiki notes (built by build.py)
   brain/src/interests.json  the interest tags of those notes, empty ones too (the cloud on the Wiki notes card)
@@ -25,7 +25,7 @@ def live(url):
     """False for a url (relative to brain/) that points at a page that is not public or is no longer in the repo."""
     if re.match(r"^[a-z][a-z0-9+.-]*:", url):
         return True
-    path = posixpath.normpath(posixpath.join("ai-life-os/brain", url.split("#")[0].split("?")[0]))
+    path = posixpath.normpath(posixpath.join("broman-os/brain", url.split("#")[0].split("?")[0]))
     return path not in RETIRED and (ROOT / path).exists()
 site = json.loads(rd("brain/src/site.json"))
 extra = json.loads(rd("brain/src/extra.json"))

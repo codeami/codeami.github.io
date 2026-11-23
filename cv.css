@@ -1,5 +1,5 @@
 /* The plain web CV (cv.html): one readable column on the Calm skin. Link after hud.css, kit/kit.css and
-   ai-life-os/panel.css; it reads only their role tokens. */
+   broman-os/panel.css; it reads only their role tokens. */
 .cv { max-width: 46rem; margin: 0 auto; }
 .cv-name { margin: var(--s-md) 0 var(--s-sm); font: 500 clamp(2rem, 7vw, 3rem)/1.08 var(--f-head); letter-spacing: -.01em; }
 .cv-role { margin: 0 0 var(--s-md); font: italic 1.15rem/1.45 var(--f-head); color: var(--mute); }

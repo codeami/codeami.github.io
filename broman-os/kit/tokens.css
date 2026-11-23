@@ -1,5 +1,5 @@
 /* Chart & Cards tokens, for pages built outside this site: the values of DESIGN.md (repo root),
-   the same as ai-life-os/hud.css. Change them together. Site pages link hud.css instead.
+   the same as broman-os/hud.css. Change them together. Site pages link hud.css instead.
    Skins: "hud" (warm accent, the default), "matrix" (green) and "calm" (the light reading
    theme). data-skin on any element uses that skin inside it. The kit's older names
    (--surface, --accent-text, --pop, --on-pop) point at the roles; the accent is the only one. */
