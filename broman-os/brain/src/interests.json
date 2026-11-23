@@ -1,5 +1,5 @@
 {
- "about": "The interest tags of the Wiki notes card. Edit this file, then run build.py --from-copies and build_data.py. A note may carry one to three interests. An interest with no note stays in the list and is drawn dashed: a direction, not a claim. The old tags of each note are kept as its kind.",
+ "about": "The interest tags of the Second-brain notes card. Edit this file, then run build.py --from-copies and build_data.py. A note may carry one to three interests. An interest with no note stays in the list and is drawn dashed: a direction, not a claim. The old tags of each note are kept as its kind.",
  "interests": [
   {"name": "AI agents", "what": "Agents that act for you: how to run, steer and trust a crew of them."},
   {"name": "Context engineering", "what": "What the agent reads, when, and in what order."},

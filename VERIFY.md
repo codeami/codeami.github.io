@@ -26,7 +26,7 @@ Do each flow at desktop (1280x800) and phone (390x844). Real clicks and typing t
 1. **Home** `/`: open it, then click each of the five top-bar items (Meta-Factory, Case studies, Blog, About, Work with me) in turn.
 2. **Broman OS** `/broman-os/`: open it from the bar. Open the Menu (the ▾ button by the name), click Legend, click Search and type a word. Also open `/broman-os/blog/` and one post, and `/broman-os/course/`.
 3. **Pipeline page** `/broman-os/pipeline/`: click the "▶ Replay" button. Wait about 2.5 s.
-4. **Giants room** (Shoulders of giants, on the map at `/broman-os/`): open Menu, click Legend, and read the room list. Then compare its count and folders with the data file.
+4. **Giants room** (Shoulders of giants, on the map at `/broman-os/`): open Menu, click Legend, and read the room list. Then compare its count and folders with the data file. Open Menu > Widgets for the left tree: click "Shoulders of giants" (its card opens, its row is marked, the trail reads "Map › Shoulders of giants"), click the folder Builders (only its 13 files light on the map), then click a room's dot on the map and check the tree moved with it.
 5. **Phone width**: repeat 1 to 4 under the phone emulation. Check the top bar, the card as a bottom sheet, and that nothing scrolls sideways.
 
 ## Check

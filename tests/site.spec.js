@@ -681,8 +681,8 @@ test('wiki notes card: a summary, a cloud of interest tags sized by note count, 
   await page.goto('/broman-os/index.html#pocock-steers-with-skills-kun-builds-machinery');
   const drawer = page.locator('#drawer');
   await drawer.getByRole('tab', { name: 'Related' }).click();
-  await drawer.locator('.rel button', { hasText: 'Wiki notes' }).click();
-  await expect(drawer.locator('h2.t')).toHaveText('Wiki notes');
+  await drawer.locator('.rel button', { hasText: 'Second-brain notes' }).click();
+  await expect(drawer.locator('h2.t')).toHaveText('Second-brain notes');
   await expect(drawer.locator('.pane p').first()).toContainText('25 notes');
   const tags = await drawer.locator('.ctag').evaluateAll((bs) => bs.map((b) => ({ name: b.firstChild.textContent, n: +b.querySelector('.cn').textContent, size: parseFloat(getComputedStyle(b).fontSize), dashed: getComputedStyle(b).borderTopStyle === 'dashed' })));
   expect(tags.length, 'the interest list').toBeGreaterThanOrEqual(8);
@@ -696,7 +696,7 @@ test('wiki notes card: a summary, a cloud of interest tags sized by note count, 
   await first.click();
   expect(await drawer.locator('.cloud-l button').count(), 'the tag lists its notes').toBe(big.n);
   await drawer.locator('.cloud-l button').first().click();
-  await expect(drawer.locator('h2.t')).not.toHaveText('Wiki notes');
+  await expect(drawer.locator('h2.t')).not.toHaveText('Second-brain notes');
   await expect(drawer.locator('.ln')).toContainText('kind:');
 });
 
@@ -705,8 +705,8 @@ test('room drawer: every Related chip is one line, at most 28 px tall, with its 
   const drawer = page.locator('#drawer');
   await expect(drawer).toBeVisible();
   await drawer.getByRole('tab', { name: 'Related' }).click();
-  await drawer.locator('.rel button', { hasText: 'Wiki notes' }).click();
-  await expect(drawer.locator('h2.t')).toHaveText('Wiki notes');
+  await drawer.locator('.rel button', { hasText: 'Second-brain notes' }).click();
+  await expect(drawer.locator('h2.t')).toHaveText('Second-brain notes');
   await drawer.getByRole('tab', { name: 'Related' }).click();
   const chips = await drawer.locator('.rel button').evaluateAll((bs) => bs.map((b) => ({ h: b.getBoundingClientRect().height, title: b.title, text: b.textContent })));
   expect(chips.length, 'the room lists its notes').toBeGreaterThan(5);
@@ -775,7 +775,7 @@ test('the factory page tour and the map cards show the idea, not the internal to
   expect(prose.match(terms), 'FirstMate room').toBeNull();
 });
 
-test('left pane tabs: Read, Pages and FirstMate show one list at a time; the empty Skills pane is not drawn', async ({ page }) => {
+test('left tree: reading order, rooms > folders > files and pages; the empty Skills pane is not drawn', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.goto('/broman-os/index.html');
   const map = page.locator('#brainHost');
@@ -784,14 +784,107 @@ test('left pane tabs: Read, Pages and FirstMate show one list at a time; the emp
     await page.locator('#tbDrop').click();
     await page.locator('#tbSheet').getByRole('button', { name: 'Widgets', exact: true }).click();
   }
-  await expect(map.getByRole('tab')).toHaveText(['Read', 'Pages', 'FirstMate']);
+  await expect(map.getByRole('tab')).toHaveCount(0);
   await expect(map.locator('#wr')).toHaveCount(0);
-  await expect(map.locator('#sRead')).toBeVisible();
-  await expect(map.locator('#sApps')).toBeHidden();
-  await map.getByRole('tab', { name: 'FirstMate' }).click();
-  await expect(map.locator('#sFm')).toBeVisible();
-  await expect(map.locator('#sRead')).toBeHidden();
-  await expect(map.getByRole('tab', { name: 'FirstMate' })).toHaveAttribute('aria-selected', 'true');
+  await expect(map.getByRole('tree')).toBeVisible();
+  const top = await map.locator('#tree > li').evaluateAll((l) => l.map((e) => e.getAttribute('aria-label')));
+  expect(top).toEqual(['Read in order', 'Rooms', 'Pages and projects']);
+  // the tree holds what brain-data.json holds: every room, each room's folders, each folder's named files
+  const data = JSON.parse(readFileSync(join(root, 'broman-os/brain/brain-data.json'), 'utf8'));
+  const rooms = await map.locator('#tree li[aria-level="2"][data-k^="r:"]').evaluateAll((l) => l.map((e) => e.getAttribute('aria-label')));
+  expect(rooms).toEqual(data.rooms.map((r) => r.label));
+  const giants = data.rooms.findIndex((r) => r.id === 'giants');
+  const folders = await map.locator(`#tree li[data-k^="f:${giants}:"]`).evaluateAll((l) => l.map((e) => e.getAttribute('aria-label')));
+  expect(folders).toEqual(data.rooms[giants].folders.map((f) => f.name));
+  expect(await map.locator(`#tree li[data-k="r:${giants}"] li[aria-level="4"]`).count()).toBe(data.rooms[giants].folders.reduce((n, f) => n + f.files.length, 0));
+});
+
+test('left tree and map stay in step: a pick in either one shows in the tree, the map and the card', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto('/broman-os/index.html');
+  const map = page.locator('#brainHost');
+  await expect(map.locator('canvas')).toBeVisible();
+  if (await map.locator('#side').evaluate((e) => e.hidden)) {
+    await page.locator('#tbDrop').click();
+    await page.locator('#tbSheet').getByRole('button', { name: 'Widgets', exact: true }).click();
+  }
+  const data = JSON.parse(readFileSync(join(root, 'broman-os/brain/brain-data.json'), 'utf8'));
+  const giants = data.rooms.findIndex((r) => r.id === 'giants'), g = data.rooms[giants];
+  const card = page.locator('#drawer h2.t'), trail = map.locator('#trail');
+  const lit = () => page.evaluate(() => window.AIOMap.state().lit.length);
+  const row = (key) => map.locator(`#tree li[data-k="${key}"]`);
+  // map -> tree: a real click on a project's hexagon marks its row under "Pages and projects"
+  await clickNode(page, 'reels4mphotos');
+  await expect(card).toHaveText('reels4mphotos');
+  await expect(map.locator('#tree [aria-current="location"]')).toHaveAttribute('aria-label', 'reels4mphotos');
+  await expect(trail).toContainText('Pages and projects');
+  // tree -> map and card: a room, then its first folder, then its first file
+  await row(`r:${giants}`).locator('> .tr').click();
+  await expect(card).toHaveText('Shoulders of giants');
+  await expect(row(`r:${giants}`)).toHaveAttribute('aria-current', 'location');
+  await expect(row(`r:${giants}`)).toHaveAttribute('aria-expanded', 'true');
+  expect(await lit(), 'the room lights its files, itself and the router file').toBe(g.folders.reduce((n, f) => n + f.count, 0) + 2);
+  await row(`f:${giants}:0`).locator('> .tr').click();
+  await expect(card).toHaveText(g.folders[0].name);
+  await expect(trail).toContainText(g.folders[0].name);
+  expect(await lit(), 'a folder lights only its own files').toBe(g.folders[0].count + 2);
+  await row(`f:${giants}:0`).locator('li[aria-level="4"]').first().locator('> .tr').click();
+  await expect(card).toHaveText(g.folders[0].files[0].n);
+  await expect(map.locator('#tree [aria-current="location"]')).toHaveCount(1);
+  await expect(trail).toContainText(g.folders[0].files[0].n);
+  // keyboard: the focus stays on the row after Enter, and the arrows keep moving
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('Enter');
+  await expect(card).toHaveText(g.folders[0].files[1].n);
+  await page.keyboard.press('ArrowLeft'); // up to the folder
+  await expect(map.locator(`#tree li[data-k="f:${giants}:0"]:focus`)).toHaveCount(1);
+  // the card's Related button moves the tree too
+  await row(`r:${giants}`).locator('> .tr').click();
+  await page.locator('#drawer .tab', { hasText: 'Related' }).click();
+  await page.locator('#drawer .rel button').nth(1).click(); // the first related file
+  await expect(map.locator('#tree [aria-current="location"]')).toHaveAttribute('data-k', /^n:/);
+  // closing the card clears the selection everywhere
+  await page.locator('#drawer .dh .btn').click();
+  await expect(map.locator('#tree [aria-current="location"]')).toHaveCount(0);
+  expect(await lit()).toBe(0);
+});
+
+test('map links: a note opens rendered in the card, never as a raw .md file; a link inside the site stays in the site; a room has a deep link', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const data = JSON.parse(readFileSync(join(root, 'broman-os/brain/brain-data.json'), 'utf8'));
+  const giant = data.rooms.find((r) => r.id === 'giants').folders[0].files[0]; // a giant: "The idea" (their page) and "How we use it" (a note of ours)
+  const note = giant.links.find((l) => l.label === 'How we use it').href;
+  expect(note).toMatch(/^notes\/.+\.md$/);
+  await page.goto(`/broman-os/index.html#${giant.id}`);
+  const card = page.locator('#drawer h2.t');
+  await expect(card).toHaveText(giant.n);
+  await expect(page.locator('#pageov')).toHaveClass(/min/); // a node link leaves the page card folded
+  await page.locator('#drawer .tabs button', { hasText: 'Links' }).click();
+  // the idea is another site: new tab. Nothing of this site opens in a new tab.
+  await expect(page.locator('#drawer .lnk a', { hasText: 'The idea' })).toHaveAttribute('target', '_blank');
+  await page.locator('#drawer .lnk button', { hasText: 'How we use it' }).click();
+  await expect(page.locator('#drawer .dh .pos')).toHaveText('Note');
+  await expect(card).toHaveText(/./);
+  await expect(page.locator('#drawer .art strong', { hasText: 'Claim:' })).toBeVisible();
+  expect(page.url(), 'the page did not navigate to the raw file').not.toMatch(/\.md/);
+  await page.locator('#drawer .df .btn', { hasText: 'Show on the map' }).click();
+  await expect(page.locator('#drawer .dh .pos')).not.toHaveText('Note');
+  // every note link in the data is read through the reader: no raw .md anchor is drawn for a note of this site
+  const notes = await page.evaluate(() => [...document.querySelectorAll('#drawer a[href$=".md"]')].filter((a) => a.origin === location.origin).length);
+  expect(notes).toBe(0);
+  // a link into this site's own page (Areas card: "All pages") has no new-tab arrow
+  await page.goto('/broman-os/index.html#area-harness');
+  await page.locator('#drawer .tabs button', { hasText: 'Links' }).click();
+  await expect(page.locator('#drawer .lnk a', { hasText: 'All pages' })).not.toHaveAttribute('target', '_blank');
+  // the notes room links to other people's maps only: no build script or allow-list (the what, never the how)
+  await page.goto('/broman-os/index.html#notes');
+  await page.locator('#drawer .tabs button', { hasText: 'Links' }).click();
+  await expect(page.locator('#drawer .lnk a, #drawer .lnk button', { hasText: /Build script|Approved list/ })).toHaveCount(0);
+  // a room opens from its own deep link
+  await page.goto('/broman-os/index.html#giants');
+  await expect(card).toHaveText('Shoulders of giants');
+  await page.locator('#drawer ul button.fl', { hasText: 'Builders' }).click();
+  await expect(card).toHaveText('Builders');
 });
 
 // ---- the map: Hex and Folders by default, overlays that float, and one skin over everything ----
@@ -892,4 +985,13 @@ test('the skin button names the skin that is on', async ({ page }) => {
   await expect(btn).toHaveText('Calm');
   await btn.click();
   await expect(btn).toHaveText('HUD');
+});
+
+test('a malformed #hash on the map page does not break the page or the map', async ({ page }) => {
+  const errors = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await page.goto('/broman-os/index.html#%E0%A4%A');
+  await expect(page.locator('.pov-line')).toHaveCount(1);
+  await expect(page.locator('svg').first()).toBeVisible();
+  expect(errors).toEqual([]);
 });

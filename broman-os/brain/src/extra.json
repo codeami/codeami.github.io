@@ -10,16 +10,6 @@
    "text": [
     "A public slice of the owner's private notes wiki, drawn as a map. Only notes on an approved list are copied, and a build step drops any line that names a private term, a local path, an email or a user name."
    ],
-   "links": [
-    [
-     "Approved list",
-     "allowlist.txt"
-    ],
-    [
-     "Build script",
-     "build.py"
-    ]
-   ],
    "edges": [
     "g-area",
     "g-fm",
@@ -102,7 +92,7 @@
    "id": "g-area",
    "group": "area",
    "hub": true,
-   "label": "Areas of interest",
+   "label": "Broman's topics",
    "text": [
     "The topics the owner writes about. Each links to the pages of this site that cover it, and to the wiki notes that sit under it."
    ],
@@ -233,7 +223,7 @@
    "id": "g-fm",
    "group": "fm",
    "hub": true,
-   "label": "FirstMate in detail",
+   "label": "The multi-agent service (FirstMate inside the Broman wrapper)",
    "text": [
     "The twelve parts of the harness, the tricks this setup uses on top, and what it borrowed from others. Each part links to its place on the Core logic page."
    ],
@@ -517,12 +507,6 @@
    "text": [
     "A short list of terms that must never leave the owner's machine. The build step for this page drops any note line that holds one of them, and also any line with a local path, an email or a user name."
    ],
-   "links": [
-    [
-     "Build script",
-     "build.py"
-    ]
-   ],
    "edges": [
     "part-approval",
     "brain"
@@ -596,7 +580,7 @@
    "id": "g-tier",
    "group": "tier",
    "hub": true,
-   "label": "Harness tier list",
+   "label": "Harness grades",
    "text": [
     "Eleven setups marked on the same twelve harness parts. Has it, does it differently, lacks it, or an estimate where no primary source answers it.",
     "The counts treat all twelve parts as equal. They show coverage, not quality. From a scout report dated 2026-10-27 that read public docs, repos and papers."
@@ -638,7 +622,7 @@
    2,
    3,
    0,
-   "https://code.claude.com/docs/en/memory.md"
+   "https://code.claude.com/docs/en/memory"
   ],
   [
    "tier-warp",
@@ -647,7 +631,7 @@
    1,
    5,
    1,
-   "https://docs.warp.dev/platform/harnesses/warp-agent.md"
+   "https://docs.warp.dev/platform/harnesses/warp-agent"
   ],
   [
    "tier-omni",

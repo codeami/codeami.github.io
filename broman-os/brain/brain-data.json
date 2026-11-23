@@ -7,7 +7,7 @@
  "root": {
   "label": "AGENTS.md",
   "also": "CLAUDE.md",
-  "note": "The base map. Every agent tool loads this one rules file first; each room of work adds its own CONTEXT.md on top.",
+  "note": "One file to rule them all. The base map: every agent tool loads this one rules file first; each room of work adds its own CONTEXT.md on top.",
   "links": [
    [
     "Post: one rules file for every tool",
@@ -18,18 +18,10 @@
  "rooms": [
   {
    "id": "notes",
-   "label": "Wiki notes",
+   "label": "Second-brain notes",
    "color": "#b57bff",
    "note": "A public slice of the owner's private notes wiki: only notes on an approved list are copied, and a build step drops any line with a private term, a local path, an email or a user name.",
    "links": [
-    {
-     "label": "Approved list",
-     "href": "allowlist.txt"
-    },
-    {
-     "label": "Build script",
-     "href": "build.py"
-    },
     {
      "label": "Map of GitHub",
      "href": "https://anvaka.github.io/map-of-github/",
@@ -901,7 +893,7 @@
   },
   {
    "id": "areas",
-   "label": "Areas of interest",
+   "label": "Broman's topics",
    "color": "#2ee6c5",
    "note": "The topics the owner writes about. Each links to the pages of this site that cover it, and to the wiki notes that sit under it.",
    "links": [],
@@ -986,7 +978,7 @@
   },
   {
    "id": "fm",
-   "label": "FirstMate in detail",
+   "label": "The multi-agent service (FirstMate inside the Broman wrapper)",
    "color": "#ff4fd8",
    "note": "The twelve parts of the harness, the tricks this setup uses on top, and what it borrowed from others. Each part links to its place on the Core logic page.",
    "links": [
@@ -1235,12 +1227,7 @@
        "body": [
         "A short list of terms that must never leave the owner's machine. The build step for this page drops any note line that holds one of them, and also any line with a local path, an email or a user name."
        ],
-       "links": [
-        {
-         "label": "Build script",
-         "href": "build.py"
-        }
-       ],
+       "links": [],
        "rel": [
         "part-approval",
         "brain"
@@ -1303,7 +1290,7 @@
   },
   {
    "id": "tier",
-   "label": "Harness tier list",
+   "label": "Harness grades",
    "color": "#ffd93d",
    "note": "Eleven setups marked on the same twelve harness parts. Has it, does it differently, lacks it, or an estimate where no primary source answers it. The counts treat all twelve parts as equal. They show coverage, not quality. From a scout report dated 2026-10-27 that read public docs, repos and papers.",
    "links": [],
@@ -1381,7 +1368,7 @@
         },
         {
          "label": "Primary source",
-         "href": "https://code.claude.com/docs/en/memory.md"
+         "href": "https://code.claude.com/docs/en/memory"
         }
        ],
        "rel": []
@@ -1400,7 +1387,7 @@
         },
         {
          "label": "Primary source",
-         "href": "https://docs.warp.dev/platform/harnesses/warp-agent.md"
+         "href": "https://docs.warp.dev/platform/harnesses/warp-agent"
         }
        ],
        "rel": []

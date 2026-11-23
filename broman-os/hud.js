@@ -59,7 +59,10 @@
     /* A page can start with its card folded (meta panel-start="min") so the map is the first thing seen;
        meta panel-line is the one explainer line the folded card keeps. A deep link to a part of the page opens it. */
     var ps = document.querySelector('meta[name="panel-start"]'), pl = document.querySelector('meta[name="panel-line"]');
-    if (ps && ps.content === "min" && (!location.hash || location.hash === "#map")) state = "min";
+    // a hash that is not a part of this page is a map node (index.html#first-mate): the card stays folded and that node's card opens
+    function hashId(h) { try { return decodeURIComponent(h.slice(1)); } catch (e) { return h.slice(1); } }
+    var hid = location.hash ? hashId(location.hash) : "";
+    if (ps && ps.content === "min" && (!hid || hid === "map" || !document.getElementById(hid))) state = "min";
     var line = mk("p", "pov-line", pl ? pl.content : ""); line.hidden = true; ov.insertBefore(line, body);
     function phone() { return window.innerWidth <= 760; }
     function layout() {
@@ -126,6 +129,7 @@
     function go(url) {
       var u = new URL(url, location.href);
       if (u.origin !== location.origin) return false; // public projects open from their card
+      if (G && G.note && G.note(u.href)) return true; // a note or text file of the map reads rendered in the card, never as a raw file
       // A link to the page the reader is already on never reloads it: it opens the card.
       // "#map" is a link to the map itself: fold the card so the whole chart shows
       if (pathOf(u) === pathOf(location) && u.hash === "#map") { set("min"); return true; }
@@ -147,7 +151,7 @@
           if (a.href.split("#")[0] === u.href.split("#")[0]) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
         settle();
         body.scrollTop = 0; set(u.hash === "#map" ? "min" : "open"); if (G) G.select(u.href);
-        var t = u.hash && document.getElementById(decodeURIComponent(u.hash.slice(1))); if (t) t.scrollIntoView();
+        var t = u.hash && document.getElementById(hashId(u.hash)); if (t) t.scrollIntoView();
       }).catch(function () { location.href = u.href; });
       return true;
     }
