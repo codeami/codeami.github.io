@@ -1599,10 +1599,6 @@
        ],
        "links": [
         {
-         "label": "LinkedIn",
-         "href": "https://www.linkedin.com/in/jake-van-clief/"
-        },
-        {
          "label": "GitHub",
          "href": "https://github.com/RinDig"
         },
@@ -1729,10 +1725,6 @@
         "Linux and git: open source done at scale, with plain review and fast iteration."
        ],
        "links": [
-        {
-         "label": "LinkedIn",
-         "href": "https://www.linkedin.com/in/linustorvalds/"
-        },
         {
          "label": "GitHub",
          "href": "https://github.com/torvalds"
