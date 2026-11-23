@@ -18,7 +18,7 @@ html[data-skin="calm"] :target { scroll-margin-top: 16px; }
 .p-nav nav { display: flex; flex-wrap: wrap; gap: 4px var(--s-lg); font-size: 15px; }
 .p-nav nav a { padding: 8px 0; color: var(--mute); text-decoration: none; }
 .p-nav nav a[aria-current] { color: var(--ink); font-weight: 700; box-shadow: inset 0 -2px 0 var(--accent); }
-@media (max-width: 420px) { .p-nav .p-brand span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } }
+@media (max-width: 420px) { .p-nav .p-brand .tb-badge { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } }
 
 .p-page { max-width: var(--page-max); margin: 0 auto; padding: var(--s-xl) var(--gutter) var(--s-xl); }
 
