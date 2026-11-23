@@ -51,7 +51,9 @@ var CSS=
 "#drawer .cloud-l{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}#drawer .cloud-l:empty{display:none}#drawer .cloud-l .lg{flex:1 0 100%;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--mute,#7d7a74)}"+
 "#drawer .cloud-l button{background:var(--bg,#07080a);color:var(--ink,#e9e6e0);border:1px solid var(--line,#23262b);font:inherit;font-size:11px;padding:4px 10px;cursor:pointer;max-width:100%;text-align:left}"+
 "#drawer .cloud-l button:hover,#drawer .cloud-l button:focus-visible{border-color:var(--accent,#ff7a1a);color:var(--accent,#ff7a1a)}"+
-"#drawer .tab:focus-visible{outline:1px solid var(--accent,#ff7a1a)}#drawer .pane[hidden]{display:none}#drawer .pane p{margin:0 0 10px}";
+"#drawer .tab:focus-visible{outline:1px solid var(--accent,#ff7a1a)}#drawer .pane[hidden]{display:none}#drawer .pane p{margin:0 0 10px}"+
+"#drawer button.fl{background:none;border:0;padding:0;font:inherit;color:var(--accent,#ff7a1a);text-decoration:underline;text-underline-offset:3px;cursor:pointer}"+
+"#drawer button.fl:hover,#drawer button.fl:focus-visible{outline:none;text-decoration-thickness:2px}";
 
 function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
 function abs(u,base){try{return new URL(u,base||location.href).href}catch(e){return""}}

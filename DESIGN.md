@@ -459,7 +459,10 @@ stays).
   Layout, View, Help; a full-width sheet on a phone), not as floating buttons.
   "All settings" opens the controls panel (search, layout, view, motion) over the
   map: a ✕ button and Esc close it, and on a phone it is a bottom sheet.
-  The left list pane has tabs (Read, Pages, FirstMate). No heading glow.
+  The left pane is a tree (Read in order, Rooms > folders > files, Pages and
+  projects) under a "you are here" trail. The row for the current selection has
+  an accent bar and bold text, and its parents are open. On a phone it is a
+  full-width drawer; the card steps aside while it is open. No heading glow.
 - **Node card:** glyph of its kind, name in bold, kind and status, then tabs:
   Overview, Links (`comes from`, `leads to`, each a button that jumps to that
   node), Source (file path with a copy button). Opens in the right panel or

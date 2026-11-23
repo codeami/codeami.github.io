@@ -13,10 +13,9 @@ var host=document.createElement("div");host.id="brainHost";if(FRAMED)host.classN
 var shadow=host.attachShadow({mode:"open"});
 shadow.innerHTML='<link rel="stylesheet" href="'+BASE+'graph.css">'+
   '<div id="stage"><div id="g3d" hidden></div><canvas id="cv" role="img" aria-label="Second brain map: a centre rules file linked to rooms of public notes, harness parts and posts, with a ring of skills and a ring of pages and projects. The side lists hold the same items as buttons."></canvas></div>'+
-  '<div id="side" hidden><aside class="side-col" id="wl" aria-label="Reading order, pages and projects">'+
-  '<div class="tabs" role="tablist" aria-label="Left pane"><button class="tab" type="button" role="tab" data-p="sRead">Read</button><button class="tab" type="button" role="tab" data-p="sApps">Pages</button><button class="tab" type="button" role="tab" data-p="sFm">FirstMate</button></div>'+
-  '<section class="wd" role="tabpanel" aria-label="Reading order"><ul id="sRead"></ul></section><section class="wd" role="tabpanel" aria-label="Pages and projects"><ul id="sApps"></ul></section>'+
-  '<section class="wd" role="tabpanel" aria-label="FirstMate in detail"><ul id="sFm"></ul></section></aside>'+
+  '<div id="side" hidden><aside class="side-col" id="wl" aria-label="Map tree: reading order, rooms and pages">'+
+  '<nav id="trail" aria-label="You are here"></nav>'+
+  '<ul id="tree" role="tree" aria-label="The map as a tree: rooms, folders and files"></ul></aside>'+
   '<aside class="side-col" id="wr" aria-label="Skills"><section class="wd"><h2>Skills deck</h2><ul id="sSkills"></ul></section></aside></div>'+
   '<div class="title"'+(FRAMED?' hidden':'')+'><b>THE SOFTWARE META-FACTORY</b><span>SECOND BRAIN</span><small id="src">loading…</small></div>'+
   '<div class="top"><button class="btn" id="dimBtn" type="button" aria-pressed="false" title="Switch between the flat map and a 3D view">3D</button>'+
@@ -75,7 +74,7 @@ function boot(){
 
 /* ---------- state ---------- */
 var S={layout:"hex",view:"folders",spin:0.05,motion:savedMotion()!=null?savedMotion():!mq.matches,names:false,spring:0.5,size:0.6,
-  q:"",hover:null,sel:null,here:false,angle:0,legend:false}; // here: sel is the page the reader is on, shown alone
+  q:"",hover:null,sel:null,here:false,angle:0,legend:false,fol:null,page:"",read:-1}; // here: sel is the page the reader is on, shown alone; fol: {hub,i} a folder of the selected room; page: the url of the page on show; read: the reading-order entry open in the card
 var nodes=[],rooms=[],hubs=[],skills=[],routines=[],apps=[],root=null,data=null;
 var cv=$("cv"),ctx=cv.getContext("2d"),W=0,H=0,DPR=1;
 var view={k:.6,x:0,y:0,tk:.6,tx:0,ty:0,user:false};
@@ -112,7 +111,7 @@ function start(d,srcLabel){
   $("src").textContent="public data · "+srcLabel;
   window.AIO_READING=d.reading||[];
   // the "#map" entry opens the chart itself, so it is not a reading page in the drawer's "n of m" run
-  drawer=AIODrawer({reading:window.AIO_READING.filter(function(r){return r.url.indexOf("#map")<0}),onClose:function(){S.sel=null;applyFocus();dirty=true}});
+  drawer=AIODrawer({reading:window.AIO_READING.filter(function(r){return r.url.indexOf("#map")<0}),onClose:function(){S.sel=null;S.fol=null;S.read=-1;applyFocus();dirty=true}});
   readLit();build(d);buildLegend();wire();renderSides();
   resize();setLayout(S.layout,true);mountTour();
   requestAnimationFrame(frame);
@@ -129,7 +128,7 @@ var API={
     if(!nodes.length){pending=url;return}
     var u=bare(url),hit=null;
     nodes.forEach(function(n){if(n.info&&n.info.url&&bare(n.info.url)===u)hit=n});
-    S.sel=hit;S.here=!!hit;applyFocus();dirty=true;return hit;
+    S.sel=hit;S.fol=null;S.read=-1;S.page=u;S.here=!!hit;applyFocus();dirty=true;return hit;
   },
   // the tests read what is lit and where a node sits on the canvas
   state:function(){return{here:S.here&&S.sel?S.sel.label:null,lit:flagMode?nodes.filter(function(n){return flags[n.i]}).map(function(n){return n.label}):[]}},
@@ -413,7 +412,7 @@ function wire(){
     var t=e.composedPath?e.composedPath()[0]:e.target; // the real target, also inside the shadow root
     var typing=/^(input|textarea|select)$/i.test(t.tagName||"")||t.isContentEditable;
     if((e.key==="/"&&!typing)||((e.metaKey||e.ctrlKey)&&(e.key||"").toLowerCase()==="k")){e.preventDefault();setPanel(true,true);$("q").focus();$("q").select()}
-    else if(e.key==="Escape"){var was=!$("panel").hidden;$("q").value="";S.q="";S.sel=null;hideCard();applyFocus();dirty=true;if(was)setPanel(false,true)}
+    else if(e.key==="Escape"){var was=!$("panel").hidden;$("q").value="";S.q="";S.sel=null;S.fol=null;S.read=-1;hideCard();applyFocus();dirty=true;if(was)setPanel(false,true)}
     else if(e.key==="m"&&!typing&&!e.metaKey&&!e.ctrlKey&&!e.altKey)setMotion(!S.motion,true);
   });
   cv.addEventListener("pointermove",onMove);
@@ -428,9 +427,16 @@ function wire(){
   });
   cv.tabIndex=0;
 }
+var tucked=false;
 function setSides(on){
+  // on a phone the tree is a full-width drawer and the card would cover it: the card steps aside, keeping its selection, and returns when the tree closes
+  if(window.innerWidth<900&&drawer){
+    if(on&&!drawer.el.hidden){drawer.el.hidden=true;tucked=true}
+    else if(!on&&tucked){drawer.el.hidden=false;tucked=false}
+  }
   $("side").hidden=!on;document.body.classList.toggle("side",on);
   $("sideBtn").setAttribute("aria-expanded",on);resize();
+  if(on)syncTree(true); // the tree scrolls to the selection it was not showing
 }
 /* ---------- side widgets (same real data as the map) ---------- */
 function renderSides(){
@@ -442,29 +448,166 @@ function renderSides(){
     });
     li.appendChild(b);li.appendChild(el("span",cls||"m",right));return li;
   }
-  (window.AIO_READING||[]).forEach(function(r,i){
-    var li=el("li"),b=el("button","lk",(i+1)+". "+r.title);b.type="button";
-    b.addEventListener("click",function(){if(window.innerWidth<900)setSides(false);
-      if(opts.onPage&&opts.onPage(r.url))return; // on a framed page the page overlay shows it
-      S.sel=null;applyFocus();drawer.read(i)});
-    li.appendChild(b);li.appendChild(el("span","m",r.line.split(" · ")[0]));$("sRead").appendChild(li);
-  });
-  apps.forEach(function(n){$(n.info.group==="firstmate"?"sFm":"sApps").appendChild(item(n,n.info.state||"",n.on?"ok":"warn"))});
-  // the FirstMate parts room sits under its pages, so the left column reaches it too
-  rooms.filter(function(R){return R.id==="fm"}).forEach(function(R){R.dots.forEach(function(d){$("sFm").appendChild(item(d,rooms[d.room].folders[d.folder].name))})});
-  // the left pane shows one list at a time: Read, Pages or FirstMate
-  var tabs=[].slice.call($("wl").querySelectorAll(".tab"));
-  function pickTab(p){tabs.forEach(function(t){var on=t.dataset.p===p;t.setAttribute("aria-selected",String(on));$(t.dataset.p).parentNode.hidden=!on})}
-  tabs.forEach(function(t){t.addEventListener("click",function(){pickTab(t.dataset.p)})});
-  pickTab("sRead");
+  buildTree();
   // an empty deck is not drawn, so the map keeps the width
   if(skills.length)skills.forEach(function(n){$("sSkills").appendChild(item(n,"details"))});
   else{$("wr").remove();document.body.classList.add("noskills")}
 }
+/* ---------- the left tree: the reading order, the rooms (room > folder > file) and the pages ----------
+   One selection drives the map, the card and this tree: S.sel (a node), S.fol (a folder of the selected room) and
+   S.read (a reading-order step). applyFocus() calls syncTree(), so every way of selecting (the map, the tree, the
+   card's Related buttons, a #hash, the tour) lights the same row, opens its parents and updates the trail. */
+var syncTree=function(){},closeAll=function(){};
+function readPage(i){
+  var r=(window.AIO_READING||[])[i];if(!r)return;
+  S.used=true;
+  if(opts.onPage&&opts.onPage(r.url)){S.read=i;applyFocus();return} // on a framed page the page overlay shows it
+  S.sel=null;S.fol=null;S.read=i;hideCard();applyFocus();dirty=true;
+  var j=drawer.readIndex(r.url);if(j>=0)drawer.read(j);
+}
+function openFolder(R,fi){
+  var f=R.folders[fi],files=R.dots.filter(function(d){return d.folder===fi&&d.name});
+  S.used=true;S.sel=R.hub;S.fol={hub:R.hub,i:fi};S.here=false;S.read=-1;hideCard();applyFocus();dirty=true;say(R.label+", "+f.name);
+  drawer.card({kind:"Folder",title:f.name,line:"folder · "+f.count+" item"+(f.count===1?"":"s")+" in "+R.label,status:"in the room "+R.label,statusCls:"a",
+    body:el("p",null,f.count+" item"+(f.count===1?"":"s")+" in this folder"+(files.length<f.count?"; only "+files.length+" are named." :". Pick one below, or in the tree on the left.")),
+    related:[{label:R.label+" (room)",go:function(){openNode(R.hub)}}].concat(files.map(function(d){return{label:d.name,go:function(){openNode(d)}}}))});
+}
+// bring a node into the part of the map that is not under the left list or the card
+function reveal(n){
+  if(!n||n.x==null||window.innerWidth<760)return;
+  var sx=view.x+n.x*view.k,sy=view.y+n.y*view.k,pad=28,
+    l=(document.body.classList.contains("side")?260:0)+pad,r=W-(drawer.el.hidden?0:drawer.el.offsetWidth)-pad,b=H-INS.bottom-pad,
+    dx=sx<l?l-sx:sx>r?r-sx:0,dy=sy<pad?pad-sy:sy>b?b-sy:0;
+  if(!dx&&!dy)return;
+  view.x+=dx;view.y+=dy;view.tx=view.x;view.ty=view.y;dirty=true;
+}
+function buildTree(){
+  var tree=$("tree"),acts={},items={},last="",cur=null,rove=null,reading=window.AIO_READING||[];
+  function item(key,label,meta,level,kids,act){
+    var li=el("li"),r=el("div","tr"),tw=el("span","tw",kids?"▸":"");
+    r.style.paddingLeft=((level-1)*12+4)+"px";
+    li.setAttribute("role","treeitem");li.setAttribute("aria-level",level);li.setAttribute("aria-label",label);li.tabIndex=-1;li.dataset.k=key;
+    tw.setAttribute("aria-hidden","true");r.appendChild(tw);r.appendChild(el("span","lk",label));
+    if(meta!=null&&meta!=="")r.appendChild(el("span","m",meta));
+    li.appendChild(r);
+    if(kids){var g=el("ul");g.setAttribute("role","group");g.hidden=true;li.setAttribute("aria-expanded","false");li.appendChild(g)}
+    acts[key]=act||null;items[key]=li;return li;
+  }
+  function put(parent,li){(parent?parent.lastChild:tree).appendChild(li);return li}
+  function toggle(li,on){
+    var g=li.lastChild;if(g.tagName!=="UL")return;
+    var open=on==null?li.getAttribute("aria-expanded")!=="true":on;
+    li.setAttribute("aria-expanded",String(open));g.hidden=!open;
+  }
+  function visible(){return[].filter.call(tree.querySelectorAll("li"),function(x){return!x.parentNode.closest("ul[hidden]")})}
+  function setRove(li){if(rove)rove.tabIndex=-1;rove=li;li.tabIndex=0}
+  function focusRow(li){setRove(li);li.focus({preventScroll:false})}
+  function activate(li){
+    var act=acts[li.dataset.k];
+    if(act){
+      act();if(li.getAttribute("aria-expanded")==="false")toggle(li,true);
+      li.focus({preventScroll:true}); // the card takes focus when it opens; the reader stays on the row, so the arrow keys keep working
+      if(window.innerWidth<900)setSides(false); // show the map behind the card
+    }
+    else toggle(li); // a group row only opens and closes
+  }
+  // Read in order
+  if(reading.length){
+    var gr=put(null,item("g:read","Read in order",reading.length,1,true));
+    reading.forEach(function(r,i){put(gr,item("rd:"+i,(i+1)+". "+r.title,r.line.split(" · ")[0],2,false,function(){readPage(i)}))});
+    toggle(gr,true);
+  }
+  // the rooms, each with its folders and files
+  var gm=put(null,item("g:rooms","Rooms",rooms.length,1,true));
+  put(gm,item("root",root.label,"router file",2,false,function(){openNode(root)}));
+  rooms.forEach(function(R,ri){
+    var rl=put(gm,item("r:"+ri,R.label,R.count,2,true,function(){openNode(R.hub)}));
+    R.folders.forEach(function(f,fi){
+      var fl=put(rl,item("f:"+ri+":"+fi,f.name,f.count,3,true,function(){openFolder(R,fi)})),files=R.dots.filter(function(d){return d.folder===fi});
+      files.forEach(function(d){if(d.name)put(fl,item("n:"+d.i,d.name,"",4,false,function(){R.collapsed=false;openNode(d);reveal(d)}))});
+      var un=files.filter(function(d){return!d.name}).length;
+      if(un)put(fl,item("u:"+ri+":"+fi,"+ "+un+" more, names not listed","",4,false,null));
+    });
+  });
+  toggle(gm,true);
+  // the pages and projects (the map's outer ring)
+  if(apps.length){
+    var gp=put(null,item("g:pages","Pages and projects",apps.length,1,true));
+    apps.forEach(function(n){put(gp,item("n:"+n.i,n.label,n.info.kind,2,false,function(){openNode(n);reveal(n)}))});
+  }
+  setRove(tree.firstChild);
+
+  function selKey(){
+    var n=S.sel;
+    if(S.read>=0)return"rd:"+S.read; // a step the reader picked in the list wins
+    if(n){
+      if(n.type==="root")return"root";
+      if(n.type==="hub")return S.fol&&S.fol.hub===n?"f:"+n.room+":"+S.fol.i:"r:"+n.room;
+      return n.type==="dot"||n.type==="app"?"n:"+n.i:"";
+    }
+    if(S.page)for(var i=0;i<reading.length;i++)if(reading[i].url.indexOf("#")<0&&bare(reading[i].url)===S.page)return"rd:"+i; // the page on show
+    return"";
+  }
+  function crumb(ol,label,fn,here){
+    var li=el("li");
+    if(here){var s=el("span",null,label);s.setAttribute("aria-current","location");li.appendChild(s)}
+    else{var b=el("button","lk",label);b.type="button";b.addEventListener("click",fn);li.appendChild(b)}
+    ol.appendChild(li);
+  }
+  function trail(){
+    var t=$("trail");t.textContent="";t.appendChild(el("span","tl","You are here"));
+    if(!cur){t.appendChild(el("p","none","Nothing picked yet. Pick a reading step, a room or a page."));return}
+    var chain=[],ol=el("ol");
+    for(var p=cur;p;p=p.parentNode.closest("li"))chain.unshift(p);
+    crumb(ol,"Map",closeAll,false);
+    chain.forEach(function(li,i){
+      if(li.dataset.k==="g:rooms")return; // "Map > Shoulders of giants" reads better than "Map > Rooms > Shoulders of giants"
+      var group=li.dataset.k.charAt(0)==="g";
+      crumb(ol,li.getAttribute("aria-label"),function(){if(group)focusRow(li);else{activate(li);focusRow(li)}},i===chain.length-1);
+    });
+    t.appendChild(ol);
+  }
+  syncTree=function(force){
+    var k=selKey();if(!force&&k===last)return;
+    last=k;if(cur)cur.removeAttribute("aria-current");
+    cur=k&&items[k]||null;
+    if(cur){
+      cur.setAttribute("aria-current","location");
+      for(var p=cur.parentNode.closest("li");p;p=p.parentNode.closest("li"))toggle(p,true);
+      if(cur.getAttribute("aria-expanded")==="false")toggle(cur,true);
+      setRove(cur);
+      if(S.used||!S.here)cur.firstChild.scrollIntoView({block:"nearest"}); // at load, the page the reader is on is marked but the list stays at the top
+    }
+    trail();
+  };
+  closeAll=function(){drawer.close();S.sel=null;S.fol=null;S.read=-1;hideCard();applyFocus();dirty=true};
+
+  tree.addEventListener("click",function(e){
+    var r=e.target.closest(".tr");if(!r)return;
+    var li=r.parentNode;setRove(li);
+    if(e.target.closest(".tw")){toggle(li);li.focus();return}
+    li.focus();activate(li);
+  });
+  tree.addEventListener("keydown",function(e){
+    var li=e.target;if(li.tagName!=="LI"||e.altKey||e.ctrlKey||e.metaKey)return;
+    var v=visible(),i=v.indexOf(li),k=e.key,open=li.getAttribute("aria-expanded"),to=null;
+    if(k==="ArrowDown")to=v[i+1];
+    else if(k==="ArrowUp")to=v[i-1];
+    else if(k==="Home")to=v[0];
+    else if(k==="End")to=v[v.length-1];
+    else if(k==="ArrowRight"){if(open==="false")toggle(li,true);else if(open==="true")to=v[i+1];else return}
+    else if(k==="ArrowLeft"){if(open==="true")toggle(li,false);else to=li.parentNode.closest("li")}
+    else if(k==="Enter"||k===" "){activate(li)}
+    else return;
+    e.preventDefault();
+    if(to)focusRow(to);
+  });
+  syncTree(true);
+}
 /* ---------- open a node: its card in the right-side drawer; a reading page opens its text there ---------- */
 var drawer=null;
 function openNode(n){
-  S.sel=n;S.here=false;hideCard();applyFocus();dirty=true;say(n.label||"file");
+  S.used=true;S.sel=n;S.fol=null;S.read=-1;S.here=false;hideCard();applyFocus();dirty=true;say(n.label||"file");
   // a page or post of this site: on a framed page it opens in the page overlay instead of the drawer
   if(n.info&&n.info.url&&opts.onPage&&opts.onPage(n.info.url)){drawer.close();S.sel=n;S.here=true;applyFocus();return}
   var c=nodeCard(n),i=n.info&&n.info.url?drawer.readIndex(n.info.url):-1;
@@ -510,7 +653,7 @@ function nodeCard(n){
     if(inf.summary)w.appendChild(el("p",null,inf.summary));
     if(inf.cloud)w.appendChild(interestCloud(inf.cloud));
     if(inf.note)w.appendChild(el("p",null,inf.note));
-    if(!inf.cloud)R.folders.forEach(function(f){var li=el("li");li.textContent=f.name+" · "+f.count;ul.appendChild(li)});
+    if(!inf.cloud)R.folders.forEach(function(f,fi){var li=el("li"),b=el("button","fl",f.name);b.type="button";b.addEventListener("click",function(){openFolder(R,fi)});li.appendChild(b);li.appendChild(el("span","k"," · "+f.count));ul.appendChild(li)});
     w.appendChild(ul);c.body=w;c.related=[go(root)].concat(R.dots.slice(0,12).map(go));c.links=inf.links||[];
   }else if(n.type==="dot"){
     var Rd=rooms[n.room],f=Rd.folders[n.folder];c.kind=Rd.label;
@@ -580,7 +723,7 @@ function mountTour(){
       {sel:sh("motionBtn"),before:mapView,title:"Buttons",text:"Turn the motion on or off (remembered on this device), show or hide the side lists, and open the menu."},
       {sel:sh("panel"),before:function(){if(window.innerWidth<900)setSides(false);setLegend(false);fold(false);setPanel(true)},title:"Menu",text:"Search the map (press / or ⌘K), switch layouts (Force, Circle, Hex, Rings), and tune motion and sizes."},
       {sel:sh("legend"),before:function(){mapView();setLegend(true)},title:"Legend",text:"Room colours with their counts, and what each shape means."},
-      {sel:sh("wl"),before:function(){setLegend(false);fold(false);setSides(true)},title:"Left lists",text:"The reading order, the site's pages and projects, and FirstMate in detail. A page or post opens "+(FRAMED?"in the page overlay.":"on the right, with Prev and Next.")},
+      {sel:sh("wl"),before:function(){setLegend(false);fold(false);setSides(true)},title:"Left tree",text:"The same map as a tree: the reading order, each room with its folders and files, and the site's pages. It follows what you pick on the map, and a pick here shows on the map. A page or post opens "+(FRAMED?"in the page overlay.":"on the right, with Prev and Next.")},
       {sel:doc("#askBar"),before:mapView,title:"This ask bar",text:"Each question runs a short scripted tour like this one. Nothing is sent to a model."});
   function at(t){for(var i=0;i<steps.length;i++)if(steps[i].title===t)return i;return 0}
   AIOTour({
@@ -653,6 +796,7 @@ function setHover(n){
 }
 
 function applyFocus(){
+  syncTree();
   var f=S.hover||S.sel;focusLinks=[];flags.fill(0);flagMode=false;matchCount=0;
   if(f){
     flagMode=true;flags[f.i]=1;
@@ -660,7 +804,10 @@ function applyFocus(){
     flags[root.i]=1;
     var add=function(n){flags[n.i]=1};
     if(f.type==="dot"){add(f.hub);focusLinks.push([f,f.hub],[f.hub,root])}
-    else if(f.type==="hub"){rooms[f.room].dots.forEach(function(d){add(d);focusLinks.push([f,d])});focusLinks.push([f,root])}
+    else if(f.type==="hub"){
+      var fo=f===S.sel&&S.fol&&S.fol.hub===f?S.fol:null; // a folder picked in the tree or the card lights only its own files
+      rooms[f.room].dots.forEach(function(d){if(fo&&d.folder!==fo.i)return;add(d);focusLinks.push([f,d])});focusLinks.push([f,root]);
+    }
     else if(f.type==="root"){
       hubs.concat(skills,apps).forEach(function(n){add(n);focusLinks.push([root,n])});
     }else if(f.type==="skill"){

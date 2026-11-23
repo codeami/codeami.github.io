@@ -78,11 +78,33 @@ label.ck{display:flex;gap:8px;align-items:center;margin:8px 0;color:var(--ink);f
 /* On a framed page the site's one dropdown (under the name) holds Motion, Widgets, Legend, 3D and the rest, so the floating buttons stay out of sight */
 :host(.framed) .top,:host(.framed) #legendBtn{display:none}
 :host(.framed) #panel{top:calc(var(--tt,14px));max-height:calc(100% - var(--tt,14px) - 20px)}
-.tabs{display:flex;gap:2px;margin:0 0 12px;border-bottom:1px solid var(--line)}
-.tab{flex:1;background:none;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;color:var(--mute);font:inherit;font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:8px 6px;cursor:pointer}
-@media (max-width:899px){:host(.framed) #side{top:max(52px,var(--tt,0px))}} /* the lists start under the folded page card, with their tabs in view */
-.tab[aria-selected=true]{color:var(--ink);border-bottom-color:var(--accent)}
-.tab:hover,.tab:focus-visible{color:var(--accent);outline:none}
+/* the left tree: a "you are here" trail over the reading order, the rooms (room > folder > file) and the pages */
+#trail{position:sticky;top:-14px;z-index:1;min-height:44px;margin:-14px -14px 10px;padding:14px 14px 10px;background:var(--panel);border-bottom:1px solid var(--line)}
+#trail .tl{display:block;margin:0 0 6px;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--mute)}
+#trail .tl::before{content:"";display:inline-block;width:6px;height:6px;margin-right:8px;background:var(--accent)}
+#trail ol{display:flex;flex-wrap:wrap;gap:2px 0;margin:0;padding:0;list-style:none}
+#trail li{display:flex;align-items:center;min-width:0;max-width:100%}
+#trail li+li::before{content:"›";margin:0 6px;color:var(--mute)}
+#trail button,#trail [aria-current]{max-width:100%;padding:2px 0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:left;font:inherit;color:var(--mute);background:none;border:0;cursor:pointer}
+#trail [aria-current]{color:var(--ink);cursor:default}
+#trail button:hover,#trail button:focus-visible{color:var(--accent);outline:none}
+#trail button:focus-visible{outline:1px solid var(--accent);outline-offset:2px}
+#trail .none{margin:0;color:var(--mute)}
+#tree,#tree ul{margin:0;padding:0;list-style:none}
+#tree ul[hidden]{display:none}
+#tree li{outline:none}
+#tree .tr{display:flex;align-items:baseline;gap:6px;padding:6px 4px 6px 4px;border-bottom:1px solid var(--line);border-left:2px solid transparent;cursor:pointer}
+#tree .tw{flex:none;width:14px;text-align:center;font-size:10px;color:var(--mute);transition:transform .12s}
+#tree [aria-expanded=true]>.tr>.tw{transform:rotate(90deg)}
+#tree .lk{flex:1;min-width:0;overflow-wrap:anywhere;color:var(--ink)}
+#tree .m{flex:none;font-size:11px;color:var(--mute)}
+#tree .tr:hover .lk{color:var(--accent)}
+#tree li:focus-visible>.tr{outline:1px solid var(--accent);outline-offset:-1px}
+#tree li[aria-level="1"]>.tr .lk{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--mute)}
+#tree [aria-current]>.tr{border-left-color:var(--accent);background:var(--bg)}
+#tree [aria-current]>.tr .lk{font-weight:700;color:var(--accent)}
+@media (prefers-reduced-motion:reduce){#tree .tw{transition:none}}
+@media (max-width:899px){:host(.framed) #side{top:max(52px,var(--tt,0px))}} /* the tree starts under the folded page card, with its trail in view */
 @media (max-width:760px){#legendBtn{bottom:calc(var(--ob,0px) + 64px)}#legend{bottom:calc(var(--ob,0px) + 104px)}}
 @media (max-width:899px){#side{position:fixed;top:52px;left:0;right:0;bottom:0;overflow:auto;background:var(--panel);z-index:5;border-top:1px solid var(--line)}
   #wl,#wr{position:static;width:auto;border:0;overflow:visible}}
@@ -100,13 +122,16 @@ label.ck{display:flex;gap:8px;align-items:center;margin:8px 0;color:var(--ink);f
 .phead{display:flex;justify-content:space-between;align-items:center;margin:0 0 10px}
 .phead b{font-weight:400;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--mute)}
 .phead .btn{padding:4px 10px}
-.btn,.tab,.wd button.lk,#panel label{touch-action:manipulation}
-.btn:focus-visible,.tab:focus-visible,.wd button.lk:focus-visible,#panel input:focus-visible{outline:1px solid var(--accent);outline-offset:2px}
+.btn,#tree .tr,.wd button.lk,#panel label{touch-action:manipulation}
+.btn:focus-visible,.wd button.lk:focus-visible,#panel input:focus-visible{outline:1px solid var(--accent);outline-offset:2px}
 #side,.side-col{overscroll-behavior:contain}
 @media (max-width:760px){
   #panel,:host(.framed) #panel{top:auto;left:0;right:0;bottom:0;width:auto;max-height:58vh;max-height:58dvh;border-width:0;border-top:2px solid var(--accent);z-index:7}
   /* 44px hit areas on a phone (Vercel guidelines) */
-  .btn,.tab{min-height:44px}
+  .btn{min-height:44px}
+  #tree .tr{min-height:44px;align-items:center}
+  #tree .tw{width:32px;align-self:stretch;display:flex;align-items:center;justify-content:center}
+  #trail button{min-height:32px}
   .seg .btn,.pair .btn,.phead .btn{min-height:44px}
   #panel label.ck{min-height:44px;margin:0}
   #panel input[type=checkbox]{width:20px;height:20px}
