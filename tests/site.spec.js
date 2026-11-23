@@ -849,6 +849,54 @@ test('left tree and map stay in step: a pick in either one shows in the tree, th
   expect(await lit()).toBe(0);
 });
 
+test('tree filter: typing narrows the tree to the matches and their parents; Esc clears it; the arrows and Enter reach a match', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto('/broman-os/index.html');
+  const map = page.locator('#brainHost');
+  await expect(map.locator('canvas')).toBeVisible();
+  if (await map.locator('#side').evaluate((e) => e.hidden)) {
+    await page.locator('#tbDrop').click();
+    await page.locator('#tbSheet').getByRole('button', { name: 'Widgets', exact: true }).click();
+  }
+  const data = JSON.parse(readFileSync(join(root, 'broman-os/brain/brain-data.json'), 'utf8'));
+  const shown = () => map.locator('#tree li:not([hidden])').evaluateAll((l) => l.filter((e) => !e.parentElement.closest('ul[hidden],li[hidden]')).map((e) => e.getAttribute('aria-label')));
+  const all = (await shown()).length;
+  const box = map.locator('#tq'), count = map.locator('#tcount');
+  await box.fill('ICM');
+  // a match opens its parents, and nothing that does not match stays
+  const found = await shown();
+  const wanted = data.rooms.flatMap((r) => r.folders.flatMap((f) => f.files)).filter((n) => n.n.toLowerCase().includes('icm')).map((n) => n.n);
+  expect(wanted.length).toBeGreaterThan(2);
+  for (const n of wanted) expect(found, `${n} stays`).toContain(n);
+  expect(found).not.toContain('Blog');
+  expect(found.length).toBeLessThan(all / 2);
+  await expect(count).toContainText('matches');
+  await expect(map.locator('#q')).toHaveValue('ICM'); // one query for the tree and the map's search box, as it was typed
+  // a room that matches keeps its folders and files
+  await box.fill('shoulders');
+  const giants = await shown();
+  expect(giants).toContain('Shoulders of giants');
+  expect(giants).toContain(data.rooms.find((r) => r.id === 'giants').folders[0].files[0].n);
+  // nothing found says so
+  await box.fill('zzzzqq');
+  await expect(count).toContainText('No match');
+  expect(await shown()).toEqual([]);
+  // keyboard: the arrow goes into the tree, Enter picks the first match
+  await box.fill('ladder');
+  await box.press('Enter');
+  await expect(map.locator('#tree li:focus')).toHaveAttribute('aria-label', /layer ladder/i);
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#drawer h2.t')).toContainText(/layer ladder/i);
+  // the first Esc clears the filter and leaves the card and the pick; the whole tree is back
+  await box.focus();
+  await box.press('Escape');
+  await expect(box).toHaveValue('');
+  await expect(count).toHaveText('');
+  await expect(page.locator('#drawer h2.t')).toContainText(/layer ladder/i);
+  expect((await shown()).length).toBeGreaterThanOrEqual(all);
+  await expect(map.locator('#tree [aria-current="location"]')).toHaveAttribute('aria-label', /layer ladder/i);
+});
+
 test('map links: a note opens rendered in the card, never as a raw .md file; a link inside the site stays in the site; a room has a deep link', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
   const data = JSON.parse(readFileSync(join(root, 'broman-os/brain/brain-data.json'), 'utf8'));

@@ -79,7 +79,13 @@ label.ck{display:flex;gap:8px;align-items:center;margin:8px 0;color:var(--ink);f
 :host(.framed) .top,:host(.framed) #legendBtn{display:none}
 :host(.framed) #panel{top:calc(var(--tt,14px));max-height:calc(100% - var(--tt,14px) - 20px)}
 /* the left tree: a "you are here" trail over the reading order, the rooms (room > folder > file) and the pages */
-#trail{position:sticky;top:-14px;z-index:1;min-height:44px;margin:-14px -14px 10px;padding:14px 14px 10px;background:var(--panel);border-bottom:1px solid var(--line)}
+#thead{position:sticky;top:-14px;z-index:1;margin:-14px -14px 10px;padding:14px 14px 10px;background:var(--panel);border-bottom:1px solid var(--line)}
+#trail{min-height:44px}
+#tfind{margin-top:8px}
+#tq{width:100%;background:var(--bg);color:var(--ink);border:1px solid var(--line);font:inherit;padding:6px 8px}
+#tq:focus-visible{border-color:var(--accent);outline:1px solid var(--accent);outline-offset:2px}
+#tcount{margin:4px 0 0;min-height:16px;color:var(--mute);font-size:11px}
+#tree li[hidden]{display:none}
 #trail .tl{display:block;margin:0 0 6px;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--mute)}
 #trail .tl::before{content:"";display:inline-block;width:6px;height:6px;margin-right:8px;background:var(--accent)}
 #trail ol{display:flex;flex-wrap:wrap;gap:2px 0;margin:0;padding:0;list-style:none}
@@ -93,7 +99,11 @@ label.ck{display:flex;gap:8px;align-items:center;margin:8px 0;color:var(--ink);f
 #tree,#tree ul{margin:0;padding:0;list-style:none}
 #tree ul[hidden]{display:none}
 #tree li{outline:none}
-#tree .tr{display:flex;align-items:baseline;gap:6px;padding:6px 4px 6px 4px;border-bottom:1px solid var(--line);border-left:2px solid transparent;cursor:pointer}
+/* flat rows: air instead of a hairline under every row; the picked row is a tinted band with the accent bar (DESIGN.md: flat, square, one accent) */
+#tree .tr{display:flex;align-items:baseline;gap:6px;padding:7px 4px 7px 4px;border-left:2px solid transparent;cursor:pointer}
+#tree li[aria-level="1"]{margin-top:10px}
+#tree li[aria-level="1"]:first-child{margin-top:0}
+#tree li[aria-level="1"]>.tr{border-bottom:1px solid var(--line);padding-bottom:6px;margin-bottom:2px}
 #tree .tw{flex:none;width:14px;text-align:center;font-size:10px;color:var(--mute);transition:transform .12s}
 #tree [aria-expanded=true]>.tr>.tw{transform:rotate(90deg)}
 #tree .lk{flex:1;min-width:0;overflow-wrap:anywhere;color:var(--ink)}
@@ -101,7 +111,9 @@ label.ck{display:flex;gap:8px;align-items:center;margin:8px 0;color:var(--ink);f
 #tree .tr:hover .lk{color:var(--accent)}
 #tree li:focus-visible>.tr{outline:1px solid var(--accent);outline-offset:-1px}
 #tree li[aria-level="1"]>.tr .lk{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--mute)}
-#tree [aria-current]>.tr{border-left-color:var(--accent);background:var(--bg)}
+#tree [aria-current]>.tr{border-left-color:var(--accent);background:var(--accent-dim)}
+#tree .tr:hover{background:var(--bg)}
+#tree [aria-current]>.tr:hover{background:var(--accent-dim)}
 #tree [aria-current]>.tr .lk{font-weight:700;color:var(--accent)}
 @media (prefers-reduced-motion:reduce){#tree .tw{transition:none}}
 @media (max-width:899px){:host(.framed) #side{top:max(52px,var(--tt,0px))}} /* the tree starts under the folded page card, with its trail in view */
@@ -132,6 +144,7 @@ label.ck{display:flex;gap:8px;align-items:center;margin:8px 0;color:var(--ink);f
   #tree .tr{min-height:44px;align-items:center}
   #tree .tw{width:32px;align-self:stretch;display:flex;align-items:center;justify-content:center}
   #trail button{min-height:32px}
+  #tq{min-height:44px}
   .seg .btn,.pair .btn,.phead .btn{min-height:44px}
   #panel label.ck{min-height:44px;margin:0}
   #panel input[type=checkbox]{width:20px;height:20px}
