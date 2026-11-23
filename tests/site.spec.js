@@ -681,8 +681,8 @@ test('wiki notes card: a summary, a cloud of interest tags sized by note count, 
   await page.goto('/broman-os/index.html#pocock-steers-with-skills-kun-builds-machinery');
   const drawer = page.locator('#drawer');
   await drawer.getByRole('tab', { name: 'Related' }).click();
-  await drawer.locator('.rel button', { hasText: 'Wiki notes' }).click();
-  await expect(drawer.locator('h2.t')).toHaveText('Wiki notes');
+  await drawer.locator('.rel button', { hasText: 'Second-brain notes' }).click();
+  await expect(drawer.locator('h2.t')).toHaveText('Second-brain notes');
   await expect(drawer.locator('.pane p').first()).toContainText('25 notes');
   const tags = await drawer.locator('.ctag').evaluateAll((bs) => bs.map((b) => ({ name: b.firstChild.textContent, n: +b.querySelector('.cn').textContent, size: parseFloat(getComputedStyle(b).fontSize), dashed: getComputedStyle(b).borderTopStyle === 'dashed' })));
   expect(tags.length, 'the interest list').toBeGreaterThanOrEqual(8);
@@ -696,7 +696,7 @@ test('wiki notes card: a summary, a cloud of interest tags sized by note count, 
   await first.click();
   expect(await drawer.locator('.cloud-l button').count(), 'the tag lists its notes').toBe(big.n);
   await drawer.locator('.cloud-l button').first().click();
-  await expect(drawer.locator('h2.t')).not.toHaveText('Wiki notes');
+  await expect(drawer.locator('h2.t')).not.toHaveText('Second-brain notes');
   await expect(drawer.locator('.ln')).toContainText('kind:');
 });
 
@@ -705,8 +705,8 @@ test('room drawer: every Related chip is one line, at most 28 px tall, with its 
   const drawer = page.locator('#drawer');
   await expect(drawer).toBeVisible();
   await drawer.getByRole('tab', { name: 'Related' }).click();
-  await drawer.locator('.rel button', { hasText: 'Wiki notes' }).click();
-  await expect(drawer.locator('h2.t')).toHaveText('Wiki notes');
+  await drawer.locator('.rel button', { hasText: 'Second-brain notes' }).click();
+  await expect(drawer.locator('h2.t')).toHaveText('Second-brain notes');
   await drawer.getByRole('tab', { name: 'Related' }).click();
   const chips = await drawer.locator('.rel button').evaluateAll((bs) => bs.map((b) => ({ h: b.getBoundingClientRect().height, title: b.title, text: b.textContent })));
   expect(chips.length, 'the room lists its notes').toBeGreaterThan(5);
@@ -876,6 +876,10 @@ test('map links: a note opens rendered in the card, never as a raw .md file; a l
   await page.goto('/broman-os/index.html#area-harness');
   await page.locator('#drawer .tabs button', { hasText: 'Links' }).click();
   await expect(page.locator('#drawer .lnk a', { hasText: 'All pages' })).not.toHaveAttribute('target', '_blank');
+  // the notes room links to other people's maps only: no build script or allow-list (the what, never the how)
+  await page.goto('/broman-os/index.html#notes');
+  await page.locator('#drawer .tabs button', { hasText: 'Links' }).click();
+  await expect(page.locator('#drawer .lnk a, #drawer .lnk button', { hasText: /Build script|Approved list/ })).toHaveCount(0);
   // a room opens from its own deep link
   await page.goto('/broman-os/index.html#giants');
   await expect(card).toHaveText('Shoulders of giants');

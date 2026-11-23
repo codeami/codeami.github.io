@@ -1,7 +1,7 @@
 {
  "about": "Hand-kept public data for the chart behind every page: the centre file, the outer ring (this site's pages and public projects) and the reading order. Urls are relative to brain/. build_data.py merges it with notes.js, src/extra.json, the skill map and the Blog list.",
  "root": {"label": "AGENTS.md", "also": "CLAUDE.md",
-  "note": "The base map. Every agent tool loads this one rules file first; each room of work adds its own CONTEXT.md on top.",
+  "note": "One file to rule them all. The base map: every agent tool loads this one rules file first; each room of work adds its own CONTEXT.md on top.",
   "links": [["Post: one rules file for every tool", "../blog/everything-is-a-file.html"]]},
  "pages": [
   {"n": "whoami", "state": "home", "url": "../../index.html"},

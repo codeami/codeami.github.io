@@ -617,7 +617,7 @@ function openNode(n){
   var c=nodeCard(n),i=n.info&&n.info.url?drawer.readIndex(n.info.url):-1;
   if(i>=0)drawer.read(i,{status:c.status,statusCls:c.statusCls,related:c.related});else drawer.card(c);
 }
-// the Wiki notes card: each interest tag sized by its note count, an empty tag dashed; a tap lists that tag's notes
+// the Second-brain notes card: each interest tag sized by its note count, an empty tag dashed; a tap lists that tag's notes
 function interestCloud(tags){
   var wrap=el("div","cloud-w"),cloud=el("div","cloud"),list=el("div","cloud-l"),pressed=null,max=Math.max.apply(null,tags.map(function(t){return t.count}))||1;
   cloud.setAttribute("role","group");cloud.setAttribute("aria-label","Interest tags");list.setAttribute("aria-live","polite");
@@ -718,7 +718,7 @@ function mountTour(){
   var steps=[
       {sel:FRAMED?sh("cv"):sh("src"),before:mapView,title:"The second brain",text:"A map of how the owner works with a crew of AI agents, always running behind every page of this site. It shows only public things: approved wiki notes, FirstMate's parts, the posts and this site's pages."},
       {rect:ring(function(){return 30}),before:mapView,title:"The centre: "+root.label,text:"Every agent reads this rules file first. Everything else on the map hangs off it."},
-      {rect:ring(guide(1)),before:mapView,title:"Memory: rooms of notes",text:"Each coloured arc is a room, like Wiki notes or Blog. One dot is one note, part or post. Click a dot for its card; double-click a room to fold it."},
+      {rect:ring(guide(1)),before:mapView,title:"Memory: rooms of notes",text:"Each coloured arc is a room, like Second-brain notes or Blog. One dot is one note, part or post. Click a dot for its card; double-click a room to fold it."},
       {rect:ring(guide(2)),before:mapView,title:"Outer ring: pages and projects",text:"Hexagons are this site's pages and public projects. A page or post opens on top of the map, and its node lights up."}];
   if(FRAMED)steps.push(
       {sel:doc(".k-nav"),before:mapView,title:"Site tabs",text:"The same bar on every page: Meta-Factory, Case studies, Blog, About and Work with me. Each page opens over this same map."},
