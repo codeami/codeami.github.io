@@ -8,11 +8,11 @@
 "use strict";
 var CSS=
 "#askBar{position:fixed;z-index:3;bottom:calc(var(--ob,0px) + 16px);left:calc(var(--lw,0px) + 132px);right:calc(var(--rw,0px) + 16px);display:flex;align-items:center;gap:8px;"+
-"background:rgba(12,14,17,.9);border:1px solid var(--line,#23262b);padding:5px 6px 5px 10px}"+
+"background:var(--glass,rgba(12,14,17,.9));border:1px solid var(--line,#23262b);padding:5px 6px 5px 10px}"+
 "#askBar>b{flex:none;font-size:10px;font-weight:400;letter-spacing:.3em;color:var(--accent,#ff7a1a)}"+
 "#askBar .chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;min-width:0}"+
 "#askBar .chips::-webkit-scrollbar{display:none}"+
-"#askBar .chip{flex:none;background:#07080a;color:var(--ink,#e9e6e0);border:1px solid var(--line,#23262b);border-radius:12px;font:inherit;font-size:11px;padding:4px 10px;cursor:pointer;white-space:nowrap;text-decoration:none}"+
+"#askBar .chip{flex:none;background:var(--bg,#07080a);color:var(--ink,#e9e6e0);border:1px solid var(--line,#23262b);border-radius:12px;font:inherit;font-size:11px;padding:4px 10px;cursor:pointer;white-space:nowrap;text-decoration:none}"+
 "#askBar .chip:hover,#askBar .chip:focus-visible{border-color:var(--accent,#ff7a1a);color:var(--accent,#ff7a1a);outline:none}"+
 "#askBar .chip.first{border-color:var(--accent,#ff7a1a)}"+
 "#askBar .chip.sec{display:none}#askBar.open .chip.sec{display:inline-block}"+

@@ -525,6 +525,7 @@ test('top bar: Meta-Factory, Case studies, Blog, About and Work with me on every
 });
 
 test('top bar: clicking each item on every public page lands on a page with the same bar and the same site name', async ({ page }) => {
+  test.setTimeout(180000); // every bar page times five items is over a hundred navigations
   await page.route('**/*', (route) => (route.request().url().startsWith(origin) ? route.continue() : route.fulfill({ status: 200, body: '' })));
   await page.goto('/index.html');
   const same = await barOf(page);
@@ -768,4 +769,104 @@ test('left pane tabs: Read, Pages and FirstMate show one list at a time; the emp
   await expect(map.locator('#sFm')).toBeVisible();
   await expect(map.locator('#sRead')).toBeHidden();
   await expect(map.getByRole('tab', { name: 'FirstMate' })).toHaveAttribute('aria-selected', 'true');
+});
+
+// ---- the map: Hex and Folders by default, overlays that float, and one skin over everything ----
+test('map: Hex with Folders is the default; the notes sit apart and the page badges one badge width outside them', async ({ page }) => {
+  await page.goto('/');
+  await mapState(page);
+  await expect.poll(() => page.evaluate(() => window.AIOMap.metrics().pitch), 'the layout has settled').toBeGreaterThan(0);
+  const m = await page.evaluate(() => window.AIOMap.metrics());
+  expect(m.layout).toBe('hex');
+  expect(m.view).toBe('folders');
+  await expect(page.locator('#brainHost').locator('#views [data-v="folders"]')).toHaveAttribute('aria-pressed', 'true');
+  expect(m.pitch, 'two notes are at least two dot widths apart').toBeGreaterThan(20);
+  expect(m.gap, 'a page badge sits about one badge width from the nearest note').toBeGreaterThan(0.5 * m.badge);
+  expect(m.gap).toBeLessThan(2 * m.badge);
+});
+
+test('map: the controls float over a full-width map, close with their button and with Esc, and are a bottom sheet on a phone', async ({ page }) => {
+  await page.goto('/');
+  await mapState(page);
+  const phone = test.info().project.name === 'mobile-390';
+  const vp = page.viewportSize();
+  const map = page.locator('#brainHost');
+  const canvas = map.locator('canvas');
+  const panel = map.locator('#panel');
+  const width = async () => (await canvas.boundingBox()).width;
+  expect(await width(), 'the map has the whole viewport').toBe(vp.width);
+  await expect(panel).toBeHidden();
+  const open = async () => {
+    await page.locator('#tbDrop').click();
+    await page.locator('#tbSheet').getByRole('button', { name: 'All settings' }).click();
+    await expect(panel).toBeVisible();
+  };
+  await open();
+  expect(await width(), 'opening the controls takes no width from the map').toBe(vp.width);
+  const box = await panel.boundingBox();
+  if (phone) {
+    expect(box.x, 'a sheet from the left edge').toBe(0);
+    expect(box.width, 'the full width').toBe(vp.width);
+    expect(Math.round(box.y + box.height), 'resting on the bottom edge').toBe(vp.height);
+    await expect(page.locator('#pageov'), 'the page card steps aside').toHaveClass(/min/);
+  } else {
+    expect(box.x + box.width, 'inside the viewport').toBeLessThanOrEqual(vp.width);
+    expect(box.x + box.width, 'beside the page card, not under it').toBeLessThanOrEqual((await page.locator('#pageov').boundingBox()).x);
+  }
+  await page.keyboard.press('Escape');
+  await expect(panel, 'Esc closes it').toBeHidden();
+  await expect(page.locator('#tbDrop'), 'focus returns to what opened it').toBeFocused();
+  await open();
+  await panel.getByRole('button', { name: 'Close the controls' }).click();
+  await expect(panel, 'the close button closes it').toBeHidden();
+  expect(await width()).toBe(vp.width);
+});
+
+test('Calm covers the map: a light canvas, light lists and panels, and text at 4.5:1; HUD stays dark', async ({ page }) => {
+  const lum = (rgb) => {
+    const f = rgb.map((v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; });
+    return 0.2126 * f[0] + 0.7152 * f[1] + 0.0722 * f[2];
+  };
+  const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p); return (x + 0.05) / (y + 0.05); };
+  for (const skin of ['hud', 'calm']) {
+    await page.addInitScript((s) => localStorage.setItem('skin', s), skin);
+    await page.goto('about:blank');
+    await page.goto('/');
+    await mapState(page);
+    await expect.poll(() => page.evaluate(() => { // the canvas repaints in the skin a frame or two after load
+      const cv = window.AIOMap.root.querySelector('canvas'), d = cv.getContext('2d').getImageData(cv.width - 4, cv.height - 4, 1, 1).data;
+      return d[0] + d[1] + d[2] > 384;
+    })).toBe(skin === 'calm');
+    const got = await page.evaluate(() => {
+      const root = window.AIOMap.root, cv = root.querySelector('canvas');
+      const px = cv.getContext('2d').getImageData(cv.width - 4, cv.height - 4, 1, 1).data; // a corner: bare map ground
+      const rgb = (el, prop) => getComputedStyle(el)[prop].match(/\d+(\.\d+)?/g).slice(0, 3).map(Number);
+      const text = (sel) => { const e = root.querySelector(sel); return { ink: rgb(e, 'color'), bg: rgb(e.closest('aside, div#legend') || e, 'backgroundColor') }; };
+      return { canvas: [px[0], px[1], px[2]], list: text('#wl .lk'), panel: text('#panel h3'), btn: text('#panel .btn') };
+    });
+    const light = (rgb) => lum(rgb) > 0.5;
+    expect(light(got.canvas), `${skin}: canvas ground`).toBe(skin === 'calm');
+    expect(light(got.list.bg), `${skin}: left list`).toBe(skin === 'calm');
+    if (skin === 'calm') {
+      expect(ratio(got.list.ink, got.list.bg), 'list text').toBeGreaterThanOrEqual(4.5);
+      expect(ratio(got.btn.ink, [255, 255, 255]), 'button text on paper').toBeGreaterThanOrEqual(4.5);
+      // every colour the canvas writes text in, on the ground it is drawn on
+      const t = await page.evaluate(() => window.AIOMap.textColours());
+      const rgb = (hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+      for (const c of t.text) expect(ratio(rgb(c), rgb(t.bg)), `map text ${c} on ${t.bg}`).toBeGreaterThanOrEqual(4.5);
+    }
+  }
+});
+
+test('the skin button names the skin that is on', async ({ page }) => {
+  await page.goto('/cv.html');
+  const btn = page.locator('#theme');
+  await expect(btn).toHaveText('HUD');
+  await btn.click();
+  await expect(btn).toHaveText('Matrix');
+  await expect(btn).toHaveAttribute('aria-label', /Switch to the Calm colours/);
+  await btn.click();
+  await expect(btn).toHaveText('Calm');
+  await btn.click();
+  await expect(btn).toHaveText('HUD');
 });

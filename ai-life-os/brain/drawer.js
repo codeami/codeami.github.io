@@ -8,7 +8,7 @@
 (function(){
 "use strict";
 var CSS=
-"#drawer{position:fixed;z-index:6;top:0;right:0;bottom:0;width:min(520px,100vw);display:flex;flex-direction:column;background:var(--panel,#0c0e11);border-left:1px solid var(--accent,#ff7a1a);box-shadow:-12px 0 32px rgba(0,0,0,.5);color:var(--ink,#e9e6e0)}"+
+"#drawer{position:fixed;z-index:6;top:0;right:0;bottom:0;width:min(520px,100vw);display:flex;flex-direction:column;background:var(--panel,#0c0e11);border-left:1px solid var(--accent,#ff7a1a);color:var(--ink,#e9e6e0)}"+
 "#drawer[hidden]{display:none}#drawer:focus{outline:none}"+
 "#drawer .dh{display:flex;align-items:center;gap:6px;padding:10px 12px;border-bottom:1px solid var(--line,#23262b)}"+
 "#drawer .dh .pos{flex:1;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--mute,#7d7a74)}"+
@@ -20,7 +20,7 @@ var CSS=
 "#drawer h3.s{margin:16px 0 6px;font-size:10px;font-weight:400;letter-spacing:.3em;text-transform:uppercase;color:var(--mute,#7d7a74)}"+
 "#drawer h3.s::before{content:'';display:inline-block;width:6px;height:6px;background:var(--accent,#ff7a1a);margin-right:8px}"+
 "#drawer .rel{display:flex;flex-wrap:wrap;gap:6px}"+
-"#drawer .rel button,#drawer .lnk a,#drawer .lnk button{background:#07080a;color:var(--ink,#e9e6e0);border:1px solid var(--line,#23262b);font:inherit;font-size:11px;padding:4px 10px;cursor:pointer;text-decoration:none;display:inline-block}"+
+"#drawer .rel button,#drawer .lnk a,#drawer .lnk button{background:var(--bg,#07080a);color:var(--ink,#e9e6e0);border:1px solid var(--line,#23262b);font:inherit;font-size:11px;padding:4px 10px;cursor:pointer;text-decoration:none;display:inline-block}"+
 "#drawer .rel button{max-width:min(100%,28ch);height:26px;box-sizing:border-box;padding-top:0;padding-bottom:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}"+
 "#drawer .rel button:hover,#drawer .rel button:focus-visible,#drawer .lnk a:hover,#drawer .lnk a:focus-visible,#drawer .lnk button:hover,#drawer .lnk button:focus-visible{border-color:var(--accent,#ff7a1a);color:var(--accent,#ff7a1a);outline:none}"+
 "#drawer .lnk{display:flex;flex-direction:column;align-items:flex-start;gap:6px}"+
@@ -35,7 +35,7 @@ var CSS=
 "#drawer .art blockquote{margin:0 0 10px;padding-left:10px;border-left:2px solid var(--accent,#ff7a1a);color:var(--mute,#7d7a74)}"+
 "#drawer .art details{border:1px solid var(--line,#23262b);padding:6px 10px;margin:0 0 8px}#drawer .art summary{cursor:pointer}"+
 "#drawer .art table{border-collapse:collapse;display:block;overflow:auto}#drawer .art td,#drawer .art th{border:1px solid var(--line,#23262b);padding:3px 6px}"+
-"#drawer .art pre{overflow:auto;background:#07080a;padding:8px}"+
+"#drawer .art pre{overflow:auto;background:var(--bg,#07080a);padding:8px}"+
 "#drawer .art iframe{width:100%;height:70vh;border:1px solid var(--line,#23262b)}"+
 "#drawer .df{display:flex;gap:6px;padding:10px 12px;border-top:1px solid var(--line,#23262b)}#drawer .df[hidden]{display:none}"+
 "#drawer .df .btn{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-transform:none;letter-spacing:.02em}"+
@@ -49,7 +49,7 @@ var CSS=
 "#drawer .ctag.empty{border-style:dashed;color:var(--mute,#7d7a74)}"+
 "#drawer .ctag:hover,#drawer .ctag:focus-visible,#drawer .ctag[aria-pressed=true]{border-color:var(--accent,#ff7a1a);color:var(--accent,#ff7a1a)}"+
 "#drawer .cloud-l{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}#drawer .cloud-l:empty{display:none}#drawer .cloud-l .lg{flex:1 0 100%;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--mute,#7d7a74)}"+
-"#drawer .cloud-l button{background:#07080a;color:var(--ink,#e9e6e0);border:1px solid var(--line,#23262b);font:inherit;font-size:11px;padding:4px 10px;cursor:pointer;max-width:100%;text-align:left}"+
+"#drawer .cloud-l button{background:var(--bg,#07080a);color:var(--ink,#e9e6e0);border:1px solid var(--line,#23262b);font:inherit;font-size:11px;padding:4px 10px;cursor:pointer;max-width:100%;text-align:left}"+
 "#drawer .cloud-l button:hover,#drawer .cloud-l button:focus-visible{border-color:var(--accent,#ff7a1a);color:var(--accent,#ff7a1a)}"+
 "#drawer .tab:focus-visible{outline:1px solid var(--accent,#ff7a1a)}#drawer .pane[hidden]{display:none}#drawer .pane p{margin:0 0 10px}";
 
