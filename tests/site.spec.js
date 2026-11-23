@@ -113,7 +113,7 @@ test('no private addresses or home paths in published files', () => {
 test('no public page uses wording that undersells the work', () => {
   const banned = /isn['’]t scheduled|ran once|guess:|not checked|still rough|honest limit|haven['’]t verified|haven['’]t tried|my guess|did not test|not tested|were tested|not tried|summari[sz]er|close readings|unverified|unsure|\bguess\b(?=<|"| column)/i;
   const hits = [];
-  const dataFiles = ['ai-life-os/brain/brain-data.json', 'ai-life-os/brain/src/extra.json', 'ai-life-os/brain/src/site.json'];
+  const dataFiles = ['broman-os/brain/brain-data.json', 'broman-os/brain/src/extra.json', 'broman-os/brain/src/site.json'];
   for (const file of [...pages, ...dataFiles]) {
     readFileSync(join(root, file), 'utf8').split('\n').forEach((l, i) => {
       const m = l.match(banned);
@@ -143,11 +143,32 @@ test('share.json: retired files are kept and every "into" target exists', () => 
   }
 });
 
+// ---- the section moved from /ai-life-os/ to /broman-os/: every old page forwards to its new page, and a #hash survives ----
+const movedPages = share.filter((r) => r.path.startsWith('ai-life-os/')).map((r) => r.path);
+
+test('old address: every page that was under /ai-life-os/ has a stub that lands on the same page under /broman-os/', async ({ page }) => {
+  const newPages = share.filter((r) => r.path.startsWith('broman-os/') && r.level !== 'retired').map((r) => r.path);
+  expect(movedPages.map((p) => p.replace('ai-life-os/', 'broman-os/')).sort(), 'one stub per page').toEqual(newPages.sort());
+  await page.route('**/*', (route) => (route.request().url().startsWith(origin) ? route.continue() : route.fulfill({ status: 200, body: '' })));
+  for (const old of movedPages) {
+    const now = old.replace('ai-life-os/', 'broman-os/');
+    await page.goto(`/${old}`);
+    await page.waitForURL(new RegExp(`/${now.replace(/[.]/g, '\\.')}$`));
+    // a directory link such as /ai-life-os/blog/ reaches the same stub through index.html
+    if (old.endsWith('/index.html') && old !== 'ai-life-os/index.html') {
+      await page.goto(`/${old.replace('index.html', '')}`);
+      await page.waitForURL(new RegExp(`/${now.replace(/[.]/g, '\\.')}$`));
+    }
+  }
+  await page.goto('/ai-life-os/index.html#safety');
+  await page.waitForURL(/\/broman-os\/index\.html#safety$/);
+});
+
 test('share.json: no chart node points at a page that is not public', () => {
-  const data = readFileSync(join(root, 'ai-life-os/brain/brain-data.json'), 'utf8');
+  const data = readFileSync(join(root, 'broman-os/brain/brain-data.json'), 'utf8');
   const urls = [...data.matchAll(/"(?:url|href)":\s*"([^"]+)"/g)].map((m) => m[1]).filter((u) => !external(u));
   const hit = urls
-    .map((u) => join('ai-life-os/brain', u.split('#')[0]).split(sep).join('/'))
+    .map((u) => join('broman-os/brain', u.split('#')[0]).split(sep).join('/'))
     .filter((p) => share.some((r) => r.level !== 'public' && r.path === p));
   expect(hit).toEqual([]);
 });
@@ -155,13 +176,14 @@ test('share.json: no chart node points at a page that is not public', () => {
 test('build: a link-only page gets a static noindex and no robots.txt line, a retired one keeps its Disallow', () => {
   const tmp = mkdtempSync(join(tmpdir(), 'share-build-'));
   try {
-    cpSync(join(root, 'ai-life-os'), join(tmp, 'ai-life-os'), { recursive: true });
-    const fixture = share.map((r) => (r.path === 'ai-life-os/arena.html' ? { ...r, level: 'link-only' } : r));
+    cpSync(join(root, 'broman-os'), join(tmp, 'broman-os'), { recursive: true });
+    cpSync(join(root, 'ai-life-os'), join(tmp, 'ai-life-os'), { recursive: true }); // the old-address stubs are share.json entries too
+    const fixture = share.map((r) => (r.path === 'broman-os/arena.html' ? { ...r, level: 'link-only' } : r));
     writeFileSync(join(tmp, 'share.json'), JSON.stringify({ pages: fixture }));
-    execFileSync('python3', ['-I', join(tmp, 'ai-life-os/brain/build_data.py')], { stdio: 'pipe' });
-    expect(readFileSync(join(tmp, 'ai-life-os/arena.html'), 'utf8')).toMatch(/<meta\s+name="robots"\s+content="noindex">/);
+    execFileSync('python3', ['-I', join(tmp, 'broman-os/brain/build_data.py')], { stdio: 'pipe' });
+    expect(readFileSync(join(tmp, 'broman-os/arena.html'), 'utf8')).toMatch(/<meta\s+name="robots"\s+content="noindex">/);
     const disallowed = readFileSync(join(tmp, 'robots.txt'), 'utf8').split('\n').filter((l) => l.startsWith('Disallow:'));
-    expect(disallowed).not.toContain('Disallow: /ai-life-os/arena.html');
+    expect(disallowed).not.toContain('Disallow: /broman-os/arena.html');
     expect(disallowed).toEqual(retired.map((r) => `Disallow: /${r.path}`).sort());
   } finally {
     rmSync(tmp, { recursive: true, force: true });
@@ -172,9 +194,9 @@ test('build: a link-only page gets a static noindex and no robots.txt line, a re
 test('blog index: lists exactly the public posts, newest first inside each group, no hidden post', async ({ page }) => {
   // The harness arena is a post too: it keeps its own address one folder up, so its card links to ../arena.html.
   const posts = share
-    .filter((r) => /^ai-life-os\/(blog\/(?!index\.html)[^/]+|arena)\.html$/.test(r.path))
+    .filter((r) => /^broman-os\/(blog\/(?!index\.html)[^/]+|arena)\.html$/.test(r.path))
     .map((r) => ({ ...r, file: r.path.endsWith('/arena.html') ? '../arena.html' : r.path.split('/').pop() }));
-  await page.goto('/ai-life-os/blog/index.html');
+  await page.goto('/broman-os/blog/index.html');
   const listed = await page.$$eval('.p-post h3 a', (as) => as.map((a) => a.getAttribute('href')));
   expect([...listed].sort()).toEqual(posts.filter((p) => p.level === 'public').map((p) => p.file).sort());
   expect(listed.filter((h) => posts.some((p) => p.level !== 'public' && p.file === h)), 'hidden posts listed').toEqual([]);
@@ -188,7 +210,7 @@ test('blog index: lists exactly the public posts, newest first inside each group
 });
 
 test('panel post: header, index, side cards, numbered panels; columns follow the width; no inline styles', async ({ page }) => {
-  await page.goto('/ai-life-os/blog/everything-is-a-file.html');
+  await page.goto('/broman-os/blog/everything-is-a-file.html');
   await expect(page.locator('html')).toHaveAttribute('data-skin', 'hud'); // no saved choice: the default skin
   await expect(page.locator('.p-kicker')).toBeVisible();
   await expect(page.locator('.p-title .p-hl')).toHaveCount(1);
@@ -246,7 +268,7 @@ test('panel post: header, index, side cards, numbered panels; columns follow the
 });
 
 test('panel post: the library scene is a labelled SVG that fits the width, names all five parts, and every panel has a marker icon', async ({ page }) => {
-  await page.goto('/ai-life-os/blog/everything-is-a-file.html');
+  await page.goto('/broman-os/blog/everything-is-a-file.html');
   const svg = page.locator('.p-fig svg');
   await expect(svg).toHaveAttribute('role', 'img');
   await expect(svg.locator('title')).not.toBeEmpty();
@@ -288,11 +310,11 @@ const convertedPosts = [
 ];
 
 test('converted posts: each one is a covered page, public in share.json and listed on the blog index under its series', async ({ page }) => {
-  await page.goto('/ai-life-os/blog/index.html');
+  await page.goto('/broman-os/blog/index.html');
   const groups = await page.$$eval('.p-group', (gs) => gs.map((g) => ({ title: g.querySelector('h2').textContent, hrefs: [...g.querySelectorAll('.p-post h3 a')].map((a) => a.getAttribute('href')), kickers: [...g.querySelectorAll('.p-post .p-kicker')].map((k) => k.textContent) })));
   for (const { slug, series } of convertedPosts) {
-    expect(pages, `${slug} gets a screenshot at both widths`).toContain(`ai-life-os/blog/${slug}.html`);
-    expect(share.find((r) => r.path === `ai-life-os/blog/${slug}.html`)?.level, `${slug} level`).toBe('public');
+    expect(pages, `${slug} gets a screenshot at both widths`).toContain(`broman-os/blog/${slug}.html`);
+    expect(share.find((r) => r.path === `broman-os/blog/${slug}.html`)?.level, `${slug} level`).toBe('public');
     const group = groups.find((g) => g.hrefs.includes(`${slug}.html`));
     expect(group?.title, `${slug} group`).toBe(series);
     expect(group.kickers.every((k) => k === series), 'card kicker is the series').toBe(true);
@@ -306,7 +328,7 @@ test('converted posts: each one is a covered page, public in share.json and list
 
 // The harness arena is a post: problem, then solution with its evidence, then gaps, then the full tier list and radar.
 test('arena post: problem, solution and gaps in that order before the full table; the skip link and the blog kicker work', async ({ page }) => {
-  await page.goto('/ai-life-os/arena.html');
+  await page.goto('/broman-os/arena.html');
   const heads = await page.$$eval('.k-article > h2', (hs) => hs.map((h) => h.textContent.trim()));
   expect(heads.slice(0, 4)).toEqual(['The problem: picking an agent harness is hard', 'The solution and the evidence', 'Gaps and tech debt', 'The full scoring table and radar']);
   await expect(page.locator('.k-kicker a'), 'kicker links to the Blog').toHaveAttribute('href', 'blog/index.html');
@@ -320,19 +342,19 @@ test('arena post: problem, solution and gaps in that order before the full table
 // The trimmed posts: no file layout or routing table, and the second brain post shows a picture, not a live page.
 test('trimmed posts: no routing table or file layout, second brain post uses a screenshot', async ({ page }) => {
   for (const slug of ['everything-is-a-file', 'one-harness-for-every-agent']) {
-    await page.goto(`/ai-life-os/blog/${slug}.html`);
+    await page.goto(`/broman-os/blog/${slug}.html`);
     const text = (await page.locator('main').innerText()).toLowerCase();
     expect(text, `${slug}: routing table`).not.toContain('routing table');
     expect(text, `${slug}: file layout`).not.toContain('how each tool finds it');
   }
-  await page.goto('/ai-life-os/blog/second-brain-page.html');
+  await page.goto('/broman-os/blog/second-brain-page.html');
   await expect(page.locator('#fig-screenshot img'), 'the screenshot').toHaveCount(1);
-  await expect(page.locator('main iframe, main a[href*="ai-life-os/index.html"], main a[href$="../index.html"]'), 'no live page link or frame').toHaveCount(0);
+  await expect(page.locator('main iframe, main a[href*="broman-os/index.html"], main a[href$="../index.html"]'), 'no live page link or frame').toHaveCount(0);
 });
 
 for (const { slug, series, panels: expected } of convertedPosts) {
   test(`converted post ${slug}: series label, problem first, why it matters last, panels capped, one try-it box, no inline style, no private links`, async ({ page }) => {
-    const file = `ai-life-os/blog/${slug}.html`;
+    const file = `broman-os/blog/${slug}.html`;
     await page.goto(`/${file}`);
     await expect(page.locator('html')).toHaveAttribute('data-skin', 'hud');
     await expect(page.locator('.p-head .p-kicker span')).toHaveText(series);
@@ -401,11 +423,11 @@ test('landing: the purpose line, the pipeline clip, three numbers that each name
   page.on('pageerror', (e) => problems.push(e.message));
   await page.route('**/*', (route) => (route.request().url().startsWith(origin) ? route.continue() : route.fulfill({ status: 200, body: '' })));
   await page.goto('/');
-  await expect(page).toHaveTitle('Ashish Raina · Me');
+  await expect(page).toHaveTitle('Broman OS · Me');
   const hook = page.locator('#hook');
   await expect(page.locator('#pageov')).toBeVisible();
   await expect(hook.locator('h1')).toHaveText(mission);
-  await expect(hook.locator('iframe')).toHaveAttribute('src', 'ai-life-os/pipeline/index.html');
+  await expect(hook.locator('iframe')).toHaveAttribute('src', 'broman-os/pipeline/index.html');
   const nums = hook.locator('.stats li');
   await expect(nums).toHaveCount(3);
   for (const li of await nums.all()) {
@@ -414,7 +436,7 @@ test('landing: the purpose line, the pipeline clip, three numbers that each name
     await expect(li.locator('.src')).toContainText(/\d{1,2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) 20\d\d/);
   }
   await expect(hook.locator('.next-links a')).toHaveText(['See it work', 'Talk to me']);
-  expect(await hook.locator('.next-links a').evaluateAll((as) => as.map((a) => a.getAttribute('href')))).toEqual(['ai-life-os/index.html', 'work-with-me/index.html']);
+  expect(await hook.locator('.next-links a').evaluateAll((as) => as.map((a) => a.getAttribute('href')))).toEqual(['broman-os/index.html', 'work-with-me/index.html']);
   // the old first-visit trip and the eight-step walk are gone
   for (const gone of ['#trip', '#explain', '#flow', '#step-1', '#step-8', '#replay']) await expect(page.locator(gone), gone).toHaveCount(0);
   const html = await page.content();
@@ -431,9 +453,9 @@ test('landing: the purpose line, the pipeline clip, three numbers that each name
 test('landing: the pipeline clip has no private names, paths or fetches', async ({ page }) => {
   const asked = [];
   page.on('request', (r) => asked.push(r.url()));
-  await page.goto('/ai-life-os/pipeline/index.html');
+  await page.goto('/broman-os/pipeline/index.html');
   await page.waitForSelector('#stages .stage, #stages > *');
-  const html = readFileSync(join(root, 'ai-life-os/pipeline/index.html'), 'utf8') + readFileSync(join(root, 'ai-life-os/pipeline/flow-anim.js'), 'utf8');
+  const html = readFileSync(join(root, 'broman-os/pipeline/index.html'), 'utf8') + readFileSync(join(root, 'broman-os/pipeline/flow-anim.js'), 'utf8');
   expect(html).not.toMatch(/fm-inbox|operational-inbox|data\/<task>|\/Users\/|\.ts\.net|127\.0\.0\.1|localhost|@[a-z0-9-]+\.[a-z]|lavish/i);
   expect(asked.filter((u) => !u.startsWith(origin)), 'only this site is asked').toEqual([]);
   await page.getByRole('button', { name: /Replay/ }).click();
@@ -493,7 +515,7 @@ test('landing: Me is a short block with the title, the About and CV links, and t
 const redirects = ['blog/index.html', 'intent/index.html']; // stubs that never show: the Blog list and Intent both moved
 const barPages = () => pages.filter((f) => !share.some((r) => r.path === f && r.level !== 'public') && !redirects.includes(f));
 const barItems = ['Meta-Factory', 'Case studies', 'Blog', 'About', 'Work with me'];
-const barPaths = ['/ai-life-os/index.html', '/case-studies/index.html', '/ai-life-os/blog/index.html', '/about/index.html', '/work-with-me/index.html'];
+const barPaths = ['/broman-os/index.html', '/case-studies/index.html', '/broman-os/blog/index.html', '/about/index.html', '/work-with-me/index.html'];
 
 // What a page's bar says: the site name, then each item's text and target.
 const barOf = (page) => page.locator('header.tb').evaluate((b) => ({
@@ -503,7 +525,7 @@ const barOf = (page) => page.locator('header.tb').evaluate((b) => ({
 }));
 
 test('top bar: Meta-Factory, Case studies, Blog, About and Work with me on every page, all in view, current page marked', async ({ page }) => {
-  expect(barPages().length, 'pages checked').toBe(pages.length - 4); // the two redirect stubs, the link-only Course and the link-only pipeline clip
+  expect(barPages().length, 'pages checked').toBe(pages.length - 4 - movedPages.length); // the two redirect stubs, the link-only Course and the link-only pipeline clip, and the old-address stubs
   for (const file of barPages()) {
     await page.goto(`/${file}`);
     const bar = page.locator('header.tb');
@@ -518,7 +540,7 @@ test('top bar: Meta-Factory, Case studies, Blog, About and Work with me on every
     // no Menu button: all five items are in view at this width, and the site name is on the bar
     for (let i = 0; i < 5; i++) await expect(links.nth(i), `${file}: item ${i} in view`).toBeVisible();
     await expect(bar.locator('.tb-menu'), `${file}: no Menu button`).toHaveCount(0);
-    await expect(bar.locator('.tb-brand'), file).toHaveText('Ashish Raina');
+    await expect(bar.locator('.tb-brand'), file).toHaveText('Broman OS');
     const inView = await links.evaluateAll((as) => as.every((a) => { const r = a.getBoundingClientRect(); return r.left >= 0 && r.right <= document.documentElement.clientWidth; }));
     expect(inView, `${file}: every item inside the screen width`).toBe(true);
   }
@@ -529,7 +551,7 @@ test('top bar: clicking each item on every public page lands on a page with the 
   await page.route('**/*', (route) => (route.request().url().startsWith(origin) ? route.continue() : route.fulfill({ status: 200, body: '' })));
   await page.goto('/index.html');
   const same = await barOf(page);
-  expect(same.brand).toBe('Ashish Raina');
+  expect(same.brand).toBe('Broman OS');
   expect(same.items.map((i) => i[0])).toEqual(barItems);
   for (const file of barPages()) {
     for (const [n, label] of barItems.entries()) {
@@ -546,7 +568,7 @@ test('top bar: clicking each item on every public page lands on a page with the 
 });
 
 test('skin: one saved choice. Switch once and every page follows, before first paint; the default is HUD', async ({ page }) => {
-  const all = ['index.html', 'ai-life-os/index.html', 'case-studies/index.html', 'ai-life-os/blog/index.html', 'ai-life-os/blog/everything-is-a-file.html', 'about/index.html', 'cv.html', 'work-with-me/index.html', 'ai-life-os/arena.html', 'ai-life-os/course/index.html'];
+  const all = ['index.html', 'broman-os/index.html', 'case-studies/index.html', 'broman-os/blog/index.html', 'broman-os/blog/everything-is-a-file.html', 'about/index.html', 'cv.html', 'work-with-me/index.html', 'broman-os/arena.html', 'broman-os/course/index.html'];
   const skinOf = () => page.evaluate(() => document.documentElement.dataset.skin);
   await page.goto('/cv.html');
   expect(await skinOf()).toBe('hud');
@@ -567,13 +589,13 @@ test('skin: one saved choice. Switch once and every page follows, before first p
 });
 
 test('top bar: the current page is marked in each part of the bar', async ({ page }) => {
-  const current = { 'cv.html': 'About', 'about/index.html': 'About', 'work-with-me/index.html': 'Work with me', 'case-studies/index.html': 'Case studies', 'ai-life-os/arena.html': 'Case studies', 'ai-life-os/blog/index.html': 'Blog', 'ai-life-os/blog/second-brain-page.html': 'Blog', 'ai-life-os/index.html': 'Meta-Factory' };
+  const current = { 'cv.html': 'About', 'about/index.html': 'About', 'work-with-me/index.html': 'Work with me', 'case-studies/index.html': 'Case studies', 'broman-os/arena.html': 'Case studies', 'broman-os/blog/index.html': 'Blog', 'broman-os/blog/second-brain-page.html': 'Blog', 'broman-os/index.html': 'Meta-Factory' };
   for (const [file, label] of Object.entries(current)) {
     await page.goto(`/${file}`);
     await expect(page.locator('header.tb .tb-links > a[aria-current]'), file).toHaveText(label);
   }
   // the Home page and the Course are not in the bar, so neither marks an item
-  for (const file of ['index.html', 'ai-life-os/course/index.html']) {
+  for (const file of ['index.html', 'broman-os/course/index.html']) {
     await page.goto(`/${file}`);
     await expect(page.locator('header.tb .tb-links > a[aria-current]'), file).toHaveCount(0);
   }
@@ -581,9 +603,9 @@ test('top bar: the current page is marked in each part of the bar', async ({ pag
 
 test('hand-off: the last line of each bar page leads to the next page in the bar order', async ({ page }) => {
   const chain = [
-    ['ai-life-os/index.html#pages', '.handoff a', /\/case-studies\/index\.html$/], // a hash opens the folded card
-    ['case-studies/index.html', '.handoff a', /\/ai-life-os\/blog\/index\.html$/],
-    ['ai-life-os/blog/index.html', '.handoff a', /\/about\/index\.html$/],
+    ['broman-os/index.html#pages', '.handoff a', /\/case-studies\/index\.html$/], // a hash opens the folded card
+    ['case-studies/index.html', '.handoff a', /\/broman-os\/blog\/index\.html$/],
+    ['broman-os/blog/index.html', '.handoff a', /\/about\/index\.html$/],
     ['about/index.html', '.handoff a', /\/work-with-me\/index\.html$/],
   ];
   for (const [file, sel, target] of chain) {
@@ -595,7 +617,7 @@ test('hand-off: the last line of each bar page leads to the next page in the bar
 });
 
 test('Meta-Factory page: how it works holds how I work with agents, what the crew may do, who it is for and the credits; Intent is a redirect that keeps its anchors', async ({ page }) => {
-  await page.goto('/ai-life-os/index.html#safety');
+  await page.goto('/broman-os/index.html#safety');
   const law = page.locator('aside.law');
   await expect(law.locator('#how')).toHaveText('How I work with agents');
   await expect(law.locator('#safety')).toHaveText('What the crew may do, and what waits for me');
@@ -607,9 +629,9 @@ test('Meta-Factory page: how it works holds how I work with agents, what the cre
   for (const name of ['AI-Life-OS', 'AIO OS', 'EA-bot', 'Chart Room']) expect(text, name).not.toContain(name);
   // the old Intent address still works, and a section anchor survives the redirect
   await page.goto('/intent/index.html#how');
-  await page.waitForURL(/ai-life-os\/index\.html#how$/);
+  await page.waitForURL(/broman-os\/index\.html#how$/);
   await page.goto('/intent/index.html');
-  await page.waitForURL(/ai-life-os\/index\.html$/);
+  await page.waitForURL(/broman-os\/index\.html$/);
 });
 
 test('landing: the logo and the page card never reload the page', async ({ page }) => {
@@ -642,12 +664,12 @@ test('cv.html: the plain web CV is the v5 text without a phone number, an email,
   expect(hrefs.filter((h) => /\.(docx?|pdf)$/i.test(h)), 'no file downloads').toEqual([]);
   expect(readdirSync(root).filter((f) => /\.(docx?|pdf)$/i.test(f)), 'no CV file in the repo').toEqual([]);
   // the way on: the CV sits under Me, so its next stop is the Blog and its way back is Me
-  await expect(page.getByRole('link', { name: 'Next: what I write' }).first()).toHaveAttribute('href', 'ai-life-os/blog/index.html');
+  await expect(page.getByRole('link', { name: 'Next: what I write' }).first()).toHaveAttribute('href', 'broman-os/blog/index.html');
   await expect(page.getByRole('link', { name: 'Back to Me' })).toHaveAttribute('href', 'index.html#me');
 });
 
 test('the demo chat holds the story and tour branches', () => {
-  const t = JSON.parse(readFileSync(join(root, 'ai-life-os/tour/tour.json'), 'utf8')).chat;
+  const t = JSON.parse(readFileSync(join(root, 'broman-os/tour/tour.json'), 'utf8')).chat;
   const folders = new Set(t.nodes.map((n) => n.folder));
   expect(folders.has('story') && folders.has('tour')).toBe(true);
   const ids = new Set(t.nodes.map((n) => n.id));
@@ -655,7 +677,7 @@ test('the demo chat holds the story and tour branches', () => {
 });
 
 test('wiki notes card: a summary, a cloud of interest tags sized by note count, empty tags dashed, each tag lists its notes', async ({ page }) => {
-  await page.goto('/ai-life-os/index.html#pocock-steers-with-skills-kun-builds-machinery');
+  await page.goto('/broman-os/index.html#pocock-steers-with-skills-kun-builds-machinery');
   const drawer = page.locator('#drawer');
   await drawer.getByRole('tab', { name: 'Related' }).click();
   await drawer.locator('.rel button', { hasText: 'Wiki notes' }).click();
@@ -678,7 +700,7 @@ test('wiki notes card: a summary, a cloud of interest tags sized by note count, 
 });
 
 test('room drawer: every Related chip is one line, at most 28 px tall, with its full text in the title', async ({ page }) => {
-  await page.goto('/ai-life-os/index.html#pocock-steers-with-skills-kun-builds-machinery'); // the demo opens the card of the note in the hash
+  await page.goto('/broman-os/index.html#pocock-steers-with-skills-kun-builds-machinery'); // the demo opens the card of the note in the hash
   const drawer = page.locator('#drawer');
   await expect(drawer).toBeVisible();
   await drawer.getByRole('tab', { name: 'Related' }).click();
@@ -697,7 +719,7 @@ test('room drawer: every Related chip is one line, at most 28 px tall, with its 
 
 test('one dropdown under the name holds Look, Map, Layout, View and Help; the floating map buttons are gone; m still toggles motion', async ({ page }) => {
   await page.addInitScript(() => localStorage.setItem('brain-motion', 'on'));
-  await page.goto('/ai-life-os/index.html');
+  await page.goto('/broman-os/index.html');
   const map = page.locator('#brainHost');
   await expect(map.locator('canvas')).toBeVisible();
   // the buttons that used to float over the map are hidden; the ask chips are too
@@ -737,7 +759,7 @@ test('one dropdown under the name holds Look, Map, Layout, View and Help; the fl
 
 test('the factory page tour and the map cards show the idea, not the internal tool names', async ({ request }) => {
   const terms = /backpass|no-mistakes|herdr|treehouse|lavish|worktree|launchd|\bnix\b/i;
-  const tour = JSON.parse(await (await request.get('/ai-life-os/tour/tour.json')).text());
+  const tour = JSON.parse(await (await request.get('/broman-os/tour/tour.json')).text());
   const bad = [];
   (function walk(o, key) {
     if (typeof o === 'string') { if (!['id', 'next'].includes(key) && terms.test(o)) bad.push(o.slice(0, 60)); }
@@ -745,7 +767,7 @@ test('the factory page tour and the map cards show the idea, not the internal to
     else if (o) Object.entries(o).forEach(([k, v]) => walk(v, k));
   })(tour, '');
   expect(bad, 'tour strings').toEqual([]);
-  const data = await (await request.get('/ai-life-os/brain/brain-data.json')).text();
+  const data = await (await request.get('/broman-os/brain/brain-data.json')).text();
   // the room parts are our own words; the wiki notes quote their sources and keep a tool name where the source does
   const fm = JSON.parse(data).rooms.find((r) => r.id === 'fm');
   const prose = JSON.stringify(fm, (k, v) => (['rel', 'id', 'links'].includes(k) ? undefined : v)); // ids and links point at notes by name
@@ -754,7 +776,7 @@ test('the factory page tour and the map cards show the idea, not the internal to
 
 test('left pane tabs: Read, Pages and FirstMate show one list at a time; the empty Skills pane is not drawn', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
-  await page.goto('/ai-life-os/index.html');
+  await page.goto('/broman-os/index.html');
   const map = page.locator('#brainHost');
   await expect(map.locator('canvas')).toBeVisible();
   if (await map.locator('#side').evaluate((e) => e.hidden)) { // the widgets start open on a wide screen, closed on a phone

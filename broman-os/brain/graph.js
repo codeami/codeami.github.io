@@ -117,7 +117,7 @@ function start(d,srcLabel){
   resize();setLayout(S.layout,true);mountTour();
   requestAnimationFrame(frame);
   if(FRAMED&&pending)API.select(pending);
-  // a link such as ai-life-os/index.html#first-mate opens that node's card
+  // a link such as broman-os/index.html#first-mate opens that node's card
   function fromHash(){var id=decodeURIComponent(location.hash.slice(1));if(id&&byId[id])openNode(byId[id])}
   window.addEventListener("hashchange",fromHash);setTimeout(fromHash,0);
 }
