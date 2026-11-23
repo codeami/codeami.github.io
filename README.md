@@ -2,6 +2,8 @@
 
 Personal site of Ashish Raina. It has one job: to show the Software Meta-Factory in the open, which is a software factory made of AI helpers. The home page says what it does, how it is checked and how to ask for one. The demo (FirstMate, the agent crew, and the second brain as a map) is at /ai-life-os/. The folder keeps its old name so no link breaks.
 
+What the site is for and what gets escalated: see [vision.md](vision.md).
+
 Plain static files, served by GitHub Pages from the root of `main` (`.nojekyll` turns Jekyll off). To read it locally: `python3 -m http.server`, then open `/`.
 
 The public pages, under one top bar of five items (Meta-Factory, Case studies, Blog, About, Work with me):
