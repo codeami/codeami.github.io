@@ -1,23 +1,28 @@
 /*
-  flow-anim.js: data-driven animation module for flow-style.css. No dependencies, works from file://.
+  flow-anim.js: data-driven workflow canvas for flow-style.css. No dependencies, works from file://.
 
   The page is a skeleton (see index.html in this folder). All content comes from one JSON document,
   schema "flow-pipeline.v1", inline in <script type="application/json" id="flow-data">. Nothing is fetched.
-  Then FlowAnim.render(data) builds the page and FlowAnim.init(data) plays it.
+  FlowAnim.render(data) builds the step content; FlowAnim.init(data) draws the canvas and plays it.
+
+  Each stage may carry "kind" (trigger, worker, gate or result; default worker, "gate": true means gate)
+  and "edge" (the label on the arrow that leaves it).
 
   Skeleton ids it fills or uses:
     #title #tagline #thought-label #thought-text #pills  header and the travelling item
-    #rail #stages #log #livetag #legend #source           rail, panels, log, footer
-    #replay #slow #theme                                  buttons
-    canvas.net                                            node-network background (optional)
+    #nodes #edge-paths #canvas #now                      the canvas: step cards, arrows, caption
+    #stages #drawer #drawer-x #board                     detail drawer
+    #log #livetag #legend #source #bands                 log, footer, group chips
+    #replay #slow #theme                                 buttons (skin.js owns #theme)
 
-  URL options: ?stage=N shows one stage with no auto-advance; ?slow=1 starts slow;
-  ?theme=light|dark. Self-test hook: FlowAnim.state.stamp holds stage start times in ms.
+  URL options: ?stage=N shows one stage with no auto-advance; ?slow=1 starts slow.
+  Self-test hook: FlowAnim.state.stamp holds stage start times in ms.
   Text from the JSON is always inserted with textContent. Only **bold** is parsed.
 */
 (function () {
   'use strict';
   var FlowAnim = { state: { stamp: [], ready: false, endAt: 0 } };
+  var NS = 'http://www.w3.org/2000/svg';
 
   function $(id) { return document.getElementById(id); }
   function two(n) { return n < 10 ? '0' + n : '' + n; }
@@ -37,58 +42,6 @@
     });
     return e;
   }
-
-  /* ---------- node-network background ---------- */
-  FlowAnim.network = function (canvas) {
-    if (!canvas || !canvas.getContext) return;
-    var ctx = canvas.getContext('2d');
-    var nodes = [], w = 0, h = 0, dpr = 1, raf = 0;
-    var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    function rgb(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim().replace(/\s+/g, ''); }
-    function size() {
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
-      w = canvas.clientWidth; h = canvas.clientHeight;
-      canvas.width = w * dpr; canvas.height = h * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      var count = Math.max(24, Math.min(70, Math.round(w * h / 26000)));
-      nodes = [];
-      for (var i = 0; i < count; i++) {
-        nodes.push({ x: Math.random() * w, y: Math.random() * h, vx: (Math.random() - 0.5) * 0.25, vy: (Math.random() - 0.5) * 0.25, r: 1.6 + Math.random() * 2.4 });
-      }
-    }
-    function draw() {
-      ctx.clearRect(0, 0, w, h);
-      var line = rgb('--net-line'), dot = rgb('--net-dot'), reach = Math.min(190, Math.max(120, w / 9));
-      var i, j, a, b, d;
-      for (i = 0; i < nodes.length; i++) {
-        a = nodes[i];
-        if (!still) {
-          a.x += a.vx; a.y += a.vy;
-          if (a.x < 0 || a.x > w) a.vx *= -1;
-          if (a.y < 0 || a.y > h) a.vy *= -1;
-        }
-        for (j = i + 1; j < nodes.length; j++) {
-          b = nodes[j]; d = Math.hypot(a.x - b.x, a.y - b.y);
-          if (d < reach) {
-            ctx.strokeStyle = 'rgba(' + line + ',' + (0.5 * (1 - d / reach)).toFixed(3) + ')';
-            ctx.lineWidth = 1;
-            ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
-          }
-        }
-      }
-      for (i = 0; i < nodes.length; i++) {
-        a = nodes[i];
-        ctx.fillStyle = 'rgba(' + dot + ',0.85)';
-        ctx.shadowColor = 'rgba(' + dot + ',0.9)'; ctx.shadowBlur = 10;
-        ctx.beginPath(); ctx.arc(a.x, a.y, a.r, 0, 6.283); ctx.fill();
-      }
-      ctx.shadowBlur = 0;
-      if (!still) raf = requestAnimationFrame(draw);
-    }
-    size(); draw();
-    window.addEventListener('resize', function () { cancelAnimationFrame(raf); size(); draw(); });
-    FlowAnim.redrawNetwork = function () { if (still) draw(); };
-  };
 
   /* ---------- render: JSON -> DOM ---------- */
   FlowAnim.render = function (data) {
@@ -212,7 +165,7 @@
         });
         return e;
       case 'lanes':
-        e = el('div', 'lanes');
+        e = el('div', 'fan');
         b.items.forEach(function (it) {
           var l = el('div', 'lane' + (it.pick ? ' pick' : '')); reveal(l, k);
           l.appendChild(el('div', 't', it.title));
@@ -228,7 +181,7 @@
           r.appendChild(el('span', 'bx', it.done ? '[x]' : '[ ]'));
           r.appendChild(el('span', 'bid', it.id));
           r.appendChild(el('span', 'btx', it.title));
-          r.appendChild(el('span', 'bmeta', '(kind: ' + it.kind + ') (since ' + it.since + ')'));
+          r.appendChild(el('span', 'bmeta', ' (kind: ' + it.kind + ') (since ' + it.since + ')'));
           e.appendChild(r);
         });
         return e;
@@ -249,7 +202,7 @@
         e = el('div', 'workers');
         b.items.forEach(function (it) {
           var w = el('div', 'card worker'); reveal(w, k);
-          if (it.tone) w.style.borderColor = 'var(--' + it.tone + ')';
+          if (it.tone) w.style.borderColor = 'var(--t-' + it.tone + ')';
           w.appendChild(el('span', 't', it.name));
           var st = el('span', 'st', 'queued'); w.appendChild(st);
           function set(s) { st.textContent = s; st.className = 'st' + (s === 'running' ? ' run' : s === 'done' ? ' fin' : ''); }
@@ -264,30 +217,123 @@
 
   function card(it, k) {
     var e = el('div', 'card'); reveal(e, k);
-    if (it.tone) e.style.borderColor = 'var(--' + it.tone + ')';
+    if (it.tone) e.style.borderColor = 'var(--t-' + it.tone + ')';
     e.appendChild(el('div', 't', it.title));
     if (it.sub) e.appendChild(el('div', 's' + (it.mono ? ' file' : ''), it.sub));
     if (it.bullets) { var ul = el('ul', ''); it.bullets.forEach(function (x) { ul.appendChild(el('li', '', x)); }); e.appendChild(ul); }
     return e;
   }
 
+  /* ---------- canvas: step cards and arrows ---------- */
+  var ICON = { // 16px line icons, one per node kind
+    trigger: '<path d="M9 1.5 3.5 9H8l-1 5.5L12.5 7H8z"/>',
+    worker: '<circle cx="8" cy="8" r="2.4"/><path d="M8 1.5v2M8 12.5v2M1.5 8h2M12.5 8h2M3.4 3.4l1.4 1.4M11.2 11.2l1.4 1.4M3.4 12.6l1.4-1.4M11.2 4.8l1.4-1.4"/>',
+    gate: '<path d="M8 1.5 14.5 8 8 14.5 1.5 8z"/><path d="M5.5 8l1.8 1.8L10.8 6"/>',
+    result: '<rect x="2" y="2.5" width="12" height="11"/><path d="M5 8.2l2.2 2.2L11.2 6"/>'
+  };
+  function kindOf(s, i, n) { return s.gate ? 'gate' : s.kind || (i === 0 ? 'trigger' : i === n - 1 ? 'result' : 'worker'); }
+  var KIND_LABEL = { trigger: 'TRIGGER', worker: 'WORKER', gate: 'CHECKPOINT', result: 'RESULT' };
+
+  // Where each step sits: 4 columns wide (the second row runs right to left, so Prepare drops straight into Gate), or one column.
+  function place(i, n, cols) {
+    if (cols === 1) return { row: i, col: 0 };
+    var row = Math.floor(i / cols), c = i % cols;
+    return { row: row, col: row % 2 ? cols - 1 - c : c };
+  }
+
+  FlowAnim.canvas = function (data, onPick) {
+    var S = data.stages, n = S.length, host = $('nodes'), canvas = $('canvas'), paths = $('edge-paths');
+    var nodes = [], labels = [], edges = [], cols = 1;
+    S.forEach(function (s, i) {
+      var kind = kindOf(s, i, n);
+      var b = el('button', 'node k-' + kind);
+      b.type = 'button';
+      b.setAttribute('aria-label', 'Step ' + s.n + ' ' + s.name + ', ' + KIND_LABEL[kind].toLowerCase());
+      var kd = el('span', 'kind');
+      kd.insertAdjacentHTML('beforeend', '<svg viewBox="0 0 16 16" aria-hidden="true">' + ICON[kind] + '</svg>');
+      kd.appendChild(document.createTextNode(s.n + ' · ' + KIND_LABEL[kind]));
+      b.appendChild(kd);
+      b.appendChild(el('b', '', s.name));
+      b.appendChild(el('small', '', (s.role || '').split(/(?<=\.)\s/)[0]));
+      b.addEventListener('click', function () { onPick(i, b); });
+      host.appendChild(b); nodes.push(b);
+    });
+    for (var i = 0; i < n - 1; i++) {
+      var p = document.createElementNS(NS, 'path'); p.setAttribute('class', 'e'); p.setAttribute('marker-end', 'url(#ah)');
+      paths.appendChild(p); edges.push(p);
+      var lb = el('span', 'elabel', S[i].edge || ''); lb.hidden = true; canvas.appendChild(lb); labels.push(lb);
+    }
+
+    function layout() {
+      cols = canvas.clientWidth >= 600 ? 4 : 1;
+      canvas.classList.toggle('wide', cols > 1);
+      host.style.setProperty('--cols', cols);
+      nodes.forEach(function (b, i) {
+        var pos = place(i, n, cols);
+        b.style.gridRow = pos.row + 1; b.style.gridColumn = pos.col + 1;
+        b.classList.toggle('off', cols > 1 && i % 2 === 1);
+      });
+      draw();
+    }
+    function rect(i) {
+      var c = canvas.getBoundingClientRect(), r = nodes[i].getBoundingClientRect();
+      return { x: r.left - c.left, y: r.top - c.top, w: r.width, h: r.height };
+    }
+    function curve(a, b) { // leave one card on the side that faces the next, arrive with the arrowhead on the near edge
+      var dx = Math.abs((a.x + a.w / 2) - (b.x + b.w / 2)), p0, p1, c0, c1, d;
+      if (dx < 8) { // straight down
+        p0 = { x: a.x + a.w / 2, y: a.y + a.h }; p1 = { x: b.x + b.w / 2, y: b.y - 3 }; d = (p1.y - p0.y) / 2;
+        c0 = { x: p0.x, y: p0.y + d }; c1 = { x: p1.x, y: p1.y - d };
+      } else if (b.x > a.x) { // to the right
+        p0 = { x: a.x + a.w, y: a.y + a.h / 2 }; p1 = { x: b.x - 3, y: b.y + b.h / 2 }; d = (p1.x - p0.x) / 2;
+        c0 = { x: p0.x + d, y: p0.y }; c1 = { x: p1.x - d, y: p1.y };
+      } else { // to the left
+        p0 = { x: a.x, y: a.y + a.h / 2 }; p1 = { x: b.x + b.w + 3, y: b.y + b.h / 2 }; d = (p0.x - p1.x) / 2;
+        c0 = { x: p0.x - d, y: p0.y }; c1 = { x: p1.x + d, y: p1.y };
+      }
+      return { d: 'M' + p0.x + ' ' + p0.y + ' C' + c0.x + ' ' + c0.y + ' ' + c1.x + ' ' + c1.y + ' ' + p1.x + ' ' + p1.y, mx: (p0.x + p1.x) / 2, my: (p0.y + p1.y) / 2, vert: dx < 8 };
+    }
+    function draw() {
+      edges.forEach(function (p, i) {
+        var g = curve(rect(i), rect(i + 1));
+        p.setAttribute('d', g.d);
+        // labels only where the arrow is long enough to carry one without covering its head
+        var lb = labels[i];
+        lb.hidden = !(g.vert && lb.textContent);
+        lb.style.left = g.mx + 'px'; lb.style.top = g.my + 'px';
+      });
+    }
+    window.addEventListener('resize', layout);
+    if (window.ResizeObserver) new ResizeObserver(draw).observe(host);
+    layout();
+
+    return {
+      nodes: nodes,
+      mark: function (cur) { // the step on, steps passed, arrows passed and the arrow being walked
+        nodes.forEach(function (b, j) { b.classList.toggle('on', j === cur); b.classList.toggle('done', j < cur); });
+        edges.forEach(function (p, j) {
+          var live = j === cur - 1, done = j < cur - 1;
+          p.setAttribute('class', 'e' + (live ? ' live' : done ? ' done' : ''));
+          p.setAttribute('marker-end', live || done ? 'url(#aha)' : 'url(#ah)');
+        });
+      }
+    };
+  };
+
   /* ---------- timeline ---------- */
   FlowAnim.init = function (data) {
     var STAGES = data.stages, BASE = data.baseMs || 5000, SLOWF = data.slowFactor || 2.2;
     var CLK = data.clock || { start: '07:42:00', scale: 7 };
     var cp = CLK.start.split(':').map(Number), CLK0 = cp[0] * 3600 + cp[1] * 60 + cp[2];
-    var rail = $('rail'), logEl = $('log'), live = $('livetag');
+    var logEl = $('log'), live = $('livetag'), drawer = $('drawer'), board = $('board'), now = $('now');
     var stageEls = Array.prototype.slice.call($('stages').querySelectorAll('.stage'));
     var pillEls = Array.prototype.slice.call(document.querySelectorAll('[data-from]'));
-    var stepEls = [], timers = [], slow = false, cur = -1, t0 = 0;
+    var timers = [], slow = false, cur = -1, t0 = 0, opener = null;
     var stamp = FlowAnim.state.stamp;
+    var docked = window.matchMedia('(min-width: 900px)');
 
-    rail.style.gridTemplateColumns = 'repeat(' + STAGES.length + ', 1fr)'; // any stage count
-    rail.style.setProperty('--lead', (50 / STAGES.length).toFixed(3) + '%');
-
-    // optional parent bands: data.groups = [{ name, stages: ["01", ...] }], contiguous stage ids
+    // optional parent chips: data.groups = [{ name, stages: ["01", ...] }]
     var bandsEl = $('bands'), bandEls = [], bandSpan = [];
-    bandsEl.style.gridTemplateColumns = rail.style.gridTemplateColumns;
     (data.groups || []).forEach(function (g) {
       var idx = (g.stages || []).map(function (id) {
         for (var j = 0; j < STAGES.length; j++) if (STAGES[j].n === id) return j;
@@ -295,25 +341,21 @@
       }).filter(function (j) { return j >= 0; });
       if (!idx.length) return;
       var lo = Math.min.apply(null, idx), hi = Math.max.apply(null, idx);
-      var b = el('div', 'band', g.name);
-      b.style.gridColumn = (lo + 1) + ' / ' + (hi + 2);
+      var b = el('div', 'band', g.name + ' · ' + STAGES[lo].n + (hi > lo ? '-' + STAGES[hi].n : ''));
       bandsEl.appendChild(b); bandEls.push(b); bandSpan.push([lo, hi]);
     });
     if (!bandEls.length) bandsEl.style.display = 'none';
 
-    var line = el('div', 'line'), fill = el('div', 'fill'), pulse = el('div', 'pulse');
-    rail.appendChild(line); rail.appendChild(fill); rail.appendChild(pulse);
+    var cv = FlowAnim.canvas(data, function (i, btn) { opener = btn; jump(i); openDrawer(true); });
 
-    STAGES.forEach(function (s, i) {
-      var b = el('button', 'step' + (s.gate ? ' gate' : ''));
-      b.type = 'button';
-      b.appendChild(el('span', 'dot', s.n));
-      b.appendChild(el('span', 'nm', s.name));
-      b.setAttribute('aria-label', 'Stage ' + s.n + ' ' + s.name);
-      b.addEventListener('click', function () { jump(i); });
-      rail.appendChild(b);
-      stepEls.push(b);
-    });
+    function openDrawer(on) {
+      drawer.hidden = !on;
+      board.classList.toggle('has-drawer', on && docked.matches);
+      if (!on && opener && !docked.matches) opener.focus();
+      cv.nodes.forEach(function (b) { b.setAttribute('aria-expanded', on ? 'true' : 'false'); });
+    }
+    $('drawer-x').addEventListener('click', function () { openDrawer(false); });
+    docked.addEventListener('change', function () { openDrawer(docked.matches); });
 
     function factor() { return slow ? SLOWF : 1; }
     function applyFactor() { document.documentElement.style.setProperty('--tm', String(factor())); }
@@ -337,15 +379,15 @@
     function show(i) {
       cur = i;
       stageEls.forEach(function (e, j) { e.classList.toggle('on', j === i); });
-      stepEls.forEach(function (e, j) { e.classList.toggle('on', j === i); e.classList.toggle('done', j < i); });
+      cv.mark(i);
       bandEls.forEach(function (e, j) { e.classList.toggle('on', i >= bandSpan[j][0] && i <= bandSpan[j][1]); });
-      var span = 'calc((100% - 2 * var(--lead)) * ' + (i / (STAGES.length - 1)).toFixed(4) + ')';
-      fill.style.width = span;
-      pulse.style.left = 'calc(var(--lead) + ' + span + ')';
       pillEls.forEach(function (e) {
         var from = +e.getAttribute('data-from'), to = e.hasAttribute('data-to') ? +e.getAttribute('data-to') : 99;
         e.classList.toggle('show', i >= from && i <= to);
       });
+      now.textContent = '';
+      now.appendChild(el('b', '', STAGES[i].n + ' ' + (STAGES[i].title || STAGES[i].name) + ': '));
+      now.appendChild(document.createTextNode(STAGES[i].role || ''));
       stamp[i] = Math.round(performance.now() - t0);
     }
 
@@ -364,6 +406,7 @@
       logEl.innerHTML = '';
       live.textContent = '● live';
       FlowAnim.state.ready = false;
+      if (docked.matches) openDrawer(true); // wide: the drawer follows the replay; a phone keeps the canvas in view and shows a caption
       var f = factor();
       for (var i = 0; i < STAGES.length; i++) {
         (function (i) { later(function () { runStage(i); }, i * BASE * f); })(i);
@@ -395,22 +438,11 @@
     }
     slowBtn.addEventListener('click', function () { setSlow(!slow, true); });
 
-    var themeBtn = $('theme');
-    function currentTheme() { return document.documentElement.getAttribute('data-theme') || 'dark'; }
-    function setTheme(t) {
-      document.documentElement.setAttribute('data-theme', t);
-      themeBtn.textContent = 'Theme: ' + t;
-      if (FlowAnim.redrawNetwork) FlowAnim.redrawNetwork();
-    }
-    // the site's saved skin decides the start: Calm is light, HUD and Matrix are dark; the button changes it for this view only
-    var saved = null;
-    try { saved = localStorage.getItem('skin'); } catch (e) {}
-    var qTheme = /[?&]theme=(light|dark)/.exec(location.search);
-    setTheme(qTheme ? qTheme[1] : (saved === 'calm' ? 'light' : 'dark'));
-    themeBtn.addEventListener('click', function () { setTheme(currentTheme() === 'dark' ? 'light' : 'dark'); });
+    // #theme is the site's skin button (skin.js): HUD, Matrix, Calm. The saved skin decides the start.
 
     document.addEventListener('keydown', function (e) {
       if (e.code === 'Space' && e.target === document.body) { e.preventDefault(); replay(); }
+      else if (e.key === 'Escape' && !drawer.hidden) openDrawer(false);
       else if (e.key === 's' || e.key === 'S') setSlow(!slow, true);
       else if (e.key === 'ArrowRight') jump(Math.min(STAGES.length - 1, cur + 1));
       else if (e.key === 'ArrowLeft') jump(Math.max(0, cur - 1));
@@ -419,19 +451,16 @@
     if (/[?&]slow=1/.test(location.search)) setSlow(true, false);
     applyFactor();
     var qStage = /[?&]stage=(\d)/.exec(location.search);
-    if (qStage) jump(Math.min(STAGES.length - 1, Math.max(0, +qStage[1] - 1))); else play();
+    if (qStage) { jump(Math.min(STAGES.length - 1, Math.max(0, +qStage[1] - 1))); openDrawer(docked.matches); } else play();
   };
 
   /* ---------- boot: pick the data, render, play ---------- */
   FlowAnim.boot = function () {
-    FlowAnim.network(document.getElementById('net'));
-    function go(data) { FlowAnim.render(data); FlowAnim.init(data); }
-    function inline() {
-      var n = $('flow-data');
-      try { go(JSON.parse(n.textContent.replace(/<!--\/?DATA-->/g, ''))); }
-      catch (e) { $('title').textContent = 'Could not read the pipeline data'; $('tagline').textContent = String(e); }
-    }
-    inline();
+    var n = $('flow-data');
+    try {
+      var data = JSON.parse(n.textContent.replace(/<!--\/?DATA-->/g, ''));
+      FlowAnim.render(data); FlowAnim.init(data);
+    } catch (e) { $('title').textContent = 'Could not read the pipeline data'; $('tagline').textContent = String(e); }
   };
 
   window.FlowAnim = FlowAnim;
