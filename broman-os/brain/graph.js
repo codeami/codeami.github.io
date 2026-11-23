@@ -857,7 +857,8 @@ function hayOf(n){
 }
 function applyFocus(){
   syncTree();filterTree(S.q||"");
-  var f=S.hover||S.sel;focusLinks=[];flags.fill(0);flagMode=false;matchCount=0;
+  var f=S.hover||(S.q&&S.here?null:S.sel); // a query beats the page's own "you are here" mark, so the map lights the matches the tree lists
+  focusLinks=[];flags.fill(0);flagMode=false;matchCount=0;
   if(f){
     flagMode=true;flags[f.i]=1;
     if(f===S.sel&&S.here)return; // the page the reader is on is the one lit node: no centre node, no links

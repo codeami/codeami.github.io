@@ -872,6 +872,7 @@ test('tree filter: typing narrows the tree to the matches and their parents; Esc
   expect(found.length).toBeLessThan(all / 2);
   await expect(count).toContainText('matches');
   await expect(map.locator('#q')).toHaveValue('ICM'); // one query for the tree and the map's search box, as it was typed
+  expect(await page.evaluate(() => window.AIOMap.state().lit.length), 'the map lights the matches too, not only the page you are on').toBeGreaterThan(wanted.length);
   // a room that matches keeps its folders and files
   await box.fill('shoulders');
   const giants = await shown();
