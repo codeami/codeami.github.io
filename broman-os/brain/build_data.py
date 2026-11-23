@@ -68,6 +68,9 @@ def node(e, kind):
     if e["id"].startswith("part-"):
         body.append(extra["core_note"])
     ls = links(e.get("links"))
+    if e.get("use"):  # a giant: the idea it gave (their page) and how we use it (a page of this site)
+        body.append("How we use it: " + e["use"][0])
+        ls = links([["The idea: " + e["idea"][0], e["idea"][1]], ["How we use it", e["use"][1]]]) + ls
     if e["id"].startswith("part-"):
         ls = links([["Open this part on Core logic", "../core.html#" + e["id"]]])
     tags = [TAGS.get(t, t) + (" " + e["from"] if t == "borrowed-from" and e.get("from") else "") for t in e.get("tags", [])]

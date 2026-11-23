@@ -101,9 +101,9 @@ html[data-skin] .theme:hover, html[data-skin] .theme:focus-visible { border-colo
   html[data-skin] .k-nav nav { gap: 8px; }
   html[data-skin] .theme { padding: 0 8px; }
 }
-/* A narrow phone: the mark alone links home; the name stays for screen readers. */
+/* A narrow phone: the mark and the name stay; only the "Powered by" badge is kept for screen readers. */
 @media (max-width: 420px) {
-  html[data-skin] .k-logo { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  html[data-skin] .tb-badge { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 }
 @media (prefers-reduced-motion: reduce) { .hud-bg { opacity: .55; } }
 
