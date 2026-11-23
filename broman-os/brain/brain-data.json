@@ -1529,7 +1529,7 @@
    "id": "giants",
    "label": "Shoulders of giants",
    "color": "#ff9a3c",
-   "note": "The people and firms whose public work this project stands on: builders, startup founders and funds, and marketing authors. One line on what each gave us, and their public profiles and repos. Links go to public pages only.",
+   "note": "The people, firms, blogs and newsletters this project stands on: builders, startup founders and funds, marketing authors, the blogs we read, and the older thinkers whose ideas still hold. Each one links to the idea it gave and to where we use it. Links go to public pages only.",
    "links": [],
    "folders": [
     {
@@ -1541,16 +1541,21 @@
        "n": "Kun Chen",
        "line": "giant · builders",
        "body": [
-        "Factory conventions: one dispatcher, disposable worktrees, a pre-push gate, and instructions as the product."
+        "One dispatcher, disposable worktrees, a check before every push, and instructions treated as the product.",
+        "How we use it: Our crew ships through a gate, so a change is checked before it leaves the machine."
        ],
        "links": [
         {
-         "label": "GitHub",
-         "href": "https://github.com/kunchenguid"
+         "label": "The idea: no-mistakes: the pre-push check",
+         "href": "https://github.com/kunchenguid/no-mistakes"
         },
         {
-         "label": "no-mistakes",
-         "href": "https://github.com/kunchenguid/no-mistakes"
+         "label": "How we use it",
+         "href": "notes/validate-dont-review.md"
+        },
+        {
+         "label": "GitHub",
+         "href": "https://github.com/kunchenguid"
         },
         {
          "label": "gnhf",
@@ -1564,28 +1569,25 @@
        "n": "Matt Pocock",
        "line": "giant · builders",
        "body": [
-        "Clear TypeScript teaching and a public set of agent skills for coding with AI."
+        "Clear TypeScript teaching, and a public set of skills for coding with AI.",
+        "How we use it: We steer agents with short skill files, and keep the heavy machinery separate."
        ],
        "links": [
         {
-         "label": "LinkedIn",
-         "href": "https://uk.linkedin.com/in/mapocock"
+         "label": "The idea: skills: small files that steer an agent",
+         "href": "https://github.com/mattpocock/skills"
+        },
+        {
+         "label": "How we use it",
+         "href": "notes/pocock-steers-with-skills-kun-builds-machinery.md"
         },
         {
          "label": "GitHub",
          "href": "https://github.com/mattpocock"
         },
         {
-         "label": "Website",
+         "label": "Total TypeScript",
          "href": "https://www.totaltypescript.com"
-        },
-        {
-         "label": "skills",
-         "href": "https://github.com/mattpocock/skills"
-        },
-        {
-         "label": "ts-reset",
-         "href": "https://github.com/mattpocock/ts-reset"
         }
        ],
        "rel": []
@@ -1595,16 +1597,21 @@
        "n": "Jake Van Clief",
        "line": "giant · builders",
        "body": [
-        "Interpretable Context Methodology: ordered stages, a contract per stage, and rooms with their own taste files."
+        "Interpretable Context Methodology: ordered stages, a contract per stage, and rooms with their own taste files.",
+        "How we use it: A routing table sends each task to the one room it needs, and nothing more."
        ],
        "links": [
         {
-         "label": "GitHub",
-         "href": "https://github.com/RinDig"
+         "label": "The idea: Interpretable Context Methodology",
+         "href": "https://github.com/RinDig/Interpretable-Context-Methodology"
         },
         {
-         "label": "Interpretable-Context-Methodology",
-         "href": "https://github.com/RinDig/Interpretable-Context-Methodology"
+         "label": "How we use it",
+         "href": "notes/icm-routing-table-is-the-core-pattern.md"
+        },
+        {
+         "label": "GitHub",
+         "href": "https://github.com/RinDig"
         }
        ],
        "rel": []
@@ -1614,12 +1621,17 @@
        "n": "Daniel Miessler",
        "line": "giant · builders",
        "body": [
-        "Fabric prompt patterns and a personal AI infrastructure for augmenting people with AI."
+        "Fabric prompt patterns, and a personal AI setup built to augment a person.",
+        "How we use it: We borrowed his done-test idea for the harness arena."
        ],
        "links": [
         {
-         "label": "LinkedIn",
-         "href": "https://www.linkedin.com/in/danielmiessler/"
+         "label": "The idea: Fabric: prompts as reusable patterns",
+         "href": "https://github.com/danielmiessler/Fabric"
+        },
+        {
+         "label": "How we use it",
+         "href": "../arena.html"
         },
         {
          "label": "GitHub",
@@ -1630,11 +1642,7 @@
          "href": "https://danielmiessler.com"
         },
         {
-         "label": "Fabric",
-         "href": "https://github.com/danielmiessler/Fabric"
-        },
-        {
-         "label": "Personal_AI_Infrastructure",
+         "label": "Personal AI Infrastructure",
          "href": "https://github.com/danielmiessler/Personal_AI_Infrastructure"
         }
        ],
@@ -1645,12 +1653,17 @@
        "n": "David Allen",
        "line": "giant · builders",
        "body": [
-        "Getting Things Done: capture, clarify, organize, reflect, engage. The base of any personal inbox system."
+        "Getting Things Done: capture, clarify, organize, reflect, engage.",
+        "How we use it: New items land in an inbox and are sorted before they count as knowledge."
        ],
        "links": [
         {
-         "label": "Website",
+         "label": "The idea: Getting Things Done",
          "href": "https://gettingthingsdone.com"
+        },
+        {
+         "label": "How we use it",
+         "href": "notes/second-brain-is-a-context-layer.md"
         }
        ],
        "rel": []
@@ -1660,12 +1673,17 @@
        "n": "Andrej Karpathy",
        "line": "giant · builders",
        "body": [
-        "Taught a generation how LLMs work; named vibe coding and the LLM-wiki style of notes."
+        "Taught a generation how LLMs work. Named vibe coding, and sketched notes an LLM keeps for you.",
+        "How we use it: Our second brain is a wiki the AI can read, not a search over loose files."
        ],
        "links": [
         {
-         "label": "LinkedIn",
-         "href": "https://www.linkedin.com/in/andrej-karpathy-9a650716/"
+         "label": "The idea: The LLM wiki idea",
+         "href": "https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f"
+        },
+        {
+         "label": "How we use it",
+         "href": "notes/llmwiki-vs-rag.md"
         },
         {
          "label": "GitHub",
@@ -1678,10 +1696,6 @@
         {
          "label": "nanoGPT",
          "href": "https://github.com/karpathy/nanoGPT"
-        },
-        {
-         "label": "autoresearch",
-         "href": "https://github.com/karpathy/autoresearch"
         }
        ],
        "rel": []
@@ -1691,28 +1705,29 @@
        "n": "Simon Willison",
        "line": "giant · builders",
        "body": [
-        "Daily, honest notes on what LLMs and coding agents can and cannot do, plus the llm tool."
+        "Daily, honest notes on what LLMs and coding agents can and cannot do.",
+        "How we use it: Agents that can read private data and send it out always get a person's yes first."
        ],
        "links": [
         {
-         "label": "LinkedIn",
-         "href": "https://www.linkedin.com/in/simonwillison/"
+         "label": "The idea: The lethal trifecta for agents",
+         "href": "https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/"
+        },
+        {
+         "label": "How we use it",
+         "href": "notes/human-in-the-loop.md"
+        },
+        {
+         "label": "Weblog",
+         "href": "https://simonwillison.net"
         },
         {
          "label": "GitHub",
          "href": "https://github.com/simonw"
         },
         {
-         "label": "Website",
-         "href": "https://simonwillison.net"
-        },
-        {
          "label": "llm",
          "href": "https://github.com/simonw/llm"
-        },
-        {
-         "label": "datasette",
-         "href": "https://github.com/simonw/datasette"
         }
        ],
        "rel": []
@@ -1722,16 +1737,21 @@
        "n": "Linus Torvalds",
        "line": "giant · builders",
        "body": [
-        "Linux and git: open source done at scale, with plain review and fast iteration."
+        "Linux and git: open source at scale, with plain review and fast iteration.",
+        "How we use it: Every change is a branch that is checked before it merges."
        ],
        "links": [
         {
-         "label": "GitHub",
-         "href": "https://github.com/torvalds"
+         "label": "The idea: git",
+         "href": "https://git-scm.com"
         },
         {
-         "label": "linux",
-         "href": "https://github.com/torvalds/linux"
+         "label": "How we use it",
+         "href": "notes/validate-dont-review.md"
+        },
+        {
+         "label": "GitHub",
+         "href": "https://github.com/torvalds"
         }
        ],
        "rel": []
@@ -1741,24 +1761,25 @@
        "n": "DHH (David Heinemeier Hansson)",
        "line": "giant · builders",
        "body": [
-        "Ruby on Rails, Basecamp and Omarchy: opinionated, simple tools that one person can understand."
+        "Ruby on Rails, Basecamp and Omarchy: opinionated, simple tools that one person can understand.",
+        "How we use it: One opinionated setup for every agent, instead of a different one per tool."
        ],
        "links": [
         {
-         "label": "GitHub",
-         "href": "https://github.com/dhh"
+         "label": "The idea: Omarchy: a Linux setup you shape around you",
+         "href": "https://omarchy.org"
+        },
+        {
+         "label": "How we use it",
+         "href": "../blog/one-harness-for-every-agent.html"
         },
         {
          "label": "Website",
          "href": "https://dhh.dk"
         },
         {
-         "label": "omarchy",
-         "href": "https://github.com/basecamp/omarchy"
-        },
-        {
-         "label": "rails",
-         "href": "https://github.com/rails/rails"
+         "label": "GitHub",
+         "href": "https://github.com/dhh"
         }
        ],
        "rel": []
@@ -1768,9 +1789,18 @@
        "n": "Andrei Kashcha (anvaka)",
        "line": "giant · builders",
        "body": [
-        "Beautiful graph and map visualizations of code and data, built as small open-source toys."
+        "Beautiful maps of code and data, built as small open-source toys.",
+        "How we use it: The map on this site grew from his maps."
        ],
        "links": [
+        {
+         "label": "The idea: Map of GitHub",
+         "href": "https://anvaka.github.io/map-of-github/"
+        },
+        {
+         "label": "How we use it",
+         "href": "../blog/second-brain-page.html"
+        },
         {
          "label": "GitHub",
          "href": "https://github.com/anvaka"
@@ -1787,16 +1817,21 @@
        "n": "Boris Cherny",
        "line": "giant · builders",
        "body": [
-        "Created Claude Code and shares how he runs it: plan first, many sessions in parallel."
+        "Created Claude Code, and shares how he runs it: plan first, many sessions in parallel.",
+        "How we use it: Several agents work at once, each in its own copy of the project."
        ],
        "links": [
         {
-         "label": "GitHub",
-         "href": "https://github.com/bcherny"
+         "label": "The idea: Claude Code",
+         "href": "https://github.com/anthropics/claude-code"
         },
         {
-         "label": "claude-code",
-         "href": "https://github.com/anthropics/claude-code"
+         "label": "How we use it",
+         "href": "notes/worktree-pooling.md"
+        },
+        {
+         "label": "GitHub",
+         "href": "https://github.com/bcherny"
         }
        ],
        "rel": []
@@ -1806,24 +1841,25 @@
        "n": "Geoffrey Huntley",
        "line": "giant · builders",
        "body": [
-        "The Ralph loop: run an agent in a loop on one small task until the spec is met."
+        "The Ralph loop: run an agent in a loop on one small task until the spec is met.",
+        "How we use it: Long jobs run as loops of small, checked steps."
        ],
        "links": [
         {
-         "label": "LinkedIn",
-         "href": "https://www.linkedin.com/in/geoffreyhuntley/"
+         "label": "The idea: Ralph Wiggum as a software engineer",
+         "href": "https://ghuntley.com/ralph/"
         },
         {
-         "label": "GitHub",
-         "href": "https://github.com/ghuntley"
+         "label": "How we use it",
+         "href": "notes/long-running-loops.md"
         },
         {
          "label": "Website",
          "href": "https://ghuntley.com"
         },
         {
-         "label": "how-to-ralph-wiggum",
-         "href": "https://github.com/ghuntley/how-to-ralph-wiggum"
+         "label": "GitHub",
+         "href": "https://github.com/ghuntley"
         }
        ],
        "rel": []
@@ -1833,19 +1869,24 @@
        "n": "Steve Yegge",
        "line": "giant · builders",
        "body": [
-        "Beads and Gas Town: a task ledger and a way to run many coding agents in parallel."
+        "Beads and Gas Town: a task ledger, and a way to run many coding agents side by side.",
+        "How we use it: Many small agents, each with one job, beat one big agent that holds everything."
        ],
        "links": [
+        {
+         "label": "The idea: Beads: a ledger of tasks for agents",
+         "href": "https://github.com/steveyegge/beads"
+        },
+        {
+         "label": "How we use it",
+         "href": "notes/mini-brains-not-one-brain.md"
+        },
         {
          "label": "GitHub",
          "href": "https://github.com/steveyegge"
         },
         {
-         "label": "beads",
-         "href": "https://github.com/steveyegge/beads"
-        },
-        {
-         "label": "gastown",
+         "label": "Gas Town",
          "href": "https://github.com/steveyegge/gastown"
         }
        ],
@@ -1862,12 +1903,17 @@
        "n": "Y Combinator",
        "line": "giant · startup ecosystem",
        "body": [
-        "The startup accelerator model: small seed money, a batch of peers, and weekly office hours."
+        "The accelerator model: a small bet, a batch of peers, and regular office hours.",
+        "How we use it: We ship small and in public, then learn from what comes back."
        ],
        "links": [
         {
-         "label": "LinkedIn",
-         "href": "https://www.linkedin.com/school/y-combinator/"
+         "label": "The idea: The YC Library",
+         "href": "https://www.ycombinator.com/library"
+        },
+        {
+         "label": "How we use it",
+         "href": "../blog/index.html"
         },
         {
          "label": "Website",
@@ -1881,24 +1927,21 @@
        "n": "Garry Tan",
        "line": "giant · startup ecosystem",
        "body": [
-        "YC CEO who open-sourced gstack and gbrain, his own agent skills and memory setup."
+        "YC CEO who open-sourced gstack and gbrain, his own agent skills and memory setup.",
+        "How we use it: His setup is one of the twelve we scored in the harness arena."
        ],
        "links": [
         {
-         "label": "LinkedIn",
-         "href": "https://www.linkedin.com/in/garrytan/"
+         "label": "The idea: gstack",
+         "href": "https://github.com/garrytan/gstack"
+        },
+        {
+         "label": "How we use it",
+         "href": "../arena.html"
         },
         {
          "label": "GitHub",
          "href": "https://github.com/garrytan"
-        },
-        {
-         "label": "Website",
-         "href": "https://garryslist.org"
-        },
-        {
-         "label": "gstack",
-         "href": "https://github.com/garrytan/gstack"
         },
         {
          "label": "gbrain",
@@ -1912,11 +1955,20 @@
        "n": "Paul Graham",
        "line": "giant · startup ecosystem",
        "body": [
-        "Essays on making things people want, starting small, and doing things that do not scale."
+        "Essays on making things people want, starting small, and doing things that do not scale.",
+        "How we use it: We get one path working end to end by hand before we automate it."
        ],
        "links": [
         {
-         "label": "Website",
+         "label": "The idea: Do Things That Don't Scale",
+         "href": "https://paulgraham.com/ds.html"
+        },
+        {
+         "label": "How we use it",
+         "href": "../blog/index.html"
+        },
+        {
+         "label": "Essays",
          "href": "https://paulgraham.com"
         }
        ],
@@ -1927,9 +1979,19 @@
        "n": "Jessica Livingston",
        "line": "giant · startup ecosystem",
        "body": [
-        "Co-founded YC and built the founder community; wrote down how real founders started."
+        "Co-founded YC, and wrote down how real founders started.",
+        "How we use it: Real starts, told plainly, are why the site has case studies."
        ],
-       "links": [],
+       "links": [
+        {
+         "label": "The idea: Founders at Work",
+         "href": "https://en.wikipedia.org/wiki/Founders_at_Work"
+        },
+        {
+         "label": "How we use it",
+         "href": "../../case-studies/index.html"
+        }
+       ],
        "rel": []
       },
       {
@@ -1937,11 +1999,20 @@
        "n": "Sam Altman",
        "line": "giant · startup ecosystem",
        "body": [
-        "Startup advice from YC days: growth, focus, and ambition. Now runs OpenAI."
+        "Startup advice from the YC years: growth, focus and ambition. Now runs OpenAI.",
+        "How we use it: We pick one thing to do well and say no to the rest."
        ],
        "links": [
         {
-         "label": "Website",
+         "label": "The idea: How To Be Successful",
+         "href": "https://blog.samaltman.com/how-to-be-successful"
+        },
+        {
+         "label": "How we use it",
+         "href": "../../about/index.html"
+        },
+        {
+         "label": "Blog",
          "href": "https://blog.samaltman.com"
         }
        ],
@@ -1952,20 +2023,25 @@
        "n": "a16z (Andreessen Horowitz)",
        "line": "giant · startup ecosystem",
        "body": [
-        "A venture firm that publishes deep essays, guides and podcasts on software, AI and company building."
+        "A venture firm that publishes deep essays, guides and podcasts on software, AI and company building.",
+        "How we use it: A reading list like his is how the course points to the first sources."
        ],
        "links": [
         {
-         "label": "LinkedIn",
-         "href": "https://www.linkedin.com/company/a16z"
+         "label": "The idea: The a16z AI Canon",
+         "href": "https://a16z.com/ai-canon/"
         },
         {
-         "label": "GitHub",
-         "href": "https://github.com/a16z"
+         "label": "How we use it",
+         "href": "../blog/index.html"
         },
         {
          "label": "Website",
          "href": "https://a16z.com"
+        },
+        {
+         "label": "GitHub",
+         "href": "https://github.com/a16z"
         }
        ],
        "rel": []
@@ -1975,11 +2051,20 @@
        "n": "Marc Andreessen",
        "line": "giant · startup ecosystem",
        "body": [
-        "Wrote 'software is eating the world' and the product-market-fit essays; built Mosaic and Netscape."
+        "Wrote 'software is eating the world' and the product-market-fit essays; built Mosaic and Netscape.",
+        "How we use it: Software is the lever, so a crew of AI helpers is one more way to pull it."
        ],
        "links": [
         {
-         "label": "Website",
+         "label": "The idea: Why Software Is Eating the World",
+         "href": "https://a16z.com/why-software-is-eating-the-world/"
+        },
+        {
+         "label": "How we use it",
+         "href": "../../work-with-me/index.html"
+        },
+        {
+         "label": "Substack",
          "href": "https://pmarca.substack.com"
         }
        ],
@@ -1990,12 +2075,17 @@
        "n": "First Round Capital",
        "line": "giant · startup ecosystem",
        "body": [
-        "A seed fund whose First Round Review shares practical operating playbooks from founders."
+        "A seed fund whose First Round Review shares practical playbooks from founders.",
+        "How we use it: Our posts follow the same shape: a real problem, then what fixed it."
        ],
        "links": [
         {
-         "label": "LinkedIn",
-         "href": "https://www.linkedin.com/company/first-round-capital"
+         "label": "The idea: First Round Review",
+         "href": "https://review.firstround.com/"
+        },
+        {
+         "label": "How we use it",
+         "href": "../blog/index.html"
         },
         {
          "label": "Website",
@@ -2009,12 +2099,17 @@
        "n": "Sequoia Capital",
        "line": "giant · startup ecosystem",
        "body": [
-        "A venture firm that shares frameworks and essays on company building and the AI shift."
+        "A venture firm that shares frameworks and essays on company building and the AI shift.",
+        "How we use it: We read the market through the people who fund it, then test it ourselves."
        ],
        "links": [
         {
-         "label": "LinkedIn",
-         "href": "https://www.linkedin.com/company/sequoia"
+         "label": "The idea: Generative AI: A Creative New World",
+         "href": "https://www.sequoiacap.com/article/generative-ai-a-creative-new-world/"
+        },
+        {
+         "label": "How we use it",
+         "href": "../arena.html"
         },
         {
          "label": "Website",
@@ -2028,9 +2123,18 @@
        "n": "Naval Ravikant",
        "line": "giant · startup ecosystem",
        "body": [
-        "Short, clear thinking on leverage, specific knowledge, and building wealth without luck."
+        "Short, clear thinking on leverage, specific knowledge and building wealth without luck.",
+        "How we use it: Code and AI helpers are leverage that works while you sleep."
        ],
        "links": [
+        {
+         "label": "The idea: How to Get Rich (without getting lucky)",
+         "href": "https://nav.al/rich"
+        },
+        {
+         "label": "How we use it",
+         "href": "../blog/one-harness-for-every-agent.html"
+        },
         {
          "label": "Website",
          "href": "https://nav.al"
@@ -2043,16 +2147,25 @@
        "n": "Pieter Levels",
        "line": "giant · startup ecosystem",
        "body": [
-        "Shows how one person ships many small products fast, in public, with simple tech."
+        "Shows how one person ships many small products fast, in public, with simple tech.",
+        "How we use it: One person plus a crew of AI helpers can ship like a small team."
        ],
        "links": [
         {
-         "label": "GitHub",
-         "href": "https://github.com/levelsio"
+         "label": "The idea: MAKE: the book",
+         "href": "https://readmake.com"
+        },
+        {
+         "label": "How we use it",
+         "href": "../blog/index.html"
         },
         {
          "label": "Website",
          "href": "https://levels.io"
+        },
+        {
+         "label": "GitHub",
+         "href": "https://github.com/levelsio"
         }
        ],
        "rel": []
@@ -2062,16 +2175,17 @@
        "n": "Reid Hoffman",
        "line": "giant · startup ecosystem",
        "body": [
-        "Blitzscaling and network-effect thinking; co-founded LinkedIn and invests in AI."
+        "Blitzscaling and network-effect thinking; co-founded LinkedIn and invests in AI.",
+        "How we use it: Speed is only safe with a check in front of it."
        ],
        "links": [
         {
-         "label": "LinkedIn",
-         "href": "https://linkedin.com/in/reidhoffman"
+         "label": "The idea: Blitzscaling",
+         "href": "https://www.blitzscaling.com"
         },
         {
-         "label": "Website",
-         "href": "https://www.reidhoffman.org"
+         "label": "How we use it",
+         "href": "notes/validate-dont-review.md"
         }
        ],
        "rel": []
@@ -2081,11 +2195,20 @@
        "n": "Steve Blank",
        "line": "giant · startup ecosystem",
        "body": [
-        "Customer Development: get out of the building and test your guesses with real customers."
+        "Customer Development: get out of the building and test your guesses with real customers.",
+        "How we use it: We talk to the person with the problem before we build."
        ],
        "links": [
         {
-         "label": "Website",
+         "label": "The idea: Customer Development",
+         "href": "https://steveblank.com/category/customer-development/"
+        },
+        {
+         "label": "How we use it",
+         "href": "../../work-with-me/index.html"
+        },
+        {
+         "label": "Blog",
          "href": "https://steveblank.com"
         }
        ],
@@ -2096,16 +2219,17 @@
        "n": "Eric Ries",
        "line": "giant · startup ecosystem",
        "body": [
-        "The Lean Startup: build, measure, learn, and treat the product as a series of experiments."
+        "The Lean Startup: build, measure, learn, and treat the product as a series of experiments.",
+        "How we use it: Each case study is one small experiment with a dated result."
        ],
        "links": [
         {
-         "label": "LinkedIn",
-         "href": "https://www.linkedin.com/in/eries/"
+         "label": "The idea: The Lean Startup",
+         "href": "https://theleanstartup.com"
         },
         {
-         "label": "Website",
-         "href": "https://theleanstartup.com"
+         "label": "How we use it",
+         "href": "../../case-studies/index.html"
         }
        ],
        "rel": []
@@ -2115,20 +2239,25 @@
        "n": "Techstars",
        "line": "giant · startup ecosystem",
        "body": [
-        "A global accelerator network built on mentor-led programs and a 'give first' culture."
+        "A global accelerator network built on mentor-led programs and a 'give first' culture.",
+        "How we use it: We share what we learn back, which is why the map and the blog are public."
        ],
        "links": [
         {
-         "label": "LinkedIn",
-         "href": "https://www.linkedin.com/company/techstars"
+         "label": "The idea: Give first",
+         "href": "https://www.techstars.com/the-line"
         },
         {
-         "label": "GitHub",
-         "href": "https://github.com/techstars"
+         "label": "How we use it",
+         "href": "../blog/index.html"
         },
         {
          "label": "Website",
          "href": "https://www.techstars.com"
+        },
+        {
+         "label": "GitHub",
+         "href": "https://github.com/techstars"
         }
        ],
        "rel": []
@@ -2144,16 +2273,17 @@
        "n": "Philip Kotler",
        "line": "giant · marketing",
        "body": [
-        "Modern marketing basics: segmentation, targeting, positioning, and the four Ps."
+        "Modern marketing basics: segmentation, targeting, positioning and the four Ps.",
+        "How we use it: Each page speaks to one reader and says what we offer them."
        ],
        "links": [
         {
-         "label": "LinkedIn",
-         "href": "https://www.linkedin.com/in/philipkotler/"
+         "label": "The idea: Kotler Marketing Group",
+         "href": "https://www.kotlermarketing.com"
         },
         {
-         "label": "Website",
-         "href": "https://www.kotlermarketing.com"
+         "label": "How we use it",
+         "href": "../../index.html"
         }
        ],
        "rel": []
@@ -2163,16 +2293,17 @@
        "n": "Seth Godin",
        "line": "giant · marketing",
        "body": [
-        "Marketing as earned trust: tribes, permission, remarkable work, and a daily blog habit."
+        "Marketing as earned trust: permission, remarkable work and a daily blog habit.",
+        "How we use it: We write for a small group that wants this, not for everyone."
        ],
        "links": [
         {
-         "label": "LinkedIn",
-         "href": "https://www.linkedin.com/in/sethgodin/"
+         "label": "The idea: Seth's Blog",
+         "href": "https://seths.blog"
         },
         {
-         "label": "Website",
-         "href": "https://seths.blog"
+         "label": "How we use it",
+         "href": "../blog/index.html"
         }
        ],
        "rel": []
@@ -2182,11 +2313,20 @@
        "n": "David Ogilvy",
        "line": "giant · marketing",
        "body": [
-        "Research-based advertising and clear, honest copy: the original 'Confessions of an Advertising Man'."
+        "Research-based advertising and clear, honest copy.",
+        "How we use it: Plain claims, with a source and a date next to each number."
        ],
        "links": [
         {
-         "label": "Website",
+         "label": "The idea: Confessions of an Advertising Man",
+         "href": "https://en.wikipedia.org/wiki/Confessions_of_an_Advertising_Man"
+        },
+        {
+         "label": "How we use it",
+         "href": "../../index.html"
+        },
+        {
+         "label": "Ogilvy",
          "href": "https://www.ogilvy.com"
         }
        ],
@@ -2197,12 +2337,17 @@
        "n": "Al Ries",
        "line": "giant · marketing",
        "body": [
-        "Positioning: own one word in the customer's mind. Co-wrote the classic book with Jack Trout."
+        "Positioning: own one word in the customer's mind. Co-wrote the classic book with Jack Trout.",
+        "How we use it: One line says what we do, and every page repeats it."
        ],
        "links": [
         {
-         "label": "Website",
+         "label": "The idea: Positioning, by Ries and Trout",
          "href": "https://ries.com"
+        },
+        {
+         "label": "How we use it",
+         "href": "../../index.html"
         }
        ],
        "rel": []
@@ -2212,12 +2357,17 @@
        "n": "Byron Sharp",
        "line": "giant · marketing",
        "body": [
-        "How Brands Grow: evidence-based rules on mental and physical availability and reach."
+        "How Brands Grow: evidence-based rules on mental and physical availability and reach.",
+        "How we use it: We ask for evidence before we believe a marketing claim, ours included."
        ],
        "links": [
         {
-         "label": "Website",
+         "label": "The idea: Ehrenberg-Bass Institute",
          "href": "https://www.marketingscience.info"
+        },
+        {
+         "label": "How we use it",
+         "href": "../blog/when-the-notes-are-wrong.html"
         }
        ],
        "rel": []
@@ -2227,9 +2377,18 @@
        "n": "April Dunford",
        "line": "giant · marketing",
        "body": [
-        "A practical positioning method from Obviously Awesome: alternatives, value, best-fit customers, market."
+        "A practical positioning method: alternatives, value, best-fit customers, market.",
+        "How we use it: We say what we do next to the alternative, and who it fits best."
        ],
        "links": [
+        {
+         "label": "The idea: Obviously Awesome",
+         "href": "https://www.aprildunford.com/obviously-awesome"
+        },
+        {
+         "label": "How we use it",
+         "href": "../../work-with-me/index.html"
+        },
         {
          "label": "Website",
          "href": "https://www.aprildunford.com"
@@ -2242,12 +2401,17 @@
        "n": "Rand Fishkin",
        "line": "giant · marketing",
        "body": [
-        "Audience research over vanity metrics; founded Moz and SparkToro and writes openly about marketing."
+        "Audience research over vanity metrics; founded Moz and SparkToro.",
+        "How we use it: This site has no tracking, so we learn from the people who write to us."
        ],
        "links": [
         {
-         "label": "LinkedIn",
-         "href": "https://www.linkedin.com/in/randfishkin/"
+         "label": "The idea: The Moz blog, where he wrote for years",
+         "href": "https://moz.com/blog"
+        },
+        {
+         "label": "How we use it",
+         "href": "../../work-with-me/index.html"
         }
        ],
        "rel": []
@@ -2257,9 +2421,18 @@
        "n": "Ann Handley",
        "line": "giant · marketing",
        "body": [
-        "Everybody Writes: plain, useful writing as the core of content marketing."
+        "Everybody Writes: plain, useful writing as the core of content marketing.",
+        "How we use it: Short sentences, plain words, one idea per paragraph."
        ],
        "links": [
+        {
+         "label": "The idea: Everybody Writes",
+         "href": "https://annhandley.com/everybodywrites/"
+        },
+        {
+         "label": "How we use it",
+         "href": "notes/ste100-mode.md"
+        },
         {
          "label": "Website",
          "href": "https://annhandley.com"
@@ -2272,16 +2445,405 @@
        "n": "Gary Vaynerchuk",
        "line": "giant · marketing",
        "body": [
-        "Document, don't create: publish daily on every platform and meet attention where it is."
+        "Document, don't create: share the work as it happens and meet attention where it is.",
+        "How we use it: The blog documents real work rather than staging it."
        ],
        "links": [
         {
-         "label": "LinkedIn",
-         "href": "https://www.linkedin.com/in/garyvaynerchuk/"
+         "label": "The idea: Gary Vaynerchuk",
+         "href": "https://www.garyvaynerchuk.com"
         },
         {
-         "label": "Website",
-         "href": "https://www.garyvaynerchuk.com"
+         "label": "How we use it",
+         "href": "../blog/index.html"
+        }
+       ],
+       "rel": []
+      }
+     ]
+    },
+    {
+     "name": "Blogs and newsletters",
+     "count": 10,
+     "files": [
+      {
+       "id": "giant-martin-fowler",
+       "n": "Martin Fowler's bliki",
+       "line": "giant · blogs and newsletters",
+       "body": [
+        "Decades of clear writing on software design, refactoring and now working with generative AI.",
+        "How we use it: We name each idea and write it down once, the way a bliki entry does."
+       ],
+       "links": [
+        {
+         "label": "The idea: Exploring Gen AI",
+         "href": "https://martinfowler.com/articles/exploring-gen-ai.html"
+        },
+        {
+         "label": "How we use it",
+         "href": "../blog/everything-is-a-file.html"
+        },
+        {
+         "label": "Bliki",
+         "href": "https://martinfowler.com/bliki/"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-karpathy-blog",
+       "n": "Andrej Karpathy's blog",
+       "line": "giant · blogs and newsletters",
+       "body": [
+        "Long, careful posts that explain how neural networks work from first principles.",
+        "How we use it: We explain things from the ground up, so a first-time reader can follow."
+       ],
+       "links": [
+        {
+         "label": "The idea: The Unreasonable Effectiveness of Recurrent Neural Networks",
+         "href": "https://karpathy.github.io/2015/05/21/rnn-effectiveness/"
+        },
+        {
+         "label": "How we use it",
+         "href": "../blog/second-brain-page.html"
+        },
+        {
+         "label": "Blog",
+         "href": "https://karpathy.bearblog.dev"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-latent-space",
+       "n": "Latent Space",
+       "line": "giant · blogs and newsletters",
+       "body": [
+        "A newsletter and podcast for people who build with AI.",
+        "How we use it: It is how we spot which agent tools are worth testing next."
+       ],
+       "links": [
+        {
+         "label": "The idea: Latent Space",
+         "href": "https://www.latent.space"
+        },
+        {
+         "label": "How we use it",
+         "href": "../arena.html"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-pragmatic-engineer",
+       "n": "The Pragmatic Engineer",
+       "line": "giant · blogs and newsletters",
+       "body": [
+        "Gergely Orosz on how real engineering teams work, and how AI is changing that.",
+        "How we use it: A reality check on how teams use AI, before we claim anything about it."
+       ],
+       "links": [
+        {
+         "label": "The idea: The Pragmatic Engineer",
+         "href": "https://newsletter.pragmaticengineer.com"
+        },
+        {
+         "label": "How we use it",
+         "href": "../../case-studies/index.html"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-import-ai",
+       "n": "Import AI",
+       "line": "giant · blogs and newsletters",
+       "body": [
+        "Jack Clark's weekly newsletter on AI research and what it means.",
+        "How we use it: It is where research on harnesses and agents reaches us first."
+       ],
+       "links": [
+        {
+         "label": "The idea: Import AI",
+         "href": "https://importai.substack.com"
+        },
+        {
+         "label": "How we use it",
+         "href": "../blog/one-harness-for-every-agent.html"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-lenny-rachitsky",
+       "n": "Lenny's Newsletter",
+       "line": "giant · blogs and newsletters",
+       "body": [
+        "Lenny Rachitsky on product, growth and careers, with concrete examples.",
+        "How we use it: It shapes how we explain a service in terms of the reader's problem."
+       ],
+       "links": [
+        {
+         "label": "The idea: Lenny's Newsletter",
+         "href": "https://www.lennysnewsletter.com"
+        },
+        {
+         "label": "How we use it",
+         "href": "../../work-with-me/index.html"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-anthropic-engineering",
+       "n": "Anthropic Engineering blog",
+       "line": "giant · blogs and newsletters",
+       "body": [
+        "How the lab that makes Claude builds agents, and what it learned.",
+        "How we use it: Start with the simplest workflow that works, and add agents only when it needs them."
+       ],
+       "links": [
+        {
+         "label": "The idea: Building effective agents",
+         "href": "https://www.anthropic.com/engineering/building-effective-agents"
+        },
+        {
+         "label": "How we use it",
+         "href": "../blog/one-harness-for-every-agent.html"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-lilian-weng",
+       "n": "Lilian Weng's blog",
+       "line": "giant · blogs and newsletters",
+       "body": [
+        "Deep, well-sourced surveys of AI topics.",
+        "How we use it: The picture of an agent as a model plus planning, memory and tools is what our harness diagram draws."
+       ],
+       "links": [
+        {
+         "label": "The idea: LLM Powered Autonomous Agents",
+         "href": "https://lilianweng.github.io/posts/2023-06-23-agent/"
+        },
+        {
+         "label": "How we use it",
+         "href": "../index.html"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-eugene-yan",
+       "n": "Eugene Yan's writing",
+       "line": "giant · blogs and newsletters",
+       "body": [
+        "Practical notes on building machine-learning and LLM systems that work in production.",
+        "How we use it: Checks on the output, not hope, decide whether the system works."
+       ],
+       "links": [
+        {
+         "label": "The idea: Eugene Yan",
+         "href": "https://eugeneyan.com"
+        },
+        {
+         "label": "How we use it",
+         "href": "notes/validate-dont-review.md"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-stratechery",
+       "n": "Stratechery",
+       "line": "giant · blogs and newsletters",
+       "body": [
+        "Ben Thompson on how technology companies win, one daily analysis at a time.",
+        "How we use it: It teaches us to ask who controls the layer, which is the lock-in question in the arena."
+       ],
+       "links": [
+        {
+         "label": "The idea: Stratechery",
+         "href": "https://stratechery.com"
+        },
+        {
+         "label": "How we use it",
+         "href": "../arena.html"
+        }
+       ],
+       "rel": []
+      }
+     ]
+    },
+    {
+     "name": "OG thinkers",
+     "count": 8,
+     "files": [
+      {
+       "id": "giant-dieter-rams",
+       "n": "Dieter Rams",
+       "line": "giant · og thinkers",
+       "body": [
+        "Ten principles of good design: useful, honest, long-lasting, and as little design as possible.",
+        "How we use it: Less, but better: a page stays only if it earns its place."
+       ],
+       "links": [
+        {
+         "label": "The idea: Ten principles for good design",
+         "href": "https://www.vitsoe.com/gb/about/good-design"
+        },
+        {
+         "label": "How we use it",
+         "href": "notes/ste100-mode.md"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-christopher-alexander",
+       "n": "Christopher Alexander",
+       "line": "giant · og thinkers",
+       "body": [
+        "A pattern is a reusable answer to a problem that keeps coming back.",
+        "How we use it: We write down what works as a named pattern, then reuse it."
+       ],
+       "links": [
+        {
+         "label": "The idea: A Pattern Language",
+         "href": "https://en.wikipedia.org/wiki/A_Pattern_Language"
+        },
+        {
+         "label": "How we use it",
+         "href": "notes/icm-routing-table-is-the-core-pattern.md"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-douglas-engelbart",
+       "n": "Douglas Engelbart",
+       "line": "giant · og thinkers",
+       "body": [
+        "Computers should make people more capable, not replace them.",
+        "How we use it: The crew does the work. A person decides."
+       ],
+       "links": [
+        {
+         "label": "The idea: Augmenting Human Intellect",
+         "href": "https://en.wikipedia.org/wiki/Augmenting_Human_Intellect"
+        },
+        {
+         "label": "How we use it",
+         "href": "notes/human-in-the-loop.md"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-alan-kay",
+       "n": "Alan Kay",
+       "line": "giant · og thinkers",
+       "body": [
+        "The computer as a personal medium you shape, not just a tool you use.",
+        "How we use it: We build the tools we think with, like the map of this site."
+       ],
+       "links": [
+        {
+         "label": "The idea: Personal Dynamic Media",
+         "href": "https://www.mprove.de/diplom/gui/kay77.html"
+        },
+        {
+         "label": "How we use it",
+         "href": "../index.html#map"
+        },
+        {
+         "label": "The Dynabook",
+         "href": "https://en.wikipedia.org/wiki/Dynabook"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-donella-meadows",
+       "n": "Donella Meadows",
+       "line": "giant · og thinkers",
+       "body": [
+        "In any system, a few places give you the most leverage. Most effort goes to the weak ones.",
+        "How we use it: We fix how work is set up before we fix the work itself."
+       ],
+       "links": [
+        {
+         "label": "The idea: Leverage Points: Places to Intervene in a System",
+         "href": "https://donellameadows.org/archives/leverage-points-places-to-intervene-in-a-system/"
+        },
+        {
+         "label": "How we use it",
+         "href": "notes/structure-decides-what-matters.md"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-james-c-scott",
+       "n": "James C. Scott",
+       "line": "giant · og thinkers",
+       "body": [
+        "Neat, top-down plans lose the local knowledge that made things work.",
+        "How we use it: Notes drift from reality unless someone checks them against it."
+       ],
+       "links": [
+        {
+         "label": "The idea: Seeing Like a State",
+         "href": "https://yalebooks.yale.edu/book/9780300078152/seeing-like-a-state/"
+        },
+        {
+         "label": "How we use it",
+         "href": "../blog/when-the-notes-are-wrong.html"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-richard-feynman",
+       "n": "Richard Feynman",
+       "line": "giant · og thinkers",
+       "body": [
+        "The first rule is that you must not fool yourself, and you are the easiest person to fool.",
+        "How we use it: A claim stands only when we ran the check and can say how."
+       ],
+       "links": [
+        {
+         "label": "The idea: Cargo Cult Science",
+         "href": "https://calteches.library.caltech.edu/51/2/CargoCult.htm"
+        },
+        {
+         "label": "How we use it",
+         "href": "notes/reproduce-bugs-end-to-end.md"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-peter-drucker",
+       "n": "Peter Drucker",
+       "line": "giant · og thinkers",
+       "body": [
+        "Management is about results and clear objectives, and the manager's job is to make people effective.",
+        "How we use it: Every task starts with a stated intent, and ends with a result we can check."
+       ],
+       "links": [
+        {
+         "label": "The idea: Peter Drucker",
+         "href": "https://en.wikipedia.org/wiki/Peter_Drucker"
+        },
+        {
+         "label": "How we use it",
+         "href": "../../work-with-me/index.html"
+        },
+        {
+         "label": "Drucker Institute",
+         "href": "https://www.drucker.institute"
         }
        ],
        "rel": []

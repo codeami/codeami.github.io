@@ -540,7 +540,7 @@ test('top bar: Meta-Factory, Case studies, Blog, About and Work with me on every
     // no Menu button: all five items are in view at this width, and the site name is on the bar
     for (let i = 0; i < 5; i++) await expect(links.nth(i), `${file}: item ${i} in view`).toBeVisible();
     await expect(bar.locator('.tb-menu'), `${file}: no Menu button`).toHaveCount(0);
-    await expect(bar.locator('.tb-brand'), file).toHaveText('Broman OS');
+    await expect(bar.locator('.tb-brand'), file).toHaveText('Ashish Raina Powered by Broman OS');
     const inView = await links.evaluateAll((as) => as.every((a) => { const r = a.getBoundingClientRect(); return r.left >= 0 && r.right <= document.documentElement.clientWidth; }));
     expect(inView, `${file}: every item inside the screen width`).toBe(true);
   }
@@ -551,7 +551,7 @@ test('top bar: clicking each item on every public page lands on a page with the 
   await page.route('**/*', (route) => (route.request().url().startsWith(origin) ? route.continue() : route.fulfill({ status: 200, body: '' })));
   await page.goto('/index.html');
   const same = await barOf(page);
-  expect(same.brand).toBe('Broman OS');
+  expect(same.brand).toBe('Ashish Raina Powered by Broman OS');
   expect(same.items.map((i) => i[0])).toEqual(barItems);
   for (const file of barPages()) {
     for (const [n, label] of barItems.entries()) {
