@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
 <title>Ashish's AI introductory course · Ashish Raina</title>
-<meta name="description" content="Ashish's AI introductory course: 12 short lessons in four parts, in a guided chat. Hello; our vision, intent; our ethos, shoulders of giants; and build your own: an LLM wiki, an AI twin, a company brain and your own tools.">
+<meta name="description" content="Ashish's AI introductory course: 13 short lessons in four parts, in a guided chat. Hello; our vision, intent; our ethos, shoulders of giants; and build your own: an LLM wiki, three maps, an AI twin, a company brain and your own tools.">
 <link rel="stylesheet" href="../hud.css">
 <script src="../article.js"></script>
 <link rel="icon" href="../kit/bosun.svg" type="image/svg+xml">
@@ -32,6 +32,15 @@
 .reads li { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
 .reads li a { flex: 1; min-width: 0; font-weight: 700; }
 .reads .note { display: block; font-size: 13px; color: var(--mute); }
+.k-bubble.wide { max-width: 100%; }
+.maps { display: grid; gap: var(--space-2); margin-top: 8px; }
+@media (min-width: 700px) { .maps { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.mapcard { display: flex; flex-direction: column; gap: 4px; min-width: 0; padding: 10px 12px; background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius); }
+.mapcard .q { font-size: 14px; font-weight: 700; color: var(--accent-text); }
+.mapcard p { margin: 0; font-size: 14px; }
+.mapcard .thumb { display: block; line-height: 0; }
+.mapcard .thumb img { width: 100%; height: 96px; object-fit: cover; border: 1px solid var(--line); border-radius: 6px; }
+.mapcard .credit { margin-top: auto; font-size: 12px; color: var(--mute); }
 .typing { display: inline-flex; gap: 4px; padding: 14px 16px; }
 .typing i { width: 7px; height: 7px; border-radius: 50%; background: var(--mute); animation: dot 1s infinite ease-in-out; }
 .typing i:nth-child(2) { animation-delay: .15s; } .typing i:nth-child(3) { animation-delay: .3s; }
@@ -132,7 +141,7 @@ form.hello .acts { display: flex; flex-wrap: wrap; align-items: center; gap: var
       <noscript><p>This course runs as a chat and needs JavaScript. The readings are listed in <a href="course.json">course.json</a>.</p></noscript>
     </div>
     <div class="composer">
-      <span class="prog" id="prog">12 short lessons</span>
+      <span class="prog" id="prog">13 short lessons</span>
       <a class="k-btn secondary pill" href="#later">Saved <b id="pillN">0</b></a>
     </div>
   </main>
@@ -373,8 +382,30 @@ form.hello .acts { display: flex; flex-wrap: wrap; align-items: center; gap: var
     b.appendChild(el("p", "", P.blurb));
     return row;
   }
+  /* A step may carry "maps": cards side by side, each a link to a map somewhere else. */
+  function mapCards(row, maps) {
+    var b = row.lastChild, grid = el("div", "maps");
+    b.className += " wide";
+    maps.forEach(function (m) {
+      var c = el("div", "mapcard");
+      c.appendChild(el("strong", "", m.name));
+      c.appendChild(el("span", "q", m.q));
+      if (m.img) {
+        var a = link({ label: "", href: m.href }), im = el("img");
+        a.className = "thumb"; a.setAttribute("aria-label", m.label);
+        im.src = m.img; im.alt = m.alt || ""; im.loading = "lazy";
+        a.appendChild(im); c.appendChild(a);
+      }
+      c.appendChild(el("p", "", m.line));
+      c.appendChild(link({ label: m.label, href: m.href }));
+      if (m.credit) c.appendChild(el("span", "credit", m.credit));
+      grid.appendChild(c);
+    });
+    b.appendChild(grid);
+  }
   function step(L, i) {
     var s = L.steps[i], row = botRow(s.text, s.cite), rows = [row], P = partOf(L.part);
+    if (s.maps) mapCards(row, s.maps);
     if (i === 0) {
       row.lastChild.insertBefore(el("span", "kick", "Lesson " + num(L.id) + " of " + C.lessons.length + ": " + L.title), row.lastChild.firstChild);
       if (P && firstOfPart(L)) rows.unshift(partRow(P));

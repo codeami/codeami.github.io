@@ -200,6 +200,29 @@
     "why": "Retrieval finds chunks and rediscovers knowledge at question time. The wiki is compiled once, and updated as each new source arrives."}
   },
   {
+   "id": "maps", "part": 3, "title": "Three maps",
+   "summary": "Your second brain is a map. Two public maps show what the world knows and what people want.",
+   "steps": [
+    {"text": "A second brain is easier to see as a map. Here are three, side by side. Each one answers a different question.",
+     "maps": [
+      {"name": "Your second brain", "q": "What do I know?", "line": "The notes and pages on this site, drawn as one chart. It is small, and it is yours.", "label": "Open the map", "href": "../index.html#map"},
+      {"name": "Wikipedia", "q": "What does the world know?", "line": "Articles joined by the links between them. A static picture: no live map of all of Wikipedia loads today.", "label": "Getting to Philosophy graph", "href": "https://commons.wikimedia.org/wiki/File:Getting_to_Philosophy_graph_of_Wikipedia_articles_by_Pine_(cropped).png", "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Getting_to_Philosophy_graph_of_Wikipedia_articles_by_Pine_%28cropped%29.png/500px-Getting_to_Philosophy_graph_of_Wikipedia_articles_by_Pine_%28cropped%29.png", "alt": "A graph of Wikipedia articles, joined by the links between them", "credit": "Image: Pine, CC BY-SA 4.0, via Wikimedia Commons"},
+      {"name": "Reddit", "q": "What do people want right now?", "line": "Each dot is a subreddit. Two dots sit close when many of the same people comment on both.", "label": "Map of Reddit", "href": "https://anvaka.github.io/map-of-reddit/", "credit": "By Andrei Kashcha (anvaka)"}
+     ]},
+    {"text": "Wikipedia is a knowledge graph: a store of things and the links between them. It answers what the world knows. Reddit is closer to an interest graph: a portrait of what people care about, drawn from where they spend time. It answers what people want right now, so it works like a market map.",
+     "cite": {"label": "Knowledge graph (encyclopedia, with sources)", "href": "https://en.wikipedia.org/wiki/Knowledge_graph"}},
+    {"text": "Andrei Kashcha built the Reddit map from 176,178,986 comments left in 2020 and 2021. It is a snapshot, so check the date before you lean on it.",
+     "cite": {"label": "Map of Reddit: how it is made", "href": "https://github.com/anvaka/map-of-reddit"}},
+    {"text": "Your map is small. Wikipedia's is the world's. Reddit's is the market's. The useful move is to look at where your map overlaps what people want, and where it does not."}
+   ],
+   "read": {"label": "Map of Reddit", "href": "https://anvaka.github.io/map-of-reddit/", "note": "Open it, zoom in, and find a topic you know well. About 10 minutes."},
+   "more": [{"label": "Interest graph (encyclopedia)", "href": "https://en.wikipedia.org/wiki/Interest_graph"}, {"label": "Knowledge graph (encyclopedia)", "href": "https://en.wikipedia.org/wiki/Knowledge_graph"}],
+   "check": {"q": "Which map answers “what do people want right now?”",
+    "options": ["Your second brain", "The Wikipedia map", "The Reddit map, an interest graph"],
+    "answer": 2,
+    "why": "Your map shows what you know. Wikipedia's knowledge graph shows what the world knows. Reddit's interest graph shows what people care about now."}
+  },
+  {
    "id": "twin", "part": 3, "title": "An AI twin",
    "summary": "A helper that has your notes, writing and preferences, and drafts as you would. You check and send.",
    "steps": [
