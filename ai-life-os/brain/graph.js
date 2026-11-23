@@ -23,7 +23,7 @@ shadow.innerHTML='<link rel="stylesheet" href="'+BASE+'graph.css">'+
   '<button class="btn" id="motionBtn" type="button" aria-pressed="true">Motion on</button>'+
   '<button class="btn" id="sideBtn" type="button" aria-expanded="false" aria-controls="side">&#9638; Widgets</button>'+
   '<button class="btn" id="menuBtn" type="button" aria-expanded="true" aria-controls="panel">&#9776; Menu</button></div>'+
-  '<aside id="panel" aria-label="Second brain controls"><h3>Search</h3>'+
+  '<aside id="panel" aria-label="Second brain controls"><div class="phead"><b>Controls</b><button class="btn" id="panelX" type="button" aria-label="Close the controls">&#10005;</button></div><h3>Search</h3>'+
   '<input type="search" id="q" placeholder="Search notes, skills, pages…  (⌘K or /)" aria-label="Search the map" aria-keyshortcuts="Meta+K Control+K /">'+
   '<div id="hits" aria-live="polite"></div><h3>Layout</h3><div class="seg" id="layouts" role="group" aria-label="Layout">'+
   '<button class="btn" data-l="force">Force</button><button class="btn" data-l="circle">Circle</button><button class="btn" data-l="hex">Hex</button><button class="btn" data-l="rings">Rings</button></div>'+
@@ -74,18 +74,41 @@ function boot(){
 }
 
 /* ---------- state ---------- */
-var S={layout:"rings",view:"departments",spin:0.05,motion:savedMotion()!=null?savedMotion():!mq.matches,names:false,spring:0.5,size:0.6,
+var S={layout:"hex",view:"folders",spin:0.05,motion:savedMotion()!=null?savedMotion():!mq.matches,names:false,spring:0.5,size:0.6,
   q:"",hover:null,sel:null,here:false,angle:0,legend:false}; // here: sel is the page the reader is on, shown alone
 var nodes=[],rooms=[],hubs=[],skills=[],routines=[],apps=[],root=null,data=null;
 var cv=$("cv"),ctx=cv.getContext("2d"),W=0,H=0,DPR=1;
 var view={k:.6,x:0,y:0,tk:.6,tx:0,ty:0,user:false};
 var applied="",dirty=true,flags=null,flagMode=false,focusLinks=[],guideA=0,cache={},sprites={},matchCount=0;
+/* ---------- palette: Calm is a light map, HUD and Matrix keep the dark one ----------
+   The canvas reads the skin's tokens from the page (hud.css). Node colours in the data are the HUD hexes; in Calm each one
+   maps to its Calm token (TOK), and anything else is darkened. C(hex) is a shape's colour, T(hex) a label's. */
+var TOK={"#ff7a1a":"--k-root","#ff9a3c":"--k-skill","#ffb347":"--k-routine","#6c6a66":"--k-off","#5a6270":"--k-off","#5cd3ff":"--k-cli",
+  "#2ee6c5":"--k-project","#ffd93d":"--k-page","#b57bff":"--r1","#ff4fd8":"--r2","#4f8dff":"--r3","#ff8a3d":"--r6"};
+var PAL={light:false};
+function tok(name,fb){var v=getComputedStyle(host).getPropertyValue(name).trim();return /^#[0-9a-f]{6}$/i.test(v)?v:fb}
+function darken(hex,f){var n=parseInt(hex.slice(1),16);function c(v){return Math.round(v*(1-f))}return"#"+((1<<24)+(c(n>>16)<<16)+(c(n>>8&255)<<8)+c(n&255)).toString(16).slice(1)}
+function readPal(){
+  var light=document.documentElement.getAttribute("data-skin")==="calm";
+  PAL=light?{light:true,bg:tok("--bg","#faf7f2"),ink:tok("--ink","#2b2620"),mute:tok("--mute","#6b5f4a"),fill:tok("--panel","#ffffff"),tint:tok("--accent-dim","#efe3d2"),accent:tok("--accent","#8a5a2b")}
+    :{light:false,bg:"#05060a",ink:"#e9e6e0",mute:"#cfc9bd",fill:"#0c0e11",tint:"#2a1608",accent:"#ff7a1a"};
+  PAL.col={};PAL.txt={};
+  sprites={};dirty=true;
+}
+function C(hex){
+  if(!PAL.light)return hex;
+  return PAL.col[hex]||(PAL.col[hex]=TOK[hex.toLowerCase()]?tok(TOK[hex.toLowerCase()],darken(hex,.45)):darken(hex,.45));
+}
+function T(hex){return PAL.light?(PAL.txt[hex]||(PAL.txt[hex]=darken(C(hex),.4))):hex}
 var drag=null,mouse={x:-1,y:-1};
 
 function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;var t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 
 function start(d,srcLabel){
   data=d;
+  readPal();
+  // the skin can change at any time (the top bar, another tab): the map repaints in the new one
+  new MutationObserver(function(){readPal();buildLegend();if(g3)g3.backgroundColor(PAL.bg)}).observe(document.documentElement,{attributes:true,attributeFilter:["data-skin"]});
   $("src").textContent="public data · "+srcLabel;
   window.AIO_READING=d.reading||[];
   // the "#map" entry opens the chart itself, so it is not a reading page in the drawer's "n of m" run
@@ -110,6 +133,15 @@ var API={
   },
   // the tests read what is lit and where a node sits on the canvas
   state:function(){return{here:S.here&&S.sel?S.sel.label:null,lit:flagMode?nodes.filter(function(n){return flags[n.i]}).map(function(n){return n.label}):[]}},
+  // and how they sit, in world units: the gap from a page badge to its nearest dot, and the closest two dots come
+  metrics:function(){
+    var dots=nodes.filter(function(n){return n.type==="dot"&&n.vis>.5}),gap=1e9,pitch=1e9;
+    apps.forEach(function(a){dots.concat(hubs).forEach(function(d){gap=Math.min(gap,Math.hypot(a.x-d.x,a.y-d.y)-a.r)})});
+    dots.forEach(function(a,i){for(var j=i+1;j<dots.length;j++)pitch=Math.min(pitch,Math.hypot(a.x-dots[j].x,a.y-dots[j].y))});
+    return{gap:gap,badge:apps.length?2*apps[0].r:0,pitch:pitch,layout:S.layout,view:S.view};
+  },
+  // the ground and the colours the canvas writes text in, for the contrast test
+  textColours:function(){return{bg:PAL.bg,text:rooms.map(function(R){return T(R.color)}).concat(apps.map(function(a){return T(a.color)}),[PAL.ink,PAL.mute])}},
   screenOf:function(label){var n=nodes.filter(function(m){return m.label===label&&m.type==="app"})[0];return n?w2s(n.x,n.y):null},
   setInsets:function(bottom){INS.bottom=bottom||0;if(!view.user)fitView();dirty=true},
   overlay:function(on){host.classList.toggle("ov",!!on);setTimeout(resize,0)},
@@ -120,8 +152,8 @@ var API={
     if(name==="motion")setMotion(!S.motion,true);
     else if(name==="widgets")setSides($("side").hidden);
     else if(name==="legend")setLegend(!S.legend);
-    else if(name==="menu"){var open=$("panel").hidden;setPanel(open)}
-    else if(name==="search"){setPanel(true);$("q").focus()}
+    else if(name==="menu"){var open=$("panel").hidden;setPanel(open,true)}
+    else if(name==="search"){setPanel(true,true);$("q").focus()}
     else if(name==="3d")setDim(true);
     else if(/^(force|circle|hex|rings)$/.test(name)){setDim(false,true);setLayout(name)}
   },
@@ -256,29 +288,35 @@ function computeLayout(name){
     L.ext=r2+66+70;
     L.guides=[{r:130,c:"#ff7a1a",label:"SKILLS",lc:"#ff9a3c",ly:-114}];
   }else if(name==="hex"){
-    var S0=skills.length,M=0;rooms.forEach(function(R){M+=R.count});
+    // the cells sit wider apart than in the other layouts, so folder and room names fit between them
+    var hs=sp*2.4,S0=skills.length,M=0;rooms.forEach(function(R){M+=R.count});
     var cells=hexSpiral(1+S0+M+40);
     var skillCells=cells.slice(1,1+S0),memCells=cells.slice(1+S0,1+S0+M);
-    skillCells.forEach(function(c,i){var p=hexCell(c[0],c[1],sp);skills[i].bx=p[0];skills[i].by=p[1]});
-    var skillR=0;skills.forEach(function(s){skillR=Math.max(skillR,Math.hypot(s.bx,s.by))});
+    skillCells.forEach(function(c,i){var p=hexCell(c[0],c[1],hs);skills[i].bx=p[0];skills[i].by=p[1]});
     // memory cells follow the skill cells in spiral order, so they sit outside
     // the skills block; sort by angle from the top so each room gets a wedge
     var maxR=0;
-    var mp=memCells.map(function(c){var p=hexCell(c[0],c[1],sp);
+    var mp=memCells.map(function(c){var p=hexCell(c[0],c[1],hs);
       return{x:p[0],y:p[1],a:(Math.atan2(p[1],p[0])+Math.PI/2+TAU)%TAU,r:Math.hypot(p[0],p[1])}});
+    skills.forEach(function(s){maxR=Math.max(maxR,Math.hypot(s.bx,s.by))});
     mp.forEach(function(p){maxR=Math.max(maxR,p.r)});
     mp.sort(function(a,b){return a.a-b.a||a.r-b.r});
     var k=0;
     rooms.forEach(function(R){
       var sx=0,sy=0;
       R.dots.forEach(function(n){var p=mp[k++];n.bx=p.x;n.by=p.y;sx+=p.x;sy+=p.y});
-      var cx=sx/R.dots.length,cy=sy/R.dots.length,cl=Math.hypot(cx,cy)||1;
-      R.hub.bx=cx*(skillR+sp*1.6)/cl;R.hub.by=cy*(skillR+sp*1.6)/cl;
+      R.hub.bx=sx/R.dots.length;R.hub.by=sy/R.dots.length; // the room's name sits on the middle of its own notes
     });
-    var rh=maxR+sp*3;
-    routines.forEach(function(n,i){var p=hexPerimeter(rh,i,routines.length);n.bx=p[0];n.by=p[1]});
-    apps.forEach(function(n,i){var p=hexPerimeter(rh+sp*3,i,apps.length);n.bx=p[0];n.by=p[1]});
-    L.ext=rh+sp*3+70;
+    // the badges hug the cluster: each sits one badge width outside the cells nearest its own bearing (the hex layout does not spin)
+    var badge=2*(apps.length?apps[0].r:9),far=0;
+    function outer(a,w){var o=0;mp.forEach(function(p){var d=Math.abs(p.a-a);if(Math.min(d,TAU-d)<=w&&p.r>o)o=p.r});return o||maxR}
+    if(routines.length){routines.forEach(function(n,i){var p=hexPerimeter(maxR+badge+9,i,routines.length);n.bx=p[0];n.by=p[1]});far=badge+9}
+    apps.forEach(function(n,i){
+      var a=i/apps.length*TAU,rad=outer(a,TAU/apps.length*.75)+badge+9+far;
+      n.bx=rad*Math.sin(a);n.by=-rad*Math.cos(a); // bearing a is measured from the top, clockwise
+      L.far=Math.max(L.far||0,rad);
+    });
+    L.ext=(L.far||maxR)+badge+16;
     L.guides=[];
   }else{ // force
     var spread=1.6-1.2*S.spring;
@@ -330,10 +368,9 @@ function setView(v){
   dirty=true;
 }
 function say(t){$("live").textContent=t}
-function panelW(){return $("panel").hidden||W<760?0:280}
 function fitView(L){
   if(!root)return; // the frame may resize the map before its data has loaded
-  var aw=W-panelW(),ah=Math.max(160,H-INS.bottom),k=Math.min(aw,ah)/(2*(L||computeLayout(S.layout)).ext)*.98;
+  var aw=W,ah=Math.max(160,H-INS.bottom-(W>760?56:0)), /* on a wide screen the hint line takes the bottom strip */k=Math.min(aw,ah)/(2*(L||computeLayout(S.layout)).ext)*.98;
   view.tk=k;view.tx=aw/2;view.ty=ah/2+8;
   if(!S.motion||!view.init){view.k=k;view.x=view.tx;view.y=view.ty;view.init=true}
 }
@@ -362,8 +399,8 @@ function wire(){
   $("names").addEventListener("change",function(){S.names=this.checked;dirty=true});
   $("expand").addEventListener("click",function(){setAll(false)});
   $("collapse").addEventListener("click",function(){setAll(true)});
-  $("menuBtn").addEventListener("click",function(){
-    var p=$("panel");p.hidden=!p.hidden;this.setAttribute("aria-expanded",!p.hidden);if(!view.user)fitView();dirty=true});
+  $("menuBtn").addEventListener("click",function(){setPanel($("panel").hidden,true)});
+  $("panelX").addEventListener("click",function(){setPanel(false,true)});
   $("legendBtn").addEventListener("click",function(){
     S.legend=!S.legend;$("legend").hidden=!S.legend;this.setAttribute("aria-expanded",S.legend)});
   // the menu starts closed unless the map has room beside it (the Menu button or / or ⌘K opens it)
@@ -375,8 +412,8 @@ function wire(){
   document.addEventListener("keydown",function(e){
     var t=e.composedPath?e.composedPath()[0]:e.target; // the real target, also inside the shadow root
     var typing=/^(input|textarea|select)$/i.test(t.tagName||"")||t.isContentEditable;
-    if((e.key==="/"&&!typing)||((e.metaKey||e.ctrlKey)&&(e.key||"").toLowerCase()==="k")){e.preventDefault();setPanel(true);$("q").focus();$("q").select()}
-    else if(e.key==="Escape"){$("q").value="";S.q="";S.sel=null;hideCard();applyFocus();dirty=true}
+    if((e.key==="/"&&!typing)||((e.metaKey||e.ctrlKey)&&(e.key||"").toLowerCase()==="k")){e.preventDefault();setPanel(true,true);$("q").focus();$("q").select()}
+    else if(e.key==="Escape"){var was=!$("panel").hidden;$("q").value="";S.q="";S.sel=null;hideCard();applyFocus();dirty=true;if(was)setPanel(false,true)}
     else if(e.key==="m"&&!typing&&!e.metaKey&&!e.ctrlKey&&!e.altKey)setMotion(!S.motion,true);
   });
   cv.addEventListener("pointermove",onMove);
@@ -500,7 +537,24 @@ function nodeCard(n){
   return c;
 }
 /* ---------- chat bar: a scripted guided tour (tour.js), no model calls ---------- */
-function setPanel(on){$("panel").hidden=!on;$("menuBtn").setAttribute("aria-expanded",on);if(!view.user)fitView();dirty=true}
+/* The controls float over the map and never resize it. On a phone they are a sheet over its lower part, so the page card steps aside while they are open. */
+var panelFold=false;
+function setPanel(on,user){
+  $("panel").hidden=!on;$("menuBtn").setAttribute("aria-expanded",on);
+  if(user&&window.innerWidth<=760){
+    var folded=panelFold;
+    if(opts.overlayShown){
+      if(on&&!panelFold){panelFold=true;opts.overlayShown(false)}
+      else if(!on&&panelFold){panelFold=false;opts.overlayShown(true)}
+    }
+    if(on)INS.bottom=$("panel").offsetHeight; // the map centres above the sheet
+    else if(!folded)INS.bottom=0;
+    if(!view.user)fitView();
+  }
+  if(user&&on)$("panelX").focus({preventScroll:true});
+  else if(user){var o=document.getElementById("tbDrop")||$("menuBtn");if(o.offsetParent!==null)o.focus()} // focus goes back to what opened it
+  dirty=true;
+}
 function setLegend(on){S.legend=on;$("legend").hidden=!on;$("legendBtn").setAttribute("aria-expanded",on)}
 function mountTour(){
   if(!window.AIOTour)return;
@@ -665,12 +719,12 @@ function buildLegend(){
   var L=$("legend");L.textContent="";
   L.appendChild(el("h3",null,"Rooms"));
   rooms.forEach(function(r){
-    var d=el("div"),i=el("i");i.style.background=r.color;i.style.boxShadow="0 0 6px "+r.color;
+    var d=el("div"),i=el("i");i.style.background=C(r.color);if(!PAL.light)i.style.boxShadow="0 0 6px "+r.color;
     d.appendChild(i);d.appendChild(el("span",null,r.label+" · "+r.count));L.appendChild(d);
   });
   L.appendChild(el("h3",null,"Shapes"));
   [["","#ff7a1a","Centre rules file"],["dia","#ff9a3c","Skill (links to the skill map)"],["","#b57bff","Dot: a note, part, setup or post"],["","#5a6270","Course lesson: grey until you finish it"],["hex","#2ee6c5","Public project (click for its link)"],["hex","#ffd93d","Page of this site (click to read it)"]].forEach(function(s){
-    var d=el("div"),i=el("i",s[0]);i.style.background=s[1];i.style.borderColor=s[1];d.appendChild(i);d.appendChild(el("span",null,s[2]));L.appendChild(d);
+    var d=el("div"),i=el("i",s[0]);i.style.background=C(s[1]);i.style.borderColor=C(s[1]);d.appendChild(i);d.appendChild(el("span",null,s[2]));L.appendChild(d);
   });
 }
 
@@ -683,11 +737,11 @@ function sprite(color){
   g.fillStyle=gr;g.fillRect(0,0,64,64);return sprites[color]=c;
 }
 function shade(hex,f,fi){ // folders view: vary lightness per folder
-  var n=parseInt(hex.slice(1),16),r=n>>16,g=n>>8&255,b=n&255,m=[.75,1,1.2,.9,1.35][fi%5];
+  var n=parseInt(hex.slice(1),16),r=n>>16,g=n>>8&255,b=n&255,m=(PAL.light?[1,.82,.68,.9,.76]:[.75,1,1.2,.9,1.35])[fi%5]; // on paper the shades only go darker
   function c(v){return Math.max(0,Math.min(255,Math.round(v*m)))}
   return"#"+((1<<24)+(c(r)<<16)+(c(g)<<8)+c(b)).toString(16).slice(1);
 }
-function dotColor(n){return S.view==="folders"?shade(n.color,0,n.folder):n.color}
+function dotColor(n){return S.view==="folders"?shade(C(n.color),0,n.folder):C(n.color)}
 
 var last=0;
 function frame(t){
@@ -716,7 +770,7 @@ function g3Fail(){
 }
 function g3Build(){
   var box=$("g3d"),sz=g3Size();
-  g3=window.ForceGraph3D()(box).width(sz[0]).height(sz[1]).backgroundColor("#05060a").showNavInfo(false)
+  g3=window.ForceGraph3D()(box).width(sz[0]).height(sz[1]).backgroundColor(PAL.bg).showNavInfo(false)
     .graphData(g3Data()).nodeLabel(function(n){return n.kind+" · "+n.name}).nodeColor("color").nodeVal("val").nodeRelSize(4).nodeOpacity(.9)
     .linkColor(function(){return "rgba(120,130,150,.35)"}).linkWidth(.4)
     .onNodeClick(function(n){var m=nodes[n.id];if(m)openNode(m)});
@@ -744,8 +798,8 @@ function showDim(on,quiet){
 
 function step(dt){
   var moving=false,motion=S.motion;
-  if(motion&&S.layout!=="force")S.angle+=S.spin*dt*2;
-  var rot=S.layout==="force"?0:S.angle,L=computeLayout(S.layout);
+  if(motion&&S.layout!=="force"&&S.layout!=="hex")S.angle+=S.spin*dt*2;
+  var rot=S.layout==="force"||S.layout==="hex"?0:S.angle,L=computeLayout(S.layout);
   var ga=S.layout==="rings"?1:0;guideA+=(ga-guideA)*(motion?Math.min(1,dt*4):1);
   if(Math.abs(ga-guideA)>.01)moving=true;
   if(motion){
@@ -777,37 +831,39 @@ function draw(t){
   var k=view.k,tm=t/1000;
   ctx.setTransform(DPR,0,0,DPR,0,0);
   ctx.globalCompositeOperation="source-over";ctx.globalAlpha=1;
-  ctx.fillStyle="#05060a";ctx.fillRect(0,0,W,H);
-  var g=ctx.createRadialGradient(view.x,view.y,0,view.x,view.y,Math.max(W,H)*.7*Math.max(.5,k*1.2));
-  g.addColorStop(0,"rgba(60,30,90,.28)");g.addColorStop(.5,"rgba(20,14,40,.12)");g.addColorStop(1,"rgba(5,6,10,0)");
-  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  ctx.fillStyle=PAL.bg;ctx.fillRect(0,0,W,H);
+  if(!PAL.light){
+    var g=ctx.createRadialGradient(view.x,view.y,0,view.x,view.y,Math.max(W,H)*.7*Math.max(.5,k*1.2));
+    g.addColorStop(0,"rgba(60,30,90,.28)");g.addColorStop(.5,"rgba(20,14,40,.12)");g.addColorStop(1,"rgba(5,6,10,0)");
+    ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  }
   ctx.setTransform(DPR*k,0,0,DPR*k,DPR*view.x,DPR*view.y);
-  var dimA=flagMode?.1:1;
+  var dimA=flagMode?(PAL.light?.3:.1):1;
 
   // guides (rings layout)
   var L=computeLayout(S.layout);
   if(guideA>.02){
     ctx.lineWidth=1.2/k;
     L.guides.forEach(function(gd){
-      ctx.globalAlpha=guideA*(flagMode?.35:.7);ctx.strokeStyle=gd.c;
+      ctx.globalAlpha=guideA*(flagMode?.35:.7);ctx.strokeStyle=C(gd.c);
       ctx.beginPath();ctx.arc(0,0,gd.r,0,TAU);ctx.stroke();
     });
   }
 
   // links
   ctx.lineCap="round";
-  var baseA=flagMode?.05:.2;
+  var baseA=(flagMode?.05:.2)*(PAL.light?2:1); // thin lines need more weight on paper than on a dark ground
   ctx.lineWidth=1/k;
   hubs.forEach(function(h){
-    ctx.globalAlpha=baseA*h.vis;ctx.strokeStyle=h.color;
+    ctx.globalAlpha=baseA*h.vis;ctx.strokeStyle=C(h.color);
     ctx.beginPath();ctx.moveTo(root.x,root.y);ctx.lineTo(h.x,h.y);ctx.stroke();
   });
-  ctx.strokeStyle="#ff7a1a";ctx.globalAlpha=baseA*.5;ctx.beginPath();
+  ctx.strokeStyle=C("#ff7a1a");ctx.globalAlpha=baseA*.5;ctx.beginPath();
   skills.forEach(function(s){ctx.moveTo(root.x,root.y);ctx.lineTo(s.x,s.y)});ctx.stroke();
   if(S.layout==="force"&&!flagMode){
     ctx.globalAlpha=.05+.1*S.spring;
     rooms.forEach(function(R){
-      if(R.collapsed)return;ctx.strokeStyle=R.color;ctx.beginPath();
+      if(R.collapsed)return;ctx.strokeStyle=C(R.color);ctx.beginPath();
       for(var i=0;i<R.dots.length;i++){var d=R.dots[i];ctx.moveTo(R.hub.x,R.hub.y);ctx.lineTo(d.x,d.y)}
       ctx.stroke();
     });
@@ -817,13 +873,13 @@ function draw(t){
     ctx.lineWidth=1.2/k;
     focusLinks.forEach(function(p){
       ctx.globalAlpha=(p[1].type==="dot"||p[0].type==="dot"?.35:.7)*(.4+.6*S.spring)*Math.min(p[0].vis,p[1].vis);
-      ctx.strokeStyle=p[0].type==="dot"?p[0].color:(p[1].type==="dot"?p[1].color:p[0].color);
+      ctx.strokeStyle=C(p[0].type==="dot"?p[0].color:(p[1].type==="dot"?p[1].color:p[0].color));
       ctx.beginPath();ctx.moveTo(p[0].x,p[0].y);ctx.lineTo(p[1].x,p[1].y);ctx.stroke();
     });
   }
 
-  // dots: additive glow sprites
-  ctx.globalCompositeOperation="lighter";
+  // dots: additive glow sprites on the dark map, flat discs on Calm paper
+  ctx.globalCompositeOperation=PAL.light?"source-over":"lighter";
   var drift=S.motion&&S.layout==="force"?1:0;
   for(var i=0;i<nodes.length;i++){
     var n=nodes[i];if(n.type!=="dot"||n.vis<.02)continue;
@@ -831,58 +887,64 @@ function draw(t){
     var x=n.x,y=n.y;
     if(drift){x+=Math.cos(tm*.6+n.jit)*2.2;y+=Math.sin(tm*.5+n.jit*1.3)*2.2}
     var sz=n.r*(flagMode&&flags[i]?3.4:3),col=dotColor(n);
-    if(n.info.lesson){if(lit[n.info.lesson])sz*=1.4;else{col="#5a6270";a*=.6}}
-    ctx.globalAlpha=a;ctx.drawImage(sprite(col),x-sz,y-sz,sz*2,sz*2);
+    if(n.info.lesson){if(lit[n.info.lesson])sz*=1.4;else{col=C("#5a6270");a*=.6}}
+    ctx.globalAlpha=a;
+    if(PAL.light){ctx.fillStyle=col;ctx.beginPath();ctx.arc(x,y,sz/3,0,TAU);ctx.fill()}
+    else ctx.drawImage(sprite(col),x-sz,y-sz,sz*2,sz*2);
   }
   ctx.globalCompositeOperation="source-over";
 
   // hubs
   hubs.forEach(function(h){
     var a=flagMode?(flags[h.i]?1:dimA+.1):1,R=rooms[h.room],hr=h.r*(R.collapsed?1.5:1);
-    ctx.globalCompositeOperation="lighter";ctx.globalAlpha=a*.9;
-    ctx.drawImage(sprite(h.color),h.x-hr*3.2,h.y-hr*3.2,hr*6.4,hr*6.4);
-    ctx.globalCompositeOperation="source-over";
-    ctx.globalAlpha=a;ctx.fillStyle="#05060a";ctx.strokeStyle=h.color;ctx.lineWidth=1.6/k;
+    if(!PAL.light){
+      ctx.globalCompositeOperation="lighter";ctx.globalAlpha=a*.9;
+      ctx.drawImage(sprite(h.color),h.x-hr*3.2,h.y-hr*3.2,hr*6.4,hr*6.4);
+      ctx.globalCompositeOperation="source-over";
+    }
+    ctx.globalAlpha=a;ctx.fillStyle=PAL.light?PAL.fill:"#05060a";ctx.strokeStyle=C(h.color);ctx.lineWidth=1.6/k;
     ctx.beginPath();ctx.arc(h.x,h.y,hr*.55,0,TAU);ctx.fill();ctx.stroke();
   });
 
   // skills (diamonds)
   skills.forEach(function(s){
     var a=flagMode?(flags[s.i]?1:dimA+.1):1;ctx.globalAlpha=a;
-    ctx.fillStyle="#2a1608";ctx.strokeStyle=s.color;ctx.lineWidth=1.4/k;
+    ctx.fillStyle=PAL.tint;ctx.strokeStyle=C(s.color);ctx.lineWidth=1.4/k;
     ctx.beginPath();ctx.moveTo(s.x,s.y-s.r*1.3);ctx.lineTo(s.x+s.r,s.y);ctx.lineTo(s.x,s.y+s.r*1.3);ctx.lineTo(s.x-s.r,s.y);ctx.closePath();ctx.fill();ctx.stroke();
   });
   // routines (circles)
   routines.forEach(function(r){
     var a=flagMode?(flags[r.i]?1:dimA+.1):1;ctx.globalAlpha=a;
-    ctx.lineWidth=1.6/k;ctx.strokeStyle=r.color;
+    ctx.lineWidth=1.6/k;ctx.strokeStyle=C(r.color);
     if(r.on){
-      ctx.globalCompositeOperation="lighter";ctx.globalAlpha=a*.7;ctx.drawImage(sprite("#ffb347"),r.x-r.r*2.2,r.y-r.r*2.2,r.r*4.4,r.r*4.4);
+      if(!PAL.light){ctx.globalCompositeOperation="lighter";ctx.globalAlpha=a*.7;ctx.drawImage(sprite("#ffb347"),r.x-r.r*2.2,r.y-r.r*2.2,r.r*4.4,r.r*4.4)}
       ctx.globalCompositeOperation="source-over";ctx.globalAlpha=a;ctx.setLineDash([]);
     }else ctx.setLineDash([2/k*2,2/k*2]);
-    ctx.fillStyle="#0c0e11";ctx.beginPath();ctx.arc(r.x,r.y,r.r,0,TAU);ctx.fill();ctx.stroke();ctx.setLineDash([]);
+    ctx.fillStyle=PAL.fill;ctx.beginPath();ctx.arc(r.x,r.y,r.r,0,TAU);ctx.fill();ctx.stroke();ctx.setLineDash([]);
   });
   // apps (hexagons)
   apps.forEach(function(p){
     var a=flagMode?(flags[p.i]?1:dimA+.1):1;ctx.globalAlpha=a;
-    ctx.fillStyle="#0a1220";ctx.strokeStyle=p.color;ctx.lineWidth=1.5/k;
+    ctx.fillStyle=PAL.light?PAL.fill:"#0a1220";ctx.strokeStyle=C(p.color);ctx.lineWidth=1.5/k;
     ctx.beginPath();
     for(var v=0;v<6;v++){var an=Math.PI/6+v*Math.PI/3,px=p.x+p.r*Math.cos(an),py=p.y+p.r*Math.sin(an);v?ctx.lineTo(px,py):ctx.moveTo(px,py)}
     ctx.closePath();ctx.fill();ctx.stroke();
-    ctx.fillStyle=p.color;ctx.font="bold "+(p.r*.95)+"px ui-monospace,monospace";ctx.textAlign="center";ctx.textBaseline="middle";
+    ctx.fillStyle=T(p.color);ctx.font="bold "+(p.r*.95)+"px ui-monospace,monospace";ctx.textAlign="center";ctx.textBaseline="middle";
     ctx.fillText((p.label[0]||"?").toUpperCase(),p.x,p.y+.5);
   });
   // the page the reader is on: one ring round its node
-  if(S.sel&&S.here){ctx.globalAlpha=1;ctx.strokeStyle=S.sel.color;ctx.lineWidth=2/k;ctx.beginPath();ctx.arc(S.sel.x,S.sel.y,Math.max(S.sel.r*1.9,7/k),0,TAU);ctx.stroke()}
+  if(S.sel&&S.here){ctx.globalAlpha=1;ctx.strokeStyle=C(S.sel.color);ctx.lineWidth=2/k;ctx.beginPath();ctx.arc(S.sel.x,S.sel.y,Math.max(S.sel.r*1.9,7/k),0,TAU);ctx.stroke()}
   // root
   (function(){
     var a=flagMode&&!flags[root.i]?.25:1; // dimmed like any node that is not lit
-    ctx.globalCompositeOperation="lighter";ctx.globalAlpha=.9*a;
-    ctx.drawImage(sprite("#ff7a1a"),root.x-root.r*3,root.y-root.r*3,root.r*6,root.r*6);
+    if(!PAL.light){
+      ctx.globalCompositeOperation="lighter";ctx.globalAlpha=.9*a;
+      ctx.drawImage(sprite("#ff7a1a"),root.x-root.r*3,root.y-root.r*3,root.r*6,root.r*6);
+    }
     ctx.globalCompositeOperation="source-over";ctx.globalAlpha=a;
-    ctx.fillStyle="#150b04";ctx.strokeStyle="#ff7a1a";ctx.lineWidth=2/k;
+    ctx.fillStyle=PAL.light?PAL.tint:"#150b04";ctx.strokeStyle=C("#ff7a1a");ctx.lineWidth=2/k;
     ctx.beginPath();ctx.arc(root.x,root.y,root.r*.7,0,TAU);ctx.fill();ctx.stroke();
-    ctx.fillStyle="#ff7a1a";ctx.fillRect(root.x-3,root.y-3,6,6);
+    ctx.fillStyle=C("#ff7a1a");ctx.fillRect(root.x-3,root.y-3,6,6);
   })();
 
   // text in screen space
@@ -894,26 +956,30 @@ function draw(t){
     ctx.font=size+"px ui-monospace,monospace";
     var w=ctx.measureText(txt).width;
     x=Math.max(w/2+6,Math.min(W-w/2-6,x));
-    if(soft){for(var p=0;p<placed.length;p++){var o=placed[p];if(x-w/2<o[2]&&x+w/2>o[0]&&y-size<o[3]&&y>o[1])return}}
+    if(soft){ // it steps up or down a line to find a free place, and is left out when there is none
+      var hit=function(yy){for(var p=0;p<placed.length;p++){var o=placed[p];if(x-w/2<o[2]&&x+w/2>o[0]&&yy-size<o[3]&&yy>o[1])return true}return false};
+      if(hit(y)){var alt=[y+size+4,y-size-4,y+2*(size+4),y-2*(size+4)],q=0;while(q<alt.length&&hit(alt[q]))q++;if(q===alt.length)return;y=alt[q]}
+    }
     placed.push([x-w/2-4,y-size-2,x+w/2+4,y+2]);
-    ctx.globalAlpha=al;ctx.fillStyle=color;ctx.fillText(txt,x,y);
+    ctx.globalAlpha=PAL.light?1:al; // Calm text is always full strength, so it keeps its contrast; only the shapes dim
+    ctx.fillStyle=color;ctx.fillText(txt,x,y);
   }
-  label(root.label,root.x,root.y,"#e9e6e0",11,root.r*k+16,flagMode&&!flags[root.i]?.25:1);
+  label(root.label,root.x,root.y,PAL.ink,11,root.r*k+16,flagMode&&!flags[root.i]?.25:1);
   hubs.forEach(function(h){
     var R=rooms[h.room];
-    label(R.label.toUpperCase()+(R.collapsed?" · "+R.count:""),h.x,h.y,h.color,10,-h.r*k-8,flagMode?(flags[h.i]?1:.3):.95);
+    label(R.label.toUpperCase()+(R.collapsed?" · "+R.count:""),h.x,h.y,T(h.color),10,-h.r*k-8,flagMode?(flags[h.i]?1:.3):.95,true);
   });
   // on a narrow stage the ring names show only while a node is hovered or picked
-  if(guideA>.05&&(W>=520||S.hover||S.sel))L.guides.forEach(function(gd){label(gd.label,0,gd.ly,gd.lc,12,0,guideA*(flagMode?.4:.9),true)});
-  if(S.hover&&S.hover.type!=="dot"&&S.hover.type!=="hub"&&S.hover.type!=="root")label(S.hover.label,S.hover.x,S.hover.y,"#e9e6e0",11,-S.hover.r*k-8,1);
-  else if(S.sel&&S.sel!==S.hover&&S.sel.type!=="dot"&&S.sel.type!=="hub"&&S.sel.type!=="root")label(S.sel.label+(S.here?" · you are here":""),S.sel.x,S.sel.y,"#e9e6e0",11,-S.sel.r*k-8,1);
+  if(guideA>.05&&(W>=520||S.hover||S.sel))L.guides.forEach(function(gd){label(gd.label,0,gd.ly,T(gd.lc),12,0,guideA*(flagMode?.4:.9),true)});
+  if(S.hover&&S.hover.type!=="dot"&&S.hover.type!=="hub"&&S.hover.type!=="root")label(S.hover.label,S.hover.x,S.hover.y,PAL.ink,11,-S.hover.r*k-8,1);
+  else if(S.sel&&S.sel!==S.hover&&S.sel.type!=="dot"&&S.sel.type!=="hub"&&S.sel.type!=="root")label(S.sel.label+(S.here?" · you are here":""),S.sel.x,S.sel.y,PAL.ink,11,-S.sel.r*k-8,1);
   if(S.names||(S.q&&matchCount>0&&matchCount<=40)){
     var cnt=0;
     for(var i2=0;i2<nodes.length&&cnt<260;i2++){
       var d=nodes[i2];if(d.type!=="dot"||!d.name||d.vis<.5)continue;
       if(S.q&&!flags[i2])continue;
       if(k<.45&&!S.q)continue;
-      label(d.name,d.x,d.y,"#cfc9bd",9,-6,flagMode&&!flags[i2]?.2:.8);cnt++;
+      label(d.name,d.x,d.y,PAL.mute,9,-6,flagMode&&!flags[i2]?.2:.8);cnt++;
     }
   }
   if(S.view==="folders"){
@@ -922,7 +988,7 @@ function draw(t){
       var idx=0;R.folders.forEach(function(f,fi){
         var sx=0,sy=0,c=0;
         for(var j=idx;j<idx+f.count;j++){sx+=R.dots[j].x;sy+=R.dots[j].y;c++}
-        idx+=f.count;if(c)label(f.name,sx/c,sy/c,shade(R.color,0,fi),9,3,.9);
+        idx+=f.count;if(c)label(f.name,sx/c,sy/c,PAL.light?T(R.color):shade(R.color,0,fi),9,3,.9,true);
       });
     });
   }

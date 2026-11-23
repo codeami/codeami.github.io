@@ -12,9 +12,11 @@
   function next() { return SKINS[(SKINS.indexOf(current()) + 1) % SKINS.length]; }
   function label() {
     var n = next();
+    // the button names the skin that is on; a press moves to the next one
     [].forEach.call(document.querySelectorAll("#theme, button.theme"), function (b) {
-      b.textContent = NAMES[n];
-      b.setAttribute("aria-label", "Switch to the " + NAMES[n] + " colours");
+      b.textContent = NAMES[current()];
+      b.title = "Switch to the " + NAMES[n] + " colours";
+      b.setAttribute("aria-label", "Colours: " + NAMES[current()] + ". Switch to the " + NAMES[n] + " colours");
     });
   }
   function set(s, keep) {

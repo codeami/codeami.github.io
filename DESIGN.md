@@ -1,7 +1,7 @@
 ---
 version: alpha
 name: Software Meta-Factory Chart & Cards
-description: The design system for every front end of the Software Meta-Factory. Three skins and one saved choice. "Chart & Cards" puts a live graph under everything and slides content over it as cards, in two colour variants, HUD (warm orange, the default) and Matrix (green). "Calm" is a quiet light skin for reading; the graph under it keeps its dark panel so its controls stay readable. The reader picks a skin once and every page follows.
+description: The design system for every front end of the Software Meta-Factory. Three skins and one saved choice. "Chart & Cards" puts a live graph under everything and slides content over it as cards, in two colour variants, HUD (warm orange, the default) and Matrix (green). "Calm" is a quiet light skin that covers every surface, the graph and its controls included: a light map on paper, never a dark panel inside a light page. The reader picks a skin once and every page follows.
 colors:
   primary: "#e9e6e0"
   secondary: "#8f8b84"
@@ -253,6 +253,27 @@ components:
 
 # Software Meta-Factory Chart & Cards
 
+## Design principles
+
+Five rules every new screen and every change must keep. Each is checked in the
+Agent Contract before anything is handed back.
+
+1. **One skin applies to every surface.** HUD, Matrix or Calm is set once on
+   `<html>`. The top bar, cards, panels, the map canvas, its labels, legend and
+   buttons all follow it. A surface that cannot follow the skin does not ship;
+   there is no dark panel inside a light page, and no light one inside a dark page.
+2. **Overlays float over the map, never resize it.** The map keeps the whole
+   viewport and centres on it. The page card, the controls panel and the lists
+   lay over it. Each can be closed (a ✕ button, and Esc), and on a phone the
+   panel is a sheet over the lower map.
+3. **One spacing scale.** Steps are 3, 6, 12, 16 and 24px, and a 16px gutter. No
+   other gap, padding or margin.
+4. **Text meets WCAG AA.** 4.5:1 for text, 3:1 for shapes and lines, in all three
+   skins, on every surface, dimmed states included. Colour never carries status alone.
+5. **Every control is reachable by keyboard.** Tab reaches it, a 1px accent
+   outline with a 2px offset shows where focus is, Esc closes what opened, and
+   focus returns to what opened it. On a phone every hit area is at least 44px.
+
 ## Overview
 
 One design system, three skins, one saved choice.
@@ -272,8 +293,11 @@ never playful. It has two colour variants that share every other token:
 - **Matrix**: the `matrix-*` set, phosphor green #00ff41 on black-green.
 
 **Calm** is the reading skin: warm off-white paper, Georgia headings, small-caps
-labels, 8px corners. It has no base-layer graph. Cards sit in one centred column,
-and a graph appears only as a framed figure when the content needs one.
+labels, 8px corners. It covers every surface, the map as well: the same live
+graph is the base layer, drawn light (paper ground, flat dots, no glow), with its
+panels, legend, buttons and labels in the Calm palette. Reading pages sit in one
+centred column, and a graph also appears as a framed figure when the content
+needs one.
 
 The skin is set on `<html>`: `data-skin="hud"`, `"matrix"` or `"calm"`. One file,
 `ai-life-os/skin.js`, owns it. Every page loads that file first in the head, so the
@@ -347,10 +371,13 @@ only inside graphs and charts. Matrix and Calm remap them to their own palettes
 
 - **Base layer:** the graph is `position:fixed; inset:0` behind everything.
 - **Cards:** one scrolling column of cards, max `card-max` (46rem), on the left
-  on wide screens. The graph's centre shifts right, so at least half of it stays
-  uncovered.
-- **Right panel (900px and up):** node cards, details and chat open in a
-  `panel-w` (340px) panel pinned to the right edge.
+  on wide screens. Cards float over the graph; its centre stays the centre of
+  the viewport.
+- **Right panel (900px and up):** node cards, details, chat and the map's
+  controls open in a `panel-w` (340px) panel pinned to the right edge. It floats
+  over the map and takes no width from it. When the page card is open the
+  controls panel sits beside it, still over the map. It has a ✕ button, and Esc
+  closes it and returns focus to what opened it.
 - **Bottom sheet (under 900px):** the same content opens as a sheet from the
   bottom, at most `sheet-max` (70vh), with a drag handle. The graph stays
   visible above it.
@@ -360,9 +387,13 @@ only inside graphs and charts. Matrix and Calm remap them to their own palettes
 
 ### Layout: Calm
 
-One centred reading column, max 46rem, on plain paper. No base-layer graph.
+One centred reading column, max 46rem, on plain paper. Calm applies to all the
+UI, the map included: the base-layer graph is light (`calm-neutral` ground,
+flat dots in the `calm` graph tones, labels darkened to 4.5:1), and the left
+list, controls panel, legend, node cards and buttons use the Calm tokens. This
+replaces the earlier rule that kept a dark graph panel under Calm.
 Detail panels still use the right panel or bottom sheet. Graphs and ladders
-appear inline: a graph in a framed figure, a course ladder as a stepper.
+also appear inline: a graph in a framed figure, a course ladder as a stepper.
 
 A **panel post** and the blog index are wider: the page is at most `page-max`
 (74rem). Under 760px every grid is one column. From 760px the panel grid and the
@@ -426,6 +457,8 @@ stays).
 - **Side panel:** graph controls: layout, spin, node size, labels, motion, legend.
   On a framed page they sit behind one dropdown under the site name (Look, Map,
   Layout, View, Help; a full-width sheet on a phone), not as floating buttons.
+  "All settings" opens the controls panel (search, layout, view, motion) over the
+  map: a ✕ button and Esc close it, and on a phone it is a bottom sheet.
   The left list pane has tabs (Read, Pages, FirstMate). No heading glow.
 - **Node card:** glyph of its kind, name in bold, kind and status, then tabs:
   Overview, Links (`comes from`, `leads to`, each a button that jumps to that
@@ -480,10 +513,14 @@ stays).
 
 ## Graphs and Charts
 
-- **Graph views:** rings (the default: root at the centre, skills on the inner
-  ring, rooms in sectors, routines and apps on the outer rings), force, circle,
-  hex and 3D. All use the same node kinds, colours, labels, hover label and
-  click-to-card.
+- **Graph views:** hex (the default, with the Folders view: a honeycomb of
+  cells, each room's notes in their own wedge with the room's name on the middle
+  of them, folder names between the cells, and the page and project badges one
+  badge width outside the outermost cell; it does not spin), rings (root at the
+  centre, skills on the inner ring, rooms in sectors, routines and apps on the
+  outer rings), force, circle and 3D. The Departments view colours by room only.
+  All use the same node kinds, colours, labels, hover label and click-to-card.
+  In Calm every view is drawn light.
 - **Chart marks:** the rings view draws 32 faint rhumb lines from the root and
   a degree ring on the outer edge (a tick every 10°, labelled 000, 090, 180,
   270), taken from the portolan charts and the astrolabe in References. They
@@ -512,7 +549,9 @@ stays).
 - Do show every state of a control the same way on every page.
 - Don't add a colour that is not a token here.
 - Don't round corners, add shadows or add gradients in Chart & Cards.
-- Don't put a base-layer graph behind Calm.
+- Don't leave any surface, the map and its controls included, in one skin while
+  the page is in another.
+- Don't let a panel or card take width from the map.
 - Don't spread uppercase spaced labels beyond widget headings.
 - Don't use middle-dot meta strings or arrow suffixes as decoration.
 - Don't load web fonts or icon fonts. The only external script allowed is the
@@ -591,5 +630,6 @@ The look is not yours to decide. It lives in this file and in `ai-life-os/hud.cs
 4. Never edit this file or `hud.css` unless the owner asks to change the look.
 5. Write every label, toast and error in the voice above, and check the copy
    against the never-list.
-6. Before handing back: check 375px and 1200px widths, all three palettes, and
-   grep for colours not listed above.
+6. Before handing back: check 375px and 1200px widths, all three palettes, the
+   five Design principles at the top of this file, and grep for colours not
+   listed above.

@@ -12,15 +12,15 @@ canvas.drag{cursor:grabbing}canvas.hit{cursor:pointer}
 .title span{letter-spacing:.3em;color:var(--mute);font-size:13px;margin-left:10px}
 .title small{display:block;margin-top:4px;font-size:10px;letter-spacing:.14em;color:var(--mute);text-transform:uppercase}
 .top{position:fixed;right:16px;top:var(--tt,14px);display:flex;gap:8px;z-index:3}
-.btn{background:rgba(12,14,17,.85);color:var(--ink);border:1px solid var(--line);font:inherit;font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:6px 12px;cursor:pointer;text-decoration:none;display:inline-block}
-.btn:hover,.btn:focus-visible{border-color:var(--accent);color:var(--accent);outline:none}
+.btn{background:var(--glass);color:var(--ink);border:1px solid var(--line);font:inherit;font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:6px 12px;cursor:pointer;text-decoration:none;display:inline-block}
+.btn:hover,.btn:focus-visible{border-color:var(--accent);color:var(--accent)}
 .btn[aria-pressed=true],.btn.on{border-color:var(--accent);color:var(--accent)}
-#panel{position:fixed;right:16px;top:56px;width:250px;max-height:calc(100% - 76px);overflow:auto;background:rgba(12,14,17,.9);border:1px solid var(--line);padding:12px;z-index:2}
+#panel{position:fixed;right:16px;top:56px;width:250px;max-height:calc(100% - 76px);overflow:auto;background:var(--glass);border:1px solid var(--line);padding:12px;z-index:2;overscroll-behavior:contain}
 #panel[hidden]{display:none}
 #panel h3{margin:12px 0 6px;font-size:10px;font-weight:400;letter-spacing:.3em;text-transform:uppercase;color:var(--mute)}
 #panel h3:first-child{margin-top:0}
-#panel input[type=search]{width:100%;background:#07080a;color:var(--ink);border:1px solid var(--line);font:inherit;padding:6px 8px}
-#panel input[type=search]:focus{border-color:var(--accent);outline:none}
+#panel input[type=search]{width:100%;background:var(--bg);color:var(--ink);border:1px solid var(--line);font:inherit;padding:6px 8px}
+#panel input[type=search]:focus-visible{border-color:var(--accent);outline:1px solid var(--accent);outline-offset:2px}
 .seg{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}.seg.two{grid-template-columns:1fr 1fr}
 .seg .btn{padding:5px 2px;text-align:center;letter-spacing:.04em;text-transform:none}
 .row{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:8px 0 2px;color:var(--mute);font-size:11px}
@@ -29,7 +29,7 @@ input[type=range]{width:100%;accent-color:var(--accent);margin:0}
 label.ck{display:flex;gap:8px;align-items:center;margin:8px 0;color:var(--ink);font-size:11px}
 .pair{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:10px}
 #hits{margin-top:4px;color:var(--mute);font-size:11px;min-height:16px}
-#card{position:fixed;z-index:4;max-width:260px;background:rgba(12,14,17,.96);border:1px solid var(--line);padding:8px 10px;pointer-events:none;display:none}
+#card{position:fixed;z-index:4;max-width:260px;background:var(--panel);border:1px solid var(--line);padding:8px 10px;pointer-events:none;display:none}
 #card.pin{pointer-events:auto}
 #card b{display:block;word-break:break-word}
 #card .k{color:var(--mute);font-size:11px}
@@ -37,7 +37,7 @@ label.ck{display:flex;gap:8px;align-items:center;margin:8px 0;color:var(--ink);f
 #card .s{margin-top:4px;font-size:11px}
 #card .ok{color:var(--ok)}#card .warn{color:var(--warn)}
 #legendBtn{position:fixed;left:16px;bottom:calc(var(--ob,0px) + 16px);z-index:3}
-#legend{position:fixed;left:16px;bottom:calc(var(--ob,0px) + 56px);width:230px;background:rgba(12,14,17,.92);border:1px solid var(--line);padding:12px;z-index:3}
+#legend{position:fixed;left:16px;bottom:calc(var(--ob,0px) + 56px);width:230px;background:var(--glass);border:1px solid var(--line);padding:12px;z-index:3}
 #legend[hidden]{display:none}
 #legend h3{margin:10px 0 6px;font-size:10px;font-weight:400;letter-spacing:.3em;text-transform:uppercase;color:var(--mute)}
 #legend h3:first-child{margin-top:0}
@@ -51,11 +51,11 @@ label.ck{display:flex;gap:8px;align-items:center;margin:8px 0;color:var(--ink);f
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 @media (max-width:760px){#panel{width:calc(100% - 32px)}.hint{display:none}.title span{display:none}}
 /* side widgets: columns beside the map when wide, one drawer over it when narrow */
-#stage{left:var(--lw,0px);right:var(--rw,0px)}
+#stage{left:0;right:0} /* the map keeps the whole viewport: the lists and panels float over it */
 .title{left:calc(var(--lw) + 20px)}
-.top,#panel{right:calc(var(--rw) + 16px)}
+.top{right:16px}#panel{right:calc(var(--po,0px) + 16px)} /* --po: the page card, when it is open beside the panel */
 #legendBtn,#legend{left:calc(var(--lw) + 16px)}
-.hint{left:calc(50% + (var(--lw) - var(--rw)) / 2);max-width:calc(100% - var(--lw) - var(--rw) - 32px);overflow:hidden;text-overflow:ellipsis}
+.hint{left:calc(var(--lw) + 16px);transform:none;max-width:calc(100% - var(--lw) - var(--po,0px) - 48px);overflow:hidden;text-overflow:ellipsis}
 #side[hidden]{display:none}
 .side-col{position:fixed;top:0;bottom:0;overflow:auto;background:var(--panel);padding:14px;z-index:3}
 #wl{left:0;width:260px;border-right:1px solid var(--line)}
@@ -96,3 +96,20 @@ label.ck{display:flex;gap:8px;align-items:center;margin:8px 0;color:var(--ink);f
 /* the tabs are wider than the map between the side columns: they span the page, and the columns start under them */
 @media (min-width:900px){:host(:not(.framed)) .top{right:16px}:host(:not(.framed)) .side-col{top:58px}}
 @media (max-width:760px){.top{left:16px;right:16px;flex-wrap:wrap;justify-content:flex-end}.title{top:128px}.vtag{display:none}.nav .btn{padding:5px 8px;letter-spacing:.06em}}
+/* the controls panel: a header with its close button; a sheet over the lower map on a phone */
+.phead{display:flex;justify-content:space-between;align-items:center;margin:0 0 10px}
+.phead b{font-weight:400;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--mute)}
+.phead .btn{padding:4px 10px}
+.btn,.tab,.wd button.lk,#panel label{touch-action:manipulation}
+.btn:focus-visible,.tab:focus-visible,.wd button.lk:focus-visible,#panel input:focus-visible{outline:1px solid var(--accent);outline-offset:2px}
+#side,.side-col{overscroll-behavior:contain}
+@media (max-width:760px){
+  #panel,:host(.framed) #panel{top:auto;left:0;right:0;bottom:0;width:auto;max-height:58vh;max-height:58dvh;border-width:0;border-top:2px solid var(--accent);z-index:7}
+  /* 44px hit areas on a phone (Vercel guidelines) */
+  .btn,.tab{min-height:44px}
+  .seg .btn,.pair .btn,.phead .btn{min-height:44px}
+  #panel label.ck{min-height:44px;margin:0}
+  #panel input[type=checkbox]{width:20px;height:20px}
+  #panel input[type=range]{min-height:44px}
+  .wd li{min-height:44px;align-items:center}
+}

@@ -189,7 +189,7 @@
           item(r, "Motion", function () { G.act("motion"); }, m.motion, true);
           item(r, "Widgets", function () { G.act("widgets"); }, m.widgets, true);
           item(r, "Legend", function () { G.act("legend"); }, m.legend, true);
-          item(r, "All settings", function () { G.act("menu"); }, m.menu, true);
+          item(r, "All settings", function () { G.act("menu"); }, m.menu); // the sheet closes, so the panel it opens is not hidden behind it
           r = section("Layout");
           [["rings", "Rings"], ["force", "Force"], ["circle", "Circle"], ["hex", "Hex"], ["3d", "3D"]].forEach(function (l) { item(r, l[1], function () { G.act(l[0]); }, m.layout === l[0], true); });
         }
