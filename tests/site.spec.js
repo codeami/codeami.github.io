@@ -454,7 +454,8 @@ test('landing: the pipeline clip has no private names, paths or fetches', async 
   const asked = [];
   page.on('request', (r) => asked.push(r.url()));
   await page.goto('/broman-os/pipeline/index.html');
-  await page.waitForSelector('#stages .stage, #stages > *');
+  // The step content sits in the detail drawer, which is closed on a phone until a card is opened; it only has to be built.
+  await page.waitForSelector('#stages .stage', { state: 'attached' });
   const html = readFileSync(join(root, 'broman-os/pipeline/index.html'), 'utf8') + readFileSync(join(root, 'broman-os/pipeline/flow-anim.js'), 'utf8');
   expect(html).not.toMatch(/fm-inbox|operational-inbox|data\/<task>|\/Users\/|\.ts\.net|127\.0\.0\.1|localhost|@[a-z0-9-]+\.[a-z]|lavish/i);
   expect(asked.filter((u) => !u.startsWith(origin)), 'only this site is asked').toEqual([]);
