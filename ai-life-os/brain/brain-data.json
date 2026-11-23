@@ -1653,10 +1653,6 @@
        ],
        "links": [
         {
-         "label": "LinkedIn",
-         "href": "https://www.linkedin.com/in/davidallengtd/"
-        },
-        {
          "label": "Website",
          "href": "https://gettingthingsdone.com"
         }
@@ -1803,10 +1799,6 @@
        ],
        "links": [
         {
-         "label": "LinkedIn",
-         "href": "https://www.linkedin.com/in/bcherny/"
-        },
-        {
          "label": "GitHub",
          "href": "https://github.com/bcherny"
         },
@@ -1945,12 +1937,7 @@
        "body": [
         "Co-founded YC and built the founder community; wrote down how real founders started."
        ],
-       "links": [
-        {
-         "label": "LinkedIn",
-         "href": "https://www.linkedin.com/in/jessicalivingston1/"
-        }
-       ],
+       "links": [],
        "rel": []
       },
       {
@@ -1961,10 +1948,6 @@
         "Startup advice from YC days: growth, focus, and ambition. Now runs OpenAI."
        ],
        "links": [
-        {
-         "label": "LinkedIn",
-         "href": "https://www.linkedin.com/in/sam-altman/"
-        },
         {
          "label": "Website",
          "href": "https://blog.samaltman.com"
@@ -2225,10 +2208,6 @@
         "Positioning: own one word in the customer's mind. Co-wrote the classic book with Jack Trout."
        ],
        "links": [
-        {
-         "label": "LinkedIn",
-         "href": "https://www.linkedin.com/in/alriesofficial/"
-        },
         {
          "label": "Website",
          "href": "https://ries.com"
