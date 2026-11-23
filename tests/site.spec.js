@@ -986,3 +986,12 @@ test('the skin button names the skin that is on', async ({ page }) => {
   await btn.click();
   await expect(btn).toHaveText('HUD');
 });
+
+test('a malformed #hash on the map page does not break the page or the map', async ({ page }) => {
+  const errors = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await page.goto('/broman-os/index.html#%E0%A4%A');
+  await expect(page.locator('.pov-line')).toHaveCount(1);
+  await expect(page.locator('svg').first()).toBeVisible();
+  expect(errors).toEqual([]);
+});
