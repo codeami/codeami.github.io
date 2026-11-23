@@ -900,6 +900,91 @@
    ]
   },
   {
+   "id": "areas",
+   "label": "Areas of interest",
+   "color": "#2ee6c5",
+   "note": "The topics the owner writes about. Each links to the pages of this site that cover it, and to the wiki notes that sit under it.",
+   "links": [],
+   "folders": [
+    {
+     "name": "areas",
+     "count": 5,
+     "files": [
+      {
+       "id": "area-harness",
+       "n": "Agent harnesses",
+       "line": "area",
+       "body": [
+        "A harness is everything around the model: what it reads, what it may do, and who checks it."
+       ],
+       "links": [
+        {
+         "label": "All pages",
+         "href": "../index.html#pages"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "area-icm",
+       "n": "Context engineering (ICM)",
+       "line": "area",
+       "body": [
+        "One rules file, linked into every agent tool, plus layers and rooms. The routing table says: for this kind of task, go to this folder and read these files first."
+       ],
+       "links": [
+        {
+         "label": "Post: Write it down once: a folder your AI can read",
+         "href": "../blog/everything-is-a-file.html"
+        },
+        {
+         "label": "ICM (Van Clief)",
+         "href": "https://github.com/RinDig/Interpretable-Context-Methodology"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "area-safety",
+       "n": "AI safety",
+       "line": "area",
+       "body": [
+        "Who may do what: seats, the A0 to A3 ladder and the permission matrix. Short hook scripts turn the most important rules into checks.",
+        "swarm-referee is a public repo for the Apart Research AI Collusion Sprint 2026. One worker delivered a reviewed pull request to it."
+       ],
+       "links": [
+        {
+         "label": "swarm-referee",
+         "href": "https://github.com/codeami/swarm-referee"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "area-learning",
+       "n": "Learning",
+       "line": "area",
+       "body": [
+        "Where the ideas come from: ICM, Kun Chen's agent stack and Matt Pocock's skills. And two checks that found the setup wrong, and what the owner did about each."
+       ],
+       "links": [],
+       "rel": []
+      },
+      {
+       "id": "area-content",
+       "n": "Content",
+       "line": "area",
+       "body": [
+        "The owner reviews every report and draft as an HTML page, not in a terminal."
+       ],
+       "links": [],
+       "rel": []
+      }
+     ]
+    }
+   ]
+  },
+  {
    "id": "fm",
    "label": "FirstMate in detail",
    "color": "#ff4fd8",
@@ -1217,91 +1302,6 @@
    ]
   },
   {
-   "id": "areas",
-   "label": "Areas of interest",
-   "color": "#2ee6c5",
-   "note": "The topics the owner writes about. Each links to the pages of this site that cover it, and to the wiki notes that sit under it.",
-   "links": [],
-   "folders": [
-    {
-     "name": "areas",
-     "count": 5,
-     "files": [
-      {
-       "id": "area-harness",
-       "n": "Agent harnesses",
-       "line": "area",
-       "body": [
-        "A harness is everything around the model: what it reads, what it may do, and who checks it."
-       ],
-       "links": [
-        {
-         "label": "All pages",
-         "href": "../index.html#pages"
-        }
-       ],
-       "rel": []
-      },
-      {
-       "id": "area-icm",
-       "n": "Context engineering (ICM)",
-       "line": "area",
-       "body": [
-        "One rules file, linked into every agent tool, plus layers and rooms. The routing table says: for this kind of task, go to this folder and read these files first."
-       ],
-       "links": [
-        {
-         "label": "Post: Write it down once: a folder your AI can read",
-         "href": "../blog/everything-is-a-file.html"
-        },
-        {
-         "label": "ICM (Van Clief)",
-         "href": "https://github.com/RinDig/Interpretable-Context-Methodology"
-        }
-       ],
-       "rel": []
-      },
-      {
-       "id": "area-safety",
-       "n": "AI safety",
-       "line": "area",
-       "body": [
-        "Who may do what: seats, the A0 to A3 ladder and the permission matrix. Short hook scripts turn the most important rules into checks.",
-        "swarm-referee is a public repo for the Apart Research AI Collusion Sprint 2026. One worker delivered a reviewed pull request to it."
-       ],
-       "links": [
-        {
-         "label": "swarm-referee",
-         "href": "https://github.com/codeami/swarm-referee"
-        }
-       ],
-       "rel": []
-      },
-      {
-       "id": "area-learning",
-       "n": "Learning",
-       "line": "area",
-       "body": [
-        "Where the ideas come from: ICM, Kun Chen's agent stack and Matt Pocock's skills. And two checks that found the setup wrong, and what the owner did about each."
-       ],
-       "links": [],
-       "rel": []
-      },
-      {
-       "id": "area-content",
-       "n": "Content",
-       "line": "area",
-       "body": [
-        "The owner reviews every report and draft as an HTML page, not in a terminal."
-       ],
-       "links": [],
-       "rel": []
-      }
-     ]
-    }
-   ]
-  },
-  {
    "id": "tier",
    "label": "Harness tier list",
    "color": "#ffd93d",
@@ -1517,6 +1517,771 @@
         {
          "label": "Primary source",
          "href": "https://github.com/stanford-iris-lab/meta-harness"
+        }
+       ],
+       "rel": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "giants",
+   "label": "Shoulders of giants",
+   "color": "#ff9a3c",
+   "note": "The people and firms whose public work this project stands on: builders, startup founders and funds, and marketing authors. One line on what each gave us, and their public profiles and repos. Links go to public pages only.",
+   "links": [],
+   "folders": [
+    {
+     "name": "Builders",
+     "count": 13,
+     "files": [
+      {
+       "id": "giant-kun-chen",
+       "n": "Kun Chen",
+       "line": "giant · builders",
+       "body": [
+        "Factory conventions: one dispatcher, disposable worktrees, a pre-push gate, and instructions as the product."
+       ],
+       "links": [
+        {
+         "label": "GitHub",
+         "href": "https://github.com/kunchenguid"
+        },
+        {
+         "label": "no-mistakes",
+         "href": "https://github.com/kunchenguid/no-mistakes"
+        },
+        {
+         "label": "gnhf",
+         "href": "https://github.com/kunchenguid/gnhf"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-matt-pocock",
+       "n": "Matt Pocock",
+       "line": "giant · builders",
+       "body": [
+        "Clear TypeScript teaching and a public set of agent skills for coding with AI."
+       ],
+       "links": [
+        {
+         "label": "LinkedIn",
+         "href": "https://uk.linkedin.com/in/mapocock"
+        },
+        {
+         "label": "GitHub",
+         "href": "https://github.com/mattpocock"
+        },
+        {
+         "label": "Website",
+         "href": "https://www.totaltypescript.com"
+        },
+        {
+         "label": "skills",
+         "href": "https://github.com/mattpocock/skills"
+        },
+        {
+         "label": "ts-reset",
+         "href": "https://github.com/mattpocock/ts-reset"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-jake-van-clief",
+       "n": "Jake Van Clief",
+       "line": "giant · builders",
+       "body": [
+        "Interpretable Context Methodology: ordered stages, a contract per stage, and rooms with their own taste files."
+       ],
+       "links": [
+        {
+         "label": "GitHub",
+         "href": "https://github.com/RinDig"
+        },
+        {
+         "label": "Interpretable-Context-Methodology",
+         "href": "https://github.com/RinDig/Interpretable-Context-Methodology"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-daniel-miessler",
+       "n": "Daniel Miessler",
+       "line": "giant · builders",
+       "body": [
+        "Fabric prompt patterns and a personal AI infrastructure for augmenting people with AI."
+       ],
+       "links": [
+        {
+         "label": "LinkedIn",
+         "href": "https://www.linkedin.com/in/danielmiessler/"
+        },
+        {
+         "label": "GitHub",
+         "href": "https://github.com/danielmiessler"
+        },
+        {
+         "label": "Website",
+         "href": "https://danielmiessler.com"
+        },
+        {
+         "label": "Fabric",
+         "href": "https://github.com/danielmiessler/Fabric"
+        },
+        {
+         "label": "Personal_AI_Infrastructure",
+         "href": "https://github.com/danielmiessler/Personal_AI_Infrastructure"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-david-allen",
+       "n": "David Allen",
+       "line": "giant · builders",
+       "body": [
+        "Getting Things Done: capture, clarify, organize, reflect, engage. The base of any personal inbox system."
+       ],
+       "links": [
+        {
+         "label": "Website",
+         "href": "https://gettingthingsdone.com"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-andrej-karpathy",
+       "n": "Andrej Karpathy",
+       "line": "giant · builders",
+       "body": [
+        "Taught a generation how LLMs work; named vibe coding and the LLM-wiki style of notes."
+       ],
+       "links": [
+        {
+         "label": "LinkedIn",
+         "href": "https://www.linkedin.com/in/andrej-karpathy-9a650716/"
+        },
+        {
+         "label": "GitHub",
+         "href": "https://github.com/karpathy"
+        },
+        {
+         "label": "Website",
+         "href": "https://karpathy.ai"
+        },
+        {
+         "label": "nanoGPT",
+         "href": "https://github.com/karpathy/nanoGPT"
+        },
+        {
+         "label": "autoresearch",
+         "href": "https://github.com/karpathy/autoresearch"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-simon-willison",
+       "n": "Simon Willison",
+       "line": "giant · builders",
+       "body": [
+        "Daily, honest notes on what LLMs and coding agents can and cannot do, plus the llm tool."
+       ],
+       "links": [
+        {
+         "label": "LinkedIn",
+         "href": "https://www.linkedin.com/in/simonwillison/"
+        },
+        {
+         "label": "GitHub",
+         "href": "https://github.com/simonw"
+        },
+        {
+         "label": "Website",
+         "href": "https://simonwillison.net"
+        },
+        {
+         "label": "llm",
+         "href": "https://github.com/simonw/llm"
+        },
+        {
+         "label": "datasette",
+         "href": "https://github.com/simonw/datasette"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-linus-torvalds",
+       "n": "Linus Torvalds",
+       "line": "giant · builders",
+       "body": [
+        "Linux and git: open source done at scale, with plain review and fast iteration."
+       ],
+       "links": [
+        {
+         "label": "GitHub",
+         "href": "https://github.com/torvalds"
+        },
+        {
+         "label": "linux",
+         "href": "https://github.com/torvalds/linux"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-dhh",
+       "n": "DHH (David Heinemeier Hansson)",
+       "line": "giant · builders",
+       "body": [
+        "Ruby on Rails, Basecamp and Omarchy: opinionated, simple tools that one person can understand."
+       ],
+       "links": [
+        {
+         "label": "GitHub",
+         "href": "https://github.com/dhh"
+        },
+        {
+         "label": "Website",
+         "href": "https://dhh.dk"
+        },
+        {
+         "label": "omarchy",
+         "href": "https://github.com/basecamp/omarchy"
+        },
+        {
+         "label": "rails",
+         "href": "https://github.com/rails/rails"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-andrei-kashcha",
+       "n": "Andrei Kashcha (anvaka)",
+       "line": "giant · builders",
+       "body": [
+        "Beautiful graph and map visualizations of code and data, built as small open-source toys."
+       ],
+       "links": [
+        {
+         "label": "GitHub",
+         "href": "https://github.com/anvaka"
+        },
+        {
+         "label": "VivaGraphJS",
+         "href": "https://github.com/anvaka/VivaGraphJS"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-boris-cherny",
+       "n": "Boris Cherny",
+       "line": "giant · builders",
+       "body": [
+        "Created Claude Code and shares how he runs it: plan first, many sessions in parallel."
+       ],
+       "links": [
+        {
+         "label": "GitHub",
+         "href": "https://github.com/bcherny"
+        },
+        {
+         "label": "claude-code",
+         "href": "https://github.com/anthropics/claude-code"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-geoffrey-huntley",
+       "n": "Geoffrey Huntley",
+       "line": "giant · builders",
+       "body": [
+        "The Ralph loop: run an agent in a loop on one small task until the spec is met."
+       ],
+       "links": [
+        {
+         "label": "LinkedIn",
+         "href": "https://www.linkedin.com/in/geoffreyhuntley/"
+        },
+        {
+         "label": "GitHub",
+         "href": "https://github.com/ghuntley"
+        },
+        {
+         "label": "Website",
+         "href": "https://ghuntley.com"
+        },
+        {
+         "label": "how-to-ralph-wiggum",
+         "href": "https://github.com/ghuntley/how-to-ralph-wiggum"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-steve-yegge",
+       "n": "Steve Yegge",
+       "line": "giant · builders",
+       "body": [
+        "Beads and Gas Town: a task ledger and a way to run many coding agents in parallel."
+       ],
+       "links": [
+        {
+         "label": "GitHub",
+         "href": "https://github.com/steveyegge"
+        },
+        {
+         "label": "beads",
+         "href": "https://github.com/steveyegge/beads"
+        },
+        {
+         "label": "gastown",
+         "href": "https://github.com/steveyegge/gastown"
+        }
+       ],
+       "rel": []
+      }
+     ]
+    },
+    {
+     "name": "Startup ecosystem",
+     "count": 15,
+     "files": [
+      {
+       "id": "giant-y-combinator",
+       "n": "Y Combinator",
+       "line": "giant · startup ecosystem",
+       "body": [
+        "The startup accelerator model: small seed money, a batch of peers, and weekly office hours."
+       ],
+       "links": [
+        {
+         "label": "LinkedIn",
+         "href": "https://www.linkedin.com/school/y-combinator/"
+        },
+        {
+         "label": "Website",
+         "href": "https://www.ycombinator.com"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-garry-tan",
+       "n": "Garry Tan",
+       "line": "giant · startup ecosystem",
+       "body": [
+        "YC CEO who open-sourced gstack and gbrain, his own agent skills and memory setup."
+       ],
+       "links": [
+        {
+         "label": "LinkedIn",
+         "href": "https://www.linkedin.com/in/garrytan/"
+        },
+        {
+         "label": "GitHub",
+         "href": "https://github.com/garrytan"
+        },
+        {
+         "label": "Website",
+         "href": "https://garryslist.org"
+        },
+        {
+         "label": "gstack",
+         "href": "https://github.com/garrytan/gstack"
+        },
+        {
+         "label": "gbrain",
+         "href": "https://github.com/garrytan/gbrain"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-paul-graham",
+       "n": "Paul Graham",
+       "line": "giant · startup ecosystem",
+       "body": [
+        "Essays on making things people want, starting small, and doing things that do not scale."
+       ],
+       "links": [
+        {
+         "label": "Website",
+         "href": "https://paulgraham.com"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-jessica-livingston",
+       "n": "Jessica Livingston",
+       "line": "giant · startup ecosystem",
+       "body": [
+        "Co-founded YC and built the founder community; wrote down how real founders started."
+       ],
+       "links": [],
+       "rel": []
+      },
+      {
+       "id": "giant-sam-altman",
+       "n": "Sam Altman",
+       "line": "giant · startup ecosystem",
+       "body": [
+        "Startup advice from YC days: growth, focus, and ambition. Now runs OpenAI."
+       ],
+       "links": [
+        {
+         "label": "Website",
+         "href": "https://blog.samaltman.com"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-a16z",
+       "n": "a16z (Andreessen Horowitz)",
+       "line": "giant · startup ecosystem",
+       "body": [
+        "A venture firm that publishes deep essays, guides and podcasts on software, AI and company building."
+       ],
+       "links": [
+        {
+         "label": "LinkedIn",
+         "href": "https://www.linkedin.com/company/a16z"
+        },
+        {
+         "label": "GitHub",
+         "href": "https://github.com/a16z"
+        },
+        {
+         "label": "Website",
+         "href": "https://a16z.com"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-marc-andreessen",
+       "n": "Marc Andreessen",
+       "line": "giant · startup ecosystem",
+       "body": [
+        "Wrote 'software is eating the world' and the product-market-fit essays; built Mosaic and Netscape."
+       ],
+       "links": [
+        {
+         "label": "Website",
+         "href": "https://pmarca.substack.com"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-first-round-capital",
+       "n": "First Round Capital",
+       "line": "giant · startup ecosystem",
+       "body": [
+        "A seed fund whose First Round Review shares practical operating playbooks from founders."
+       ],
+       "links": [
+        {
+         "label": "LinkedIn",
+         "href": "https://www.linkedin.com/company/first-round-capital"
+        },
+        {
+         "label": "Website",
+         "href": "https://www.firstround.com"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-sequoia-capital",
+       "n": "Sequoia Capital",
+       "line": "giant · startup ecosystem",
+       "body": [
+        "A venture firm that shares frameworks and essays on company building and the AI shift."
+       ],
+       "links": [
+        {
+         "label": "LinkedIn",
+         "href": "https://www.linkedin.com/company/sequoia"
+        },
+        {
+         "label": "Website",
+         "href": "https://www.sequoiacap.com"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-naval-ravikant",
+       "n": "Naval Ravikant",
+       "line": "giant · startup ecosystem",
+       "body": [
+        "Short, clear thinking on leverage, specific knowledge, and building wealth without luck."
+       ],
+       "links": [
+        {
+         "label": "Website",
+         "href": "https://nav.al"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-pieter-levels",
+       "n": "Pieter Levels",
+       "line": "giant · startup ecosystem",
+       "body": [
+        "Shows how one person ships many small products fast, in public, with simple tech."
+       ],
+       "links": [
+        {
+         "label": "GitHub",
+         "href": "https://github.com/levelsio"
+        },
+        {
+         "label": "Website",
+         "href": "https://levels.io"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-reid-hoffman",
+       "n": "Reid Hoffman",
+       "line": "giant · startup ecosystem",
+       "body": [
+        "Blitzscaling and network-effect thinking; co-founded LinkedIn and invests in AI."
+       ],
+       "links": [
+        {
+         "label": "LinkedIn",
+         "href": "https://linkedin.com/in/reidhoffman"
+        },
+        {
+         "label": "Website",
+         "href": "https://www.reidhoffman.org"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-steve-blank",
+       "n": "Steve Blank",
+       "line": "giant · startup ecosystem",
+       "body": [
+        "Customer Development: get out of the building and test your guesses with real customers."
+       ],
+       "links": [
+        {
+         "label": "Website",
+         "href": "https://steveblank.com"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-eric-ries",
+       "n": "Eric Ries",
+       "line": "giant · startup ecosystem",
+       "body": [
+        "The Lean Startup: build, measure, learn, and treat the product as a series of experiments."
+       ],
+       "links": [
+        {
+         "label": "LinkedIn",
+         "href": "https://www.linkedin.com/in/eries/"
+        },
+        {
+         "label": "Website",
+         "href": "https://theleanstartup.com"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-techstars",
+       "n": "Techstars",
+       "line": "giant · startup ecosystem",
+       "body": [
+        "A global accelerator network built on mentor-led programs and a 'give first' culture."
+       ],
+       "links": [
+        {
+         "label": "LinkedIn",
+         "href": "https://www.linkedin.com/company/techstars"
+        },
+        {
+         "label": "GitHub",
+         "href": "https://github.com/techstars"
+        },
+        {
+         "label": "Website",
+         "href": "https://www.techstars.com"
+        }
+       ],
+       "rel": []
+      }
+     ]
+    },
+    {
+     "name": "Marketing",
+     "count": 9,
+     "files": [
+      {
+       "id": "giant-philip-kotler",
+       "n": "Philip Kotler",
+       "line": "giant · marketing",
+       "body": [
+        "Modern marketing basics: segmentation, targeting, positioning, and the four Ps."
+       ],
+       "links": [
+        {
+         "label": "LinkedIn",
+         "href": "https://www.linkedin.com/in/philipkotler/"
+        },
+        {
+         "label": "Website",
+         "href": "https://www.kotlermarketing.com"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-seth-godin",
+       "n": "Seth Godin",
+       "line": "giant · marketing",
+       "body": [
+        "Marketing as earned trust: tribes, permission, remarkable work, and a daily blog habit."
+       ],
+       "links": [
+        {
+         "label": "LinkedIn",
+         "href": "https://www.linkedin.com/in/sethgodin/"
+        },
+        {
+         "label": "Website",
+         "href": "https://seths.blog"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-david-ogilvy",
+       "n": "David Ogilvy",
+       "line": "giant · marketing",
+       "body": [
+        "Research-based advertising and clear, honest copy: the original 'Confessions of an Advertising Man'."
+       ],
+       "links": [
+        {
+         "label": "Website",
+         "href": "https://www.ogilvy.com"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-al-ries",
+       "n": "Al Ries",
+       "line": "giant · marketing",
+       "body": [
+        "Positioning: own one word in the customer's mind. Co-wrote the classic book with Jack Trout."
+       ],
+       "links": [
+        {
+         "label": "Website",
+         "href": "https://ries.com"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-byron-sharp",
+       "n": "Byron Sharp",
+       "line": "giant · marketing",
+       "body": [
+        "How Brands Grow: evidence-based rules on mental and physical availability and reach."
+       ],
+       "links": [
+        {
+         "label": "Website",
+         "href": "https://www.marketingscience.info"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-april-dunford",
+       "n": "April Dunford",
+       "line": "giant · marketing",
+       "body": [
+        "A practical positioning method from Obviously Awesome: alternatives, value, best-fit customers, market."
+       ],
+       "links": [
+        {
+         "label": "Website",
+         "href": "https://www.aprildunford.com"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-rand-fishkin",
+       "n": "Rand Fishkin",
+       "line": "giant · marketing",
+       "body": [
+        "Audience research over vanity metrics; founded Moz and SparkToro and writes openly about marketing."
+       ],
+       "links": [
+        {
+         "label": "LinkedIn",
+         "href": "https://www.linkedin.com/in/randfishkin/"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-ann-handley",
+       "n": "Ann Handley",
+       "line": "giant · marketing",
+       "body": [
+        "Everybody Writes: plain, useful writing as the core of content marketing."
+       ],
+       "links": [
+        {
+         "label": "Website",
+         "href": "https://annhandley.com"
+        }
+       ],
+       "rel": []
+      },
+      {
+       "id": "giant-gary-vaynerchuk",
+       "n": "Gary Vaynerchuk",
+       "line": "giant · marketing",
+       "body": [
+        "Document, don't create: publish daily on every platform and meet attention where it is."
+       ],
+       "links": [
+        {
+         "label": "LinkedIn",
+         "href": "https://www.linkedin.com/in/garyvaynerchuk/"
+        },
+        {
+         "label": "Website",
+         "href": "https://www.garyvaynerchuk.com"
         }
        ],
        "rel": []
