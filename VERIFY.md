@@ -8,10 +8,10 @@ This file is for an agent that has changed the site and has to show it works. It
 
 Plain static files, no build step and nothing to install to look at pages.
 
-    node tests/server.mjs        # serves the repo root at http://127.0.0.1:4173/ (the port the tests use)
+    node tests/server.mjs        # serves the repo root on port 4173 of this machine (the port the tests use)
     # or: python3 -m http.server 4173
 
-Run it in the background and check `curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:4173/` prints `200`. Use the repo's own server: it returns a real 404 for missing files.
+Run it in the background and fetch the root path on port 4173 with `curl -s -o /dev/null -w '%{http_code}'` and check it prints `200`. Use the repo's own server: it returns a real 404 for missing files.
 
 Browser: `chrome-devtools-axi` (Chromium). It has no coordinate click, so it clicks by `@uid` from `snapshot` output. For a phone, use `chrome-devtools-axi emulate --viewport 390x844x3,mobile,touch`; `resize 390 844` is not enough (Chrome holds the width at 500).
 
