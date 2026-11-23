@@ -9,7 +9,7 @@
   "submit": "Say hello",
   "skip": "Skip for now",
   "echoYou": "Call me {you}.",
-  "echoBot": "Call you {bot}.",
+  "echoBot": "You're {bot}.",
   "echoNone": "Keep the names as they are.",
   "doneLesson": "Lesson {k} of {n} done{who}. Its dot is now lit in the Course room on the map behind this page.",
   "doneCourse": "That is the course{who}. All {n} lessons are lit on the map behind this page. Keep the time box short, and say what done looks like.",
