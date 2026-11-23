@@ -1,22 +1,47 @@
 {
  "about": "Ashish's AI introductory course: the script EA-bot reads on course/index.html. build_data.py also turns the lessons into the Course room of the second brain. Every claim about Maslow or commander's intent carries a cite; every href was checked to load.",
  "title": "Ashish's AI introductory course",
- "opening": "AI or no AI. Let's get real. Let's lock in and let's learn how to balance our wants and needs.",
+ "hello": {
+  "greet": "Hi. Before we start, let's meet properly. What should I call you? And you can rename me too.",
+  "youLabel": "Your name",
+  "botLabel": "Rename me",
+  "botDefault": "EA-bot",
+  "submit": "Say hello",
+  "skip": "Skip for now",
+  "echoYou": "I'm {you}.",
+  "echoBot": "I'll call you {bot}.",
+  "echoNone": "Keep the names as they are.",
+  "doneLesson": "Lesson {k} of {n} done{who}. Its dot is now lit in the Course room on the map behind this page.",
+  "doneCourse": "That is the course{who}. All {n} lessons are lit on the map behind this page. Keep the time box short, and say what done looks like.",
+  "renamed": "{bot} it is. ",
+  "thanksName": "Thanks, {you}.",
+  "thanks": "Thanks.",
+  "idea": " Here's the idea in one line: AI or no AI, the real skill is knowing what you want, knowing what you need, and balancing the two. That's where we begin.",
+  "back": "Welcome back, {you}.",
+  "backNoName": "Welcome back.",
+  "progress": "You have finished {done} of {n} lessons."
+ },
+ "parts": [
+  {"n": 0, "title": "Hello", "blurb": "We meet, and you pick names."},
+  {"n": 1, "title": "Our vision: intent", "blurb": "Why knowing what you want and need matters, and how to pass it on to people and to AI."},
+  {"n": 2, "title": "Our ethos: shoulders of giants", "blurb": "We build on work that others shared, so we share back."},
+  {"n": 3, "title": "Build your own", "blurb": "Four steps: a second brain, an AI twin, a company brain, and your own tools."}
+ ],
  "law": {
   "kick": "What we build",
-  "line": "New AI models and tools let you build your own software, an assistant or a home helper. We build a team of AI helpers that does computer jobs. A person checks the work. This course is the short way in: seven lessons, a few minutes each.",
+  "line": "New AI models and tools let you build your own software, an assistant or a home helper. We build a team of AI helpers that does computer jobs. A person checks the work. This course is the short way in: {n} lessons, a few minutes each.",
   "link": {"label": "See what we build", "href": "../index.html"}
  },
- "intro": "This is Ashish's AI introductory course: seven short lessons in a fixed order. In each one I explain a little, hand you one thing to read, and ask one question. It is modelled on BlueDot Impact's free AI courses. Each lesson you finish lights up on the map behind this page.",
+ "intro": "A short course in four parts. First we meet. Then why intent matters, what we believe, and how to build your own AI helpers. A few minutes per lesson, one reading and one question each. Your progress stays in your browser.",
  "model": {"label": "BlueDot Impact's courses", "href": "https://bluedot.org/courses"},
- "how": "Each lesson has two to four short messages, one reading and one question. Tap the flag beside a reading to save it to your reading list for later. Your progress stays in this browser only; nothing is sent anywhere.",
+ "how": "Each lesson has two to four short messages, one reading and one question. Tap the flag beside a reading to save it to your reading list for later. Your progress and names stay in this browser only; nothing is sent anywhere.",
  "who": "Ashish Raina, a program manager turned AI-crew operator, wrote it with his AI crew. Where a lesson states a fact, the source is linked under the message.",
  "lessons": [
   {
-   "id": "wants", "title": "Wants and needs",
+   "id": "wants", "part": 1, "title": "Wants and needs",
    "summary": "A need is what you cannot do without. A want is one way you would like to meet it.",
    "steps": [
-    {"text": "Start with the line that opened this course: balance wants and needs. It sounds simple. It gets hard fast, because a want often arrives dressed as a need."},
+    {"text": "Start with the one-line idea: balance what you want and what you need. It sounds simple. It gets hard fast, because a want often arrives dressed as a need."},
     {"text": "One clear way to split them comes from the economist Manfred Max-Neef. He argued that basic needs are few, finite and the same in every culture: subsistence, protection, affection, understanding, participation, idleness, creation, identity and freedom. What changes from place to place is the satisfier: the thing you reach for to meet a need.",
      "cite": {"label": "Max-Neef's fundamental human needs (1986)", "href": "https://en.wikipedia.org/wiki/Manfred_Max-Neef%27s_Fundamental_human_needs"}},
     {"text": "So a want is a satisfier you have picked: a new phone, a course, a promotion. Each one can meet a need, or miss it. The useful question is: which need is this for, and is there a better way to meet it?"},
@@ -30,7 +55,7 @@
     "why": "The needs are the short list that every culture shares. The laptop is a satisfier you picked. Name the need it serves, then ask whether it is the best way to meet it."}
   },
   {
-   "id": "maslow", "title": "Maslow's hierarchy of needs",
+   "id": "maslow", "part": 1, "title": "Maslow's hierarchy of needs",
    "summary": "Maslow's 1943 theory: five kinds of need, roughly in order. The pyramid came later, and the strict order is debated.",
    "steps": [
     {"text": "The best-known model of needs is Abraham Maslow's. He set it out in 1943 in a paper called “A Theory of Human Motivation”, in the journal Psychological Review.",
@@ -50,7 +75,7 @@
     "why": "The 1943 paper has the five needs and no pyramid. Maslow himself said the order is not rigid and that people are partly satisfied in every need at once. The pyramid was drawn by others, around 1960."}
   },
   {
-   "id": "intent", "title": "What you want vs what you say",
+   "id": "intent", "part": 1, "title": "What you want vs what you say",
    "summary": "What you say is a lossy copy of what you want. Good intent names the purpose and what done looks like.",
    "steps": [
     {"text": "Intent is the want behind the words. The words are only a copy of it, and copies lose detail."},
@@ -66,7 +91,7 @@
     "why": "It says what you want, why it matters to you (your phone) and how anyone can check it is done. The other two leave the purpose and the finish line to a guess."}
   },
   {
-   "id": "humans", "title": "How people pass on intent",
+   "id": "humans", "part": 1, "title": "How people pass on intent",
    "summary": "Armies learned to send the purpose and the end state, not only the steps, so people can still act when the plan stops fitting.",
    "steps": [
     {"text": "Armies have long had this problem. Orders pass down a chain of people, and the situation changes on the way."},
@@ -84,7 +109,7 @@
     "why": "The intent says why the bridge mattered and what the end state is. Knowing that, the team can pick a new route to the same result without waiting."}
   },
   {
-   "id": "ai", "title": "How AI receives intent",
+   "id": "ai", "part": 1, "title": "How AI receives intent",
    "summary": "You can steer an AI with a prompt, a skill, a folder of files or a script. Intent engineering says: write the what, and let the model pick the how.",
    "steps": [
     {"text": "An AI gets your intent only through what you give it. In my setup there are four ways, from loose to strict: a prompt (a chat message), a skill (written instructions that load when a task matches), a folder of files that steers it, and a script (a hook or check that runs the same way every time).",
@@ -102,7 +127,7 @@
     "why": "Intent engineering writes the what and the check, and leaves the how to the model. The step list is the old prompt style; guessing skips the intent altogether."}
   },
   {
-   "id": "layers", "title": "Life intent and project intent",
+   "id": "layers", "part": 1, "title": "Life intent and project intent",
    "summary": "Two sizes of intent: a life file that changes slowly, and a short brief for each task, drawn out by questions.",
    "steps": [
     {"text": "Intent comes in two sizes. Life intent is what you are about: your mission, your goals, your problems. It changes slowly. Project intent is what you want from this one task. It changes every time."},
@@ -120,7 +145,7 @@
     "why": "Evenings with family is about what your life is for, and it changes slowly. Fixing links by Friday is one task with a finish line."}
   },
   {
-   "id": "start", "title": "Your first step",
+   "id": "start", "part": 1, "title": "Your first step",
    "summary": "Pick one need and one good free read. Learn it with an AI tutor until you can use it. Then keep it in your second brain.",
    "steps": [
     {"text": "Here is the route I am building for myself. Step one: pick one need you want to work on, and one good free read for it. I keep a short directory of free and public-domain reads per area, called Open Brain. It is private for now, so start from the readings in this course."},
@@ -136,6 +161,94 @@
     "options": ["Install every AI tool you can find", "Pick one need and one good free read for it", "Write your whole life plan before you start"],
     "answer": 1,
     "why": "Start small: one need, one read. The tutor and the second brain come after, and only for what you can use."}
+  },
+  {
+   "id": "giants", "part": 2, "title": "Shoulders of giants",
+   "summary": "Take freely, give back. Everything in this course stands on work that others shared.",
+   "steps": [
+    {"text": "The phrase “standing on the shoulders of giants” goes back to Bernard of Chartres. It appears in a 1675 letter by Isaac Newton. The idea: we see further because we start from what others built.",
+     "cite": {"label": "Standing on the shoulders of giants (encyclopedia, with sources)", "href": "https://en.wikipedia.org/wiki/Standing_on_the_shoulders_of_giants"}},
+    {"text": "Software works this way. The Linux kernel is provided under GPL version 2 only. Open source licences allow free redistribution. Some, like the GPL, ask that changes be shared under the same terms. Others, like MIT, only ask you to keep the notice.",
+     "cite": {"label": "Linux kernel licence rules", "href": "https://www.kernel.org/doc/html/latest/process/license-rules.html"}},
+    {"text": "Wikipedia is written by human volunteers, and its text is under the Creative Commons Attribution-ShareAlike 4.0 licence. Omarchy describes itself as “a beautiful, modern & opinionated Linux distribution by DHH”, and it is released under the MIT License.",
+     "cite": {"label": "Omarchy on GitHub", "href": "https://github.com/basecamp/omarchy"}},
+    {"text": "Our ethos: take freely, give back. Giving back can be a fix, a doc, a note, a thank-you, or a licence that lets others reuse your work. This is how the tools in this course were made possible, so we say it plainly."}
+   ],
+   "read": {"label": "Omarchy", "href": "https://omarchy.org", "note": "The home page of one open-source project built on shared work. About 5 minutes."},
+   "more": [{"label": "How to contribute to open source (Open Source Guides)", "href": "https://opensource.guide/how-to-contribute/"}, {"label": "The Open Source Definition", "href": "https://opensource.org/osd"}, {"label": "About Wikipedia: who writes it, and the licence", "href": "https://en.wikipedia.org/wiki/Wikipedia:About"}],
+   "check": {"q": "You use an open-source tool and fix a bug in it. What does giving back look like?",
+    "options": ["Keep the fix private", "Send the fix to the maintainers", "Delete the tool"],
+    "answer": 1,
+    "why": "Sending the fix to the maintainers shares your work with everyone who uses the tool, as others shared theirs with you."}
+  },
+  {
+   "id": "wiki", "part": 3, "title": "A second brain as an LLM wiki",
+   "summary": "Instead of searching your notes at question time, let an AI build and keep a wiki of them.",
+   "steps": [
+    {"text": "In lesson 7 your second brain was a place for what you can use. Here is one way to run it. Andrej Karpathy published an idea file called “LLM Wiki”.",
+     "cite": {"label": "Andrej Karpathy: LLM Wiki (gist)", "href": "https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f"}},
+    {"text": "He says most use of LLMs with documents looks like RAG (retrieval-augmented generation). The model finds chunks at question time and rediscovers the knowledge each time.",
+     "cite": {"label": "Karpathy: LLM Wiki", "href": "https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f"}},
+    {"text": "His alternative: the LLM incrementally builds and maintains a persistent wiki of interlinked markdown files, between you and the raw sources. It is compiled once and kept current.",
+     "cite": {"label": "Karpathy: LLM Wiki", "href": "https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f"}}
+   ],
+   "read": {"label": "Andrej Karpathy: LLM Wiki", "href": "https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f", "note": "The idea file itself, a short read."},
+   "more": [],
+   "check": {"q": "What is the difference between the wiki idea and plain retrieval?",
+    "options": ["The wiki is built and kept current as you add sources, instead of re-derived on every question", "The wiki needs no AI at all", "Retrieval keeps interlinked markdown files; the wiki does not"],
+    "answer": 0,
+    "why": "Retrieval finds chunks and rediscovers knowledge at question time. The wiki is compiled once, and updated as each new source arrives."}
+  },
+  {
+   "id": "twin", "part": 3, "title": "An AI twin",
+   "summary": "A helper that has your notes, writing and preferences, and drafts as you would. You check and send.",
+   "steps": [
+    {"text": "“Digital twin” is an engineering term. Michael Grieves introduced the three-part concept in 2002. The name was coined by John Vickers of NASA in 2010.",
+     "cite": {"label": "Digital twin (encyclopedia, with sources)", "href": "https://en.wikipedia.org/wiki/Digital_twin"}},
+    {"text": "Applying it to a person is an idea, not a standard. Here, an AI twin is a helper that has your notes, your writing and your preferences, and drafts as you would. Your life intent file from lesson 6 is its starting point."},
+    {"text": "The rule in this course: a person checks the work. The twin drafts. You send."}
+   ],
+   "read": {"label": "Digital twin", "href": "https://en.wikipedia.org/wiki/Digital_twin", "note": "Encyclopedia article: where the term comes from. About 10 minutes."},
+   "more": [{"label": "Daniel Miessler: Personal AI Infrastructure", "href": "https://github.com/danielmiessler/Personal_AI_Infrastructure"}],
+   "check": {"q": "Your twin drafts a reply to your boss. What stays with you?",
+    "options": ["Nothing. The twin sends it", "Reading it and pressing send", "Only writing the first draft"],
+    "answer": 1,
+    "why": "The twin drafts, you send. Reading the draft and pressing send is the check that keeps a person responsible."}
+  },
+  {
+   "id": "company", "part": 3, "title": "A company brain",
+   "summary": "The wiki idea, shared by a team. It needs rules that a personal one does not.",
+   "steps": [
+    {"text": "A company brain is the same idea as the wiki lesson, shared by a team. Retrieval-augmented generation (RAG) is the retrieval approach from the wiki lesson. It was described in a 2020 paper by Patrick Lewis and 11 other authors, “Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks”.",
+     "cite": {"label": "Lewis et al. (2020), arXiv:2005.11401", "href": "https://arxiv.org/abs/2005.11401"}},
+    {"text": "Our view, as advice and not as fact: a company brain needs what a personal one does not. Who may read what. An owner for each page. A date, so stale pages are found."},
+    {"text": "A personal brain has one reader and one owner. A team has many, so someone has to be answerable for each page."}
+   ],
+   "read": {"label": "Retrieval-augmented generation", "href": "https://en.wikipedia.org/wiki/Retrieval-augmented_generation", "note": "Encyclopedia overview of RAG. About 10 minutes."},
+   "more": [{"label": "Lewis et al. (2020): the RAG paper, abstract", "href": "https://arxiv.org/abs/2005.11401"}],
+   "check": {"q": "What does a company brain need that a personal one does not?",
+    "options": ["A larger font", "Access rules and an owner per page", "No sources"],
+    "answer": 1,
+    "why": "A team shares the brain, so it needs rules on who may read what, and an owner who keeps each page right."}
+  },
+  {
+   "id": "tools", "part": 3, "title": "Your own AI tools and marketplaces",
+   "summary": "Build a small tool for your own job. Share it with a licence. Check before you install someone else's.",
+   "steps": [
+    {"text": "The Model Context Protocol (MCP) is an open-source standard for connecting AI applications to external systems. Anthropic introduced it in November 2024.",
+     "cite": {"label": "Model Context Protocol", "href": "https://modelcontextprotocol.io"}},
+    {"text": "A plugin marketplace is a directory or repository with a .claude-plugin/marketplace.json file. It lists plugins and where to fetch each one.",
+     "cite": {"label": "Claude Code docs: plugin marketplaces", "href": "https://code.claude.com/docs/en/plugin-marketplaces"}},
+    {"text": "Build a small tool for your own job first. If it helps others, share it with a licence. That is the ethos lesson again."},
+    {"text": "Before you install someone else's tool, check who wrote it, what it can access and its licence. The MCP specification says these capabilities come with arbitrary data access and code execution paths, and that users must explicitly consent to and understand all data access and operations.",
+     "cite": {"label": "MCP specification", "href": "https://modelcontextprotocol.io/specification/latest"}}
+   ],
+   "read": {"label": "Model Context Protocol", "href": "https://modelcontextprotocol.io", "note": "The project site: what MCP is and how it connects AI to other systems. About 10 minutes."},
+   "more": [{"label": "Claude Code docs: plugin marketplaces", "href": "https://code.claude.com/docs/en/plugin-marketplaces"}, {"label": "MCP specification", "href": "https://modelcontextprotocol.io/specification/latest"}, {"label": "Model Context Protocol (encyclopedia)", "href": "https://en.wikipedia.org/wiki/Model_Context_Protocol"}],
+   "check": {"q": "Before installing a tool from a marketplace, what do you do?",
+    "options": ["Install it, then read about it", "Check who wrote it, what it can reach, and its licence", "Trust it because it is listed"],
+    "answer": 1,
+    "why": "A tool can reach your data and run code. Check the author, its access and its licence first."}
   }
  ]
 }
