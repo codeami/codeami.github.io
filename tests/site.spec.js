@@ -774,6 +774,7 @@ test('left pane tabs: Read, Pages and FirstMate show one list at a time; the emp
 test('map: Hex with Folders is the default; the notes sit apart and the page badges one badge width outside them', async ({ page }) => {
   await page.goto('/');
   await mapState(page);
+  await expect.poll(() => page.evaluate(() => window.AIOMap.metrics().pitch), 'the layout has settled').toBeGreaterThan(0);
   const m = await page.evaluate(() => window.AIOMap.metrics());
   expect(m.layout).toBe('hex');
   expect(m.view).toBe('folders');
@@ -831,6 +832,10 @@ test('Calm covers the map: a light canvas, light lists and panels, and text at 4
     await page.goto('about:blank');
     await page.goto('/');
     await mapState(page);
+    await expect.poll(() => page.evaluate(() => { // the canvas repaints in the skin a frame or two after load
+      const cv = window.AIOMap.root.querySelector('canvas'), d = cv.getContext('2d').getImageData(cv.width - 4, cv.height - 4, 1, 1).data;
+      return d[0] + d[1] + d[2] > 384;
+    })).toBe(skin === 'calm');
     const got = await page.evaluate(() => {
       const root = window.AIOMap.root, cv = root.querySelector('canvas');
       const px = cv.getContext('2d').getImageData(cv.width - 4, cv.height - 4, 1, 1).data; // a corner: bare map ground
