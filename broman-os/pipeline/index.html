@@ -17,6 +17,7 @@
       <p class="tag" id="tagline"></p>
     </div>
     <div class="tools" role="group" aria-label="Controls">
+      <button class="btn" id="view" type="button" aria-pressed="false">View: Simple</button>
       <button class="btn" id="replay" type="button">&#9654; Replay</button>
       <button class="btn" id="slow" type="button" aria-pressed="false">Slow-mo: off</button>
       <button class="btn" id="theme" type="button" aria-label="Switch theme">Theme</button>
@@ -35,12 +36,13 @@
     <div class="left">
       <section class="canvas" id="canvas" aria-label="Pipeline canvas: seven steps, select one for details">
         <svg class="edges" id="edges" aria-hidden="true"><defs>
-          <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1l8 4-8 4z" fill="var(--line-2)"/></marker>
+          <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1l8 4-8 4z" fill="var(--mute)"/></marker>
           <marker id="aha" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1l8 4-8 4z" fill="var(--accent)"/></marker>
         </defs><g id="edge-paths"></g></svg>
         <div class="nodes" id="nodes"></div>
       </section>
       <p class="now" id="now" aria-live="polite"></p>
+      <p class="frame" id="frame" hidden>The factory loop is one dispatcher, disposable worktrees and a gate before anything is pushed. The Full view extends it with a second brain (the notes every agent reads first) and ordered stages, each with one task and a check.</p>
       <aside class="logbox" aria-label="Live log">
         <h3><span>LIVE LOG</span><span class="live" id="livetag">&#9679; idle</span></h3>
         <div class="log" id="log"></div>
@@ -227,6 +229,7 @@
    "n": "01",
    "kind": "trigger",
    "edge": "inbox note",
+   "me": "sets the goal",
    "name": "Catch",
    "today": {
     "tone": "warn",
@@ -282,6 +285,7 @@
    "n": "02",
    "kind": "worker",
    "edge": "tagged note",
+   "loop": 2,
    "name": "Sort",
    "today": {
     "tone": "gate",
@@ -350,6 +354,7 @@
    "n": "03",
    "kind": "worker",
    "edge": "4 jobs",
+   "loop": 2,
    "name": "Route",
    "today": {
     "tone": "warn",
@@ -391,6 +396,7 @@
    "n": "04",
    "kind": "worker",
    "edge": "proposed plan",
+   "loop": 3,
    "name": "Prepare",
    "today": {
     "tone": "warn",
@@ -474,6 +480,7 @@
    "n": "05",
    "kind": "gate",
    "edge": "approved plan",
+   "me": "yes or no",
    "name": "Gate",
    "title": "Captain gate",
    "gate": true,
@@ -545,6 +552,7 @@
    "n": "06",
    "kind": "worker",
    "edge": "finished work",
+   "loop": 4,
    "name": "Execute",
    "today": {
     "tone": "go",
@@ -593,6 +601,8 @@
   {
    "n": "07",
    "kind": "result",
+   "edge": "pick the form",
+   "me": "grades if subjective (UI)",
    "name": "Keep",
    "today": {
     "tone": "go",
@@ -675,6 +685,217 @@
      "at": 3800,
      "tone": "ok",
      "text": "project folder kept; ask firstmate to change it"
+    }
+   ]
+  },
+  {
+   "n": "04b",
+   "name": "Twin check",
+   "kind": "twin",
+   "fullOnly": true,
+   "after": "04",
+   "pillAs": 3,
+   "edge": "aligned or not",
+   "today": {
+    "tone": "gate",
+    "label": "plan, not built yet"
+   },
+   "role": "A digital twin of me reads the plan against my vision and ethos. It says aligned or not, with a reason.",
+   "blocks": [
+    {
+     "t": "split",
+     "left": [
+      {
+       "t": "card",
+       "title": "Reads",
+       "sub": "my vision and ethos notes, then the proposed plan"
+      },
+      {
+       "t": "card",
+       "title": "Says",
+       "sub": "aligned, or not aligned, plus one reason"
+      }
+     ],
+     "right": [
+      {
+       "t": "card",
+       "title": "Sample verdict",
+       "bullets": [
+        "Aligned",
+        "Reason: all four jobs serve a current goal",
+        "One fix: the reel caption is long"
+       ],
+       "tone": "go"
+      }
+     ]
+    },
+    {
+     "t": "note",
+     "text": "The twin is a model, not me. **It can stop a plan. It cannot approve one.** Only the Gate approves."
+    }
+   ],
+   "log": [
+    {
+     "at": 300,
+     "text": "twin: reading plan against vision and ethos"
+    },
+    {
+     "at": 2200,
+     "tone": "ok",
+     "text": "twin: aligned (all 4 jobs serve a goal)"
+    }
+   ]
+  },
+  {
+   "n": "06r",
+   "name": "Orchestrator",
+   "kind": "router",
+   "fullOnly": true,
+   "side": true,
+   "after": "06",
+   "today": {
+    "tone": "gate",
+    "label": "plan, not built yet"
+   },
+   "role": "An orchestrator on Opus by default sends each job to the right worker, following the rules in the workflow. Results come back to it.",
+   "workers": [
+    {
+     "name": "Sonnet",
+     "job": "code"
+    },
+    {
+     "name": "Haiku",
+     "job": "small jobs"
+    },
+    {
+     "name": "Perplexity",
+     "job": "research"
+    },
+    {
+     "name": "NotebookLM",
+     "job": "research"
+    }
+   ],
+   "blocks": [
+    {
+     "t": "cards",
+     "items": [
+      {
+       "title": "Code",
+       "sub": "goes to Sonnet"
+      },
+      {
+       "title": "Small jobs",
+       "sub": "go to Haiku"
+      },
+      {
+       "title": "Research",
+       "sub": "goes to Perplexity and NotebookLM"
+      },
+      {
+       "title": "Anything else",
+       "sub": "stays on Opus"
+      }
+     ]
+    },
+    {
+     "t": "note",
+     "text": "The rules are written once, in the workflow. **First match wins. The last rule is the default.** A reviewer still runs on a different model from the builder."
+    }
+   ],
+   "log": [
+    {
+     "at": 300,
+     "tone": "sort",
+     "text": "orchestrator (Opus): 4 jobs, matching rules"
+    },
+    {
+     "at": 900,
+     "tone": "sort",
+     "text": "code -> Sonnet, small job -> Haiku"
+    },
+    {
+     "at": 1500,
+     "tone": "sort",
+     "text": "research -> Perplexity, NotebookLM"
+    },
+    {
+     "at": 3200,
+     "tone": "ok",
+     "text": "all workers reported back"
+    }
+   ]
+  },
+  {
+   "n": "07b",
+   "name": "Outcome",
+   "kind": "outcome",
+   "fullOnly": true,
+   "after": "07",
+   "pillAs": 6,
+   "today": {
+    "tone": "gate",
+    "label": "plan, not built yet"
+   },
+   "role": "What does the job end as? Pick one. The path changes a little for each.",
+   "options": [
+    {
+     "id": "pr",
+     "label": "Pull request",
+     "exec": "opens a pull request"
+    },
+    {
+     "id": "patch",
+     "label": "Patch",
+     "exec": "writes a patch file"
+    },
+    {
+     "id": "report",
+     "label": "Research report",
+     "exec": "writes the report, no PR"
+    },
+    {
+     "id": "update",
+     "label": "Direct update",
+     "exec": "edits in place, no PR"
+    }
+   ],
+   "blocks": [
+    {
+     "t": "cards",
+     "items": [
+      {
+       "title": "Pull request",
+       "sub": "code or page changes, merged on my word"
+      },
+      {
+       "title": "Patch",
+       "sub": "a change I apply myself"
+      },
+      {
+       "title": "Research report",
+       "sub": "a written answer"
+      },
+      {
+       "title": "Direct update",
+       "sub": "the worker edits the thing in place"
+      }
+     ]
+    },
+    {
+     "t": "note",
+     "text": "**The path changes a little.** A research job skips Execute's pull request step: the report is the result."
+    }
+   ],
+   "log": [
+    {
+     "at": 300,
+     "text": "outcome: pull request"
+    },
+    {
+     "at": 1800,
+     "tone": "ok",
+     "text": "result handed over in that form"
     }
    ]
   }
