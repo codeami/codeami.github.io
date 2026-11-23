@@ -14,7 +14,8 @@ var shadow=host.attachShadow({mode:"open"});
 shadow.innerHTML='<link rel="stylesheet" href="'+BASE+'graph.css">'+
   '<div id="stage"><div id="g3d" hidden></div><canvas id="cv" role="img" aria-label="Second brain map: a centre rules file linked to rooms of public notes, harness parts and posts, with a ring of skills and a ring of pages and projects. The side lists hold the same items as buttons."></canvas></div>'+
   '<div id="side" hidden><aside class="side-col" id="wl" aria-label="Map tree: reading order, rooms and pages">'+
-  '<nav id="trail" aria-label="You are here"></nav>'+
+  '<div id="thead"><nav id="trail" aria-label="You are here"></nav>'+
+  '<div id="tfind"><input type="search" id="tq" placeholder="Filter the tree…  (/)" aria-label="Filter the tree" aria-controls="tree" autocomplete="off"><p id="tcount" aria-live="polite"></p></div></div>'+
   '<ul id="tree" role="tree" aria-label="The map as a tree: rooms, folders and files"></ul></aside>'+
   '<aside class="side-col" id="wr" aria-label="Skills"><section class="wd"><h2>Skills deck</h2><ul id="sSkills"></ul></section></aside></div>'+
   '<div class="title"'+(FRAMED?' hidden':'')+'><b>THE SOFTWARE META-FACTORY</b><span>SECOND BRAIN</span><small id="src">loading…</small></div>'+
@@ -415,7 +416,9 @@ function wire(){
   document.addEventListener("keydown",function(e){
     var t=e.composedPath?e.composedPath()[0]:e.target; // the real target, also inside the shadow root
     var typing=/^(input|textarea|select)$/i.test(t.tagName||"")||t.isContentEditable;
-    if((e.key==="/"&&!typing)||((e.metaKey||e.ctrlKey)&&(e.key||"").toLowerCase()==="k")){e.preventDefault();setPanel(true,true);$("q").focus();$("q").select()}
+    if((e.key==="/"&&!typing)||((e.metaKey||e.ctrlKey)&&(e.key||"").toLowerCase()==="k")){e.preventDefault();
+      // with the tree on screen, search is the tree's filter box; otherwise the controls panel's
+      var box=$("side").hidden?($("panel").hidden&&setPanel(true,true),$("q")):$("tq");box.focus();box.select()}
     else if(e.key==="Escape"){var was=!$("panel").hidden;$("q").value="";S.q="";S.sel=null;S.fol=null;S.read=-1;hideCard();applyFocus();dirty=true;if(was)setPanel(false,true)}
     else if(e.key==="m"&&!typing&&!e.metaKey&&!e.ctrlKey&&!e.altKey)setMotion(!S.motion,true);
   });
@@ -461,7 +464,7 @@ function renderSides(){
    One selection drives the map, the card and this tree: S.sel (a node), S.fol (a folder of the selected room) and
    S.read (a reading-order step). applyFocus() calls syncTree(), so every way of selecting (the map, the tree, the
    card's Related buttons, a #hash, the tour) lights the same row, opens its parents and updates the trail. */
-var syncTree=function(){},closeAll=function(){};
+var syncTree=function(){},closeAll=function(){},filterTree=function(){};
 function readPage(i){
   var r=(window.AIO_READING||[])[i];if(!r)return;
   S.used=true;
@@ -503,7 +506,7 @@ function buildTree(){
     var open=on==null?li.getAttribute("aria-expanded")!=="true":on;
     li.setAttribute("aria-expanded",String(open));g.hidden=!open;
   }
-  function visible(){return[].filter.call(tree.querySelectorAll("li"),function(x){return!x.parentNode.closest("ul[hidden]")})}
+  function visible(){return[].filter.call(tree.querySelectorAll("li"),function(x){return!x.hidden&&!x.parentNode.closest("ul[hidden],li[hidden]")})}
   function setRove(li){if(rove)rove.tabIndex=-1;rove=li;li.tabIndex=0}
   function focusRow(li){setRove(li);li.focus({preventScroll:false})}
   function activate(li){
@@ -585,6 +588,52 @@ function buildTree(){
     trail();
   };
   closeAll=function(){drawer.close();S.sel=null;S.fol=null;S.read=-1;hideCard();applyFocus();dirty=true};
+
+  /* Filter: the same query as the map's search. A row stays when it matches, when something under it matches, or when a
+     row above it matches (a room that matches keeps its folders and files). Groups that hold a match open; the open and
+     shut state from before the filter comes back when it is cleared. */
+  var tq=$("tq"),tcount=$("tcount"),was=null,q0="";
+  function hit(li,q){
+    var k=li.dataset.k;
+    if(k.charAt(0)==="g"||k.charAt(0)==="u")return false; // the group headers and the "names not listed" rows are never a match
+    if(k.indexOf("n:")===0)return hayOf(nodes[+k.slice(2)]).indexOf(q)>=0;
+    return li.getAttribute("aria-label").toLowerCase().indexOf(q)>=0;
+  }
+  function walk(li,q,inherited,out){
+    var own=hit(li,q),g=li.lastChild.tagName==="UL"?li.lastChild:null,any=false,deep=false;
+    if(g)[].forEach.call(g.children,function(c){var r=walk(c,q,own||inherited,out);if(r.vis)any=true;if(r.own)deep=true});
+    li.hidden=!(own||inherited||any);
+    if(own&&li.dataset.k.charAt(0)!=="u")out.n++;
+    if(g&&deep)toggle(li,true);
+    return{vis:!li.hidden,own:own||deep};
+  }
+  filterTree=function(q){
+    if(tq.value.trim().toLowerCase()!==q)tq.value=q; // keep the two search boxes the same
+    var all=[].slice.call(tree.querySelectorAll("li"));
+    if(!q){
+      if(was){
+        all.forEach(function(li){li.hidden=false;if(li.dataset.k in was)toggle(li,was[li.dataset.k])});
+        was=null;syncTree(true);
+      }
+      tcount.textContent="";q0="";return;
+    }
+    if(q===q0)return;
+    q0=q;
+    if(!was){was={};all.forEach(function(li){if(li.hasAttribute("aria-expanded"))was[li.dataset.k]=li.getAttribute("aria-expanded")==="true"})}
+    var out={n:0};
+    [].forEach.call(tree.children,function(li){walk(li,q,false,out)});
+    tcount.textContent=out.n?out.n+" match"+(out.n===1?"":"es")+" in the tree":"No match. Clear the filter to see the whole tree.";
+  };
+  function setQ(v){S.q=v.trim().toLowerCase();$("q").value=v;applyFocus();dirty=true}
+  tq.addEventListener("input",function(){setQ(this.value)});
+  tq.addEventListener("keydown",function(e){
+    if(e.key==="Escape"&&tq.value){e.stopPropagation();setQ("")} // the first Esc clears the filter; the pick and the card stay
+    else if(e.key==="ArrowDown"||e.key==="Enter"){
+      var v=visible();if(!v.length)return;
+      e.preventDefault();
+      focusRow(e.key==="Enter"&&q0?v.filter(function(li){return hit(li,q0)})[0]||v[0]:rove&&v.indexOf(rove)>=0?rove:v[0]);
+    }
+  });
 
   tree.addEventListener("click",function(e){
     var r=e.target.closest(".tr");if(!r)return;
@@ -799,9 +848,17 @@ function setHover(n){
   applyFocus();dirty=true;
 }
 
+// the text the search reads for a node: the map flags the matches and the tree filters to them, from this one text
+function hayOf(n){
+  if(n.type==="dot")return(n.name+" "+rooms[n.room].label+" "+rooms[n.room].folders[n.folder].name).toLowerCase();
+  if(n.type==="skill")return(n.label+" "+(n.info.desc||"")).toLowerCase();
+  if(n.type==="root")return"";
+  return(n.label+" "+(n.info.kind||"")+" "+(n.info.when||"")).toLowerCase();
+}
 function applyFocus(){
-  syncTree();
-  var f=S.hover||S.sel;focusLinks=[];flags.fill(0);flagMode=false;matchCount=0;
+  syncTree();filterTree(S.q||"");
+  var f=S.hover||(S.q&&S.here?null:S.sel); // a query beats the page's own "you are here" mark, so the map lights the matches the tree lists
+  focusLinks=[];flags.fill(0);flagMode=false;matchCount=0;
   if(f){
     flagMode=true;flags[f.i]=1;
     if(f===S.sel&&S.here)return; // the page the reader is on is the one lit node: no centre node, no links
@@ -826,12 +883,7 @@ function applyFocus(){
     flagMode=true;
     var q=S.q;
     nodes.forEach(function(n){
-      var hay;
-      if(n.type==="dot")hay=(n.name+" "+rooms[n.room].label+" "+rooms[n.room].folders[n.folder].name).toLowerCase();
-      else if(n.type==="skill")hay=(n.label+" "+(n.info.desc||"")).toLowerCase();
-      else if(n.type==="root")hay="";
-      else hay=(n.label+" "+(n.info.kind||"")+" "+(n.info.when||"")).toLowerCase();
-      if(hay.indexOf(q)>=0){flags[n.i]=1;matchCount++;if(n.hub)flags[n.hub.i]=1}
+      if(hayOf(n).indexOf(q)>=0){flags[n.i]=1;matchCount++;if(n.hub)flags[n.hub.i]=1}
     });
     flags[root.i]=1;
     $("hits").textContent=matchCount+" match"+(matchCount===1?"":"es");
@@ -1118,7 +1170,8 @@ function draw(t){
   label(root.label,root.x,root.y,PAL.ink,11,root.r*k+16,flagMode&&!flags[root.i]?.25:1);
   hubs.forEach(function(h){
     var R=rooms[h.room];
-    label(R.label.toUpperCase()+(R.collapsed?" · "+R.count:""),h.x,h.y,T(h.color),10,-h.r*k-8,flagMode?(flags[h.i]?1:.3):.95,true);
+    // the name and how many it holds; a long name loses its bracket on the map (the tree and the card keep it whole)
+    label(R.label.split(" (")[0].toUpperCase()+"  "+R.count,h.x,h.y,T(h.color),10,-h.r*k-8,flagMode?(flags[h.i]?1:.3):.95,true);
   });
   // on a narrow stage the ring names show only while a node is hovered or picked
   if(guideA>.05&&(W>=520||S.hover||S.sel))L.guides.forEach(function(gd){label(gd.label,0,gd.ly,T(gd.lc),12,0,guideA*(flagMode?.4:.9),true)});

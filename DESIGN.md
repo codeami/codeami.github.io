@@ -460,7 +460,10 @@ stays).
   "All settings" opens the controls panel (search, layout, view, motion) over the
   map: a ✕ button and Esc close it, and on a phone it is a bottom sheet.
   The left pane is a tree (Read in order, Rooms > folders > files, Pages and
-  projects) under a "you are here" trail. The row for the current selection has
+  projects) under a "you are here" trail and a filter box that shares one query
+  with the map's search (the tree narrows to the matches and their parents; the
+  first Esc clears only the filter). Rows are flat, with no hairline under each
+  row. The row for the current selection is a tinted band (`--accent-dim`) with
   an accent bar and bold text, and its parents are open. On a phone it is a
   full-width drawer; the card steps aside while it is open. No heading glow.
 - **Node card:** glyph of its kind, name in bold, kind and status, then tabs:
