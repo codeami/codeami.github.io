@@ -525,6 +525,7 @@ test('top bar: Meta-Factory, Case studies, Blog, About and Work with me on every
 });
 
 test('top bar: clicking each item on every public page lands on a page with the same bar and the same site name', async ({ page }) => {
+  test.setTimeout(180000); // every bar page times five items is over a hundred navigations
   await page.route('**/*', (route) => (route.request().url().startsWith(origin) ? route.continue() : route.fulfill({ status: 200, body: '' })));
   await page.goto('/index.html');
   const same = await barOf(page);
