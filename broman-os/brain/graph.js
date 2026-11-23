@@ -111,7 +111,8 @@ function start(d,srcLabel){
   $("src").textContent="public data · "+srcLabel;
   window.AIO_READING=d.reading||[];
   // the "#map" entry opens the chart itself, so it is not a reading page in the drawer's "n of m" run
-  drawer=AIODrawer({reading:window.AIO_READING.filter(function(r){return r.url.indexOf("#map")<0}),onClose:function(){S.sel=null;S.fol=null;S.read=-1;applyFocus();dirty=true}});
+  drawer=AIODrawer({reading:window.AIO_READING.filter(function(r){return r.url.indexOf("#map")<0}),onClose:function(){S.sel=null;S.fol=null;S.read=-1;applyFocus();dirty=true},
+    onNote:function(id){if(byId[id])openNode(byId[id])}}); // "Show on the map" in the note reader
   readLit();build(d);buildLegend();wire();renderSides();
   resize();setLayout(S.layout,true);mountTour();
   requestAnimationFrame(frame);
@@ -145,6 +146,8 @@ var API={
   setInsets:function(bottom){INS.bottom=bottom||0;if(!view.user)fitView();dirty=true},
   overlay:function(on){host.classList.toggle("ov",!!on);setTimeout(resize,0)},
   lit:readLit, // the course page calls this after a lesson is done
+  // a link to a note or text file of this site opens in the drawer's reader, rendered; true when it did
+  note:function(url){if(!drawer||!drawer.isText(url))return false;drawer.note({href:url,label:decodeURIComponent(url.split("/").pop().replace(/\.\w+$/,"").replace(/-/g," "))});return true},
   // the site's one dropdown reads and drives the map's controls through these two
   get:function(){return{motion:!!S.motion,widgets:!$("side").hidden,legend:!!S.legend,layout:S.dim3?"3d":S.layout,menu:!$("panel").hidden}},
   act:function(name){
@@ -175,6 +178,7 @@ function build(d){
     var hub=mk("hub",rm.label,{r:9,color:rm.color,room:ri,count:total,collapsed:false,info:rm});
     rooms.push({id:rm.id,label:rm.label,color:rm.color,hub:hub,dots:[],count:total,folders:rm.folders,collapsed:false,ang0:0,span:0});
     hubs.push(hub);
+    byId[rm.id]=hub; // a link such as index.html#giants opens the room's card
   });
   (d.skills||[]).forEach(function(s,i){skills.push(mk("skill",s.n,{r:5,color:"#ff9a3c",info:s,idx:i}))});
   var skillByName={};skills.forEach(function(s){skillByName[s.label]=s});

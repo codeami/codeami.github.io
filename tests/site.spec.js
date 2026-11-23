@@ -849,6 +849,40 @@ test('left tree and map stay in step: a pick in either one shows in the tree, th
   expect(await lit()).toBe(0);
 });
 
+test('map links: a note opens rendered in the card, never as a raw .md file; a link inside the site stays in the site; a room has a deep link', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  const data = JSON.parse(readFileSync(join(root, 'broman-os/brain/brain-data.json'), 'utf8'));
+  const giant = data.rooms.find((r) => r.id === 'giants').folders[0].files[0]; // a giant: "The idea" (their page) and "How we use it" (a note of ours)
+  const note = giant.links.find((l) => l.label === 'How we use it').href;
+  expect(note).toMatch(/^notes\/.+\.md$/);
+  await page.goto(`/broman-os/index.html#${giant.id}`);
+  const card = page.locator('#drawer h2.t');
+  await expect(card).toHaveText(giant.n);
+  await expect(page.locator('#pageov')).toHaveClass(/min/); // a node link leaves the page card folded
+  await page.locator('#drawer .tabs button', { hasText: 'Links' }).click();
+  // the idea is another site: new tab. Nothing of this site opens in a new tab.
+  await expect(page.locator('#drawer .lnk a', { hasText: 'The idea' })).toHaveAttribute('target', '_blank');
+  await page.locator('#drawer .lnk button', { hasText: 'How we use it' }).click();
+  await expect(page.locator('#drawer .dh .pos')).toHaveText('Note');
+  await expect(card).toHaveText(/./);
+  await expect(page.locator('#drawer .art strong', { hasText: 'Claim:' })).toBeVisible();
+  expect(page.url(), 'the page did not navigate to the raw file').not.toMatch(/\.md/);
+  await page.locator('#drawer .df .btn', { hasText: 'Show on the map' }).click();
+  await expect(page.locator('#drawer .dh .pos')).not.toHaveText('Note');
+  // every note link in the data is read through the reader: no raw .md anchor is drawn for a note of this site
+  const notes = await page.evaluate(() => [...document.querySelectorAll('#drawer a[href$=".md"]')].filter((a) => a.origin === location.origin).length);
+  expect(notes).toBe(0);
+  // a link into this site's own page (Areas card: "All pages") has no new-tab arrow
+  await page.goto('/broman-os/index.html#area-harness');
+  await page.locator('#drawer .tabs button', { hasText: 'Links' }).click();
+  await expect(page.locator('#drawer .lnk a', { hasText: 'All pages' })).not.toHaveAttribute('target', '_blank');
+  // a room opens from its own deep link
+  await page.goto('/broman-os/index.html#giants');
+  await expect(card).toHaveText('Shoulders of giants');
+  await page.locator('#drawer ul button.fl', { hasText: 'Builders' }).click();
+  await expect(card).toHaveText('Builders');
+});
+
 // ---- the map: Hex and Folders by default, overlays that float, and one skin over everything ----
 test('map: Hex with Folders is the default; the notes sit apart and the page badges one badge width outside them', async ({ page }) => {
   await page.goto('/');

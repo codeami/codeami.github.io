@@ -1381,7 +1381,7 @@
         },
         {
          "label": "Primary source",
-         "href": "https://code.claude.com/docs/en/memory.md"
+         "href": "https://code.claude.com/docs/en/memory"
         }
        ],
        "rel": []
@@ -1400,7 +1400,7 @@
         },
         {
          "label": "Primary source",
-         "href": "https://docs.warp.dev/platform/harnesses/warp-agent.md"
+         "href": "https://docs.warp.dev/platform/harnesses/warp-agent"
         }
        ],
        "rel": []

@@ -638,7 +638,7 @@
    2,
    3,
    0,
-   "https://code.claude.com/docs/en/memory.md"
+   "https://code.claude.com/docs/en/memory"
   ],
   [
    "tier-warp",
@@ -647,7 +647,7 @@
    1,
    5,
    1,
-   "https://docs.warp.dev/platform/harnesses/warp-agent.md"
+   "https://docs.warp.dev/platform/harnesses/warp-agent"
   ],
   [
    "tier-omni",

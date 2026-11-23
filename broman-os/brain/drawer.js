@@ -76,7 +76,9 @@ window.AIODrawer=function(o){
     if(l.doc){var bd=el("button",null,l.label);bd.type="button";bd.addEventListener("click",function(){doc(l)});return bd}
     var i=l.newTab?-1:readIndex(l.href);
     if(i>=0){var b=el("button",null,"Read: "+l.label);b.type="button";b.addEventListener("click",function(){read(i)});return b}
-    var ext=l.newTab||/^https?:/.test(l.href),a=el("a",null,l.label+(ext?" ↗":""));a.href=l.href;if(l.title)a.title=l.title;
+    if(isText(l.href)){var bn=el("button",null,"Read: "+l.label);bn.type="button";bn.addEventListener("click",function(){note(l)});return bn}
+    // only a link to another site opens in a new tab: a page of this site swaps into the page card
+    var ext=l.newTab||(/^https?:/.test(l.href)&&abs(l.href).indexOf(location.origin)!==0),a=el("a",null,l.label+(ext?" ↗":""));a.href=l.href;if(l.title)a.title=l.title;
     if(ext){a.target="_blank";a.rel="noopener noreferrer"}
     return a;
   }
@@ -174,7 +176,71 @@ window.AIODrawer=function(o){
     if(from){foot.hidden=false;var b=el("button","btn","◀ Back to "+from.title);b.type="button";
       b.addEventListener("click",function(){card(from)});foot.appendChild(b)}
   }
+  /* A note or text file of this site (brain/notes/*.md, allowlist.txt, build.py) reads here, rendered, never as a raw file.
+     The note's own links, tags and source show above its text; Back returns to the card it was opened from. */
+  function isText(href){var u=abs(href);return u.indexOf(location.origin)===0&&/\/brain\/[^?#]*\.(md|txt|py)$/.test(bare(u))}
+  function inline(p,s){
+    var re=/(`[^`]+`)|(\*\*[^*]+\*\*)|(\[[^\]]+\]\([^)]+\))/g,at=0,m;
+    while((m=re.exec(s))){
+      if(m.index>at)p.appendChild(document.createTextNode(s.slice(at,m.index)));
+      var t=m[0];
+      if(t.charAt(0)==="`")p.appendChild(el("code",null,t.slice(1,-1)));
+      else if(t.charAt(0)==="*")p.appendChild(el("strong",null,t.slice(2,-2)));
+      else{
+        var k=/^\[([^\]]+)\]\(([^)]+)\)$/.exec(t),h=k[2].trim();
+        if(/^[a-z][a-z0-9+.-]*:/i.test(h)&&!/^https?:/i.test(h))p.appendChild(document.createTextNode(k[1])); // no javascript: or data: links
+        else{var a=el("a",null,k[1]);a.href=h;if(/^https?:/i.test(h)){a.target="_blank";a.rel="noopener noreferrer"}p.appendChild(a)}
+      }
+      at=m.index+t.length;
+    }
+    if(at<s.length)p.appendChild(document.createTextNode(s.slice(at)));
+  }
+  // a small Markdown reader: front matter, headings, paragraphs, lists, `code`, **bold** and [links](url)
+  function md(art,text){
+    var lines=text.replace(/\r/g,"").split("\n"),i=0,meta={},title="",list=null,para=null,last=null,KEY=/^(Claim|Evidence|Elaboration|Why it matters here):\s*/;
+    if(lines[0]==="---"){for(i=1;i<lines.length&&lines[i]!=="---";i++){var fm=/^(\w+):\s*(.*)$/.exec(lines[i]);if(fm)meta[fm[1]]=fm[2]}i++}
+    for(;i<lines.length;i++){
+      var ln=lines[i],h=/^(#{1,4})\s+(.*)$/.exec(ln),li=/^\s*(?:[-*]|\d+\.)\s+(.*)$/.exec(ln);
+      if(!ln.trim()){list=para=null;continue}
+      if(h){list=para=null;if(h[1].length===1&&!title)title=h[2];else art.appendChild(el("h3",null,h[2]));continue}
+      if(li){
+        var ord=/^\s*\d+\./.test(ln);
+        if(!list||list.tagName!==(ord?"OL":"UL")){list=el(ord?"ol":"ul");art.appendChild(list)}
+        last=el("li");inline(last,li[1]);list.appendChild(last);para=null;continue;
+      }
+      if(list&&/^\s+/.test(ln)&&last){last.appendChild(document.createTextNode(" "));inline(last,ln.trim());continue}
+      list=null;
+      var kw=KEY.exec(ln);
+      if(kw||!para){para=el("p");art.appendChild(para);if(kw){para.appendChild(el("strong",null,kw[1]+": "));ln=ln.slice(kw[0].length)}}
+      else para.appendChild(document.createTextNode(" "));
+      inline(para,ln.trim());
+    }
+    return{title:title,meta:meta};
+  }
+  function note(l){
+    var from=last,href=bare(abs(l.href)),name=href.split("/").pop(),text=/\.md$/.test(name);
+    card({doc:true,kind:text?"Note":"File",title:l.title||l.label,line:text?"wiki note · public copy":name,links:[]});
+    var art=el("div","art"),my=++token;art.appendChild(el("p","none","Loading…"));body.appendChild(art);
+    foot.hidden=false;
+    if(from){var b=el("button","btn","◀ Back to "+from.title);b.type="button";b.addEventListener("click",function(){card(from)});foot.appendChild(b)}
+    fetch(href).then(function(r){if(!r.ok)throw 0;return r.text()}).then(function(src){
+      if(my!==token)return;
+      art.textContent="";
+      if(!text){var pre=el("pre",null,src);art.appendChild(pre);return}
+      var r=md(art,src),id=name.replace(/\.md$/,"");
+      if(r.title)body.querySelector("h2.t").textContent=r.title;
+      var tags=(r.meta.tags||"").replace(/[\[\]]/g,"").split(",").map(function(s){return s.trim()}).filter(Boolean);
+      if(tags.length)body.querySelector(".ln").textContent="wiki note · "+tags.join(", ");
+      var ref=el("p","none"),rel=(r.meta.links||"").replace(/[\[\]]/g,"").split(",").map(function(s){return s.trim()}).filter(Boolean);
+      if(r.meta.source)art.insertBefore(el("p","none","Source: "+r.meta.source),art.firstChild);
+      if(rel.length){
+        var rl=el("div","rel");ref.textContent="Related notes";art.appendChild(ref);art.appendChild(rl);
+        rel.forEach(function(x){var rb=el("button",null,x.replace(/-/g," "));rb.type="button";rb.addEventListener("click",function(){note({href:new URL(x+".md",href).href,label:x.replace(/-/g," ")})});rl.appendChild(rb)});
+      }
+      if(o.onNote){var sb=el("button","btn","Show on the map");sb.type="button";sb.addEventListener("click",function(){o.onNote(id)});foot.appendChild(sb)}
+    }).catch(function(){if(my!==token)return;art.textContent="";art.appendChild(el("p","none","This note could not be loaded."))});
+  }
   function close(){if(d.hidden)return;token++;d.hidden=true;if(o.onClose)o.onClose()}
-  return{card:card,read:read,doc:doc,close:close,el:d,readIndex:readIndex};
+  return{card:card,read:read,doc:doc,note:note,isText:isText,close:close,el:d,readIndex:readIndex};
 };
 })();
