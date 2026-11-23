@@ -6,7 +6,7 @@ What the site is for and what gets escalated: see [vision.md](vision.md).
 
 Plain static files, served by GitHub Pages from the root of `main` (`.nojekyll` turns Jekyll off). To read it locally: `python3 -m http.server`, then open `/`.
 
-The public pages, under one top bar of five items (Meta-Factory, Case studies, Blog, About, Work with me):
+The public pages. Five of them are the items of the one top bar (Meta-Factory, Case studies, Blog, About, Work with me):
 
     Home            index.html                    the purpose line, the pipeline clip, three dated numbers, See it work / Talk to me, a short "Ashish Raina" block
     Meta-Factory    broman-os/index.html         what we build, the demo (a chat and the second brain as a map), and how it works: how I work with agents, what the crew may do, who it is for, credits
@@ -14,6 +14,7 @@ The public pages, under one top bar of five items (Meta-Factory, Case studies, B
     Blog            broman-os/blog/              the post list, four posts and the harness arena post (broman-os/arena.html)
     About           about/index.html              who I am; cv.html is its child, the CV
     Work with me    work-with-me/index.html       how to ask for a factory; the contact is a mailto and LinkedIn
+    Services        broman-os/services/index.html how a pilot runs (Diagnose, Prove, Run, with gates the client controls); public but not in the bar, linked from Work with me
 
 Link-only pages (reachable, not in the bar or the map): the course (`broman-os/course/`) and the pipeline clip (`broman-os/pipeline/`, a scrubbed animated page that Home embeds). Redirect stubs, kept so old links work: `blog/index.html` goes to the post list; `intent/index.html` goes to the Meta-Factory page and keeps the `#how` and `#safety` anchors.
 
