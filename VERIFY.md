@@ -26,7 +26,7 @@ Do each flow at desktop (1280x800) and phone (390x844). Real clicks and typing t
 1. **Home** `/`: open it, then click each of the five top-bar items (Meta-Factory, Case studies, Blog, About, Work with me) in turn.
 2. **Broman OS** `/broman-os/`: open it from the bar. Open the Menu (the ▾ button by the name), click Legend, click Search and type a word. Also open `/broman-os/blog/` and one post, and `/broman-os/course/`.
 3. **Pipeline page** `/broman-os/pipeline/`: click the "▶ Replay" button. Wait about 2.5 s.
-4. **Giants room** (Shoulders of giants, on the map at `/broman-os/`): open Menu, click Legend, and read the room list. Then check its folders (Builders, Startup ecosystem, Marketing, Blogs and newsletters, OG thinkers) show on the map.
+4. **Giants room** (Shoulders of giants, on the map at `/broman-os/`): open Menu, click Legend, and read the room list. Then compare its count and folders with the data file.
 5. **Phone width**: repeat 1 to 4 under the phone emulation. Check the top bar, the card as a bottom sheet, and that nothing scrolls sideways.
 
 ## Check
@@ -35,8 +35,8 @@ Passing looks like this, for each flow:
 
 1. Home: each bar click lands on a page with the same top bar and the name "Ashish Raina"; no console errors (`chrome-devtools-axi console` says no messages); no failed request other than a `favicon.ico` 404 on a page opened directly.
 2. Broman OS: the map draws with the six rooms in the legend; Menu opens and closes; Search takes the typed text; the blog list and the post load; the course opens.
-3. Pipeline: the snapshot's Live log heading changes from `idle` to `● live` after the click; the stage area and log fill. (The page has a known `favicon.ico` 404 when opened on its own; it is not a failure.)
-4. Giants room: the legend reads `Shoulders of giants · 55` (the count moves when the room's notes change; compare with `broman-os/brain/brain-data.json`), and the five folder names are on the map.
+3. Pipeline: the page plays on its own at load, so the heading already reads `● live` before any click. Wait until it reads `● done` (about 35 s), note the log line count (14), then click Replay: the heading goes back to `● live` and the log restarts with 1 line. A click that does nothing leaves `● done` and 14 lines. (The page has a known `favicon.ico` 404 when opened on its own; it is not a failure.)
+4. Giants room: the legend reads `Shoulders of giants · 55` (the count moves when the room's notes change; compare with `broman-os/brain/brain-data.json`, where the room has five folders: Builders, Startup ecosystem, Marketing, Blogs and newsletters, OG thinkers). Folder names are not drawn on the map by default, so do not look for them there.
 5. Phone: `document.documentElement.scrollWidth` equals `innerWidth` (390 / 390), and the screenshot shows the bar and sheet intact.
 
 Evidence: put the commands you ran and a screenshot path per flow in your final message, and say which flows you did not run.
