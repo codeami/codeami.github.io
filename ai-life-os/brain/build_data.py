@@ -99,6 +99,11 @@ for tid, label, has, dif, lacks, guess, src in extra["tier"]:
                  "links": links(ls), "rel": extra["tier_edges"].get(tid, [])})
 tier_room = hub_of("g-tier", "tier", "Harness tier list", "#ffd93d", [("scored setups", tier)])
 
+# Room 4b: shoulders of giants, one folder per `folder` field of the giants nodes (src/extra.json)
+giants = [e for e in extra["extra"] if e["group"] == "giants" and not e.get("hub")]
+giants_room = hub_of("g-giants", "giants", "Shoulders of giants", "#ff9a3c", [
+    (f, [node(e, "giant · " + f.lower()) for e in giants if e["folder"] == f]) for f in extra["giants_folders"]])
+
 # Room 5: Blog posts, one folder per kicker; a post opens in the reading drawer
 POST = re.compile(r'<li class="p-post"><p class="p-kicker">([^<]+)</p><h3><a href="([^"]+)">(.+?)</a></h3><p>(.+?)</p><p class="p-byline"><time datetime="([^"]+)">([^<]+)</time>')
 posts = {}
@@ -127,7 +132,7 @@ skills = []
 
 out = {"meta": {"name": "Public second brain of the Software Meta-Factory", "invented": False,
                 "note": "Public data only: the approved wiki notes, this site's pages and posts, the harness tier list. No private files, paths, routines or links."},
-       "root": site["root"], "rooms": [notes_room, fm_room, areas_room, tier_room, posts_room] + ([course_room] if live("../course/index.html") else []), "skills": skills, "routines": [],
+       "root": site["root"], "rooms": [notes_room, areas_room, fm_room, tier_room, giants_room, posts_room] + ([course_room] if live("../course/index.html") else []), "skills": skills, "routines": [],
        "apps": [], "projects": [dict(p, kind="project") for p in site["projects"]], "pages": [dict(p, kind="page") for p in site["pages"] if live(p["url"])],
        "reading": [r for r in site["reading"] if live(r["url"])]}
 (HERE / "brain-data.json").write_text(json.dumps(out, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
