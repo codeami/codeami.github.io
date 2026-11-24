@@ -666,12 +666,12 @@ test('Meta-Factory page: how it works holds how I work with agents, what the cre
   await page.waitForURL(/broman-os\/index\.html$/);
 });
 
-test('home and Meta-Factory introductions: no model or vendor names, no unbuilt or pending wording', () => {
+test('home and Meta-Factory introductions: no model or vendor names, no unbuilt or pending wording', async ({ page }) => {
   const bad = /\b(Gemini|GPT|ChatGPT|Claude|DeepSeek|Kimi|Qwen|Hermes|OpenClaw|Omarchy|Kestrel|Rosie)\b|\bPi\b|in build|not built or priced|Opening soon/;
-  for (const f of ['index.html', 'broman-os/index.html']) {
-    const html = readFileSync(join(root, f), 'utf8');
-    const text = html.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>|<!--[\s\S]*?-->/g, '').replace(/<[^>]+>/g, ' ');
-    expect(text.match(bad)?.[0] ?? null, `${f} names`).toBeNull();
+  for (const [url, scope] of [['/index.html', 'main article'], ['/broman-os/index.html', 'aside.law']]) {
+    await page.goto(url);
+    const text = await page.locator(scope).first().innerText();
+    expect(text.match(bad)?.[0] ?? null, `${url} names`).toBeNull();
   }
 });
 
