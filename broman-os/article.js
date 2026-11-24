@@ -5,16 +5,15 @@
    hud.js draws the background graph and turns the header's #theme button into
    the skin toggle. */
 (function () {
-  var root = document.documentElement;
-  var base = document.currentScript ? document.currentScript.src.replace(/[^\/]*$/, "") : "";
+  const base = document.currentScript ? document.currentScript.src.replace(/[^/]*$/, "") : "";
   // skin.js sets the saved skin and runs the toggle; written in place so it runs before the body is drawn
-  document.write('<script src="' + base + 'skin.js"><\/script>');
+  document.write('<script src="' + base + 'skin.js"></script>');
   if (!document.querySelector('link[href$="hud.css"]')) {
-    var css = document.createElement("link");
+    const css = document.createElement("link");
     css.rel = "stylesheet"; css.href = base + "hud.css";
     document.head.appendChild(css);
   }
-  var js = document.createElement("script");
+  const js = document.createElement("script");
   js.src = base + "hud.js";
   document.head.appendChild(js);
 })();
