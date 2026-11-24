@@ -1,0 +1,25 @@
+/* decisions screen: calls have long titles, so rows wrap instead of cutting off */
+.dec .row { align-items: flex-start; }
+.dec .row .title, .dec .row .sub { white-space: normal; overflow: visible; }
+.dec .row .sub { margin-top: 2px; }
+.dec-drafts { margin-bottom: var(--s-5); }
+.dec-draft { max-width: 640px; margin-top: var(--s-3); }
+.dec-who { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-3); }
+.dec-why { margin: var(--s-3) 0; padding-left: var(--s-5); }
+.dec-mail pre { margin: var(--s-1) 0 var(--s-4); white-space: pre-wrap; font: inherit; background: var(--raise); border-radius: var(--r-lg); padding: var(--s-4); }
+.dec-draft .acts { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-3); }
+.dec-note { margin: var(--s-3) 0 0; }
+.dec-meta { display: flex; flex-wrap: wrap; gap: var(--s-3); margin-top: var(--s-1); font-size: 13px; }
+.dec-meta .mono { overflow-wrap: anywhere; }
+/* AI-news proposals: cards like the draft cards, a fetch bar, and the weekly count */
+.dec-signal { margin-bottom: var(--s-5); }
+.dec-news { max-width: 640px; margin-top: var(--s-3); }
+.dec-news h3 { margin: var(--s-3) 0 var(--s-2); font-size: 16px; line-height: 1.35; overflow-wrap: anywhere; }
+.dec-news p { margin: var(--s-2) 0; overflow-wrap: anywhere; }
+.dec-news .acts { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-3); margin-top: var(--s-3); }
+.dec-news .mono { overflow-wrap: anywhere; }
+.dec-bar { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-3); margin: var(--s-3) 0; }
+.dec-week { width: 100%; border-collapse: collapse; font-size: 13px; }
+.dec-week caption { text-align: left; padding: var(--s-3) var(--s-4) 0; }
+.dec-week th { text-align: left; font: 600 12px/1.2 var(--mono); color: var(--faint); padding: var(--s-3) var(--s-4) var(--s-2) var(--s-4); }
+.dec-week td { padding: var(--s-2) var(--s-4); border-top: 1px solid var(--rule); color: var(--ink-2); }

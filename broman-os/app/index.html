@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta name="robots" content="noindex">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<title>Broman OS trial</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0A121A">
+<link rel="icon" href="shell/pwa/icon-192.png">
+<link rel="apple-touch-icon" href="shell/pwa/icon-192.png">
+<script>if ("serviceWorker" in navigator) addEventListener("load", function () { navigator.serviceWorker.register("sw.js").catch(function () {}); });</script>
+<link rel="stylesheet" href="shell/tokens.css">
+<link rel="stylesheet" href="shell/shell.css">
+<link rel="stylesheet" href="plugins/guided/styles.css">
+<link rel="stylesheet" href="plugins/dashboard/styles.css">
+<link rel="stylesheet" href="plugins/inbox/styles.css">
+<link rel="stylesheet" href="plugins/decisions/styles.css">
+<link rel="stylesheet" href="plugins/workflow/styles.css">
+<link rel="stylesheet" href="plugins/second-brain/styles.css">
+<link rel="stylesheet" href="plugins/usage/styles.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="i-brain" viewBox="0 0 24 24"><path d="M12 10a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM5 6a1.6 1.6 0 1 0 0 3.2A1.6 1.6 0 0 0 5 6zM19 6a1.6 1.6 0 1 0 0 3.2A1.6 1.6 0 0 0 19 6zM12 19a1.6 1.6 0 1 0 0 3.2 1.6 1.6 0 0 0 0-3.2zM6.3 8.7l4.2 3.3M17.7 8.7l-4.2 3.3M12 14v5"/></symbol><symbol id="i-chat" viewBox="0 0 24 24"><path d="M5 5h14v10h-8.5L6 19v-4H5z"/></symbol><symbol id="i-coin" viewBox="0 0 24 24"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM14.5 9.5c-.5-.8-1.5-1.2-2.5-1.2-1.4 0-2.5.7-2.5 1.9 0 2.5 5.2 1.2 5.2 3.7 0 1.2-1.2 2-2.7 2-1.1 0-2.2-.5-2.7-1.4M12 6.5v1.8M12 15.8v1.7"/></symbol><symbol id="i-crew" viewBox="0 0 24 24"><path d="M9 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM3 21c0-3.6 2.7-6 6-6s6 2.4 6 6M17 9a2.5 2.5 0 1 0 0-5M17.5 15c2.2.3 3.5 2.3 3.5 6"/></symbol><symbol id="i-flag" viewBox="0 0 24 24"><path d="M6 21V4M6 5h11l-2 4 2 4H6"/></symbol><symbol id="i-flow" viewBox="0 0 24 24"><path d="M4 5h6v5H4zM14 14h6v5h-6zM10 7.5h2.5a2 2 0 0 1 2 2V14"/></symbol><symbol id="i-grid" viewBox="0 0 24 24"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></symbol><symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 4l8 4-8 4-8-4zM4 12l8 4 8-4M4 16l8 4 8-4"/></symbol><symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5l11 7-11 7z"/></symbol><symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM18.5 16l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z"/></symbol><symbol id="i-sun" viewBox="0 0 24 24"><path d="M12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol><symbol id="i-tray" viewBox="0 0 24 24"><path d="M4 13l2.5-7h11L20 13v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zM4 13h5l1 2h4l1-2h5"/></symbol><symbol id="mark" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#0E2233"/><circle cx="16" cy="16" r="8.5" fill="none" stroke="#3CC6CF" stroke-width="2"/><circle cx="16" cy="7.5" r="2.6" fill="#3CC6CF"/><circle cx="8.6" cy="20.3" r="2.6" fill="#3CC6CF"/><circle cx="23.4" cy="20.3" r="3.2" fill="#FFC531"/></symbol></svg>
+<div class="app" id="app"></div>
+<noscript><p class="note">Broman OS needs JavaScript on.</p></noscript>
+<script>window.BromanOS = { registry: {"name":"trial","display":"Broman OS trial","built":"2026-11-24","plugins":[{"id":"guided","title":"Start here","summary":"Bosun walks you through Broman OS, then two guided runs: an email becomes a decision and a task, and Ask Bromni.","group":"Broman OS","screens":[{"id":"start","title":"Start here","icon":"spark"},{"id":"run","title":"Guided run","icon":"play"},{"id":"ask","title":"Ask Bromni","icon":"chat"},{"id":"crew","title":"Crew","icon":"crew"},{"id":"deeper","title":"Go deeper","icon":"layers"}]},{"id":"dashboard","title":"Dashboard","summary":"One tile for every plugin in this variant, and the products built in Broman.","group":"Broman OS","screens":[{"id":"home","title":"Dashboard","icon":"grid"}]},{"id":"inbox","title":"Inbox","summary":"Feeds, creators, papers and topics worth a look.","group":"Broman OS","screens":[{"id":"stream","title":"Inbox","icon":"tray"}]},{"id":"decisions","title":"Decisions","summary":"Calls held for you to make, with their reports.","group":"Broman OS","screens":[{"id":"held","title":"Decisions","icon":"flag"}]},{"id":"workflow","title":"Workflows","summary":"How jobs flow, as cards, plus the services each one needs.","group":"Workflows","screens":[{"id":"canvas","title":"Workflows","icon":"flow"}]},{"id":"second-brain","title":"Brain","summary":"A sample second brain: see how your notes could connect once your own tools are linked.","group":"Broman OS","screens":[{"id":"map","title":"Brain","icon":"brain"}]},{"id":"usage","title":"Usage","summary":"How much of your free trial you have used, and how to ask Troupe for more.","group":"Broman OS","screens":[{"id":"meter","title":"Usage","icon":"coin"}]}]}, data: {}, screens: {} };</script>
+<script src="plugins/usage/data.js"></script>
+<script src="plugins/second-brain/data.js"></script>
+<script src="plugins/workflow/data.js"></script>
+<script src="plugins/decisions/data.js"></script>
+<script src="plugins/inbox/data.js"></script>
+<script src="plugins/dashboard/data.js"></script>
+<script src="plugins/guided/data.js"></script>
+<script src="plugins/guided/start.js"></script>
+<script src="plugins/guided/run.js"></script>
+<script src="plugins/guided/ask.js"></script>
+<script src="plugins/guided/crew.js"></script>
+<script src="plugins/guided/deeper.js"></script>
+<script src="plugins/dashboard/screen.js"></script>
+<script src="plugins/inbox/screen.js"></script>
+<script src="plugins/decisions/screen.js"></script>
+<script src="plugins/workflow/screen.js"></script>
+<script src="plugins/second-brain/screen.js"></script>
+<script src="plugins/usage/screen.js"></script>
+<script src="shell/shell.js"></script>
+</body>
+</html>

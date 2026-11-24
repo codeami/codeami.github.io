@@ -1,0 +1,9 @@
+.us-rows { display: grid; gap: var(--s-4); }
+.us-row { display: grid; gap: var(--s-2); }
+.us-top { display: flex; align-items: center; justify-content: space-between; gap: var(--s-3); }
+.us-json { margin: 0; padding: var(--s-3); border-radius: var(--r-md); background: var(--paper); font: var(--fs-meta) var(--mono); overflow-x: auto; }
+.us-limit { display: grid; gap: var(--s-3); border: 1px solid var(--amber); }
+.us-connect { display: grid; gap: var(--s-2); padding: var(--s-3); border-radius: var(--r-md); background: var(--paper); }
+.us-f { display: grid; gap: 4px; font-size: 13px; color: var(--muted); }
+.us-f input, .us-f textarea { font: inherit; color: var(--ink); background: var(--raise); border: 1px solid var(--line); border-radius: var(--r-sm); padding: 8px 10px; width: 100%; box-sizing: border-box; }
+.us-connect .acts { display: flex; flex-wrap: wrap; gap: var(--s-2); align-items: center; }
