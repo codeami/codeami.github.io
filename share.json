@@ -11,6 +11,7 @@
   {"path": "broman-os/index.html", "level": "public"},
   {"path": "broman-os/arena.html", "level": "public"},
   {"path": "broman-os/services/index.html", "level": "public"},
+  {"path": "broman-os/try/index.html", "level": "public"},
   {"path": "broman-os/pipeline/index.html", "level": "link-only"},
   {"path": "broman-os/course/index.html", "level": "link-only"},
   {"path": "broman-os/blog/index.html", "level": "public"},

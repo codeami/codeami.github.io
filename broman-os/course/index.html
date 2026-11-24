@@ -586,7 +586,7 @@ form.hello .acts { display: flex; flex-wrap: wrap; align-items: center; gap: var
     greet(); side();
   });
   // a link such as course/index.html#maslow (the map's lesson cards) opens that lesson
-  function fromHash() { var id = decodeURIComponent(location.hash.slice(1)); if (byId[id]) startLesson(id); }
+  function fromHash() { var id; try { id = decodeURIComponent(location.hash.slice(1)); } catch (e) { return; } if (byId[id]) startLesson(id); }
   window.addEventListener("hashchange", fromHash);
 
   fetch("course.json").then(function (r) {
