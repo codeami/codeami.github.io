@@ -238,7 +238,7 @@ test('panel post: header, index, side cards, numbered panels; columns follow the
   expect(targets.length).toBe(8);
   const mores = await page.$$eval('.p-more', (as) => as.map((a) => ({ href: a.getAttribute('href'), text: a.textContent })));
   expect(mores.length, 'one link to the full section per panel').toBe(8);
-  for (const { href, text } of mores) expect(text, 'link text says what it opens').not.toMatch(/section \d/i);
+  for (const { text } of mores) expect(text, 'link text says what it opens').not.toMatch(/section \d/i);
   // each panel's link opens the full-post section that carries the panel's own subject
   for (const [i, { href }] of mores.entries()) {
     const sectionHead = (await page.locator(`${href} > h2`).textContent()).toLowerCase();
@@ -481,12 +481,6 @@ const clickNode = async (page, label) => {
   }), label);
   const box = await page.locator('canvas').first().boundingBox();
   await page.mouse.click(box.x + at[0], box.y + at[1]);
-};
-// The card is a scrolling box: wait for fonts, then start the capture from its top, as the page loop does.
-const settle = async (page) => {
-  await page.evaluate(() => document.fonts.ready);
-  await page.waitForLoadState('networkidle');
-  await page.evaluate(() => document.querySelectorAll('*').forEach((e) => { e.scrollTop = 0; }));
 };
 const stays = (page) => page.evaluate(() => { window.__stay = true; });
 const stayed = (page) => page.evaluate(() => window.__stay === true);

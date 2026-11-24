@@ -2,16 +2,16 @@
    Every page loads this in the head, so data-skin is set before the body is drawn and no page flashes white.
    Any header button with id "theme" (or class "theme") cycles the skin; a change in one tab reaches the others. */
 (function () {
-  var root = document.documentElement, SKINS = ["hud", "matrix", "calm"], NAMES = { hud: "HUD", matrix: "Matrix", calm: "Calm" };
+  const root = document.documentElement, SKINS = ["hud", "matrix", "calm"], NAMES = { hud: "HUD", matrix: "Matrix", calm: "Calm" };
   function saved() {
-    var s = null;
-    try { s = localStorage.getItem("skin"); } catch (e) { /* storage blocked: use the default */ }
+    let s = null;
+    try { s = localStorage.getItem("skin"); } catch  { /* storage blocked: use the default */ }
     return SKINS.indexOf(s) >= 0 ? s : "hud";
   }
-  function current() { var s = root.getAttribute("data-skin"); return SKINS.indexOf(s) >= 0 ? s : "hud"; }
+  function current() { const s = root.getAttribute("data-skin"); return SKINS.indexOf(s) >= 0 ? s : "hud"; }
   function next() { return SKINS[(SKINS.indexOf(current()) + 1) % SKINS.length]; }
   function label() {
-    var n = next();
+    const n = next();
     // the button names the skin that is on; a press moves to the next one
     [].forEach.call(document.querySelectorAll("#theme, button.theme"), function (b) {
       b.textContent = NAMES[current()];
@@ -22,7 +22,7 @@
   function set(s, keep) {
     if (SKINS.indexOf(s) < 0) return;
     root.setAttribute("data-skin", s);
-    if (keep !== false) { try { localStorage.setItem("skin", s); } catch (e) { /* storage blocked: lasts for this page only */ } }
+    if (keep !== false) { try { localStorage.setItem("skin", s); } catch  { /* storage blocked: lasts for this page only */ } }
     label();
   }
   function bind() {

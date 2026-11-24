@@ -8,9 +8,9 @@
 window.AIOBrain=function(opts){
 "use strict";
 opts=opts||{};
-var BASE=opts.base||"",FRAMED=!!opts.framed;
-var host=document.createElement("div");host.id="brainHost";if(FRAMED)host.className="framed";
-var shadow=host.attachShadow({mode:"open"});
+const BASE=opts.base||"",FRAMED=!!opts.framed;
+const host=document.createElement("div");host.id="brainHost";if(FRAMED)host.className="framed";
+const shadow=host.attachShadow({mode:"open"});
 shadow.innerHTML='<link rel="stylesheet" href="'+BASE+'graph.css">'+
   '<div id="stage"><div id="g3d" hidden></div><canvas id="cv" role="img" aria-label="Second brain map: a centre rules file linked to rooms of public notes, harness parts and posts, with a ring of skills and a ring of pages and projects. The side lists hold the same items as buttons."></canvas></div>'+
   '<div id="side" hidden><aside class="side-col" id="wl" aria-label="Map tree: reading order, rooms and pages">'+
@@ -38,26 +38,26 @@ shadow.innerHTML='<link rel="stylesheet" href="'+BASE+'graph.css">'+
   '<div id="legend" hidden></div><div class="hint">drag to pan &middot; wheel to zoom &middot; click a dot for its card &middot; double-click a room to fold it</div>'+
   '<div class="sr" id="live" aria-live="polite"></div>';
 document.body.insertBefore(host,document.body.firstChild);
-var $=function(id){return shadow.getElementById(id)};
-function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
-var TAU=Math.PI*2;
-var mq=window.matchMedia?matchMedia("(prefers-reduced-motion: reduce)"):{matches:false};
+const $=function(id){return shadow.getElementById(id)};
+function el(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
+const TAU=Math.PI*2;
+const mq=window.matchMedia?matchMedia("(prefers-reduced-motion: reduce)"):{matches:false};
 /* Motion: reduced motion turns it off by default; the Motion button overrides that, and is remembered */
-var MKEY="brain-motion";
-function savedMotion(){try{var v=localStorage.getItem(MKEY);return v==="on"?true:v==="off"?false:null}catch(e){return null}}
-function setMotion(on,remember){S.motion=on;$("motion").checked=on;var b=$("motionBtn");b.textContent=on?"Motion on":"Motion off";b.setAttribute("aria-pressed",String(on));
-  if(remember)try{localStorage.setItem(MKEY,on?"on":"off")}catch(e){}dirty=true}
-var INS={bottom:0}; // screen space a bottom sheet covers; the map centres above it
+const MKEY="brain-motion";
+function savedMotion(){try{const v=localStorage.getItem(MKEY);return v==="on"?true:v==="off"?false:null}catch{return null}}
+function setMotion(on,remember){S.motion=on;$("motion").checked=on;const b=$("motionBtn");b.textContent=on?"Motion on":"Motion off";b.setAttribute("aria-pressed",String(on));
+  if(remember)try{localStorage.setItem(MKEY,on?"on":"off")}catch{}dirty=true}
+const INS={bottom:0}; // screen space a bottom sheet covers; the map centres above it
 /* Course lessons: course/index.html keeps progress under CKEY; a lesson's dot stays grey until it is done */
-var CKEY="ai-course:v1",lit={};
-function readLit(){lit={};try{var s=JSON.parse(localStorage.getItem(CKEY)||"null");if(s&&s.done)for(var k in s.done)lit[k]=1}catch(e){}dirty=true}
+const CKEY="ai-course:v1";let lit={};
+function readLit(){lit={};try{const s=JSON.parse(localStorage.getItem(CKEY)||"null");if(s&&s.done)for(const k in s.done)lit[k]=1}catch{}dirty=true}
 window.addEventListener("storage",function(e){if(e.key===CKEY)readLit()});
 
 /* ---------- data ---------- */
 function validData(d){return d&&Array.isArray(d.rooms)&&d.rooms.length&&d.root&&Array.isArray(d.skills)}
 // every link in the data is relative to brain/: make it absolute, so the map works mounted on any page
 function absolute(d,from){
-  function a(u){try{return new URL(u,from).href}catch(e){return u}}
+  function a(u){try{return new URL(u,from).href}catch{return u}}
   function ls(list){(list||[]).forEach(function(l){if(Array.isArray(l))l[1]=a(l[1]);else if(l.href)l.href=a(l.href)})}
   ls(d.root.links);
   d.rooms.forEach(function(r){ls(r.links);r.folders.forEach(function(f){(f.files||[]).forEach(function(x){if(x.url)x.url=a(x.url);ls(x.links)})})});
@@ -68,28 +68,28 @@ function boot(){
   // public data only: brain-data.json, built by build_data.py from this site's public files
   function fail(){$("src").textContent="the map data could not load: serve the folder (python3 -m http.server) rather than opening the file"}
   if(!window.fetch)return fail();
-  var url=new URL(BASE+"brain-data.json",location.href).href;
+  const url=new URL(BASE+"brain-data.json",location.href).href;
   fetch(url).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){
     if(!validData(d))throw 0;start(absolute(d,url),"public notes, pages, posts and skills")}).catch(fail);
 }
 
 /* ---------- state ---------- */
-var S={layout:"hex",view:"folders",spin:0.05,motion:savedMotion()!=null?savedMotion():!mq.matches,names:false,spring:0.5,size:0.6,
+const S={layout:"hex",view:"folders",spin:0.05,motion:savedMotion()!=null?savedMotion():!mq.matches,names:false,spring:0.5,size:0.6,
   q:"",hover:null,sel:null,here:false,angle:0,legend:false,fol:null,page:"",read:-1}; // here: sel is the page the reader is on, shown alone; fol: {hub,i} a folder of the selected room; page: the url of the page on show; read: the reading-order entry open in the card
-var nodes=[],rooms=[],hubs=[],skills=[],routines=[],apps=[],root=null,data=null;
-var cv=$("cv"),ctx=cv.getContext("2d"),W=0,H=0,DPR=1;
-var view={k:.6,x:0,y:0,tk:.6,tx:0,ty:0,user:false};
-var applied="",dirty=true,flags=null,flagMode=false,focusLinks=[],guideA=0,cache={},sprites={},matchCount=0;
+const nodes=[],rooms=[],hubs=[],skills=[],routines=[],apps=[];let root=null;
+const cv=$("cv"),ctx=cv.getContext("2d");let W=0,H=0,DPR=1;
+const view={k:.6,x:0,y:0,tk:.6,tx:0,ty:0,user:false};
+let applied="",dirty=true,flags=null,flagMode=false,focusLinks=[],guideA=0,cache={},sprites={},matchCount=0;
 /* ---------- palette: Calm is a light map, HUD and Matrix keep the dark one ----------
    The canvas reads the skin's tokens from the page (hud.css). Node colours in the data are the HUD hexes; in Calm each one
    maps to its Calm token (TOK), and anything else is darkened. C(hex) is a shape's colour, T(hex) a label's. */
-var TOK={"#ff7a1a":"--k-root","#ff9a3c":"--k-skill","#ffb347":"--k-routine","#6c6a66":"--k-off","#5a6270":"--k-off","#5cd3ff":"--k-cli",
+const TOK={"#ff7a1a":"--k-root","#ff9a3c":"--k-skill","#ffb347":"--k-routine","#6c6a66":"--k-off","#5a6270":"--k-off","#5cd3ff":"--k-cli",
   "#2ee6c5":"--k-project","#ffd93d":"--k-page","#b57bff":"--r1","#ff4fd8":"--r2","#4f8dff":"--r3","#ff8a3d":"--r6"};
-var PAL={light:false};
-function tok(name,fb){var v=getComputedStyle(host).getPropertyValue(name).trim();return /^#[0-9a-f]{6}$/i.test(v)?v:fb}
-function darken(hex,f){var n=parseInt(hex.slice(1),16);function c(v){return Math.round(v*(1-f))}return"#"+((1<<24)+(c(n>>16)<<16)+(c(n>>8&255)<<8)+c(n&255)).toString(16).slice(1)}
+let PAL={light:false};
+function tok(name,fb){const v=getComputedStyle(host).getPropertyValue(name).trim();return /^#[0-9a-f]{6}$/i.test(v)?v:fb}
+function darken(hex,f){const n=parseInt(hex.slice(1),16);function c(v){return Math.round(v*(1-f))}return"#"+((1<<24)+(c(n>>16)<<16)+(c(n>>8&255)<<8)+c(n&255)).toString(16).slice(1)}
 function readPal(){
-  var light=document.documentElement.getAttribute("data-skin")==="calm";
+  const light=document.documentElement.getAttribute("data-skin")==="calm";
   PAL=light?{light:true,bg:tok("--bg","#faf7f2"),ink:tok("--ink","#2b2620"),mute:tok("--mute","#6b5f4a"),fill:tok("--panel","#ffffff"),tint:tok("--accent-dim","#efe3d2"),accent:tok("--accent","#8a5a2b")}
     :{light:false,bg:"#05060a",ink:"#e9e6e0",mute:"#cfc9bd",fill:"#0c0e11",tint:"#2a1608",accent:"#ff7a1a"};
   PAL.col={};PAL.txt={};
@@ -100,12 +100,11 @@ function C(hex){
   return PAL.col[hex]||(PAL.col[hex]=TOK[hex.toLowerCase()]?tok(TOK[hex.toLowerCase()],darken(hex,.45)):darken(hex,.45));
 }
 function T(hex){return PAL.light?(PAL.txt[hex]||(PAL.txt[hex]=darken(C(hex),.4))):hex}
-var drag=null,mouse={x:-1,y:-1};
+let drag=null;const mouse={x:-1,y:-1};
 
-function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;var t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 
 function start(d,srcLabel){
-  data=d;
   readPal();
   // the skin can change at any time (the top bar, another tab): the map repaints in the new one
   new MutationObserver(function(){readPal();buildLegend();if(g3)g3.backgroundColor(PAL.bg)}).observe(document.documentElement,{attributes:true,attributeFilter:["data-skin"]});
@@ -119,16 +118,16 @@ function start(d,srcLabel){
   requestAnimationFrame(frame);
   if(FRAMED&&pending)API.select(pending);
   // a link such as broman-os/index.html#first-mate opens that node's card
-  function fromHash(){var id=decodeURIComponent(location.hash.slice(1));if(id&&byId[id])openNode(byId[id])}
+  function fromHash(){const id=decodeURIComponent(location.hash.slice(1));if(id&&byId[id])openNode(byId[id])}
   window.addEventListener("hashchange",fromHash);setTimeout(fromHash,0);
 }
-var pending=null;
-function bare(u){try{u=new URL(u,location.href);return(u.origin+u.pathname).replace(/index\.html$/,"")}catch(e){return String(u)}}
-var API={
+let pending=null;
+function bare(u){try{u=new URL(u,location.href);return(u.origin+u.pathname).replace(/index\.html$/,"")}catch{return String(u)}}
+const API={
   // highlight the node of the page at url (a post's dot, or a page's hexagon) without opening its card
   select:function(url){
     if(!nodes.length){pending=url;return}
-    var u=bare(url),hit=null;
+    const u=bare(url);let hit=null;
     nodes.forEach(function(n){if(n.info&&n.info.url&&bare(n.info.url)===u)hit=n});
     S.sel=hit;S.fol=null;S.read=-1;S.page=u;S.here=!!hit;applyFocus();dirty=true;return hit;
   },
@@ -136,14 +135,14 @@ var API={
   state:function(){return{here:S.here&&S.sel?S.sel.label:null,lit:flagMode?nodes.filter(function(n){return flags[n.i]}).map(function(n){return n.label}):[]}},
   // and how they sit, in world units: the gap from a page badge to its nearest dot, and the closest two dots come
   metrics:function(){
-    var dots=nodes.filter(function(n){return n.type==="dot"&&n.vis>.5}),gap=1e9,pitch=1e9;
+    const dots=nodes.filter(function(n){return n.type==="dot"&&n.vis>.5});let gap=1e9,pitch=1e9;
     apps.forEach(function(a){dots.concat(hubs).forEach(function(d){gap=Math.min(gap,Math.hypot(a.x-d.x,a.y-d.y)-a.r)})});
-    dots.forEach(function(a,i){for(var j=i+1;j<dots.length;j++)pitch=Math.min(pitch,Math.hypot(a.x-dots[j].x,a.y-dots[j].y))});
+    dots.forEach(function(a,i){for(let j=i+1;j<dots.length;j++)pitch=Math.min(pitch,Math.hypot(a.x-dots[j].x,a.y-dots[j].y))});
     return{gap:gap,badge:apps.length?2*apps[0].r:0,pitch:pitch,layout:S.layout,view:S.view};
   },
   // the ground and the colours the canvas writes text in, for the contrast test
   textColours:function(){return{bg:PAL.bg,text:rooms.map(function(R){return T(R.color)}).concat(apps.map(function(a){return T(a.color)}),[PAL.ink,PAL.mute])}},
-  screenOf:function(label){var n=nodes.filter(function(m){return m.label===label&&m.type==="app"})[0];return n?w2s(n.x,n.y):null},
+  screenOf:function(label){const n=nodes.filter(function(m){return m.label===label&&m.type==="app"})[0];return n?w2s(n.x,n.y):null},
   setInsets:function(bottom){INS.bottom=bottom||0;if(!view.user)fitView();dirty=true},
   overlay:function(on){host.classList.toggle("ov",!!on);setTimeout(resize,0)},
   lit:readLit, // the course page calls this after a lesson is done
@@ -155,7 +154,7 @@ var API={
     if(name==="motion")setMotion(!S.motion,true);
     else if(name==="widgets")setSides($("side").hidden);
     else if(name==="legend")setLegend(!S.legend);
-    else if(name==="menu"){var open=$("panel").hidden;setPanel(open,true)}
+    else if(name==="menu"){const open=$("panel").hidden;setPanel(open,true)}
     else if(name==="search"){setPanel(true,true);$("q").focus()}
     else if(name==="3d")setDim(true);
     else if(/^(force|circle|hex|rings)$/.test(name)){setDim(false,true);setLayout(name)}
@@ -163,43 +162,43 @@ var API={
 
   host:host,root:shadow
 };
-var byId={}; // node by its data id (notes, parts, posts) or name (skills, pages)
+const byId={}; // node by its data id (notes, parts, posts) or name (skills, pages)
 
 function mk(type,label,extra){
-  var n={i:nodes.length,type:type,label:label,x:0,y:0,tx:0,ty:0,vis:1,tv:1,rate:3+Math.random()*3,r:3,room:-1,folder:-1,color:"#ff7a1a",name:"",rand:Math.random()};
-  for(var k in extra)n[k]=extra[k];
+  const n={i:nodes.length,type:type,label:label,x:0,y:0,tx:0,ty:0,vis:1,tv:1,rate:3+Math.random()*3,r:3,room:-1,folder:-1,color:"#ff7a1a",name:"",rand:Math.random()};
+  for(const k in extra)n[k]=extra[k];
   nodes.push(n);return n;
 }
 
 function build(d){
-  var rand=rng(7);
+  const rand=rng(7);
   root=mk("root",d.root.label||"CLAUDE.md",{r:13,color:"#ff7a1a",info:d.root});
   d.rooms.forEach(function(rm,ri){
-    var total=0;rm.folders.forEach(function(f){total+=f.count});
-    var hub=mk("hub",rm.label,{r:9,color:rm.color,room:ri,count:total,collapsed:false,info:rm});
+    let total=0;rm.folders.forEach(function(f){total+=f.count});
+    const hub=mk("hub",rm.label,{r:9,color:rm.color,room:ri,count:total,collapsed:false,info:rm});
     rooms.push({id:rm.id,label:rm.label,color:rm.color,hub:hub,dots:[],count:total,folders:rm.folders,collapsed:false,ang0:0,span:0});
     hubs.push(hub);
     byId[rm.id]=hub; // a link such as index.html#giants opens the room's card
   });
   (d.skills||[]).forEach(function(s,i){skills.push(mk("skill",s.n,{r:5,color:"#ff9a3c",info:s,idx:i}))});
-  var skillByName={};skills.forEach(function(s){skillByName[s.label]=s});
+  const skillByName={};skills.forEach(function(s){skillByName[s.label]=s});
   (d.routines||[]).forEach(function(r,i){
-    var run=r.status==="running"||r.status==="scheduled";
+    const run=r.status==="running"||r.status==="scheduled";
     routines.push(mk("routine",r.n,{r:6,color:run?"#ffb347":"#6c6a66",info:r,on:run,skillNode:skillByName[r.skill]||null,idx:i}));
   });
   // projects and pages share the outer ring with the apps; they carry a url to open
-  var KIND={cli:"#5cd3ff",project:"#2ee6c5",page:"#ffd93d"};
+  const KIND={cli:"#5cd3ff",project:"#2ee6c5",page:"#ffd93d"};
   (d.apps||[]).concat(d.projects||[],d.pages||[]).forEach(function(a,i){
-    var ok=["not connected","needs Chrome","paused"].indexOf(a.state)<0;
+    const ok=["not connected","needs Chrome","paused"].indexOf(a.state)<0;
     apps.push(mk("app",a.n,{r:9,color:ok?(KIND[a.kind]||"#4f8dff"):"#5a6270",info:a,on:ok,idx:i}));
   });
   d.rooms.forEach(function(rm,ri){
-    var R=rooms[ri];
+    const R=rooms[ri];
     rm.folders.forEach(function(f,fi){
-      for(var j=0;j<f.count;j++){
+      for(let j=0;j<f.count;j++){
         // a file is {id, n, line, body, links, rel, url}; every one is public, so it is named and has a card
-        var it=f.files&&j<f.files.length?f.files[j]:{},nm=typeof it==="string"?it:(it.n||"");
-        var n=mk("dot",nm,{r:2.6+rand()*1.2,color:rm.color,room:ri,folder:fi,name:nm,hub:R.hub,info:typeof it==="string"?{}:it,rand:rand(),rate:2.5+rand()*4,jit:rand()*TAU});
+        const it=f.files&&j<f.files.length?f.files[j]:{},nm=typeof it==="string"?it:(it.n||"");
+        const n=mk("dot",nm,{r:2.6+rand()*1.2,color:rm.color,room:ri,folder:fi,name:nm,hub:R.hub,info:typeof it==="string"?{}:it,rand:rand(),rate:2.5+rand()*4,jit:rand()*TAU});
         R.dots.push(n);if(n.info.id)byId[n.info.id]=n;
       }
     });
@@ -209,57 +208,57 @@ function build(d){
 }
 
 /* ---------- layouts (base positions in world units, root at 0,0) ---------- */
-var FACTOR={dot:1,hub:1,skill:-1.5,routine:.6,app:-.4,root:0};
-function ringPlace(list,r,off){list.forEach(function(n,i){var a=off+i/list.length*TAU;n.bx=r*Math.cos(a);n.by=r*Math.sin(a)})}
+const FACTOR={dot:1,hub:1,skill:-1.5,routine:.6,app:-.4,root:0};
+function ringPlace(list,r,off){list.forEach(function(n,i){const a=off+i/list.length*TAU;n.bx=r*Math.cos(a);n.by=r*Math.sin(a)})}
 function sectors(){
-  var total=0,gap=.07;rooms.forEach(function(r){total+=r.count});
-  var avail=TAU-gap*rooms.length,a=-Math.PI/2;
+  let total=0;const gap=.07;rooms.forEach(function(r){total+=r.count});
+  const avail=TAU-gap*rooms.length;let a=-Math.PI/2;
   rooms.forEach(function(r){r.span=avail*r.count/total;r.ang0=a;a+=r.span+gap});
 }
 function hexCell(q,r,sp){return[sp*(q+r/2),sp*r*.866]}
 function hexSpiral(count){
-  var out=[[0,0]],ring=1,dirs=[[1,0],[1,-1],[0,-1],[-1,0],[-1,1],[0,1]];
+  const out=[[0,0]];let ring=1;const dirs=[[1,0],[1,-1],[0,-1],[-1,0],[-1,1],[0,1]];
   while(out.length<count){
-    var q=-ring,r=ring;
-    for(var s=0;s<6;s++)for(var t=0;t<ring;t++){out.push([q,r]);q+=dirs[s][0];r+=dirs[s][1]}
+    let q=-ring,r=ring;
+    for(let s=0;s<6;s++)for(let t=0;t<ring;t++){out.push([q,r]);q+=dirs[s][0];r+=dirs[s][1]}
     ring++;
   }
   return out;
 }
 function hexPerimeter(R,i,m){
-  var t=i/m*6,k=Math.floor(t),f=t-k,a0=-Math.PI/2+k*Math.PI/3,a1=a0+Math.PI/3;
+  const t=i/m*6,k=Math.floor(t),f=t-k,a0=-Math.PI/2+k*Math.PI/3,a1=a0+Math.PI/3;
   return[R*((1-f)*Math.cos(a0)+f*Math.cos(a1)),R*((1-f)*Math.sin(a0)+f*Math.sin(a1))];
 }
 
 function computeLayout(name){
-  var key=name+"|"+S.spring.toFixed(2)+"|"+S.size.toFixed(2);
+  const key=name+"|"+S.spring.toFixed(2)+"|"+S.size.toFixed(2);
   if(cache[key]){
     if(applied!==key){ // node base positions are shared: restore this layout's
-      var P=cache[key].pos;
-      for(var i=0;i<nodes.length;i++){nodes[i].bx=P[2*i];nodes[i].by=P[2*i+1]}
+      const P=cache[key].pos;
+      for(let i=0;i<nodes.length;i++){nodes[i].bx=P[2*i];nodes[i].by=P[2*i+1]}
       applied=key;
     }
     return cache[key];
   }
-  var L={ext:700,guides:[]},sp=14*S.size+2,rand=rng(11);
+  const L={ext:700,guides:[]},sp=14*S.size+2,rand=rng(11);
   sectors();root.bx=0;root.by=0;
   if(name==="rings"){
-    var rho0=215,step=sp,rEnd=rho0;
+    const rho0=215,step=sp;let rEnd=rho0;
     rooms.forEach(function(R){
-      var i=0,row=0,A=R.span;
+      let i=0,row=0;const A=R.span;
       while(i<R.dots.length){
-        var rho=rho0+row*step,cap=Math.max(1,Math.floor(rho*A/sp));
-        for(var j=0;j<cap&&i<R.dots.length;j++,i++){
-          var a=R.ang0+(j+.5)/cap*A;
+        const rho=rho0+row*step,cap=Math.max(1,Math.floor(rho*A/sp));
+        for(let j=0;j<cap&&i<R.dots.length;j++,i++){
+          const a=R.ang0+(j+.5)/cap*A;
           R.dots[i].bx=rho*Math.cos(a);R.dots[i].by=rho*Math.sin(a);
         }
         rEnd=Math.max(rEnd,rho);row++;
       }
-      var am=R.ang0+R.span/2;R.hub.bx=(rho0-26)*Math.cos(am);R.hub.by=(rho0-26)*Math.sin(am);
+      const am=R.ang0+R.span/2;R.hub.bx=(rho0-26)*Math.cos(am);R.hub.by=(rho0-26)*Math.sin(am);
     });
     ringPlace(skills,130,-Math.PI/2);
     // no routines on the public map: the pages ring moves in where they were
-    var rr=rEnd+58,ra=routines.length?rEnd+120:rEnd+70;
+    const rr=rEnd+58,ra=routines.length?rEnd+120:rEnd+70;
     ringPlace(routines,rr,-Math.PI/2+.2);ringPlace(apps,ra,-Math.PI/2);
     L.ext=ra+70;
     L.guides=[{r:130,c:"#ff7a1a",label:"SKILLS",lc:"#ff9a3c",ly:-(130-16)},
@@ -267,114 +266,114 @@ function computeLayout(name){
       {r:ra,c:"#2f5fa8",label:"PAGES AND PROJECTS",lc:"#5ea0ff",ly:-(ra-14)}];
     if(routines.length)L.guides.splice(2,0,{r:rr,c:"#c98a2e",label:"ROUTINES",lc:"#ffb347",ly:-(rr-14)});
   }else if(name==="circle"){
-    var maxD=0;
+    let maxD=0;
     rooms.forEach(function(R){
-      var rings=0,cap=0;while(cap<R.dots.length){rings++;cap+=6*rings}
+      let rings=0,cap=0;while(cap<R.dots.length){rings++;cap+=6*rings}
       R.rad=rings*sp;maxD=Math.max(maxD,R.rad);
     });
-    var Rc=Math.max(300,(maxD+36)/Math.sin(Math.PI/rooms.length));
+    const Rc=Math.max(300,(maxD+36)/Math.sin(Math.PI/rooms.length));
     rooms.forEach(function(R,ri){
-      var a=-Math.PI/2+ri/rooms.length*TAU,cx=Rc*Math.cos(a),cy=Rc*Math.sin(a);
+      const a=-Math.PI/2+ri/rooms.length*TAU,cx=Rc*Math.cos(a),cy=Rc*Math.sin(a);
       R.hub.bx=cx;R.hub.by=cy;
-      var i=0,ring=1;
+      let i=0,ring=1;
       while(i<R.dots.length){
-        var cap=6*ring;
-        for(var j=0;j<cap&&i<R.dots.length;j++,i++){
-          var b=j/cap*TAU+ring*.35;
+        const cap=6*ring;
+        for(let j=0;j<cap&&i<R.dots.length;j++,i++){
+          const b=j/cap*TAU+ring*.35;
           R.dots[i].bx=cx+ring*sp*Math.cos(b);R.dots[i].by=cy+ring*sp*Math.sin(b);
         }
         ring++;
       }
     });
     ringPlace(skills,130,-Math.PI/2);
-    var r2=Rc+maxD+70;
+    const r2=Rc+maxD+70;
     ringPlace(routines,r2,-Math.PI/2+.2);ringPlace(apps,r2+66,-Math.PI/2);
     L.ext=r2+66+70;
     L.guides=[{r:130,c:"#ff7a1a",label:"SKILLS",lc:"#ff9a3c",ly:-114}];
   }else if(name==="hex"){
     // the cells sit wider apart than in the other layouts, so folder and room names fit between them
-    var hs=sp*2.4,S0=skills.length,M=0;rooms.forEach(function(R){M+=R.count});
-    var cells=hexSpiral(1+S0+M+40);
-    var skillCells=cells.slice(1,1+S0),memCells=cells.slice(1+S0,1+S0+M);
-    skillCells.forEach(function(c,i){var p=hexCell(c[0],c[1],hs);skills[i].bx=p[0];skills[i].by=p[1]});
+    const hs=sp*2.4,S0=skills.length;let M=0;rooms.forEach(function(R){M+=R.count});
+    const cells=hexSpiral(1+S0+M+40);
+    const skillCells=cells.slice(1,1+S0),memCells=cells.slice(1+S0,1+S0+M);
+    skillCells.forEach(function(c,i){const p=hexCell(c[0],c[1],hs);skills[i].bx=p[0];skills[i].by=p[1]});
     // memory cells follow the skill cells in spiral order, so they sit outside
     // the skills block; sort by angle from the top so each room gets a wedge
-    var maxR=0;
-    var mp=memCells.map(function(c){var p=hexCell(c[0],c[1],hs);
+    let maxR=0;
+    const mp=memCells.map(function(c){const p=hexCell(c[0],c[1],hs);
       return{x:p[0],y:p[1],a:(Math.atan2(p[1],p[0])+Math.PI/2+TAU)%TAU,r:Math.hypot(p[0],p[1])}});
     skills.forEach(function(s){maxR=Math.max(maxR,Math.hypot(s.bx,s.by))});
     mp.forEach(function(p){maxR=Math.max(maxR,p.r)});
     mp.sort(function(a,b){return a.a-b.a||a.r-b.r});
-    var k=0;
+    let k=0;
     rooms.forEach(function(R){
-      var sx=0,sy=0;
-      R.dots.forEach(function(n){var p=mp[k++];n.bx=p.x;n.by=p.y;sx+=p.x;sy+=p.y});
+      let sx=0,sy=0;
+      R.dots.forEach(function(n){const p=mp[k++];n.bx=p.x;n.by=p.y;sx+=p.x;sy+=p.y});
       R.hub.bx=sx/R.dots.length;R.hub.by=sy/R.dots.length; // the room's name sits on the middle of its own notes
     });
     // the badges hug the cluster: each sits one badge width outside the cells nearest its own bearing (the hex layout does not spin)
-    var badge=2*(apps.length?apps[0].r:9),far=0;
-    function outer(a,w){var o=0;mp.forEach(function(p){var d=Math.abs(p.a-a);if(Math.min(d,TAU-d)<=w&&p.r>o)o=p.r});return o||maxR}
-    if(routines.length){routines.forEach(function(n,i){var p=hexPerimeter(maxR+badge+9,i,routines.length);n.bx=p[0];n.by=p[1]});far=badge+9}
+    const badge=2*(apps.length?apps[0].r:9);let far=0;
+    function outer(a,w){let o=0;mp.forEach(function(p){const d=Math.abs(p.a-a);if(Math.min(d,TAU-d)<=w&&p.r>o)o=p.r});return o||maxR}
+    if(routines.length){routines.forEach(function(n,i){const p=hexPerimeter(maxR+badge+9,i,routines.length);n.bx=p[0];n.by=p[1]});far=badge+9}
     apps.forEach(function(n,i){
-      var a=i/apps.length*TAU,rad=outer(a,TAU/apps.length*.75)+badge+9+far;
+      const a=i/apps.length*TAU,rad=outer(a,TAU/apps.length*.75)+badge+9+far;
       n.bx=rad*Math.sin(a);n.by=-rad*Math.cos(a); // bearing a is measured from the top, clockwise
       L.far=Math.max(L.far||0,rad);
     });
     L.ext=(L.far||maxR)+badge+16;
     L.guides=[];
   }else{ // force
-    var spread=1.6-1.2*S.spring;
-    var cr=rooms.map(function(R){return 6.2*Math.sqrt(R.count)*spread});
-    var pos=rooms.map(function(R,i){var a=-Math.PI/2+i/rooms.length*TAU;return[360*Math.cos(a),360*Math.sin(a)]});
-    for(var it=0;it<160;it++){
-      for(var a=0;a<pos.length;a++){
-        var fx=-pos[a][0]*.01,fy=-pos[a][1]*.01;
-        for(var b=0;b<pos.length;b++){
+    const spread=1.6-1.2*S.spring;
+    const cr=rooms.map(function(R){return 6.2*Math.sqrt(R.count)*spread});
+    const pos=rooms.map(function(R,i){const a=-Math.PI/2+i/rooms.length*TAU;return[360*Math.cos(a),360*Math.sin(a)]});
+    for(let it=0;it<160;it++){
+      for(let a=0;a<pos.length;a++){
+        let fx=-pos[a][0]*.01,fy=-pos[a][1]*.01;
+        for(let b=0;b<pos.length;b++){
           if(a===b)continue;
-          var dx=pos[a][0]-pos[b][0],dy=pos[a][1]-pos[b][1],d=Math.hypot(dx,dy)||1,want=cr[a]+cr[b]+30;
+          const dx=pos[a][0]-pos[b][0],dy=pos[a][1]-pos[b][1],d=Math.hypot(dx,dy)||1,want=cr[a]+cr[b]+30;
           if(d<want){fx+=dx/d*(want-d)*.12;fy+=dy/d*(want-d)*.12}
         }
         pos[a][0]+=fx;pos[a][1]+=fy;
       }
     }
-    var maxE=0;
+    let maxE=0;
     rooms.forEach(function(R,ri){
       R.hub.bx=pos[ri][0];R.hub.by=pos[ri][1];
       R.dots.forEach(function(n){
-        var a=rand()*TAU,r=cr[ri]*Math.pow(rand(),.6);
+        const a=rand()*TAU,r=cr[ri]*Math.pow(rand(),.6);
         n.bx=pos[ri][0]+r*Math.cos(a);n.by=pos[ri][1]+r*Math.sin(a);
       });
       maxE=Math.max(maxE,Math.hypot(pos[ri][0],pos[ri][1])+cr[ri]);
     });
     ringPlace(skills,110,-Math.PI/2);
-    function scatter(list,r){list.forEach(function(n,i){var a=i/list.length*TAU+.3,rr=r+(rand()-.5)*50;n.bx=rr*Math.cos(a);n.by=rr*Math.sin(a)})}
+    function scatter(list,r){list.forEach(function(n,i){const a=i/list.length*TAU+.3,rr=r+(rand()-.5)*50;n.bx=rr*Math.cos(a);n.by=rr*Math.sin(a)})}
     scatter(routines,maxE+70);scatter(apps,maxE+150);
     L.ext=maxE+210;
   }
   L.pos=new Float32Array(nodes.length*2);
-  for(var j=0;j<nodes.length;j++){L.pos[2*j]=nodes[j].bx||0;L.pos[2*j+1]=nodes[j].by||0}
+  for(let j=0;j<nodes.length;j++){L.pos[2*j]=nodes[j].bx||0;L.pos[2*j+1]=nodes[j].by||0}
   applied=key;cache[key]=L;return L;
 }
 
 /* ---------- control wiring ---------- */
 function setLayout(name,quiet){
   S.layout=name;
-  var L=computeLayout(name);
+  const L=computeLayout(name);
   view.user=false;fitView(L);
-  var btns=shadow.querySelectorAll("#layouts .btn");
-  for(var i=0;i<btns.length;i++)btns[i].setAttribute("aria-pressed",btns[i].dataset.l===name);
+  const btns=shadow.querySelectorAll("#layouts .btn");
+  for(let i=0;i<btns.length;i++)btns[i].setAttribute("aria-pressed",btns[i].dataset.l===name);
   if(!quiet)say("Layout "+name);
   dirty=true;
 }
 function setView(v){
-  S.view=v;var b=shadow.querySelectorAll("#views .btn");
-  for(var i=0;i<b.length;i++)b[i].setAttribute("aria-pressed",b[i].dataset.v===v);
+  S.view=v;const b=shadow.querySelectorAll("#views .btn");
+  for(let i=0;i<b.length;i++)b[i].setAttribute("aria-pressed",b[i].dataset.v===v);
   dirty=true;
 }
 function say(t){$("live").textContent=t}
 function fitView(L){
   if(!root)return; // the frame may resize the map before its data has loaded
-  var aw=W,ah=Math.max(160,H-INS.bottom-(W>760?56:0)), /* on a wide screen the hint line takes the bottom strip */k=Math.min(aw,ah)/(2*(L||computeLayout(S.layout)).ext)*.98;
+  const aw=W,ah=Math.max(160,H-INS.bottom-(W>760?56:0)), /* on a wide screen the hint line takes the bottom strip */k=Math.min(aw,ah)/(2*(L||computeLayout(S.layout)).ext)*.98;
   view.tk=k;view.tx=aw/2;view.ty=ah/2+8;
   if(!S.motion||!view.init){view.k=k;view.x=view.tx;view.y=view.ty;view.init=true}
 }
@@ -382,17 +381,17 @@ function resize(){
   DPR=Math.min(2,window.devicePixelRatio||1);
   W=cv.clientWidth||window.innerWidth;H=cv.clientHeight||window.innerHeight;
   cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);
-  if(g3&&S.dim3){var sz=g3Size();g3.width(sz[0]).height(sz[1])}
+  if(g3&&S.dim3){const sz=g3Size();g3.width(sz[0]).height(sz[1])}
   if(!view.user)fitView();dirty=true;
 }
 
 function wire(){
-  $("layouts").addEventListener("click",function(e){var b=e.target.closest("button");if(b)setLayout(b.dataset.l)});
-  $("views").addEventListener("click",function(e){var b=e.target.closest("button");if(b)setView(b.dataset.v)});
+  $("layouts").addEventListener("click",function(e){const b=e.target.closest("button");if(b)setLayout(b.dataset.l)});
+  $("views").addEventListener("click",function(e){const b=e.target.closest("button");if(b)setView(b.dataset.v)});
   setView(S.view);
   $("q").addEventListener("input",function(){S.q=this.value.trim().toLowerCase();applyFocus();dirty=true});
   function slider(id,key,out,digits){
-    var s=$(id);s.addEventListener("input",function(){S[key]=parseFloat(this.value);$(out).textContent=S[key].toFixed(digits);
+    const s=$(id);s.addEventListener("input",function(){S[key]=parseFloat(this.value);$(out).textContent=S[key].toFixed(digits);
       if(key!=="spin"){cache={};if(!view.user)fitView()}dirty=true});
   }
   slider("spin","spin","spinO",2);slider("spring","spring","springO",2);slider("size","size","sizeO",2);
@@ -414,12 +413,12 @@ function wire(){
   window.addEventListener("resize",resize);
   if(mq.addEventListener)mq.addEventListener("change",function(){if(savedMotion()==null)setMotion(!mq.matches,false)});
   document.addEventListener("keydown",function(e){
-    var t=e.composedPath?e.composedPath()[0]:e.target; // the real target, also inside the shadow root
-    var typing=/^(input|textarea|select)$/i.test(t.tagName||"")||t.isContentEditable;
+    const t=e.composedPath?e.composedPath()[0]:e.target; // the real target, also inside the shadow root
+    const typing=/^(input|textarea|select)$/i.test(t.tagName||"")||t.isContentEditable;
     if((e.key==="/"&&!typing)||((e.metaKey||e.ctrlKey)&&(e.key||"").toLowerCase()==="k")){e.preventDefault();
       // with the tree on screen, search is the tree's filter box; otherwise the controls panel's
-      var box=$("side").hidden?($("panel").hidden&&setPanel(true,true),$("q")):$("tq");box.focus();box.select()}
-    else if(e.key==="Escape"){var was=!$("panel").hidden;$("q").value="";S.q="";S.sel=null;S.fol=null;S.read=-1;hideCard();applyFocus();dirty=true;if(was)setPanel(false,true)}
+      const box=$("side").hidden?($("panel").hidden&&setPanel(true,true),$("q")):$("tq");box.focus();box.select()}
+    else if(e.key==="Escape"){const was=!$("panel").hidden;$("q").value="";S.q="";S.sel=null;S.fol=null;S.read=-1;hideCard();applyFocus();dirty=true;if(was)setPanel(false,true)}
     else if(e.key==="m"&&!typing&&!e.metaKey&&!e.ctrlKey&&!e.altKey)setMotion(!S.motion,true);
   });
   cv.addEventListener("pointermove",onMove);
@@ -428,13 +427,13 @@ function wire(){
   cv.addEventListener("pointerleave",function(){if(!drag){mouse.x=-1;setHover(null)}});
   cv.addEventListener("wheel",onWheel,{passive:false});
   cv.addEventListener("dblclick",function(e){
-    var n=pick(e.offsetX,e.offsetY);
+    const n=pick(e.offsetX,e.offsetY);
     if(n&&n.type==="hub")toggleRoom(rooms[n.room]);
     else if(!n){view.user=false;fitView();dirty=true}
   });
   cv.tabIndex=0;
 }
-var tucked=false;
+let tucked=false;
 function setSides(on){
   // on a phone the tree is a full-width drawer and the card would cover it: the card steps aside, keeping its selection, and returns when the tree closes
   if(window.innerWidth<900&&drawer){
@@ -448,7 +447,7 @@ function setSides(on){
 /* ---------- side widgets (same real data as the map) ---------- */
 function renderSides(){
   function item(n,right,cls){
-    var li=el("li"),b=el("button","lk",n.label);b.type="button";
+    const li=el("li"),b=el("button","lk",n.label);b.type="button";
     b.addEventListener("click",function(){
       if(window.innerWidth<900)setSides(false); // show the map behind the card
       openNode(n);
@@ -464,16 +463,16 @@ function renderSides(){
    One selection drives the map, the card and this tree: S.sel (a node), S.fol (a folder of the selected room) and
    S.read (a reading-order step). applyFocus() calls syncTree(), so every way of selecting (the map, the tree, the
    card's Related buttons, a #hash, the tour) lights the same row, opens its parents and updates the trail. */
-var syncTree=function(){},closeAll=function(){},filterTree=function(){};
+let syncTree=function(){},closeAll=function(){},filterTree=function(){};
 function readPage(i){
-  var r=(window.AIO_READING||[])[i];if(!r)return;
+  const r=(window.AIO_READING||[])[i];if(!r)return;
   S.used=true;
   if(opts.onPage&&opts.onPage(r.url)){S.read=i;applyFocus();return} // on a framed page the page overlay shows it
   S.sel=null;S.fol=null;S.read=i;hideCard();applyFocus();dirty=true;
-  var j=drawer.readIndex(r.url);if(j>=0)drawer.read(j);
+  const j=drawer.readIndex(r.url);if(j>=0)drawer.read(j);
 }
 function openFolder(R,fi){
-  var f=R.folders[fi],files=R.dots.filter(function(d){return d.folder===fi&&d.name});
+  const f=R.folders[fi],files=R.dots.filter(function(d){return d.folder===fi&&d.name});
   S.used=true;S.sel=R.hub;S.fol={hub:R.hub,i:fi};S.here=false;S.read=-1;hideCard();applyFocus();dirty=true;say(R.label+", "+f.name);
   drawer.card({kind:"Folder",title:f.name,line:"folder · "+f.count+" item"+(f.count===1?"":"s")+" in "+R.label,status:"in the room "+R.label,statusCls:"a",
     body:el("p",null,f.count+" item"+(f.count===1?"":"s")+" in this folder"+(files.length<f.count?"; only "+files.length+" are named." :". Pick one below, or in the tree on the left.")),
@@ -482,35 +481,35 @@ function openFolder(R,fi){
 // bring a node into the part of the map that is not under the left list or the card
 function reveal(n){
   if(!n||n.x==null||window.innerWidth<760)return;
-  var sx=view.x+n.x*view.k,sy=view.y+n.y*view.k,pad=28,
+  const sx=view.x+n.x*view.k,sy=view.y+n.y*view.k,pad=28,
     l=(document.body.classList.contains("side")?260:0)+pad,r=W-(drawer.el.hidden?0:drawer.el.offsetWidth)-pad,b=H-INS.bottom-pad,
     dx=sx<l?l-sx:sx>r?r-sx:0,dy=sy<pad?pad-sy:sy>b?b-sy:0;
   if(!dx&&!dy)return;
   view.x+=dx;view.y+=dy;view.tx=view.x;view.ty=view.y;dirty=true;
 }
 function buildTree(){
-  var tree=$("tree"),acts={},items={},last="",cur=null,rove=null,reading=window.AIO_READING||[];
+  const tree=$("tree"),acts={},items={};let last="",cur=null,rove=null;const reading=window.AIO_READING||[];
   function item(key,label,meta,level,kids,act){
-    var li=el("li"),r=el("div","tr"),tw=el("span","tw",kids?"▸":"");
+    const li=el("li"),r=el("div","tr"),tw=el("span","tw",kids?"▸":"");
     r.style.paddingLeft=((level-1)*12+4)+"px";
     li.setAttribute("role","treeitem");li.setAttribute("aria-level",level);li.setAttribute("aria-label",label);li.tabIndex=-1;li.dataset.k=key;
     tw.setAttribute("aria-hidden","true");r.appendChild(tw);r.appendChild(el("span","lk",label));
     if(meta!=null&&meta!=="")r.appendChild(el("span","m",meta));
     li.appendChild(r);
-    if(kids){var g=el("ul");g.setAttribute("role","group");g.hidden=true;li.setAttribute("aria-expanded","false");li.appendChild(g)}
+    if(kids){const g=el("ul");g.setAttribute("role","group");g.hidden=true;li.setAttribute("aria-expanded","false");li.appendChild(g)}
     acts[key]=act||null;items[key]=li;return li;
   }
   function put(parent,li){(parent?parent.lastChild:tree).appendChild(li);return li}
   function toggle(li,on){
-    var g=li.lastChild;if(g.tagName!=="UL")return;
-    var open=on==null?li.getAttribute("aria-expanded")!=="true":on;
+    const g=li.lastChild;if(g.tagName!=="UL")return;
+    const open=on==null?li.getAttribute("aria-expanded")!=="true":on;
     li.setAttribute("aria-expanded",String(open));g.hidden=!open;
   }
   function visible(){return[].filter.call(tree.querySelectorAll("li"),function(x){return!x.hidden&&!x.parentNode.closest("ul[hidden],li[hidden]")})}
   function setRove(li){if(rove)rove.tabIndex=-1;rove=li;li.tabIndex=0}
   function focusRow(li){setRove(li);li.focus({preventScroll:false})}
   function activate(li){
-    var act=acts[li.dataset.k];
+    const act=acts[li.dataset.k];
     if(act){
       act();if(li.getAttribute("aria-expanded")==="false")toggle(li,true);
       li.focus({preventScroll:true}); // the card takes focus when it opens; the reader stays on the row, so the arrow keys keep working
@@ -520,67 +519,67 @@ function buildTree(){
   }
   // Read in order
   if(reading.length){
-    var gr=put(null,item("g:read","Read in order",reading.length,1,true));
+    const gr=put(null,item("g:read","Read in order",reading.length,1,true));
     reading.forEach(function(r,i){put(gr,item("rd:"+i,(i+1)+". "+r.title,r.line.split(" · ")[0],2,false,function(){readPage(i)}))});
     toggle(gr,true);
   }
   // the rooms, each with its folders and files
-  var gm=put(null,item("g:rooms","Rooms",rooms.length,1,true));
+  const gm=put(null,item("g:rooms","Rooms",rooms.length,1,true));
   put(gm,item("root",root.label,"router file",2,false,function(){openNode(root)}));
   rooms.forEach(function(R,ri){
-    var rl=put(gm,item("r:"+ri,R.label,R.count,2,true,function(){openNode(R.hub)}));
+    const rl=put(gm,item("r:"+ri,R.label,R.count,2,true,function(){openNode(R.hub)}));
     R.folders.forEach(function(f,fi){
-      var fl=put(rl,item("f:"+ri+":"+fi,f.name,f.count,3,true,function(){openFolder(R,fi)})),files=R.dots.filter(function(d){return d.folder===fi});
+      const fl=put(rl,item("f:"+ri+":"+fi,f.name,f.count,3,true,function(){openFolder(R,fi)})),files=R.dots.filter(function(d){return d.folder===fi});
       files.forEach(function(d){if(d.name)put(fl,item("n:"+d.i,d.name,"",4,false,function(){R.collapsed=false;openNode(d);reveal(d)}))});
-      var un=files.filter(function(d){return!d.name}).length;
+      const un=files.filter(function(d){return!d.name}).length;
       if(un)put(fl,item("u:"+ri+":"+fi,"+ "+un+" more, names not listed","",4,false,null));
     });
   });
   toggle(gm,true);
   // the pages and projects (the map's outer ring)
   if(apps.length){
-    var gp=put(null,item("g:pages","Pages and projects",apps.length,1,true));
+    const gp=put(null,item("g:pages","Pages and projects",apps.length,1,true));
     apps.forEach(function(n){put(gp,item("n:"+n.i,n.label,n.info.kind,2,false,function(){openNode(n);reveal(n)}))});
   }
   setRove(tree.firstChild);
 
   function selKey(){
-    var n=S.sel;
+    const n=S.sel;
     if(S.read>=0)return"rd:"+S.read; // a step the reader picked in the list wins
     if(n){
       if(n.type==="root")return"root";
       if(n.type==="hub")return S.fol&&S.fol.hub===n?"f:"+n.room+":"+S.fol.i:"r:"+n.room;
       return n.type==="dot"||n.type==="app"?"n:"+n.i:"";
     }
-    if(S.page)for(var i=0;i<reading.length;i++)if(reading[i].url.indexOf("#")<0&&bare(reading[i].url)===S.page)return"rd:"+i; // the page on show
+    if(S.page)for(let i=0;i<reading.length;i++)if(reading[i].url.indexOf("#")<0&&bare(reading[i].url)===S.page)return"rd:"+i; // the page on show
     return"";
   }
   function crumb(ol,label,fn,here){
-    var li=el("li");
-    if(here){var s=el("span",null,label);s.setAttribute("aria-current","location");li.appendChild(s)}
-    else{var b=el("button","lk",label);b.type="button";b.addEventListener("click",fn);li.appendChild(b)}
+    const li=el("li");
+    if(here){const s=el("span",null,label);s.setAttribute("aria-current","location");li.appendChild(s)}
+    else{const b=el("button","lk",label);b.type="button";b.addEventListener("click",fn);li.appendChild(b)}
     ol.appendChild(li);
   }
   function trail(){
-    var t=$("trail");t.textContent="";t.appendChild(el("span","tl","You are here"));
+    const t=$("trail");t.textContent="";t.appendChild(el("span","tl","You are here"));
     if(!cur){t.appendChild(el("p","none","Nothing picked yet. Pick a reading step, a room or a page."));return}
-    var chain=[],ol=el("ol");
-    for(var p=cur;p;p=p.parentNode.closest("li"))chain.unshift(p);
+    const chain=[],ol=el("ol");
+    for(let p=cur;p;p=p.parentNode.closest("li"))chain.unshift(p);
     crumb(ol,"Map",closeAll,false);
     chain.forEach(function(li,i){
       if(li.dataset.k==="g:rooms")return; // "Map > Shoulders of giants" reads better than "Map > Rooms > Shoulders of giants"
-      var group=li.dataset.k.charAt(0)==="g";
+      const group=li.dataset.k.charAt(0)==="g";
       crumb(ol,li.getAttribute("aria-label"),function(){if(group)focusRow(li);else{activate(li);focusRow(li)}},i===chain.length-1);
     });
     t.appendChild(ol);
   }
   syncTree=function(force){
-    var k=selKey();if(!force&&k===last)return;
+    const k=selKey();if(!force&&k===last)return;
     last=k;if(cur)cur.removeAttribute("aria-current");
     cur=k&&items[k]||null;
     if(cur){
       cur.setAttribute("aria-current","location");
-      for(var p=cur.parentNode.closest("li");p;p=p.parentNode.closest("li"))toggle(p,true);
+      for(let p=cur.parentNode.closest("li");p;p=p.parentNode.closest("li"))toggle(p,true);
       if(cur.getAttribute("aria-expanded")==="false")toggle(cur,true);
       setRove(cur);
       if(S.used||!S.here)cur.firstChild.scrollIntoView({block:"nearest"}); // at load, the page the reader is on is marked but the list stays at the top
@@ -592,16 +591,16 @@ function buildTree(){
   /* Filter: the same query as the map's search. A row stays when it matches, when something under it matches, or when a
      row above it matches (a room that matches keeps its folders and files). Groups that hold a match open; the open and
      shut state from before the filter comes back when it is cleared. */
-  var tq=$("tq"),tcount=$("tcount"),was=null,q0="";
+  const tq=$("tq"),tcount=$("tcount");let was=null,q0="";
   function hit(li,q){
-    var k=li.dataset.k;
+    const k=li.dataset.k;
     if(k.charAt(0)==="g"||k.charAt(0)==="u")return false; // the group headers and the "names not listed" rows are never a match
     if(k.indexOf("n:")===0)return hayOf(nodes[+k.slice(2)]).indexOf(q)>=0;
     return li.getAttribute("aria-label").toLowerCase().indexOf(q)>=0;
   }
   function walk(li,q,inherited,out){
-    var own=hit(li,q),g=li.lastChild.tagName==="UL"?li.lastChild:null,any=false,deep=false;
-    if(g)[].forEach.call(g.children,function(c){var r=walk(c,q,own||inherited,out);if(r.vis)any=true;if(r.own)deep=true});
+    const own=hit(li,q),g=li.lastChild.tagName==="UL"?li.lastChild:null;let any=false,deep=false;
+    if(g)[].forEach.call(g.children,function(c){const r=walk(c,q,own||inherited,out);if(r.vis)any=true;if(r.own)deep=true});
     li.hidden=!(own||inherited||any);
     if(own&&li.dataset.k.charAt(0)!=="u")out.n++;
     if(g&&deep)toggle(li,true);
@@ -609,7 +608,7 @@ function buildTree(){
   }
   filterTree=function(q){
     if(tq.value.trim().toLowerCase()!==q)tq.value=q; // keep the two search boxes the same
-    var all=[].slice.call(tree.querySelectorAll("li"));
+    const all=[].slice.call(tree.querySelectorAll("li"));
     if(!q){
       if(was){
         all.forEach(function(li){li.hidden=false;if(li.dataset.k in was)toggle(li,was[li.dataset.k])});
@@ -620,7 +619,7 @@ function buildTree(){
     if(q===q0)return;
     q0=q;
     if(!was){was={};all.forEach(function(li){if(li.hasAttribute("aria-expanded"))was[li.dataset.k]=li.getAttribute("aria-expanded")==="true"})}
-    var out={n:0};
+    const out={n:0};
     [].forEach.call(tree.children,function(li){walk(li,q,false,out)});
     tcount.textContent=out.n?out.n+" match"+(out.n===1?"":"es")+" in the tree":"No match. Clear the filter to see the whole tree.";
   };
@@ -629,21 +628,21 @@ function buildTree(){
   tq.addEventListener("keydown",function(e){
     if(e.key==="Escape"&&tq.value){e.stopPropagation();setQ("")} // the first Esc clears the filter; the pick and the card stay
     else if(e.key==="ArrowDown"||e.key==="Enter"){
-      var v=visible();if(!v.length)return;
+      const v=visible();if(!v.length)return;
       e.preventDefault();
       focusRow(e.key==="Enter"&&q0?v.filter(function(li){return hit(li,q0)})[0]||v[0]:rove&&v.indexOf(rove)>=0?rove:v[0]);
     }
   });
 
   tree.addEventListener("click",function(e){
-    var r=e.target.closest(".tr");if(!r)return;
-    var li=r.parentNode;setRove(li);
+    const r=e.target.closest(".tr");if(!r)return;
+    const li=r.parentNode;setRove(li);
     if(e.target.closest(".tw")){toggle(li);li.focus();return}
     li.focus();activate(li);
   });
   tree.addEventListener("keydown",function(e){
-    var li=e.target;if(li.tagName!=="LI"||e.altKey||e.ctrlKey||e.metaKey)return;
-    var v=visible(),i=v.indexOf(li),k=e.key,open=li.getAttribute("aria-expanded"),to=null;
+    const li=e.target;if(li.tagName!=="LI"||e.altKey||e.ctrlKey||e.metaKey)return;
+    const v=visible(),i=v.indexOf(li),k=e.key,open=li.getAttribute("aria-expanded");let to=null;
     if(k==="ArrowDown")to=v[i+1];
     else if(k==="ArrowUp")to=v[i-1];
     else if(k==="Home")to=v[0];
@@ -658,24 +657,24 @@ function buildTree(){
   syncTree(true);
 }
 /* ---------- open a node: its card in the right-side drawer; a reading page opens its text there ---------- */
-var drawer=null;
+let drawer=null;
 function openNode(n){
   S.used=true;S.sel=n;S.fol=null;S.read=-1;S.here=false;hideCard();applyFocus();dirty=true;say(n.label||"file");
   // a page or post of this site: on a framed page it opens in the page overlay instead of the drawer
   if(n.info&&n.info.url&&opts.onPage&&opts.onPage(n.info.url)){drawer.close();S.sel=n;S.here=true;applyFocus();return}
-  var c=nodeCard(n),i=n.info&&n.info.url?drawer.readIndex(n.info.url):-1;
+  const c=nodeCard(n),i=n.info&&n.info.url?drawer.readIndex(n.info.url):-1;
   if(i>=0)drawer.read(i,{status:c.status,statusCls:c.statusCls,related:c.related});else drawer.card(c);
 }
 // the Second-brain notes card: each interest tag sized by its note count, an empty tag dashed; a tap lists that tag's notes
 function interestCloud(tags){
-  var wrap=el("div","cloud-w"),cloud=el("div","cloud"),list=el("div","cloud-l"),pressed=null,max=Math.max.apply(null,tags.map(function(t){return t.count}))||1;
+  const wrap=el("div","cloud-w"),cloud=el("div","cloud"),list=el("div","cloud-l");let pressed=null;const max=Math.max.apply(null,tags.map(function(t){return t.count}))||1;
   cloud.setAttribute("role","group");cloud.setAttribute("aria-label","Interest tags");list.setAttribute("aria-live","polite");
   tags.forEach(function(t){
-    var b=el("button","ctag",t.name),c=el("span","cn",String(t.count));b.type="button";b.appendChild(c);
+    const b=el("button","ctag",t.name),c=el("span","cn",String(t.count));b.type="button";b.appendChild(c);
     b.style.fontSize=(12+Math.round(t.count/max*10))+"px";b.title=t.what;b.setAttribute("aria-pressed","false");
     if(!t.count)b.classList.add("empty");
     b.addEventListener("click",function(){
-      var on=pressed!==b;
+      const on=pressed!==b;
       Array.prototype.forEach.call(cloud.children,function(x){x.setAttribute("aria-pressed","false")});
       list.textContent="";pressed=on?b:null;
       if(!on)return;
@@ -683,7 +682,7 @@ function interestCloud(tags){
       list.appendChild(el("div","lg",t.name+" · "+(t.count?t.count+" note"+(t.count===1?"":"s"):"no notes yet")));
       if(!t.count)list.appendChild(el("p","none","A direction I want to build up. Nothing here yet."));
       t.notes.forEach(function(x){
-        var nb=el("button",null,x.n);nb.type="button";nb.addEventListener("click",function(){if(byId[x.id])openNode(byId[x.id])});list.appendChild(nb);
+        const nb=el("button",null,x.n);nb.type="button";nb.addEventListener("click",function(){if(byId[x.id])openNode(byId[x.id])});list.appendChild(nb);
       });
     });
     cloud.appendChild(b);
@@ -692,24 +691,24 @@ function interestCloud(tags){
 }
 function nodeCard(n){
   function go(m){return{label:m.label||"a file",go:function(){openNode(m)}}}
-  var c={title:n.label,related:[],links:[]},inf=n.info||{};
+  const c={title:n.label,related:[],links:[]},inf=n.info||{};
   // every link here comes from brain-data.json: public pages of this site or public https links
-  function paras(b){if(!Array.isArray(b))return b;var w=el("div");b.forEach(function(p){w.appendChild(el("p",null,p))});return w}
+  function paras(b){if(!Array.isArray(b))return b;const w=el("div");b.forEach(function(p){w.appendChild(el("p",null,p))});return w}
   if(n.type==="root"){
     c.kind="Router file";c.line="router file"+(inf.also?" · also "+inf.also:"");c.body=inf.note;
     c.status="loaded first by every agent";c.statusCls="ok";
     c.links=(inf.links||[]).map(function(l){return{label:l[0],href:l[1]}});c.related=hubs.map(go);
   }else if(n.type==="hub"){
-    var R=rooms[n.room],w=el("div"),ul=el("ul");c.kind="Room";c.line="room · "+R.count+" items in "+R.folders.length+" folder"+(R.folders.length===1?"":"s");
+    const R=rooms[n.room],w=el("div"),ul=el("ul");c.kind="Room";c.line="room · "+R.count+" items in "+R.folders.length+" folder"+(R.folders.length===1?"":"s");
     if(inf.cloud)c.line="room · "+R.count+" notes · "+inf.cloud.filter(function(t){return t.count}).length+" of "+inf.cloud.length+" interests have notes";
     c.status=R.collapsed?"folded on the map":"open on the map";c.statusCls="a";
     if(inf.summary)w.appendChild(el("p",null,inf.summary));
     if(inf.cloud)w.appendChild(interestCloud(inf.cloud));
     if(inf.note)w.appendChild(el("p",null,inf.note));
-    if(!inf.cloud)R.folders.forEach(function(f,fi){var li=el("li"),b=el("button","fl",f.name);b.type="button";b.addEventListener("click",function(){openFolder(R,fi)});li.appendChild(b);li.appendChild(el("span","k"," · "+f.count));ul.appendChild(li)});
+    if(!inf.cloud)R.folders.forEach(function(f,fi){const li=el("li"),b=el("button","fl",f.name);b.type="button";b.addEventListener("click",function(){openFolder(R,fi)});li.appendChild(b);li.appendChild(el("span","k"," · "+f.count));ul.appendChild(li)});
     w.appendChild(ul);c.body=w;c.related=[go(root)].concat(R.dots.slice(0,12).map(go));c.links=inf.links||[];
   }else if(n.type==="dot"){
-    var Rd=rooms[n.room],f=Rd.folders[n.folder];c.kind=Rd.label;
+    const Rd=rooms[n.room],f=Rd.folders[n.folder];c.kind=Rd.label;
     c.title=n.name;c.line=inf.line||Rd.label+" / "+f.name;c.body=paras(inf.body);
     c.status=Rd.label+" / "+f.name;c.statusCls="a";c.links=inf.links||[];
     if(inf.lesson){c.status=lit[inf.lesson]?"done in this browser":"not done yet";c.statusCls=lit[inf.lesson]?"ok":"warn"}
@@ -734,11 +733,11 @@ function nodeCard(n){
 }
 /* ---------- chat bar: a scripted guided tour (tour.js), no model calls ---------- */
 /* The controls float over the map and never resize it. On a phone they are a sheet over its lower part, so the page card steps aside while they are open. */
-var panelFold=false;
+let panelFold=false;
 function setPanel(on,user){
   $("panel").hidden=!on;$("menuBtn").setAttribute("aria-expanded",on);
   if(user&&window.innerWidth<=760){
-    var folded=panelFold;
+    const folded=panelFold;
     if(opts.overlayShown){
       if(on&&!panelFold){panelFold=true;opts.overlayShown(false)}
       else if(!on&&panelFold){panelFold=false;opts.overlayShown(true)}
@@ -748,23 +747,23 @@ function setPanel(on,user){
     if(!view.user)fitView();
   }
   if(user&&on)$("panelX").focus({preventScroll:true});
-  else if(user){var o=document.getElementById("tbDrop")||$("menuBtn");if(o.offsetParent!==null)o.focus()} // focus goes back to what opened it
+  else if(user){const o=document.getElementById("tbDrop")||$("menuBtn");if(o.offsetParent!==null)o.focus()} // focus goes back to what opened it
   dirty=true;
 }
 function setLegend(on){S.legend=on;$("legend").hidden=!on;$("legendBtn").setAttribute("aria-expanded",on)}
 function mountTour(){
   if(!window.AIOTour)return;
-  var keep=null;
+  let keep=null;
   // on a framed page, the map steps fold the page overlay away and the overlay step brings it back
-  var fold=opts.overlayShown||function(){};
+  const fold=opts.overlayShown||function(){};
   function mapView(){if(window.innerWidth<900){setSides(false);setPanel(false)}setLegend(false);fold(false)}
   // a circle around the map centre, radius in world units, at the settled view
-  function ring(r){return function(){var b=cv.getBoundingClientRect(),R=r()*view.tk;
+  function ring(r){return function(){const b=cv.getBoundingClientRect(),R=r()*view.tk;
     return{x:b.left+view.tx-R,y:b.top+view.ty-R,w:2*R,h:2*R,round:true}}}
   function guide(i){return function(){return computeLayout("rings").guides[i].r+12}}
   function sh(id){return function(){return $(id)}} // steps point at parts inside the shadow root
   function doc(sel){return function(){return document.querySelector(sel)}}
-  var steps=[
+  const steps=[
       {sel:FRAMED?sh("cv"):sh("src"),before:mapView,title:"The second brain",text:"A map of how the owner works with a crew of AI agents, always running behind every page of this site. It shows only public things: approved wiki notes, FirstMate's parts, the posts and this site's pages."},
       {rect:ring(function(){return 30}),before:mapView,title:"The centre: "+root.label,text:"Every agent reads this rules file first. Everything else on the map hangs off it."},
       {rect:ring(guide(1)),before:mapView,title:"Memory: rooms of notes",text:"Each coloured arc is a room, like Second-brain notes or Blog. One dot is one note, part or post. Click a dot for its card; double-click a room to fold it."},
@@ -778,7 +777,7 @@ function mountTour(){
       {sel:sh("legend"),before:function(){mapView();setLegend(true)},title:"Legend",text:"Room colours with their counts, and what each shape means."},
       {sel:sh("wl"),before:function(){setLegend(false);fold(false);setSides(true)},title:"Left tree",text:"The same map as a tree: the reading order, each room with its folders and files, and the site's pages. It follows what you pick on the map, and a pick here shows on the map. A page or post opens "+(FRAMED?"in the page overlay.":"on the right, with Prev and Next.")},
       {sel:doc("#askBar"),before:mapView,title:"This ask bar",text:"Each question runs a short scripted tour like this one. Nothing is sent to a model."});
-  function at(t){for(var i=0;i<steps.length;i++)if(steps[i].title===t)return i;return 0}
+  function at(t){for(let i=0;i<steps.length;i++)if(steps[i].title===t)return i;return 0}
   AIOTour({
     steps:steps,
     // the landing passes opts.explain: one primary button, the map questions behind "More"
@@ -803,13 +802,13 @@ function toggleRoom(r){r.collapsed=!r.collapsed;say(r.label+(r.collapsed?" colla
 /* ---------- picking & focus ---------- */
 function w2s(x,y){return[view.x+x*view.k,view.y+y*view.k]}
 function pick(mx,my){
-  var best=null,bd=1e9,order={hub:0,app:1,routine:1,skill:1,root:0,dot:2};
-  for(var i=0;i<nodes.length;i++){
-    var n=nodes[i];if(n.vis<.35)continue;
-    var sx=view.x+n.x*view.k,sy=view.y+n.y*view.k,dx=sx-mx,dy=sy-my,d=dx*dx+dy*dy;
-    var rad=Math.max(n.type==="dot"?5:9,n.r*view.k+3);
+  let best=null,bd=1e9;const order={hub:0,app:1,routine:1,skill:1,root:0,dot:2};
+  for(let i=0;i<nodes.length;i++){
+    const n=nodes[i];if(n.vis<.35)continue;
+    const sx=view.x+n.x*view.k,sy=view.y+n.y*view.k,dx=sx-mx,dy=sy-my,d=dx*dx+dy*dy;
+    const rad=Math.max(n.type==="dot"?5:9,n.r*view.k+3);
     if(d>rad*rad)continue;
-    var score=order[n.type]*1e6+d;
+    const score=order[n.type]*1e6+d;
     if(score<bd){bd=score;best=n}
   }
   return best;
@@ -817,7 +816,7 @@ function pick(mx,my){
 function onMove(e){
   mouse.x=e.offsetX;mouse.y=e.offsetY;
   if(drag){
-    var dx=e.offsetX-drag.x,dy=e.offsetY-drag.y;
+    const dx=e.offsetX-drag.x,dy=e.offsetY-drag.y;
     if(Math.abs(dx)+Math.abs(dy)>3)drag.moved=true;
     if(drag.moved){view.x=drag.vx+dx;view.y=drag.vy+dy;view.tx=view.x;view.ty=view.y;view.user=true;dirty=true}
     return;
@@ -827,9 +826,9 @@ function onMove(e){
 function onDown(e){drag={x:e.offsetX,y:e.offsetY,vx:view.x,vy:view.y,moved:false};cv.setPointerCapture(e.pointerId);cv.classList.add("drag")}
 function onUp(e){
   cv.classList.remove("drag");
-  var d=drag;drag=null;if(!d)return;
+  const d=drag;drag=null;if(!d)return;
   if(!d.moved){
-    var n=pick(e.offsetX,e.offsetY);
+    const n=pick(e.offsetX,e.offsetY);
     // the page the reader is on opens again (its page card), it is not switched off
     if(n&&(n!==S.sel||S.here))openNode(n);
     else{S.sel=null;hideCard();drawer.close();applyFocus();dirty=true}
@@ -837,8 +836,8 @@ function onUp(e){
 }
 function onWheel(e){
   e.preventDefault();
-  var f=Math.exp(-e.deltaY*.0015),nk=Math.max(.15,Math.min(8,view.k*f));
-  var wx=(e.offsetX-view.x)/view.k,wy=(e.offsetY-view.y)/view.k;
+  const f=Math.exp(-e.deltaY*.0015),nk=Math.max(.15,Math.min(8,view.k*f));
+  const wx=(e.offsetX-view.x)/view.k,wy=(e.offsetY-view.y)/view.k;
   view.k=nk;view.tk=nk;view.x=e.offsetX-wx*nk;view.y=e.offsetY-wy*nk;view.tx=view.x;view.ty=view.y;view.user=true;dirty=true;
 }
 function setHover(n){
@@ -857,16 +856,16 @@ function hayOf(n){
 }
 function applyFocus(){
   syncTree();filterTree(S.q||"");
-  var f=S.hover||(S.q&&S.here?null:S.sel); // a query beats the page's own "you are here" mark, so the map lights the matches the tree lists
+  const f=S.hover||(S.q&&S.here?null:S.sel); // a query beats the page's own "you are here" mark, so the map lights the matches the tree lists
   focusLinks=[];flags.fill(0);flagMode=false;matchCount=0;
   if(f){
     flagMode=true;flags[f.i]=1;
     if(f===S.sel&&S.here)return; // the page the reader is on is the one lit node: no centre node, no links
     flags[root.i]=1;
-    var add=function(n){flags[n.i]=1};
+    const add=function(n){flags[n.i]=1};
     if(f.type==="dot"){add(f.hub);focusLinks.push([f,f.hub],[f.hub,root])}
     else if(f.type==="hub"){
-      var fo=f===S.sel&&S.fol&&S.fol.hub===f?S.fol:null; // a folder picked in the tree or the card lights only its own files
+      const fo=f===S.sel&&S.fol&&S.fol.hub===f?S.fol:null; // a folder picked in the tree or the card lights only its own files
       rooms[f.room].dots.forEach(function(d){if(fo&&d.folder!==fo.i)return;add(d);focusLinks.push([f,d])});focusLinks.push([f,root]);
     }
     else if(f.type==="root"){
@@ -881,7 +880,7 @@ function applyFocus(){
   }
   if(S.q){
     flagMode=true;
-    var q=S.q;
+    const q=S.q;
     nodes.forEach(function(n){
       if(hayOf(n).indexOf(q)>=0){flags[n.i]=1;matchCount++;if(n.hub)flags[n.hub.i]=1}
     });
@@ -893,14 +892,14 @@ function applyFocus(){
 }
 
 function showCard(n,mx,my,pin,keepPos){
-  var c=$("card");c.textContent="";c.className=pin?"pin":"";
-  var t=el("b",null,n.label||(n.type==="dot"?"unnamed file":""));c.appendChild(t);
-  var k="",d="",s=null;
-  if(n.type==="dot"){var R=rooms[n.room];k=n.info.line||R.label+" / "+R.folders[n.folder].name;
+  const c=$("card");c.textContent="";c.className=pin?"pin":"";
+  const t=el("b",null,n.label||(n.type==="dot"?"unnamed file":""));c.appendChild(t);
+  let k="",d="",s=null;
+  if(n.type==="dot"){const R=rooms[n.room];k=n.info.line||R.label+" / "+R.folders[n.folder].name;
     if(!n.name)d="One of "+R.folders[n.folder].count+" files in this folder. Only some names are listed.";}
-  else if(n.type==="hub"){var Rm=rooms[n.room];k="room · "+Rm.count+" files in "+Rm.folders.length+" folders";
+  else if(n.type==="hub"){const Rm=rooms[n.room];k="room · "+Rm.count+" files in "+Rm.folders.length+" folders";
     d=pin?"Double-click to "+(Rm.collapsed?"expand":"collapse")+".":"Click for folder counts.";
-    if(pin){s=el("ul");Rm.folders.forEach(function(f){var li=el("li");li.appendChild(el("span",null,f.name));li.appendChild(el("span","k",String(f.count)));s.appendChild(li)})}}
+    if(pin){s=el("ul");Rm.folders.forEach(function(f){const li=el("li");li.appendChild(el("span",null,f.name));li.appendChild(el("span","k",String(f.count)));s.appendChild(li)})}}
   else if(n.type==="root"){k="router file";d=(n.info.also?"Also "+n.info.also+". ":"")+(n.info.note||"");}
   else if(n.type==="skill"){k="skill";d=(n.info.desc||"")+(n.info.url?"":" No public page yet.");}
   else if(n.type==="routine"){k="routine · "+(n.info.when||"");d=n.info.skill?"Runs /"+n.info.skill:"";
@@ -910,8 +909,8 @@ function showCard(n,mx,my,pin,keepPos){
   c.appendChild(el("div","s","Click for the full card"+(n.type!=="hub"&&n.info&&n.info.url?" and its link":"")));
   c.style.display="block";
   if(!keepPos){
-    var r=cv.getBoundingClientRect();mx+=r.left;my+=r.top;
-    var x=Math.min(mx+14,window.innerWidth-280),y=Math.min(my+14,window.innerHeight-110);
+    const r=cv.getBoundingClientRect();mx+=r.left;my+=r.top;
+    const x=Math.min(mx+14,window.innerWidth-280),y=Math.min(my+14,window.innerHeight-110);
     c.style.left=Math.max(8,x)+"px";c.style.top=Math.max(8,y)+"px";
   }
 }
@@ -919,47 +918,47 @@ function hideCard(){$("card").style.display="none"}
 
 /* ---------- legend ---------- */
 function buildLegend(){
-  var L=$("legend");L.textContent="";
+  const L=$("legend");L.textContent="";
   L.appendChild(el("h3",null,"Rooms"));
   rooms.forEach(function(r){
-    var d=el("div"),i=el("i");i.style.background=C(r.color);if(!PAL.light)i.style.boxShadow="0 0 6px "+r.color;
+    const d=el("div"),i=el("i");i.style.background=C(r.color);if(!PAL.light)i.style.boxShadow="0 0 6px "+r.color;
     d.appendChild(i);d.appendChild(el("span",null,r.label+" · "+r.count));L.appendChild(d);
   });
   L.appendChild(el("h3",null,"Shapes"));
   [["","#ff7a1a","Centre rules file"],["dia","#ff9a3c","Skill (links to the skill map)"],["","#b57bff","Dot: a note, part, setup or post"],["","#5a6270","Course lesson: grey until you finish it"],["hex","#2ee6c5","Public project (click for its link)"],["hex","#ffd93d","Page of this site (click to read it)"]].forEach(function(s){
-    var d=el("div"),i=el("i",s[0]);i.style.background=C(s[1]);i.style.borderColor=C(s[1]);d.appendChild(i);d.appendChild(el("span",null,s[2]));L.appendChild(d);
+    const d=el("div"),i=el("i",s[0]);i.style.background=C(s[1]);i.style.borderColor=C(s[1]);d.appendChild(i);d.appendChild(el("span",null,s[2]));L.appendChild(d);
   });
 }
 
 /* ---------- drawing ---------- */
 function sprite(color){
   if(sprites[color])return sprites[color];
-  var c=document.createElement("canvas");c.width=c.height=64;var g=c.getContext("2d");
-  var gr=g.createRadialGradient(32,32,0,32,32,32);
+  const c=document.createElement("canvas");c.width=c.height=64;const g=c.getContext("2d");
+  const gr=g.createRadialGradient(32,32,0,32,32,32);
   gr.addColorStop(0,"#fff");gr.addColorStop(.18,color);gr.addColorStop(.45,color+"55");gr.addColorStop(1,color+"00");
   g.fillStyle=gr;g.fillRect(0,0,64,64);return sprites[color]=c;
 }
 function shade(hex,f,fi){ // folders view: vary lightness per folder
-  var n=parseInt(hex.slice(1),16),r=n>>16,g=n>>8&255,b=n&255,m=(PAL.light?[1,.82,.68,.9,.76]:[.75,1,1.2,.9,1.35])[fi%5]; // on paper the shades only go darker
+  const n=parseInt(hex.slice(1),16),r=n>>16,g=n>>8&255,b=n&255,m=(PAL.light?[1,.82,.68,.9,.76]:[.75,1,1.2,.9,1.35])[fi%5]; // on paper the shades only go darker
   function c(v){return Math.max(0,Math.min(255,Math.round(v*m)))}
   return"#"+((1<<24)+(c(r)<<16)+(c(g)<<8)+c(b)).toString(16).slice(1);
 }
 function dotColor(n){return S.view==="folders"?shade(C(n.color),0,n.folder):C(n.color)}
 
-var last=0;
+let last=0;
 function frame(t){
-  var dt=Math.min(.05,(t-last)/1000||0);last=t;
-  var moving=step(dt);
+  const dt=Math.min(.05,(t-last)/1000||0);last=t;
+  const moving=step(dt);
   if(!S.dim3&&(dirty||moving||S.motion)){draw(t);dirty=false}
   requestAnimationFrame(frame);
 }
 
 /* ---------- the 3D view: the same public nodes, drawn by 3d-force-graph (pinned, loaded only when 3D is opened) ---------- */
-var G3D_SRC="https://cdn.jsdelivr.net/npm/3d-force-graph@1.79.0/dist/3d-force-graph.min.js",g3=null,g3Loading=false;
-var KINDWORD={root:"rules file",hub:"room",dot:"note, part or post",skill:"skill",routine:"routine",app:"page or project"};
+const G3D_SRC="https://cdn.jsdelivr.net/npm/3d-force-graph@1.79.0/dist/3d-force-graph.min.js";let g3=null,g3Loading=false;
+const KINDWORD={root:"rules file",hub:"room",dot:"note, part or post",skill:"skill",routine:"routine",app:"page or project"};
 function g3Data(){
-  var ns=nodes.map(function(n){return{id:n.i,name:n.label||"",kind:KINDWORD[n.type]||n.type,color:n.color,val:n.type==="root"?30:n.type==="hub"?12:n.type==="dot"?1:6}});
-  var ls=[];
+  const ns=nodes.map(function(n){return{id:n.i,name:n.label||"",kind:KINDWORD[n.type]||n.type,color:n.color,val:n.type==="root"?30:n.type==="hub"?12:n.type==="dot"?1:6}});
+  const ls=[];
   nodes.forEach(function(n){
     if(n.type==="hub")ls.push({source:root.i,target:n.i});
     else if(n.type==="dot"&&n.hub)ls.push({source:n.hub.i,target:n.i});
@@ -967,62 +966,61 @@ function g3Data(){
   });
   return{nodes:ns,links:ls};
 }
-function g3Size(){var s=$("stage");return[s.clientWidth||W,s.clientHeight||H]}
+function g3Size(){const s=$("stage");return[s.clientWidth||W,s.clientHeight||H]}
 function g3Fail(){
   setDim(false,true);say("The 3D view did not load. The flat map stays.");
 }
 function g3Build(){
-  var box=$("g3d"),sz=g3Size();
+  const box=$("g3d"),sz=g3Size();
   g3=window.ForceGraph3D()(box).width(sz[0]).height(sz[1]).backgroundColor(PAL.bg).showNavInfo(false)
     .graphData(g3Data()).nodeLabel(function(n){return n.kind+" · "+n.name}).nodeColor("color").nodeVal("val").nodeRelSize(4).nodeOpacity(.9)
     .linkColor(function(){return "rgba(120,130,150,.35)"}).linkWidth(.4)
-    .onNodeClick(function(n){var m=nodes[n.id];if(m)openNode(m)});
+    .onNodeClick(function(n){const m=nodes[n.id];if(m)openNode(m)});
   if(!S.motion)g3.cooldownTime(0);
 }
 function setDim(on,quiet){
   if(on===!!S.dim3)return;
   if(on&&!g3){
     if(g3Loading)return;
-    var go=function(){g3Loading=false;if(window.ForceGraph3D){try{g3Build();showDim(true,quiet)}catch(e){g3Fail()}}else g3Fail()};
+    const go=function(){g3Loading=false;if(window.ForceGraph3D){try{g3Build();showDim(true,quiet)}catch{g3Fail()}}else g3Fail()};
     if(window.ForceGraph3D){go();return}
-    g3Loading=true;var s=document.createElement("script");s.src=G3D_SRC;s.onload=go;s.onerror=function(){g3Loading=false;g3Fail()};
+    g3Loading=true;const s=document.createElement("script");s.src=G3D_SRC;s.onload=go;s.onerror=function(){g3Loading=false;g3Fail()};
     document.head.appendChild(s);say("Loading the 3D view");return;
   }
   showDim(on,quiet);
 }
 function showDim(on,quiet){
   S.dim3=on;$("g3d").hidden=!on;cv.hidden=on;
-  var b=$("dimBtn");b.textContent=on?"2D":"3D";b.setAttribute("aria-pressed",String(on));
+  const b=$("dimBtn");b.textContent=on?"2D":"3D";b.setAttribute("aria-pressed",String(on));
   b.title=on?"Back to the flat map":"Switch between the flat map and a 3D view";
-  if(g3){if(on){var sz=g3Size();g3.width(sz[0]).height(sz[1]);g3.resumeAnimation()}else g3.pauseAnimation()}
+  if(g3){if(on){const sz=g3Size();g3.width(sz[0]).height(sz[1]);g3.resumeAnimation()}else g3.pauseAnimation()}
   if(!on){resize();dirty=true}
   if(!quiet)say(on?"3D view":"Flat map");
 }
 
 function step(dt){
-  var moving=false,motion=S.motion;
+  let moving=false;const motion=S.motion;
   if(motion&&S.layout!=="force"&&S.layout!=="hex")S.angle+=S.spin*dt*2;
-  var rot=S.layout==="force"||S.layout==="hex"?0:S.angle,L=computeLayout(S.layout);
-  var ga=S.layout==="rings"?1:0;guideA+=(ga-guideA)*(motion?Math.min(1,dt*4):1);
+  const rot=S.layout==="force"||S.layout==="hex"?0:S.angle;computeLayout(S.layout);
+  const ga=S.layout==="rings"?1:0;guideA+=(ga-guideA)*(motion?Math.min(1,dt*4):1);
   if(Math.abs(ga-guideA)>.01)moving=true;
   if(motion){
-    var vk=1-Math.exp(-dt*5);
+    const vk=1-Math.exp(-dt*5);
     if(Math.abs(view.tk-view.k)>1e-3||Math.abs(view.tx-view.x)>.3||Math.abs(view.ty-view.y)>.3){
       if(!view.user){view.k+=(view.tk-view.k)*vk;view.x+=(view.tx-view.x)*vk;view.y+=(view.ty-view.y)*vk;moving=true}
     }
   }else if(!view.user){view.k=view.tk;view.x=view.tx;view.y=view.ty}
-  var hubT=[];
-  for(var i=0;i<nodes.length;i++){
-    var n=nodes[i];
-    var f=FACTOR[n.type]||0,a=rot*f,ca=Math.cos(a),sa=Math.sin(a);
-    var bx=n.bx||0,by=n.by||0;
+  for(let i=0;i<nodes.length;i++){
+    const n=nodes[i];
+    const f=FACTOR[n.type]||0,a=rot*f,ca=Math.cos(a),sa=Math.sin(a);
+    let bx=n.bx||0,by=n.by||0;
     if(n.type==="dot"&&rooms[n.room].collapsed){bx=n.hub.bx;by=n.hub.by}
-    var tx=bx*ca-by*sa,ty=bx*sa+by*ca;
+    const tx=bx*ca-by*sa,ty=bx*sa+by*ca;
     n.tx=tx;n.ty=ty;
     n.tv=n.type==="dot"&&rooms[n.room].collapsed?0:1;
     if(motion){
-      var k=1-Math.exp(-dt*n.rate);
-      var dx=tx-n.x,dy=ty-n.y;
+      const k=1-Math.exp(-dt*n.rate);
+      const dx=tx-n.x,dy=ty-n.y;
       n.x+=dx*k;n.y+=dy*k;n.vis+=(n.tv-n.vis)*k;
       if(dx*dx+dy*dy>.01||Math.abs(n.tv-n.vis)>.01)moving=true;
     }else{n.x=tx;n.y=ty;n.vis=n.tv}
@@ -1031,20 +1029,20 @@ function step(dt){
 }
 
 function draw(t){
-  var k=view.k,tm=t/1000;
+  const k=view.k,tm=t/1000;
   ctx.setTransform(DPR,0,0,DPR,0,0);
   ctx.globalCompositeOperation="source-over";ctx.globalAlpha=1;
   ctx.fillStyle=PAL.bg;ctx.fillRect(0,0,W,H);
   if(!PAL.light){
-    var g=ctx.createRadialGradient(view.x,view.y,0,view.x,view.y,Math.max(W,H)*.7*Math.max(.5,k*1.2));
+    const g=ctx.createRadialGradient(view.x,view.y,0,view.x,view.y,Math.max(W,H)*.7*Math.max(.5,k*1.2));
     g.addColorStop(0,"rgba(60,30,90,.28)");g.addColorStop(.5,"rgba(20,14,40,.12)");g.addColorStop(1,"rgba(5,6,10,0)");
     ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
   }
   ctx.setTransform(DPR*k,0,0,DPR*k,DPR*view.x,DPR*view.y);
-  var dimA=flagMode?(PAL.light?.3:.1):1;
+  const dimA=flagMode?(PAL.light?.3:.1):1;
 
   // guides (rings layout)
-  var L=computeLayout(S.layout);
+  const L=computeLayout(S.layout);
   if(guideA>.02){
     ctx.lineWidth=1.2/k;
     L.guides.forEach(function(gd){
@@ -1055,7 +1053,7 @@ function draw(t){
 
   // links
   ctx.lineCap="round";
-  var baseA=(flagMode?.05:.2)*(PAL.light?2:1); // thin lines need more weight on paper than on a dark ground
+  const baseA=(flagMode?.05:.2)*(PAL.light?2:1); // thin lines need more weight on paper than on a dark ground
   ctx.lineWidth=1/k;
   hubs.forEach(function(h){
     ctx.globalAlpha=baseA*h.vis;ctx.strokeStyle=C(h.color);
@@ -1067,7 +1065,7 @@ function draw(t){
     ctx.globalAlpha=.05+.1*S.spring;
     rooms.forEach(function(R){
       if(R.collapsed)return;ctx.strokeStyle=C(R.color);ctx.beginPath();
-      for(var i=0;i<R.dots.length;i++){var d=R.dots[i];ctx.moveTo(R.hub.x,R.hub.y);ctx.lineTo(d.x,d.y)}
+      for(let i=0;i<R.dots.length;i++){const d=R.dots[i];ctx.moveTo(R.hub.x,R.hub.y);ctx.lineTo(d.x,d.y)}
       ctx.stroke();
     });
   }
@@ -1083,13 +1081,13 @@ function draw(t){
 
   // dots: additive glow sprites on the dark map, flat discs on Calm paper
   ctx.globalCompositeOperation=PAL.light?"source-over":"lighter";
-  var drift=S.motion&&S.layout==="force"?1:0;
-  for(var i=0;i<nodes.length;i++){
-    var n=nodes[i];if(n.type!=="dot"||n.vis<.02)continue;
-    var a=(flagMode?(flags[i]?1:dimA):1)*n.vis*.9;
-    var x=n.x,y=n.y;
+  const drift=S.motion&&S.layout==="force"?1:0;
+  for(let i=0;i<nodes.length;i++){
+    const n=nodes[i];if(n.type!=="dot"||n.vis<.02)continue;
+    let a=(flagMode?(flags[i]?1:dimA):1)*n.vis*.9;
+    let x=n.x,y=n.y;
     if(drift){x+=Math.cos(tm*.6+n.jit)*2.2;y+=Math.sin(tm*.5+n.jit*1.3)*2.2}
-    var sz=n.r*(flagMode&&flags[i]?3.4:3),col=dotColor(n);
+    let sz=n.r*(flagMode&&flags[i]?3.4:3),col=dotColor(n);
     if(n.info.lesson){if(lit[n.info.lesson])sz*=1.4;else{col=C("#5a6270");a*=.6}}
     ctx.globalAlpha=a;
     if(PAL.light){ctx.fillStyle=col;ctx.beginPath();ctx.arc(x,y,sz/3,0,TAU);ctx.fill()}
@@ -1099,7 +1097,7 @@ function draw(t){
 
   // hubs
   hubs.forEach(function(h){
-    var a=flagMode?(flags[h.i]?1:dimA+.1):1,R=rooms[h.room],hr=h.r*(R.collapsed?1.5:1);
+    const a=flagMode?(flags[h.i]?1:dimA+.1):1,R=rooms[h.room],hr=h.r*(R.collapsed?1.5:1);
     if(!PAL.light){
       ctx.globalCompositeOperation="lighter";ctx.globalAlpha=a*.9;
       ctx.drawImage(sprite(h.color),h.x-hr*3.2,h.y-hr*3.2,hr*6.4,hr*6.4);
@@ -1111,13 +1109,13 @@ function draw(t){
 
   // skills (diamonds)
   skills.forEach(function(s){
-    var a=flagMode?(flags[s.i]?1:dimA+.1):1;ctx.globalAlpha=a;
+    const a=flagMode?(flags[s.i]?1:dimA+.1):1;ctx.globalAlpha=a;
     ctx.fillStyle=PAL.tint;ctx.strokeStyle=C(s.color);ctx.lineWidth=1.4/k;
     ctx.beginPath();ctx.moveTo(s.x,s.y-s.r*1.3);ctx.lineTo(s.x+s.r,s.y);ctx.lineTo(s.x,s.y+s.r*1.3);ctx.lineTo(s.x-s.r,s.y);ctx.closePath();ctx.fill();ctx.stroke();
   });
   // routines (circles)
   routines.forEach(function(r){
-    var a=flagMode?(flags[r.i]?1:dimA+.1):1;ctx.globalAlpha=a;
+    const a=flagMode?(flags[r.i]?1:dimA+.1):1;ctx.globalAlpha=a;
     ctx.lineWidth=1.6/k;ctx.strokeStyle=C(r.color);
     if(r.on){
       if(!PAL.light){ctx.globalCompositeOperation="lighter";ctx.globalAlpha=a*.7;ctx.drawImage(sprite("#ffb347"),r.x-r.r*2.2,r.y-r.r*2.2,r.r*4.4,r.r*4.4)}
@@ -1127,10 +1125,10 @@ function draw(t){
   });
   // apps (hexagons)
   apps.forEach(function(p){
-    var a=flagMode?(flags[p.i]?1:dimA+.1):1;ctx.globalAlpha=a;
+    const a=flagMode?(flags[p.i]?1:dimA+.1):1;ctx.globalAlpha=a;
     ctx.fillStyle=PAL.light?PAL.fill:"#0a1220";ctx.strokeStyle=C(p.color);ctx.lineWidth=1.5/k;
     ctx.beginPath();
-    for(var v=0;v<6;v++){var an=Math.PI/6+v*Math.PI/3,px=p.x+p.r*Math.cos(an),py=p.y+p.r*Math.sin(an);v?ctx.lineTo(px,py):ctx.moveTo(px,py)}
+    for(let v=0;v<6;v++){const an=Math.PI/6+v*Math.PI/3,px=p.x+p.r*Math.cos(an),py=p.y+p.r*Math.sin(an);v?ctx.lineTo(px,py):ctx.moveTo(px,py)}
     ctx.closePath();ctx.fill();ctx.stroke();
     ctx.fillStyle=T(p.color);ctx.font="bold "+(p.r*.95)+"px ui-monospace,monospace";ctx.textAlign="center";ctx.textBaseline="middle";
     ctx.fillText((p.label[0]||"?").toUpperCase(),p.x,p.y+.5);
@@ -1139,7 +1137,7 @@ function draw(t){
   if(S.sel&&S.here){ctx.globalAlpha=1;ctx.strokeStyle=C(S.sel.color);ctx.lineWidth=2/k;ctx.beginPath();ctx.arc(S.sel.x,S.sel.y,Math.max(S.sel.r*1.9,7/k),0,TAU);ctx.stroke()}
   // root
   (function(){
-    var a=flagMode&&!flags[root.i]?.25:1; // dimmed like any node that is not lit
+    const a=flagMode&&!flags[root.i]?.25:1; // dimmed like any node that is not lit
     if(!PAL.light){
       ctx.globalCompositeOperation="lighter";ctx.globalAlpha=.9*a;
       ctx.drawImage(sprite("#ff7a1a"),root.x-root.r*3,root.y-root.r*3,root.r*6,root.r*6);
@@ -1153,15 +1151,15 @@ function draw(t){
   // text in screen space
   ctx.setTransform(DPR,0,0,DPR,0,0);ctx.textAlign="center";ctx.textBaseline="alphabetic";
   // a label keeps inside the stage, and a soft one (a ring name) gives way to any label already drawn
-  var placed=[];
+  const placed=[];
   function label(txt,wx,wy,color,size,dy,al,soft){
-    var x=view.x+wx*k,y=view.y+wy*k+dy;if(x<-80||x>W+80||y<-20||y>H+20)return;
+    let x=view.x+wx*k,y=view.y+wy*k+dy;if(x<-80||x>W+80||y<-20||y>H+20)return;
     ctx.font=size+"px ui-monospace,monospace";
-    var w=ctx.measureText(txt).width;
+    const w=ctx.measureText(txt).width;
     x=Math.max(w/2+6,Math.min(W-w/2-6,x));
     if(soft){ // it steps up or down a line to find a free place, and is left out when there is none
-      var hit=function(yy){for(var p=0;p<placed.length;p++){var o=placed[p];if(x-w/2<o[2]&&x+w/2>o[0]&&yy-size<o[3]&&yy>o[1])return true}return false};
-      if(hit(y)){var alt=[y+size+4,y-size-4,y+2*(size+4),y-2*(size+4)],q=0;while(q<alt.length&&hit(alt[q]))q++;if(q===alt.length)return;y=alt[q]}
+      const hit=function(yy){for(let p=0;p<placed.length;p++){const o=placed[p];if(x-w/2<o[2]&&x+w/2>o[0]&&yy-size<o[3]&&yy>o[1])return true}return false};
+      if(hit(y)){const alt=[y+size+4,y-size-4,y+2*(size+4),y-2*(size+4)];let q=0;while(q<alt.length&&hit(alt[q]))q++;if(q===alt.length)return;y=alt[q]}
     }
     placed.push([x-w/2-4,y-size-2,x+w/2+4,y+2]);
     ctx.globalAlpha=PAL.light?1:al; // Calm text is always full strength, so it keeps its contrast; only the shapes dim
@@ -1169,7 +1167,7 @@ function draw(t){
   }
   label(root.label,root.x,root.y,PAL.ink,11,root.r*k+16,flagMode&&!flags[root.i]?.25:1);
   hubs.forEach(function(h){
-    var R=rooms[h.room];
+    const R=rooms[h.room];
     // the name and how many it holds; a long name loses its bracket on the map (the tree and the card keep it whole)
     label(R.label.split(" (")[0].toUpperCase()+"  "+R.count,h.x,h.y,T(h.color),10,-h.r*k-8,flagMode?(flags[h.i]?1:.3):.95,true);
   });
@@ -1178,9 +1176,9 @@ function draw(t){
   if(S.hover&&S.hover.type!=="dot"&&S.hover.type!=="hub"&&S.hover.type!=="root")label(S.hover.label,S.hover.x,S.hover.y,PAL.ink,11,-S.hover.r*k-8,1);
   else if(S.sel&&S.sel!==S.hover&&S.sel.type!=="dot"&&S.sel.type!=="hub"&&S.sel.type!=="root")label(S.sel.label+(S.here?" · you are here":""),S.sel.x,S.sel.y,PAL.ink,11,-S.sel.r*k-8,1);
   if(S.names||(S.q&&matchCount>0&&matchCount<=40)){
-    var cnt=0;
-    for(var i2=0;i2<nodes.length&&cnt<260;i2++){
-      var d=nodes[i2];if(d.type!=="dot"||!d.name||d.vis<.5)continue;
+    let cnt=0;
+    for(let i2=0;i2<nodes.length&&cnt<260;i2++){
+      const d=nodes[i2];if(d.type!=="dot"||!d.name||d.vis<.5)continue;
       if(S.q&&!flags[i2])continue;
       if(k<.45&&!S.q)continue;
       label(d.name,d.x,d.y,PAL.mute,9,-6,flagMode&&!flags[i2]?.2:.8);cnt++;
@@ -1189,9 +1187,9 @@ function draw(t){
   if(S.view==="folders"){
     rooms.forEach(function(R){
       if(R.collapsed||k<.5)return;
-      var idx=0;R.folders.forEach(function(f,fi){
-        var sx=0,sy=0,c=0;
-        for(var j=idx;j<idx+f.count;j++){sx+=R.dots[j].x;sy+=R.dots[j].y;c++}
+      let idx=0;R.folders.forEach(function(f,fi){
+        let sx=0,sy=0,c=0;
+        for(let j=idx;j<idx+f.count;j++){sx+=R.dots[j].x;sy+=R.dots[j].y;c++}
         idx+=f.count;if(c)label(f.name,sx/c,sy/c,PAL.light?T(R.color):shade(R.color,0,fi),9,3,.9,true);
       });
     });

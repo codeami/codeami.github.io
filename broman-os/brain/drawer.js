@@ -7,7 +7,7 @@
    From the AIO prototype; this public copy has no private hub links. */
 (function(){
 "use strict";
-var CSS=
+const CSS=
 "#drawer{position:fixed;z-index:6;top:0;right:0;bottom:0;width:min(520px,100vw);display:flex;flex-direction:column;background:var(--panel,#0c0e11);border-left:1px solid var(--accent,#ff7a1a);color:var(--ink,#e9e6e0)}"+
 "#drawer[hidden]{display:none}#drawer:focus{outline:none}"+
 "#drawer .dh{display:flex;align-items:center;gap:6px;padding:10px 12px;border-bottom:1px solid var(--line,#23262b)}"+
@@ -55,34 +55,34 @@ var CSS=
 "#drawer button.fl{background:none;border:0;padding:0;font:inherit;color:var(--accent,#ff7a1a);text-decoration:underline;text-underline-offset:3px;cursor:pointer}"+
 "#drawer button.fl:hover,#drawer button.fl:focus-visible{outline:none;text-decoration-thickness:2px}";
 
-function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
-function abs(u,base){try{return new URL(u,base||location.href).href}catch(e){return""}}
+function el(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
+function abs(u,base){try{return new URL(u,base||location.href).href}catch{return""}}
 function bare(u){return u.split("#")[0]}
 
 window.AIODrawer=function(o){
-  var R=o.reading||[],st=document.createElement("style");st.textContent=CSS;document.head.appendChild(st);
-  var d=el("aside");d.id="drawer";d.hidden=true;d.setAttribute("aria-label","Details");d.tabIndex=-1;
-  var head=el("div","dh"),pos=el("span","pos"),x=el("button","btn","✕");x.type="button";x.setAttribute("aria-label","Close");
+  const R=o.reading||[],st=document.createElement("style");st.textContent=CSS;document.head.appendChild(st);
+  const d=el("aside");d.id="drawer";d.hidden=true;d.setAttribute("aria-label","Details");d.tabIndex=-1;
+  const head=el("div","dh"),pos=el("span","pos"),x=el("button","btn","✕");x.type="button";x.setAttribute("aria-label","Close");
   head.appendChild(pos);head.appendChild(x);
-  var body=el("div","db"),foot=el("div","df");
+  const body=el("div","db"),foot=el("div","df");
   d.appendChild(head);d.appendChild(body);d.appendChild(foot);document.body.appendChild(d);
   x.addEventListener("click",close);
   document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!d.hidden)close()});
-  var token=0;
+  let token=0;
 
-  function readIndex(href){var h=bare(abs(href));for(var i=0;i<R.length;i++)if(bare(abs(R[i].url))===h)return i;return-1}
+  function readIndex(href){const h=bare(abs(href));for(let i=0;i<R.length;i++)if(bare(abs(R[i].url))===h)return i;return-1}
   function linkEl(l){
     if(l.none)return el("span","none",l.none);
-    if(l.doc){var bd=el("button",null,l.label);bd.type="button";bd.addEventListener("click",function(){doc(l)});return bd}
-    var i=l.newTab?-1:readIndex(l.href);
-    if(i>=0){var b=el("button",null,"Read: "+l.label);b.type="button";b.addEventListener("click",function(){read(i)});return b}
-    if(isText(l.href)){var bn=el("button",null,"Read: "+l.label);bn.type="button";bn.addEventListener("click",function(){note(l)});return bn}
+    if(l.doc){const bd=el("button",null,l.label);bd.type="button";bd.addEventListener("click",function(){doc(l)});return bd}
+    const i=l.newTab?-1:readIndex(l.href);
+    if(i>=0){const b=el("button",null,"Read: "+l.label);b.type="button";b.addEventListener("click",function(){read(i)});return b}
+    if(isText(l.href)){const bn=el("button",null,"Read: "+l.label);bn.type="button";bn.addEventListener("click",function(){note(l)});return bn}
     // only a link to another site opens in a new tab: a page of this site swaps into the page card
-    var ext=l.newTab||(/^https?:/.test(l.href)&&abs(l.href).indexOf(location.origin)!==0),a=el("a",null,l.label+(ext?" ↗":""));a.href=l.href;if(l.title)a.title=l.title;
+    const ext=l.newTab||(/^https?:/.test(l.href)&&abs(l.href).indexOf(location.origin)!==0),a=el("a",null,l.label+(ext?" ↗":""));a.href=l.href;if(l.title)a.title=l.title;
     if(ext){a.target="_blank";a.rel="noopener noreferrer"}
     return a;
   }
-  var last=null; // the node card a document was opened from, for Back
+  let last=null; // the node card a document was opened from, for Back
   function card(c){
     token++;body.textContent="";foot.textContent="";foot.hidden=true;
     if(c.read==null&&!c.doc)last=c;
@@ -91,28 +91,28 @@ window.AIODrawer=function(o){
     if(c.line)body.appendChild(el("div","ln",c.line));
     if(c.status)body.appendChild(el("div","stt "+(c.statusCls||""),c.status));
     // a node card is tabbed (What it is / Links / Related); a reading page keeps one column above its text
-    var tabbed=c.read==null&&!c.doc,panes=[];
-    function section(name){var p=el("div","pane");if(!tabbed)p.appendChild(el("h3","s",name));panes.push([name,p]);return p}
+    const tabbed=c.read==null&&!c.doc,panes=[];
+    function section(name){const p=el("div","pane");if(!tabbed)p.appendChild(el("h3","s",name));panes.push([name,p]);return p}
     if(tabbed){
-      var dp=section("What it is");
+      const dp=section("What it is");
       if(c.body&&c.body.nodeType)dp.appendChild(c.body);
       else dp.appendChild(c.body?el("p",null,c.body):el("p","none","Details coming."));
     }
     if(c.links&&c.links.length){
-      var L=el("div","lnk"),grp=null;section("Links").appendChild(L);
+      const L=el("div","lnk");let grp=null;section("Links").appendChild(L);
       c.links.forEach(function(l){
         if(l.group&&l.group!==grp){grp=l.group;L.appendChild(el("div","lg",grp))}
         L.appendChild(linkEl(l));
       });
     }
     if(c.related&&c.related.length){
-      var rel=el("div","rel");section("Related").appendChild(rel);
-      c.related.forEach(function(r){var b=el("button",null,r.label);b.type="button";b.title=r.label;b.addEventListener("click",r.go);rel.appendChild(b)});
+      const rel=el("div","rel");section("Related").appendChild(rel);
+      c.related.forEach(function(r){const b=el("button",null,r.label);b.type="button";b.title=r.label;b.addEventListener("click",r.go);rel.appendChild(b)});
     }
     if(tabbed&&panes.length>1){
-      var tl=el("div","tabs");tl.setAttribute("role","tablist");body.appendChild(tl);
-      var pick=function(i){panes.forEach(function(q,j){q[2].setAttribute("aria-selected",String(i===j));q[1].hidden=i!==j})};
-      panes.forEach(function(q,i){var b=el("button","tab",q[0]+(q[0]==="What it is"?"":" ("+q[1].firstChild.children.length+")"));b.type="button";b.setAttribute("role","tab");q[1].setAttribute("role","tabpanel");
+      const tl=el("div","tabs");tl.setAttribute("role","tablist");body.appendChild(tl);
+      const pick=function(i){panes.forEach(function(q,j){q[2].setAttribute("aria-selected",String(i===j));q[1].hidden=i!==j})};
+      panes.forEach(function(q,i){const b=el("button","tab",q[0]+(q[0]==="What it is"?"":" ("+q[1].firstChild.children.length+")"));b.type="button";b.setAttribute("role","tab");q[1].setAttribute("role","tabpanel");
         b.addEventListener("click",function(){pick(i)});tl.appendChild(b);q.push(b)});
       pick(0);
     }
@@ -120,34 +120,34 @@ window.AIODrawer=function(o){
     d.hidden=false;body.scrollTop=0;d.focus({preventScroll:true});
   }
   function read(i,extra){
-    var it=R[i];if(!it)return;
+    const it=R[i];if(!it)return;
     // the full-page link opens a new tab, never this one
-    var c={title:it.title,line:it.line,read:i,links:[{label:"Open the full page",href:abs(it.url),newTab:true}]};
-    if(extra)for(var k in extra)c[k]=extra[k];
+    const c={title:it.title,line:it.line,read:i,links:[{label:"Open the full page",href:abs(it.url),newTab:true}]};
+    if(extra)for(const k in extra)c[k]=extra[k];
     card(c);
-    var art=el("div","art");art.appendChild(el("p","none","Loading…"));body.appendChild(art);
+    const art=el("div","art");art.appendChild(el("p","none","Loading…"));body.appendChild(art);
     foot.hidden=false;
-    function nav(label,j){var b=el("button","btn",label);b.type="button";if(j<0||j>=R.length)b.disabled=true;else{b.title=R[j].title;b.addEventListener("click",function(){read(j)})}foot.appendChild(b)}
+    function nav(label,j){const b=el("button","btn",label);b.type="button";if(j<0||j>=R.length)b.disabled=true;else{b.title=R[j].title;b.addEventListener("click",function(){read(j)})}foot.appendChild(b)}
     nav("◀ "+(i>0?R[i-1].title:"Start"),i-1);nav((i<R.length-1?R[i+1].title:"End")+" ▶",i+1);
-    var my=++token,url=abs(it.url);
+    const my=++token,url=abs(it.url);
     if(it.frame)return frame(art,url);
     fetch(url).then(function(r){if(!r.ok)throw 0;return r.text()}).then(function(html){
-      if(my!==token)return;fill(art,html,url,it);
+      if(my!==token)return;fill(art,html,url);
     }).catch(function(){if(my!==token)return;frame(art,url)});
   }
   // keep the article's words and structure; drop its scripts, styles, nav and look
-  function fill(art,html,url,it){
-    var doc=new DOMParser().parseFromString(html,"text/html");
-    var m=doc.querySelector("main")||doc.body;
+  function fill(art,html,url){
+    const doc=new DOMParser().parseFromString(html,"text/html");
+    const m=doc.querySelector("main")||doc.body;
     m.querySelectorAll("script,style,link,noscript,nav,header,footer,form,button,input,iframe,canvas,.back,.sw,.go").forEach(function(n){n.remove()});
-    var pics=m.querySelectorAll("svg,img,video");pics.forEach(function(n){n.remove()});
+    const pics=m.querySelectorAll("svg,img,video");pics.forEach(function(n){n.remove()});
     if(m.textContent.replace(/\s+/g,"").length<200)return frame(art,url);
     m.querySelectorAll("*").forEach(function(n){
-      for(var a=n.attributes.length-1;a>=0;a--){var nm=n.attributes[a].name;
+      for(let a=n.attributes.length-1;a>=0;a--){const nm=n.attributes[a].name;
         if(/^on|^style$|^class$/i.test(nm))n.removeAttribute(nm);
         else if(nm==="id")n.id="rd-"+n.id;}
       if(n.hasAttribute("href")){
-        var h=n.getAttribute("href");
+        const h=n.getAttribute("href");
         if(/^\s*javascript:/i.test(h))n.removeAttribute("href");
         else if(h.charAt(0)==="#")n.setAttribute("href","#rd-"+h.slice(1));
         else{n.setAttribute("href",abs(h,url));n.target="_blank";n.rel="noopener noreferrer"}
@@ -155,41 +155,41 @@ window.AIODrawer=function(o){
     });
     art.textContent="";
     if(pics.length)art.appendChild(el("p","none","This page has "+(pics.length===1?"a picture":pics.length+" pictures")+". Open the full page to see "+(pics.length===1?"it":"them")+"."));
-    while(m.firstChild)art.appendChild(document.importNode(m.firstChild,true)),m.removeChild(m.firstChild);
+    while(m.firstChild){art.appendChild(document.importNode(m.firstChild,true));m.removeChild(m.firstChild)}
     art.querySelectorAll("span+span").forEach(function(s){s.before(" · ")}); // badges lost their own spacing with their classes
     // a link to another page in the reading order stays in the drawer
     art.querySelectorAll("a[href]").forEach(function(a){
-      var j=readIndex(a.href);
+      const j=readIndex(a.href);
       if(j>=0)a.addEventListener("click",function(e){e.preventDefault();read(j)});
       else if(a.getAttribute("href").charAt(0)==="#")a.removeAttribute("target");
     });
   }
   // pages drawn by script (or blocked from fetch) show live in a frame
   function frame(art,url){
-    art.textContent="";var f=el("iframe");f.src=url;f.title="Page";f.loading="lazy";art.appendChild(f);
+    art.textContent="";const f=el("iframe");f.src=url;f.title="Page";f.loading="lazy";art.appendChild(f);
   }
   // a source file from the hub, live in a frame here; Back returns to its node's card
   function doc(l){
-    var from=last;
+    const from=last;
     card({doc:true,kind:"Document",title:l.title||l.label,line:l.line,links:[{label:"Open the full page",href:l.href,newTab:true}]});
-    var art=el("div","art");body.appendChild(art);frame(art,l.href);
-    if(from){foot.hidden=false;var b=el("button","btn","◀ Back to "+from.title);b.type="button";
+    const art=el("div","art");body.appendChild(art);frame(art,l.href);
+    if(from){foot.hidden=false;const b=el("button","btn","◀ Back to "+from.title);b.type="button";
       b.addEventListener("click",function(){card(from)});foot.appendChild(b)}
   }
   /* A note or text file of this site (brain/notes/*.md, allowlist.txt, build.py) reads here, rendered, never as a raw file.
      The note's own links, tags and source show above its text; Back returns to the card it was opened from. */
-  function isText(href){var u=abs(href);return u.indexOf(location.origin)===0&&/\/brain\/[^?#]*\.(md|txt|py)$/.test(bare(u))}
+  function isText(href){const u=abs(href);return u.indexOf(location.origin)===0&&/\/brain\/[^?#]*\.(md|txt|py)$/.test(bare(u))}
   function inline(p,s){
-    var re=/(`[^`]+`)|(\*\*[^*]+\*\*)|(\[[^\]]+\]\([^)]+\))/g,at=0,m;
+    const re=/(`[^`]+`)|(\*\*[^*]+\*\*)|(\[[^\]]+\]\([^)]+\))/g;let at=0,m;
     while((m=re.exec(s))){
       if(m.index>at)p.appendChild(document.createTextNode(s.slice(at,m.index)));
-      var t=m[0];
+      const t=m[0];
       if(t.charAt(0)==="`")p.appendChild(el("code",null,t.slice(1,-1)));
       else if(t.charAt(0)==="*")p.appendChild(el("strong",null,t.slice(2,-2)));
       else{
-        var k=/^\[([^\]]+)\]\(([^)]+)\)$/.exec(t),h=k[2].trim();
+        const k=/^\[([^\]]+)\]\(([^)]+)\)$/.exec(t),h=k[2].trim();
         if(/^[a-z][a-z0-9+.-]*:/i.test(h)&&!/^https?:/i.test(h))p.appendChild(document.createTextNode(k[1])); // no javascript: or data: links
-        else{var a=el("a",null,k[1]);a.href=h;if(/^https?:/i.test(h)){a.target="_blank";a.rel="noopener noreferrer"}p.appendChild(a)}
+        else{const a=el("a",null,k[1]);a.href=h;if(/^https?:/i.test(h)){a.target="_blank";a.rel="noopener noreferrer"}p.appendChild(a)}
       }
       at=m.index+t.length;
     }
@@ -197,20 +197,20 @@ window.AIODrawer=function(o){
   }
   // a small Markdown reader: front matter, headings, paragraphs, lists, `code`, **bold** and [links](url)
   function md(art,text){
-    var lines=text.replace(/\r/g,"").split("\n"),i=0,meta={},title="",list=null,para=null,last=null,KEY=/^(Claim|Evidence|Elaboration|Why it matters here):\s*/;
-    if(lines[0]==="---"){for(i=1;i<lines.length&&lines[i]!=="---";i++){var fm=/^(\w+):\s*(.*)$/.exec(lines[i]);if(fm)meta[fm[1]]=fm[2]}i++}
+    const lines=text.replace(/\r/g,"").split("\n");let i=0;const meta={};let title="",list=null,para=null,last=null;const KEY=/^(Claim|Evidence|Elaboration|Why it matters here):\s*/;
+    if(lines[0]==="---"){for(i=1;i<lines.length&&lines[i]!=="---";i++){const fm=/^(\w+):\s*(.*)$/.exec(lines[i]);if(fm)meta[fm[1]]=fm[2]}i++}
     for(;i<lines.length;i++){
-      var ln=lines[i],h=/^(#{1,4})\s+(.*)$/.exec(ln),li=/^\s*(?:[-*]|\d+\.)\s+(.*)$/.exec(ln);
+      let ln=lines[i];const h=/^(#{1,4})\s+(.*)$/.exec(ln),li=/^\s*(?:[-*]|\d+\.)\s+(.*)$/.exec(ln);
       if(!ln.trim()){list=para=null;continue}
       if(h){list=para=null;if(h[1].length===1&&!title)title=h[2];else art.appendChild(el("h3",null,h[2]));continue}
       if(li){
-        var ord=/^\s*\d+\./.test(ln);
+        const ord=/^\s*\d+\./.test(ln);
         if(!list||list.tagName!==(ord?"OL":"UL")){list=el(ord?"ol":"ul");art.appendChild(list)}
         last=el("li");inline(last,li[1]);list.appendChild(last);para=null;continue;
       }
       if(list&&/^\s+/.test(ln)&&last){last.appendChild(document.createTextNode(" "));inline(last,ln.trim());continue}
       list=null;
-      var kw=KEY.exec(ln);
+      const kw=KEY.exec(ln);
       if(kw||!para){para=el("p");art.appendChild(para);if(kw){para.appendChild(el("strong",null,kw[1]+": "));ln=ln.slice(kw[0].length)}}
       else para.appendChild(document.createTextNode(" "));
       inline(para,ln.trim());
@@ -218,26 +218,26 @@ window.AIODrawer=function(o){
     return{title:title,meta:meta};
   }
   function note(l){
-    var from=last,href=bare(abs(l.href)),name=href.split("/").pop(),text=/\.md$/.test(name);
+    const from=last,href=bare(abs(l.href)),name=href.split("/").pop(),text=name.endsWith('.md');
     card({doc:true,kind:text?"Note":"File",title:l.title||l.label,line:text?"wiki note · public copy":name,links:[]});
-    var art=el("div","art"),my=++token;art.appendChild(el("p","none","Loading…"));body.appendChild(art);
+    const art=el("div","art"),my=++token;art.appendChild(el("p","none","Loading…"));body.appendChild(art);
     foot.hidden=false;
-    if(from){var b=el("button","btn","◀ Back to "+from.title);b.type="button";b.addEventListener("click",function(){card(from)});foot.appendChild(b)}
+    if(from){const b=el("button","btn","◀ Back to "+from.title);b.type="button";b.addEventListener("click",function(){card(from)});foot.appendChild(b)}
     fetch(href).then(function(r){if(!r.ok)throw 0;return r.text()}).then(function(src){
       if(my!==token)return;
       art.textContent="";
-      if(!text){var pre=el("pre",null,src);art.appendChild(pre);return}
-      var r=md(art,src),id=name.replace(/\.md$/,"");
+      if(!text){const pre=el("pre",null,src);art.appendChild(pre);return}
+      const r=md(art,src),id=name.replace(/\.md$/,"");
       if(r.title)body.querySelector("h2.t").textContent=r.title;
-      var tags=(r.meta.tags||"").replace(/[\[\]]/g,"").split(",").map(function(s){return s.trim()}).filter(Boolean);
+      const tags=(r.meta.tags||"").replace(/[[\]]/g,"").split(",").map(function(s){return s.trim()}).filter(Boolean);
       if(tags.length)body.querySelector(".ln").textContent="wiki note · "+tags.join(", ");
-      var ref=el("p","none"),rel=(r.meta.links||"").replace(/[\[\]]/g,"").split(",").map(function(s){return s.trim()}).filter(Boolean);
+      const ref=el("p","none"),rel=(r.meta.links||"").replace(/[[\]]/g,"").split(",").map(function(s){return s.trim()}).filter(Boolean);
       if(r.meta.source)art.insertBefore(el("p","none","Source: "+r.meta.source),art.firstChild);
       if(rel.length){
-        var rl=el("div","rel");ref.textContent="Related notes";art.appendChild(ref);art.appendChild(rl);
-        rel.forEach(function(x){var rb=el("button",null,x.replace(/-/g," "));rb.type="button";rb.addEventListener("click",function(){note({href:new URL(x+".md",href).href,label:x.replace(/-/g," ")})});rl.appendChild(rb)});
+        const rl=el("div","rel");ref.textContent="Related notes";art.appendChild(ref);art.appendChild(rl);
+        rel.forEach(function(x){const rb=el("button",null,x.replace(/-/g," "));rb.type="button";rb.addEventListener("click",function(){note({href:new URL(x+".md",href).href,label:x.replace(/-/g," ")})});rl.appendChild(rb)});
       }
-      if(o.onNote){var sb=el("button","btn","Show on the map");sb.type="button";sb.addEventListener("click",function(){o.onNote(id)});foot.appendChild(sb)}
+      if(o.onNote){const sb=el("button","btn","Show on the map");sb.type="button";sb.addEventListener("click",function(){o.onNote(id)});foot.appendChild(sb)}
     }).catch(function(){if(my!==token)return;art.textContent="";art.appendChild(el("p","none","This note could not be loaded."))});
   }
   function close(){if(d.hidden)return;token++;d.hidden=true;if(o.onClose)o.onClose()}

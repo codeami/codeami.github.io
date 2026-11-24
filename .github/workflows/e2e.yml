@@ -19,6 +19,7 @@ jobs:
         with:
           node-version: 24
       - run: npm ci
+      - run: npm run lint
       - run: npx playwright test
         env:
           HOME: /root
