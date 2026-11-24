@@ -147,7 +147,9 @@ test('share.json: retired files are kept and every "into" target exists', () => 
 const movedPages = share.filter((r) => r.path.startsWith('ai-life-os/')).map((r) => r.path);
 
 test('old address: every page that was under /ai-life-os/ has a stub that lands on the same page under /broman-os/', async ({ page }) => {
-  const newPages = share.filter((r) => r.path.startsWith('broman-os/') && r.level !== 'retired').map((r) => r.path);
+  // Pages born after the move have no old address, so they need no stub.
+  const bornAfterMove = new Set(['broman-os/try/index.html']);
+  const newPages = share.filter((r) => r.path.startsWith('broman-os/') && r.level !== 'retired' && !bornAfterMove.has(r.path)).map((r) => r.path);
   expect(movedPages.map((p) => p.replace('ai-life-os/', 'broman-os/')).sort(), 'one stub per page').toEqual(newPages.sort());
   await page.route('**/*', (route) => (route.request().url().startsWith(origin) ? route.continue() : route.fulfill({ status: 200, body: '' })));
   for (const old of movedPages) {
