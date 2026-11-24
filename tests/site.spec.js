@@ -148,7 +148,7 @@ const movedPages = share.filter((r) => r.path.startsWith('ai-life-os/')).map((r)
 
 test('old address: every page that was under /ai-life-os/ has a stub that lands on the same page under /broman-os/', async ({ page }) => {
   // Pages born after the move have no old address, so they need no stub.
-  const bornAfterMove = new Set(['broman-os/try/index.html']);
+  const bornAfterMove = new Set(['broman-os/try/index.html', 'broman-os/app/index.html', 'broman-os/app/install.html']);
   const newPages = share.filter((r) => r.path.startsWith('broman-os/') && r.level !== 'retired' && !bornAfterMove.has(r.path)).map((r) => r.path);
   expect(movedPages.map((p) => p.replace('ai-life-os/', 'broman-os/')).sort(), 'one stub per page').toEqual(newPages.sort());
   await page.route('**/*', (route) => (route.request().url().startsWith(origin) ? route.continue() : route.fulfill({ status: 200, body: '' })));
@@ -557,7 +557,7 @@ const barOf = (page) => page.locator('header.tb').evaluate((b) => ({
 }));
 
 test('top bar: Meta-Factory, Case studies, Blog, About and Work with me on every page, all in view, current page marked', async ({ page }) => {
-  expect(barPages().length, 'pages checked').toBe(pages.length - 4 - movedPages.length); // the two redirect stubs, the link-only Course and the link-only pipeline clip, and the old-address stubs
+  expect(barPages().length, 'pages checked').toBe(pages.length - 6 - movedPages.length); // the two redirect stubs, the link-only Course and pipeline clip, the link-only app and its install page, and the old-address stubs
   for (const file of barPages()) {
     await page.goto(`/${file}`);
     const bar = page.locator('header.tb');

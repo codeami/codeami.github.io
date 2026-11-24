@@ -1,0 +1,76 @@
+/* inbox screen: ported from the console's bro-inbox.css, minus the scope prefix and the add/remove form */
+.in-read { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 320px); gap: var(--s-5); align-items: start; }
+.in-read > * { min-width: 0; }
+.in-read aside { position: sticky; top: calc(var(--bar-h) + var(--s-4)); }
+.in-read .row .sub, .in-list .row .sub { white-space: normal; overflow-wrap: anywhere; }
+.in-read .row .title, .in-list .row .title { white-space: normal; }
+.in-read .trail, .in-list .trail { max-width: 55%; }
+.in-read .trail .chip, .in-list .trail .chip { max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+.feed-item h4 a { overflow-wrap: anywhere; }
+.feed-item .meta .mono { color: var(--faint); }
+.in-topic .meta { margin-top: var(--s-2); }
+
+/* add feed, find feeds, podcasts, social and the compaction view */
+[data-panel="add"] .card-head, [data-panel="find"] .card-head, [data-mine] .card-head, .in-pod .card-head, .in-ig .card-head, .in-compact .card-head { flex-wrap: wrap; gap: var(--s-1) var(--s-3); }
+[data-panel="add"] .card-head .more, [data-panel="find"] .card-head .more, [data-mine] .card-head .more, .in-pod .card-head .more { white-space: normal; }
+.in-card-title, .in-compact .card-head h3, .in-ig .card-head h3, .in-pod .card-head h3 { overflow-wrap: anywhere; min-width: 0; }
+.in-act { height: 28px; padding: 0 8px; margin-left: auto; }
+.in-check { margin-top: var(--s-3); }
+.in-check .row, .in-compact + * .row, [data-findout] .row, [data-mine] .row { flex-wrap: wrap; }
+[data-findout] .row .sub, [data-mine] .row .sub, .in-check .row .sub { white-space: normal; overflow-wrap: anywhere; }
+[data-findout] .row .title, [data-mine] .row .title { white-space: normal; }
+.in-art { width: 40px; height: 40px; border-radius: var(--r-sm); object-fit: cover; flex: none; background: var(--raise); }
+.in-group { margin: var(--s-4) 0 var(--s-2); font: 600 13px/1.2 var(--text); color: var(--muted); }
+.in-compact { scroll-margin-top: calc(var(--bar-h) + var(--s-3)); }
+.in-levels { flex-wrap: wrap; margin-bottom: var(--s-4); }
+.in-sbs { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--s-4); }
+.in-pane-head { display: flex; justify-content: space-between; gap: var(--s-3); margin-bottom: var(--s-2); font-size: 13px; color: var(--ink-2); }
+.in-text { padding: var(--s-3); border-radius: var(--r-md); background: var(--raise); box-shadow: inset 0 0 0 1px var(--line); font-size: 14px; line-height: 1.6; overflow-wrap: anywhere; max-height: 420px; overflow-y: auto; }
+.cut { text-decoration: line-through; color: var(--danger); background: var(--danger-wash); border-radius: 3px; padding: 0 2px; }
+.add { color: var(--accent-ink); background: var(--accent-wash); border-radius: 3px; padding: 0 2px; }
+.in-pod .in-eps { list-style: decimal; margin: 0; padding-left: var(--s-5); display: grid; gap: var(--s-4); }
+.in-pod .in-eps > li::marker { color: var(--faint); font-weight: 700; }
+.in-ep-head { display: flex; flex-wrap: wrap; gap: var(--s-1) var(--s-3); align-items: baseline; }
+.in-ep-head a { font-weight: 700; overflow-wrap: anywhere; }
+.in-ideas { margin: var(--s-2) 0; padding-left: var(--s-4); display: grid; gap: var(--s-1); font-size: 14px; color: var(--ink-2); }
+#screen [data-social] > .in-ig + .in-ig, [data-podcasts] > .in-pod + .in-pod { margin-top: var(--s-5); }
+.in-ig-body { display: grid; grid-template-columns: minmax(0, 340px) minmax(0, 1fr); gap: var(--s-4); align-items: start; }
+.in-shot { width: 100%; height: auto; border-radius: var(--r-md); box-shadow: 0 0 0 1px var(--line); display: block; }
+.in-caption { margin: 0; padding: var(--s-3); border-radius: var(--r-md); background: var(--raise); box-shadow: inset 0 0 0 1px var(--line); font: 14px/1.55 var(--text); white-space: pre-wrap; overflow-wrap: anywhere; max-height: 360px; overflow-y: auto; }
+.in-ig .meta { display: flex; flex-wrap: wrap; gap: var(--s-3); align-items: center; margin-top: var(--s-3); }
+/* papers: a card per paper */
+[data-papers] > .in-paper + .in-paper, [data-papers] > .in-paper + .more-row, [data-papers] > * + section.card, [data-papers] > .more-row + section.card { margin-top: var(--s-5); }
+.in-paper-top { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: var(--s-4); align-items: start; }
+.in-thumb { display: block; border-radius: var(--r-md); box-shadow: 0 0 0 1px var(--line); overflow: hidden; background: var(--raise); aspect-ratio: 3 / 4; }
+.in-thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+.in-thumb.is-empty { display: flex; align-items: center; justify-content: center; text-align: center; padding: var(--s-2); color: var(--faint); }
+.in-paper-head h3 { margin: 0 0 var(--s-2); overflow-wrap: anywhere; }
+.in-paper-head .meta, .in-paper .meta { display: flex; flex-wrap: wrap; gap: var(--s-1) var(--s-3); align-items: center; }
+.in-paper-head .meta .mono { color: var(--faint); overflow-wrap: anywhere; }
+.in-sig { display: flex; flex-wrap: wrap; gap: var(--s-2); margin-top: var(--s-3); }
+.in-ins { margin-top: var(--s-4); }
+.in-ins h4 { margin: var(--s-3) 0 var(--s-1); font: 700 13px/1.3 var(--text); color: var(--ink-2); }
+.in-ins h4 .mono { font-weight: 400; color: var(--faint); margin-left: var(--s-2); }
+.in-ins p, .in-ins li { font-size: 14px; line-height: 1.6; margin: 0 0 var(--s-2); overflow-wrap: anywhere; }
+.in-ins ul { margin: 0; padding-left: var(--s-4); display: grid; gap: var(--s-1); }
+.in-evidence { margin-top: var(--s-3); font-size: 13px; color: var(--muted); }
+.in-evidence summary { cursor: pointer; }
+.in-evidence li { font-size: 13px; color: var(--muted); }
+.in-fig { margin: var(--s-4) 0 0; }
+.in-fig img { width: 100%; height: auto; display: block; border-radius: var(--r-md); box-shadow: 0 0 0 1px var(--line); background: #fff; }
+.in-fig figcaption { margin-top: var(--s-2); color: var(--faint); overflow-wrap: anywhere; }
+.in-nofig { margin-top: var(--s-3); }
+.in-compactrow { display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-3); align-items: center; margin-top: var(--s-4); }
+.in-compactrow .seg { flex-wrap: wrap; }
+.in-compactrow .btn { height: 32px; padding: 0 10px; }
+.in-links { margin-top: var(--s-3); gap: var(--s-4); }
+[data-papers] .row .sub, [data-papers] .row .title { white-space: normal; overflow-wrap: anywhere; }
+@media (max-width: 520px) {
+  .in-paper-top { grid-template-columns: 96px minmax(0, 1fr); gap: var(--s-3); }
+}
+@media (max-width: 860px) {
+  .in-sbs, .in-ig-body { grid-template-columns: minmax(0, 1fr); }
+  .in-read { grid-template-columns: minmax(0, 1fr); }
+  .in-read aside { position: static; }
+  .in-read .trail, .in-list .trail { max-width: 48%; }
+}
