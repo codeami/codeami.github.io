@@ -111,7 +111,7 @@ test('no private addresses or home paths in published files', () => {
 
 // Public pages state dated facts and plans. Hedging notes about the work's reliability belong in the owner's private notes.
 test('no public page uses wording that undersells the work', () => {
-  const banned = /isn['’]t scheduled|ran once|guess:|not checked|still rough|honest limit|haven['’]t verified|haven['’]t tried|my guess|did not test|not tested|were tested|not tried|summari[sz]er|close readings|unverified|unsure|\bguess\b(?=<|"| column)/i;
+  const banned = /isn['’]t scheduled|ran once|guess:|not checked|still rough|honest limit|haven['’]t verified|haven['’]t tried|my guess|did not test|not tested|were tested|not tried|summari[sz]er|close readings|unverified|unsure|\bGrange\b|\bguess\b(?=<|"| column)/i;
   const hits = [];
   const dataFiles = ['broman-os/brain/brain-data.json', 'broman-os/brain/src/extra.json', 'broman-os/brain/src/site.json'];
   for (const file of [...pages, ...dataFiles]) {
