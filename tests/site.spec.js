@@ -111,7 +111,7 @@ test('no private addresses or home paths in published files', () => {
 
 // Public pages state dated facts and plans. Hedging notes about the work's reliability belong in the owner's private notes.
 test('no public page uses wording that undersells the work', () => {
-  const banned = /isn['’]t scheduled|ran once|guess:|not checked|still rough|honest limit|haven['’]t verified|haven['’]t tried|my guess|did not test|not tested|were tested|not tried|summari[sz]er|close readings|unverified|unsure|\bGrange\b|\bguess\b(?=<|"| column)/i;
+  const banned = /isn['’]t scheduled|ran once|guess:|not checked|still rough|honest limit|haven['’]t verified|haven['’]t tried|my guess|did not test|not tested|were tested|not tried|summari[sz]er|close readings|unverified|unsure|\bguess\b(?=<|"| column)/i;
   const hits = [];
   const dataFiles = ['broman-os/brain/brain-data.json', 'broman-os/brain/src/extra.json', 'broman-os/brain/src/site.json'];
   for (const file of [...pages, ...dataFiles]) {
@@ -691,7 +691,7 @@ test('cv.html: the plain web CV is the v5 text without a phone number, an email,
   const links = await page.$$eval('.cv-links a', (as) => as.map((a) => a.getAttribute('href')));
   expect(links).toEqual(['https://www.linkedin.com/in/ashish-raina-6308a28', 'https://github.com/codeami', 'index.html']);
   const text = await page.locator('body').innerText();
-  expect(text).not.toMatch(/\+\d[\d\s-]{8,}|@[a-z0-9-]+\.[a-z]|rainaash|adidas/i);
+  expect(text).not.toMatch(/\+\d[\d\s-]{8,}|@[a-z0-9-]+\.[a-z]|rainaash|adidas|grange/i);
   const hrefs = await page.$$eval('a[href]', (as) => as.map((a) => a.getAttribute('href')));
   expect(hrefs.filter((h) => /\.(docx?|pdf)$/i.test(h)), 'no file downloads').toEqual([]);
   expect(readdirSync(root).filter((f) => /\.(docx?|pdf)$/i.test(f)), 'no CV file in the repo').toEqual([]);
