@@ -152,7 +152,7 @@ const API={
   get:function(){return{motion:!!S.motion,widgets:!$("side").hidden,legend:!!S.legend,layout:S.dim3?"3d":S.layout,menu:!$("panel").hidden}},
   act:function(name){
     if(name==="motion")setMotion(!S.motion,true);
-    else if(name==="widgets")setSides($("side").hidden);
+    else if(name==="widgets"){setSides($("side").hidden);if(opts.landing)opts.landing.put({tree:!$("side").hidden})}
     else if(name==="legend")setLegend(!S.legend);
     else if(name==="menu"){const open=$("panel").hidden;setPanel(open,true)}
     else if(name==="search"){setPanel(true,true);$("q").focus()}
@@ -407,9 +407,11 @@ function wire(){
   $("legendBtn").addEventListener("click",function(){
     S.legend=!S.legend;$("legend").hidden=!S.legend;this.setAttribute("aria-expanded",S.legend)});
   // the menu starts closed unless the map has room beside it (the Menu button or / or ⌘K opens it)
-  if(window.innerWidth<1400){$("panel").hidden=true;$("menuBtn").setAttribute("aria-expanded","false")}
-  $("sideBtn").addEventListener("click",function(){setSides($("side").hidden)});
-  setSides(window.innerWidth>=900&&!opts.explain); // the calm landing keeps the side lists behind Widgets
+  // a clean-start page (opts.landing) opens nothing by itself on a first visit: the controls and the tree come back only where the reader left them open, on a wide screen
+  const lk=opts.landing&&window.innerWidth>=900?opts.landing.get():{};
+  if(opts.landing?!lk.controls:window.innerWidth<1400){$("panel").hidden=true;$("menuBtn").setAttribute("aria-expanded","false")}
+  $("sideBtn").addEventListener("click",function(){setSides($("side").hidden);if(opts.landing)opts.landing.put({tree:!$("side").hidden})});
+  setSides(opts.landing?!!lk.tree:window.innerWidth>=900&&!opts.explain); // the calm landing keeps the side lists behind Widgets
   window.addEventListener("resize",resize);
   if(mq.addEventListener)mq.addEventListener("change",function(){if(savedMotion()==null)setMotion(!mq.matches,false)});
   document.addEventListener("keydown",function(e){
@@ -736,6 +738,7 @@ function nodeCard(n){
 let panelFold=false;
 function setPanel(on,user){
   $("panel").hidden=!on;$("menuBtn").setAttribute("aria-expanded",on);
+  if(user&&opts.landing)opts.landing.put({controls:on});
   if(user&&window.innerWidth<=760){
     const folded=panelFold;
     if(opts.overlayShown){

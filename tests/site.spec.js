@@ -452,6 +452,41 @@ test('landing: the purpose line, the pipeline clip, three numbers that each name
   expect(problems).toEqual([]);
 });
 
+test('landing: a fresh load shows the headline and the map with the controls, the Broman OS card and the tree closed; each choice is kept for the next visit', async ({ page }) => {
+  await page.goto('/');
+  const phone = test.info().project.name === 'mobile-390';
+  const card = page.locator('#pageov'), panel = page.locator('#brainHost #panel'), tree = page.locator('#brainHost #wl');
+  await mapState(page);
+  await expect(card, 'the card is folded').toHaveClass(/min/);
+  await expect(card.locator('.pov-line'), 'the headline stays').toHaveText(mission);
+  await expect(page.locator('.pov-body'), 'the page body is folded away').toBeHidden();
+  await expect(panel, 'controls closed').toBeHidden();
+  await expect(tree, 'tree closed').toBeHidden();
+  expect(await page.evaluate(() => localStorage.getItem('panels')), 'a first visit stores nothing').toBeNull();
+  // everything is still one tap away
+  await page.getByRole('button', { name: 'Show the page' }).click();
+  await expect(page.locator('#hook')).toBeVisible();
+  if (phone) return; // the controls and the tree are remembered on a wide screen only
+  await page.locator('#tbDrop').click();
+  await page.locator('#tbSheet').getByRole('button', { name: 'All settings' }).click();
+  await page.locator('#tbDrop').click();
+  await page.locator('#tbSheet').getByRole('button', { name: 'Widgets' }).click();
+  await expect(panel).toBeVisible();
+  await expect(tree).toBeVisible();
+  await page.reload();
+  await mapState(page);
+  await expect(card, 'the card comes back open').not.toHaveClass(/min/);
+  await expect(panel, 'controls come back open').toBeVisible();
+  await expect(tree, 'tree comes back open').toBeVisible();
+});
+
+test('landing: blocked storage still gives a clean first load', async ({ page }) => {
+  await page.addInitScript(() => { Object.defineProperty(window, 'localStorage', { get() { throw new Error('blocked'); } }); });
+  await page.goto('/');
+  await expect(page.locator('#pageov')).toHaveClass(/min/);
+  await expect(page.locator('#brainHost #panel')).toBeHidden();
+});
+
 test('landing: the pipeline clip has no private names, paths or fetches', async ({ page }) => {
   const asked = [];
   page.on('request', (r) => asked.push(r.url()));
@@ -957,6 +992,7 @@ test('map: the controls float over a full-width map, close with their button and
   const width = async () => (await canvas.boundingBox()).width;
   expect(await width(), 'the map has the whole viewport').toBe(vp.width);
   await expect(panel).toBeHidden();
+  await page.getByRole('button', { name: 'Show the page' }).click(); // the landing starts with the card folded; the controls sit beside it once it is open
   const open = async () => {
     await page.locator('#tbDrop').click();
     await page.locator('#tbSheet').getByRole('button', { name: 'All settings' }).click();

@@ -62,7 +62,15 @@
     // a hash that is not a part of this page is a map node (index.html#first-mate): the card stays folded and that node's card opens
     function hashId(h) { try { return decodeURIComponent(h.slice(1)); } catch  { return h.slice(1); } }
     const hid = location.hash ? hashId(location.hash) : "";
-    if (ps && ps.content === "min" && (!hid || hid === "map" || !document.getElementById(hid))) state = "min";
+    /* A page that says first-load=clean starts with every panel closed and remembers each choice the reader makes
+       (localStorage "panels", blocked storage just means every visit starts clean). Only that page's own URL reads and writes it. */
+    const clean = !!document.querySelector('meta[name="first-load"][content="clean"]'), cleanPath = location.pathname;
+    function kept() { try { return JSON.parse(localStorage.getItem("panels") || "{}") || {}; } catch  { return {}; } }
+    const landing = clean ? { get: kept, put: function (patch) {
+      if (location.pathname !== cleanPath) return;
+      try { localStorage.setItem("panels", JSON.stringify(Object.assign(kept(), patch))); } catch  { /* storage blocked: the choice lasts for this visit only */ }
+    } } : null;
+    if (ps && ps.content === "min" && (!hid || hid === "map" || !document.getElementById(hid))) state = landing && window.innerWidth >= 900 && /^(open|min|closed)$/.test(kept().page) ? kept().page : "min";
     const line = mk("p", "pov-line", pl ? pl.content : ""); line.hidden = true; ov.insertBefore(line, body);
     function phone() { return window.innerWidth <= 760; }
     function layout() {
@@ -80,11 +88,12 @@
       if (G) { G.overlay(state === "open" && !phone()); G.setInsets(state === "open" && phone() ? ov.offsetHeight : 0); }
     }
     function set(s) { state = s; layout(); }
-    min.onclick = function () { set(state === "min" ? "open" : "min"); };
+    function choose(s) { set(s); if (landing) landing.put({ page: s }); }
+    min.onclick = function () { choose(state === "min" ? "open" : "min"); };
     x.onclick = function () {
-      set("closed"); reopen.focus();
+      choose("closed"); reopen.focus();
     };
-    reopen.onclick = function () { set("open"); };
+    reopen.onclick = function () { choose("open"); };
     window.addEventListener("resize", layout);
     // the tour folds the card away for the map's steps, and puts it back as it was
     function shown(on) { if (!on) { if (held === null) held = state; if (state === "open") set("min"); } else if (held !== null) { set(held); held = null; } }
@@ -198,7 +207,7 @@
           [["rings", "Rings"], ["force", "Force"], ["circle", "Circle"], ["hex", "Hex"], ["3d", "3D"]].forEach(function (l) { item(r, l[1], function () { G.act(l[0]); }, m.layout === l[0], true); });
         }
         r = section("View");
-        item(r, state === "closed" ? "Show page" : "Hide page", function () { set(state === "closed" ? "open" : "closed"); });
+        item(r, state === "closed" ? "Show page" : "Hide page", function () { choose(state === "closed" ? "open" : "closed"); });
         if (G) item(r, "Search", function () { G.act("search"); });
         if (G) {
           r = section("Help");
@@ -212,7 +221,7 @@
     dropdown();
     layout();
     load(["drawer.js", "tour.js", "graph.js"], function () {
-      G = window.AIOBrain({ base: B, framed: true, onPage: go, overlayShown: shown });
+      G = window.AIOBrain({ base: B, framed: true, onPage: go, overlayShown: shown, landing: landing });
       G.select(location.href); layout();
       // the course page lights its lesson dots through this handle
       window.AIOMap = G; window.dispatchEvent(new Event("aiomap"));
