@@ -70,7 +70,7 @@
       if (location.pathname !== cleanPath) return;
       try { localStorage.setItem("panels", JSON.stringify(Object.assign(kept(), patch))); } catch  { /* storage blocked: the choice lasts for this visit only */ }
     } } : null;
-    if (ps && ps.content === "min" && (!hid || hid === "map" || !document.getElementById(hid))) state = landing && /^(open|min|closed)$/.test(kept().page) ? kept().page : "min";
+    if (ps && ps.content === "min" && (!hid || hid === "map" || !document.getElementById(hid))) state = landing && window.innerWidth >= 900 && /^(open|min|closed)$/.test(kept().page) ? kept().page : "min";
     const line = mk("p", "pov-line", pl ? pl.content : ""); line.hidden = true; ov.insertBefore(line, body);
     function phone() { return window.innerWidth <= 760; }
     function layout() {
