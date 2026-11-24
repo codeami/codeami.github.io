@@ -466,6 +466,12 @@ stays).
   row. The row for the current selection is a tinted band (`--accent-dim`) with
   an accent bar and bold text, and its parents are open. On a phone it is a
   full-width drawer; the card steps aside while it is open. No heading glow.
+  **Clean first load:** the home (`<meta name="first-load" content="clean">`)
+  opens with the map and one headline only. The page card is folded to its
+  headline line, and the controls and the tree are closed, at every width;
+  Show, the dropdown's All settings and Widgets open them. Each choice is kept in
+  `localStorage` key `panels` and restored on a screen 900px or wider; a first
+  visit, a phone or blocked storage always starts clean.
 - **Node card:** glyph of its kind, name in bold, kind and status, then tabs:
   Overview, Links (`comes from`, `leads to`, each a button that jumps to that
   node), Source (file path with a copy button). Opens in the right panel or
