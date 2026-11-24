@@ -118,7 +118,7 @@ function start(d,srcLabel){
   requestAnimationFrame(frame);
   if(FRAMED&&pending)API.select(pending);
   // a link such as broman-os/index.html#first-mate opens that node's card
-  function fromHash(){const id=decodeURIComponent(location.hash.slice(1));if(id&&byId[id])openNode(byId[id])}
+  function fromHash(){let id;try{id=decodeURIComponent(location.hash.slice(1))}catch{return}if(id&&byId[id])openNode(byId[id])}
   window.addEventListener("hashchange",fromHash);setTimeout(fromHash,0);
 }
 let pending=null;
