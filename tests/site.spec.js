@@ -1032,6 +1032,47 @@ test('the skin button names the skin that is on', async ({ page }) => {
   await expect(btn).toHaveText('HUD');
 });
 
+// ---- early access: the waitlist replaces the public download; no price words on the broman-os pages ----
+for (const url of ['/broman-os/index.html', '/broman-os/try/index.html']) {
+  test(`${url}: waitlist block renders, shows "Opening soon" while the form is a placeholder`, async ({ page }) => {
+    await page.goto(`${url}#join`); // on the map page the card starts folded; a link to #join opens it
+    const block = page.locator('section.wl');
+    await expect(block.locator('h2')).toHaveText('Join early access');
+    await expect(block.locator('input[type="email"]')).toBeVisible();
+    await expect(block.locator('label', { hasText: 'What would you use it for?' })).toBeVisible();
+    await expect(block).toContainText('We email you once when your access is ready. Nothing else; unsubscribe any time.');
+    const btn = block.locator('button.wl-btn');
+    await expect(btn).toHaveText('Opening soon');
+    await expect(btn).toBeDisabled();
+  });
+
+  test(`${url}: no visible download link`, async ({ page }) => {
+    await page.goto(url);
+    await expect(page.locator('a[href$=".zip"], a[href$=".sha256"], a[download]')).toHaveCount(0);
+    await expect(page.locator('body')).not.toContainText(/download/i);
+  });
+}
+
+test('waitlist form: filled-in config points the form at the Google Form and swaps the entry names', async ({ page }) => {
+  await page.route('**/broman-os/waitlist.config.js', (r) => r.fulfill({ contentType: 'text/javascript', body: "window.BROMAN_WAITLIST = { action: 'https://docs.google.com/forms/d/e/TEST/formResponse', emailEntry: 'entry.1', useEntry: 'entry.2' };" }));
+  await page.goto('/broman-os/try/index.html');
+  const form = page.locator('form.wl-form');
+  await expect(form.locator('button.wl-btn')).toHaveText('Join early access');
+  await expect(form).toHaveAttribute('action', 'https://docs.google.com/forms/d/e/TEST/formResponse');
+  await expect(form.locator('input[name="entry.1"]')).toHaveAttribute('type', 'email');
+  await expect(form.locator('input[name="entry.2"]')).toHaveCount(1);
+});
+
+test('broman-os pages: no price, plan or free/pro wording', () => {
+  const files = pages.filter((f) => f.startsWith('broman-os/') && !/^broman-os\/(blog|course|tour)\//.test(f) && f !== 'broman-os/arena.html');
+  expect(files).toContain('broman-os/try/index.html');
+  const bad = /\$\s?\d|\bpric(e|es|ing)\b|\bfree\b|\bpro\b|\bpremium\b|\bsubscription\b|\bper month\b|\bcountdown\b|\bonly \d+ (spots|places|seats)\b/i;
+  for (const f of files) {
+    const text = readFileSync(join(root, f), 'utf8').replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>|<!--[\s\S]*?-->/g, '').replace(/<[^>]+>/g, ' ');
+    expect(text.match(bad)?.[0] ?? null, `${f} price wording`).toBeNull();
+  }
+});
+
 test('a malformed #hash on the map page does not break the page or the map', async ({ page }) => {
   const errors = [];
   page.on('pageerror', (e) => errors.push(e.message));

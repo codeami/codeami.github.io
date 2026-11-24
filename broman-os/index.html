@@ -13,6 +13,7 @@
 <link rel="icon" href="kit/bosun.svg" type="image/svg+xml">
 <link rel="stylesheet" href="kit/kit.css">
 <link rel="stylesheet" href="topbar.css">
+<link rel="stylesheet" href="waitlist.css">
 <style>
 html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
@@ -180,7 +181,7 @@ html { scroll-behavior: smooth; }
     <li><strong>DeepSeek, Kimi, Qwen and others.</strong> They leave the model freer to act.</li>
     <li><strong>Your own models.</strong> With the hardware, you can run open-weights models yourself and fine-tune them to your work.</li>
   </ul>
-  <p>The same idea reaches the computer itself. <a href="https://omarchy.org" target="_blank" rel="noopener">Omarchy</a>, DHH's Linux setup, is an operating system you shape around you. Running any of this costs money: models, hosting and forms are never free.</p>
+  <p>The same idea reaches the computer itself. <a href="https://omarchy.org" target="_blank" rel="noopener">Omarchy</a>, DHH's Linux setup, is an operating system you shape around you. Running any of this has a running cost: models, hosting and forms all send a bill.</p>
   <h3>What that opens up</h3>
   <ul>
     <li>Build your own software.</li>
@@ -293,9 +294,22 @@ html { scroll-behavior: smooth; }
   </aside>
 </div>
 
+<section class="wl" id="join" aria-labelledby="wl-h" style="margin: 0 auto 24px; max-width: 1088px;">
+<h2 id="wl-h">Join early access</h2>
+<form class="wl-form" method="POST">
+<div class="wl-fields">
+<label class="wl-field"><span>Your email</span><input type="email" name="email" required autocomplete="email" placeholder="you@example.com"></label>
+<label class="wl-field"><span>What would you use it for? <small>(optional)</small></span><input type="text" name="use" autocomplete="off"></label>
+<button class="wl-btn" type="submit">Join early access</button>
+<p class="wl-note">We email you once when your access is ready. Nothing else; unsubscribe any time.</p>
+</div>
+<p class="wl-done" role="status" hidden></p>
+</form>
+</section>
+
 <p class="handoff"><a href="../case-studies/index.html">Next: see the proof →</a></p>
 <footer class="foot">
-  <p id="pages">Prefer to read? <a href="blog/index.html">Blog</a> · <a href="#how">How I work with agents</a> · <a href="#safety">What the crew may do</a> · <a href="arena.html">Harness arena</a> · <a href="course/index.html">Course</a> · <a href="try/index.html">Try the trial</a> · <a href="https://github.com/codeami">GitHub</a></p>
+  <p id="pages">Prefer to read? <a href="blog/index.html">Blog</a> · <a href="#how">How I work with agents</a> · <a href="#safety">What the crew may do</a> · <a href="arena.html">Harness arena</a> · <a href="course/index.html">Course</a> · <a href="try/index.html">Early access</a> · <a href="https://github.com/codeami">GitHub</a></p>
   <p>The supervisor and most crew mechanics are upstream <a href="https://github.com/kunchenguid/firstmate">Firstmate</a>, MIT licence, by Kun Chen and contributors.</p>
 </footer>
 
@@ -651,5 +665,7 @@ html { scroll-behavior: smooth; }
   });
 })();
 </script>
+<script src="waitlist.config.js"></script>
+<script src="waitlist.js"></script>
 </body>
 </html>

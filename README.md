@@ -15,7 +15,7 @@ The public pages. Five of them are the items of the one top bar (Meta-Factory, C
     About           about/index.html              who I am; cv.html is its child, the CV
     Work with me    work-with-me/index.html       how to ask for a factory; the contact is a mailto and LinkedIn
     Services        broman-os/services/index.html how a pilot runs (Diagnose, Prove, Run, with gates the client controls); public but not in the bar, linked from Work with me
-    Try             broman-os/try/index.html      the public trial download (zip and its SHA-256 sit beside the page); public but not in the bar, linked from the Meta-Factory page footer line
+    Try             broman-os/try/index.html      the early-access waitlist page (form target set in broman-os/waitlist.config.js); the trial zip still sits beside it but no page links to it; public but not in the bar, linked from the Meta-Factory page footer line
 
 Link-only pages (reachable, not in the bar or the map): the course (`broman-os/course/`) and the pipeline clip (`broman-os/pipeline/`, a scrubbed animated page that Home embeds). Redirect stubs, kept so old links work: `blog/index.html` goes to the post list; `intent/index.html` goes to the Meta-Factory page and keeps the `#how` and `#safety` anchors.
 
