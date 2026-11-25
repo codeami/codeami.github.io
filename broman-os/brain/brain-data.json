@@ -899,7 +899,7 @@
    "links": [],
    "folders": [
     {
-     "name": "areas",
+     "name": "Topics",
      "count": 5,
      "files": [
       {
@@ -919,7 +919,7 @@
       },
       {
        "id": "area-icm",
-       "n": "Context engineering (ICM)",
+       "n": "Rules files and routing",
        "line": "area",
        "body": [
         "One rules file, linked into every agent tool, plus layers and rooms. The routing table says: for this kind of task, go to this folder and read these files first."
@@ -954,7 +954,7 @@
       },
       {
        "id": "area-learning",
-       "n": "Learning",
+       "n": "Where the ideas come from",
        "line": "area",
        "body": [
         "Where the ideas come from: ICM, Kun Chen's agent stack and Matt Pocock's skills. And two checks that found the setup wrong, and what the owner did about each."
@@ -964,7 +964,7 @@
       },
       {
        "id": "area-content",
-       "n": "Content",
+       "n": "Reviewing work as pages",
        "line": "area",
        "body": [
         "The owner reviews every report and draft as an HTML page, not in a terminal."
@@ -989,7 +989,7 @@
    ],
    "folders": [
     {
-     "name": "the 12 parts",
+     "name": "The 12 parts",
      "count": 12,
      "files": [
       {
@@ -1159,7 +1159,7 @@
      ]
     },
     {
-     "name": "tricks",
+     "name": "Tricks on top",
      "count": 5,
      "files": [
       {
@@ -1197,7 +1197,7 @@
       },
       {
        "id": "trick-decay",
-       "n": "Decay tiers",
+       "n": "Memory decay tiers",
        "line": "trick · trick",
        "body": [
         "/stow (upstream Firstmate) files durable facts into a curated learnings file, with decay tiers. Status on the Memory page: designed, not proven."
@@ -1236,12 +1236,12 @@
      ]
     },
     {
-     "name": "borrowed",
+     "name": "Borrowed ideas",
      "count": 3,
      "files": [
       {
        "id": "b-grill",
-       "n": "grill-with-docs",
+       "n": "Interview until the intent is written",
        "line": "borrowed idea · borrowed from mattpocock/skills",
        "body": [
         "A skill that interviews the owner until the intent is written down in their own words. The idea is from Matt Pocock's skills, which get the agent to ask detailed questions about what you are building."
@@ -1258,7 +1258,7 @@
       },
       {
        "id": "b-arms",
-       "n": "ARMS framework",
+       "n": "Four layers of an agent workspace (ARMS)",
        "line": "borrowed idea · borrowed from RoboNuggets",
        "body": [
         "A framework from Jay E (RoboNuggets) that splits an agent workspace into four layers: Applications, Routines, Memory, Skills."
@@ -1268,7 +1268,7 @@
       },
       {
        "id": "b-pi",
-       "n": "Pi ideas",
+       "n": "Ideas from the Pi coding agent",
        "line": "borrowed idea · borrowed from the Pi ecosystem",
        "body": [
         "Ideas from the Pi coding agent and its packages. The compaction note cites a Pi extension for server-side compaction."
@@ -1290,18 +1290,18 @@
   },
   {
    "id": "tier",
-   "label": "Harness grades",
+   "label": "Harnesses scored on the 12 parts",
    "color": "#ffd93d",
    "note": "Eleven setups marked on the same twelve harness parts. Has it, does it differently, lacks it, or an estimate where no primary source answers it. The counts treat all twelve parts as equal. They show coverage, not quality. From a scout report dated 2026-10-27 that read public docs, repos and papers.",
    "links": [],
    "folders": [
     {
-     "name": "scored setups",
+     "name": "Scored setups",
      "count": 11,
      "files": [
       {
        "id": "tier-composite",
-       "n": "Our composite",
+       "n": "Our combined setup",
        "line": "harness setup · 10 of 12 parts",
        "body": [
         "Has 10 · Different 2 · Lacks 0 · Guess 0, out of the same twelve parts.",
@@ -2664,13 +2664,13 @@
      ]
     },
     {
-     "name": "OG thinkers",
+     "name": "Classic thinkers",
      "count": 8,
      "files": [
       {
        "id": "giant-dieter-rams",
        "n": "Dieter Rams",
-       "line": "giant · og thinkers",
+       "line": "giant · classic thinkers",
        "body": [
         "Ten principles of good design: useful, honest, long-lasting, and as little design as possible.",
         "How we use it: Less, but better: a page stays only if it earns its place."
@@ -2690,7 +2690,7 @@
       {
        "id": "giant-christopher-alexander",
        "n": "Christopher Alexander",
-       "line": "giant · og thinkers",
+       "line": "giant · classic thinkers",
        "body": [
         "A pattern is a reusable answer to a problem that keeps coming back.",
         "How we use it: We write down what works as a named pattern, then reuse it."
@@ -2710,7 +2710,7 @@
       {
        "id": "giant-douglas-engelbart",
        "n": "Douglas Engelbart",
-       "line": "giant · og thinkers",
+       "line": "giant · classic thinkers",
        "body": [
         "Computers should make people more capable, not replace them.",
         "How we use it: The crew does the work. A person decides."
@@ -2730,7 +2730,7 @@
       {
        "id": "giant-alan-kay",
        "n": "Alan Kay",
-       "line": "giant · og thinkers",
+       "line": "giant · classic thinkers",
        "body": [
         "The computer as a personal medium you shape, not just a tool you use.",
         "How we use it: We build the tools we think with, like the map of this site."
@@ -2754,7 +2754,7 @@
       {
        "id": "giant-donella-meadows",
        "n": "Donella Meadows",
-       "line": "giant · og thinkers",
+       "line": "giant · classic thinkers",
        "body": [
         "In any system, a few places give you the most leverage. Most effort goes to the weak ones.",
         "How we use it: We fix how work is set up before we fix the work itself."
@@ -2774,7 +2774,7 @@
       {
        "id": "giant-james-c-scott",
        "n": "James C. Scott",
-       "line": "giant · og thinkers",
+       "line": "giant · classic thinkers",
        "body": [
         "Neat, top-down plans lose the local knowledge that made things work.",
         "How we use it: Notes drift from reality unless someone checks them against it."
@@ -2794,7 +2794,7 @@
       {
        "id": "giant-richard-feynman",
        "n": "Richard Feynman",
-       "line": "giant · og thinkers",
+       "line": "giant · classic thinkers",
        "body": [
         "The first rule is that you must not fool yourself, and you are the easiest person to fool.",
         "How we use it: A claim stands only when we ran the check and can say how."
@@ -2814,7 +2814,7 @@
       {
        "id": "giant-peter-drucker",
        "n": "Peter Drucker",
-       "line": "giant · og thinkers",
+       "line": "giant · classic thinkers",
        "body": [
         "Management is about results and clear objectives, and the manager's job is to make people effective.",
         "How we use it: Every task starts with a stated intent, and ends with a result we can check."
