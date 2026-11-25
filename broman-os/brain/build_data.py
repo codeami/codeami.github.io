@@ -4,7 +4,7 @@ Run from anywhere: python3 -I broman-os/brain/build_data.py
 Reads only public files of this site:
   brain/notes.js            the approved wiki notes (built by build.py)
   brain/src/interests.json  the interest tags of those notes, empty ones too (the cloud on the Second-brain notes card)
-  brain/src/extra.json      hand-written nodes: topics, the multi-agent service's parts and tricks, the harness grades
+  brain/src/extra.json      hand-written nodes: topics, the harness parts and tricks, the harness grades
   brain/src/maps.json       the "Maps and wikis" links on the Second-brain notes card (other people's maps, link-only)
   brain/src/site.json       the centre file, this site's pages, public projects, the reading order
   blog/index.html           the Blog posts
@@ -55,7 +55,7 @@ notes_room = {"id": "notes", "label": "Second-brain notes", "color": "#b57bff",
               "summary": summary, "cloud": cloud,
               "folders": [{"name": c["name"], "count": len(by_tag[c["name"]]), "files": by_tag[c["name"]]} for c in cloud if c["name"] in by_tag]}
 
-# Rooms 2 and 3: the multi-agent service, and Broman's topics (src/extra.json)
+# Rooms 2 and 3: the harness, and Broman's topics (src/extra.json)
 X = {e["id"]: e for e in extra["extra"]}
 TAGS = {"advantage": "advantage", "gap": "gap", "borrowed-from": "borrowed from", "trick": "trick"}
 
@@ -84,12 +84,12 @@ def hub_of(gid, rid, label, color, folders):
 
 
 fm = [e for e in extra["extra"] if e["group"] == "fm" and not e.get("hub")]
-fm_room = hub_of("g-fm", "fm", "The multi-agent service (FirstMate inside the Broman wrapper)", "#ff4fd8", [
-    ("the 12 parts", [node(e, "harness part") for e in fm if e["id"].startswith("part-")]),
-    ("tricks", [node(e, "trick") for e in fm if e["id"].startswith("trick-")]),
-    ("borrowed", [node(e, "borrowed idea") for e in fm if e["id"].startswith("b-")])])
+fm_room = hub_of("g-fm", "fm", "The harness: 12 parts that run the crew", "#ff4fd8", [
+    ("The 12 parts", [node(e, "harness part") for e in fm if e["id"].startswith("part-")]),
+    ("Tricks on top", [node(e, "trick") for e in fm if e["id"].startswith("trick-")]),
+    ("Borrowed ideas", [node(e, "borrowed idea") for e in fm if e["id"].startswith("b-")])])
 areas_room = hub_of("g-area", "areas", "Broman's topics", "#2ee6c5", [
-    ("areas", [node(e, "area") for e in extra["extra"] if e["group"] == "area" and not e.get("hub")])])
+    ("Topics", [node(e, "area") for e in extra["extra"] if e["group"] == "area" and not e.get("hub")])])
 
 # Room 4: the harness grades
 tier = []
@@ -99,7 +99,7 @@ for tid, label, has, dif, lacks, guess, src in extra["tier"]:
                  "body": ["Has %d · Different %d · Lacks %d · Guess %d, out of the same twelve parts." % (has, dif, lacks, guess)]
                  + ([] if src else ["Name and score only on this page."]),
                  "links": links(ls), "rel": extra["tier_edges"].get(tid, [])})
-tier_room = hub_of("g-tier", "tier", "Harness grades", "#ffd93d", [("scored setups", tier)])
+tier_room = hub_of("g-tier", "tier", "Harnesses scored on the 12 parts", "#ffd93d", [("Scored setups", tier)])
 
 # Room 4b: shoulders of giants, one folder per `folder` field of the giants nodes (src/extra.json)
 giants = [e for e in extra["extra"] if e["group"] == "giants" and not e.get("hub")]

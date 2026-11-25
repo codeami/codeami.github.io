@@ -1,5 +1,5 @@
 {
- "giants_folders": ["Builders", "Startup ecosystem", "Marketing", "Blogs and newsletters", "OG thinkers"],
+ "giants_folders": ["Builders", "Startup ecosystem", "Marketing", "Blogs and newsletters", "Classic thinkers"],
  "core_note": "From the Core logic page. The comparison there comes from two scout reports dated 2026-10-27 that read public docs, repos and papers.",
  "extra": [
   {
@@ -80,14 +80,14 @@
   {"id":"giant-lilian-weng","group":"giants","folder":"Blogs and newsletters","label":"Lilian Weng's blog","text":["Deep, well-sourced surveys of AI topics."],"idea":["LLM Powered Autonomous Agents","https://lilianweng.github.io/posts/2023-06-23-agent/"],"use":["The picture of an agent as a model plus planning, memory and tools is what our harness diagram draws.","../index.html"],"links":[]},
   {"id":"giant-eugene-yan","group":"giants","folder":"Blogs and newsletters","label":"Eugene Yan's writing","text":["Practical notes on building machine-learning and LLM systems that work in production."],"idea":["Eugene Yan","https://eugeneyan.com"],"use":["Checks on the output, not hope, decide whether the system works.","notes/validate-dont-review.md"],"links":[]},
   {"id":"giant-stratechery","group":"giants","folder":"Blogs and newsletters","label":"Stratechery","text":["Ben Thompson on how technology companies win, one daily analysis at a time."],"idea":["Stratechery","https://stratechery.com"],"use":["It teaches us to ask who controls the layer, which is the lock-in question in the arena.","../arena.html"],"links":[]},
-  {"id":"giant-dieter-rams","group":"giants","folder":"OG thinkers","label":"Dieter Rams","text":["Ten principles of good design: useful, honest, long-lasting, and as little design as possible."],"idea":["Ten principles for good design","https://www.vitsoe.com/gb/about/good-design"],"use":["Less, but better: a page stays only if it earns its place.","notes/ste100-mode.md"],"links":[]},
-  {"id":"giant-christopher-alexander","group":"giants","folder":"OG thinkers","label":"Christopher Alexander","text":["A pattern is a reusable answer to a problem that keeps coming back."],"idea":["A Pattern Language","https://en.wikipedia.org/wiki/A_Pattern_Language"],"use":["We write down what works as a named pattern, then reuse it.","notes/icm-routing-table-is-the-core-pattern.md"],"links":[]},
-  {"id":"giant-douglas-engelbart","group":"giants","folder":"OG thinkers","label":"Douglas Engelbart","text":["Computers should make people more capable, not replace them."],"idea":["Augmenting Human Intellect","https://en.wikipedia.org/wiki/Augmenting_Human_Intellect"],"use":["The crew does the work. A person decides.","notes/human-in-the-loop.md"],"links":[]},
-  {"id":"giant-alan-kay","group":"giants","folder":"OG thinkers","label":"Alan Kay","text":["The computer as a personal medium you shape, not just a tool you use."],"idea":["Personal Dynamic Media","https://www.mprove.de/diplom/gui/kay77.html"],"use":["We build the tools we think with, like the map of this site.","../index.html#map"],"links":[["The Dynabook","https://en.wikipedia.org/wiki/Dynabook"]]},
-  {"id":"giant-donella-meadows","group":"giants","folder":"OG thinkers","label":"Donella Meadows","text":["In any system, a few places give you the most leverage. Most effort goes to the weak ones."],"idea":["Leverage Points: Places to Intervene in a System","https://donellameadows.org/archives/leverage-points-places-to-intervene-in-a-system/"],"use":["We fix how work is set up before we fix the work itself.","notes/structure-decides-what-matters.md"],"links":[]},
-  {"id":"giant-james-c-scott","group":"giants","folder":"OG thinkers","label":"James C. Scott","text":["Neat, top-down plans lose the local knowledge that made things work."],"idea":["Seeing Like a State","https://yalebooks.yale.edu/book/9780300078152/seeing-like-a-state/"],"use":["Notes drift from reality unless someone checks them against it.","../blog/when-the-notes-are-wrong.html"],"links":[]},
-  {"id":"giant-richard-feynman","group":"giants","folder":"OG thinkers","label":"Richard Feynman","text":["The first rule is that you must not fool yourself, and you are the easiest person to fool."],"idea":["Cargo Cult Science","https://calteches.library.caltech.edu/51/2/CargoCult.htm"],"use":["A claim stands only when we ran the check and can say how.","notes/reproduce-bugs-end-to-end.md"],"links":[]},
-  {"id":"giant-peter-drucker","group":"giants","folder":"OG thinkers","label":"Peter Drucker","text":["Management is about results and clear objectives, and the manager's job is to make people effective."],"idea":["Peter Drucker","https://en.wikipedia.org/wiki/Peter_Drucker"],"use":["Every task starts with a stated intent, and ends with a result we can check.","../../work-with-me/index.html"],"links":[["Drucker Institute","https://www.drucker.institute"]]},
+  {"id":"giant-dieter-rams","group":"giants","folder":"Classic thinkers","label":"Dieter Rams","text":["Ten principles of good design: useful, honest, long-lasting, and as little design as possible."],"idea":["Ten principles for good design","https://www.vitsoe.com/gb/about/good-design"],"use":["Less, but better: a page stays only if it earns its place.","notes/ste100-mode.md"],"links":[]},
+  {"id":"giant-christopher-alexander","group":"giants","folder":"Classic thinkers","label":"Christopher Alexander","text":["A pattern is a reusable answer to a problem that keeps coming back."],"idea":["A Pattern Language","https://en.wikipedia.org/wiki/A_Pattern_Language"],"use":["We write down what works as a named pattern, then reuse it.","notes/icm-routing-table-is-the-core-pattern.md"],"links":[]},
+  {"id":"giant-douglas-engelbart","group":"giants","folder":"Classic thinkers","label":"Douglas Engelbart","text":["Computers should make people more capable, not replace them."],"idea":["Augmenting Human Intellect","https://en.wikipedia.org/wiki/Augmenting_Human_Intellect"],"use":["The crew does the work. A person decides.","notes/human-in-the-loop.md"],"links":[]},
+  {"id":"giant-alan-kay","group":"giants","folder":"Classic thinkers","label":"Alan Kay","text":["The computer as a personal medium you shape, not just a tool you use."],"idea":["Personal Dynamic Media","https://www.mprove.de/diplom/gui/kay77.html"],"use":["We build the tools we think with, like the map of this site.","../index.html#map"],"links":[["The Dynabook","https://en.wikipedia.org/wiki/Dynabook"]]},
+  {"id":"giant-donella-meadows","group":"giants","folder":"Classic thinkers","label":"Donella Meadows","text":["In any system, a few places give you the most leverage. Most effort goes to the weak ones."],"idea":["Leverage Points: Places to Intervene in a System","https://donellameadows.org/archives/leverage-points-places-to-intervene-in-a-system/"],"use":["We fix how work is set up before we fix the work itself.","notes/structure-decides-what-matters.md"],"links":[]},
+  {"id":"giant-james-c-scott","group":"giants","folder":"Classic thinkers","label":"James C. Scott","text":["Neat, top-down plans lose the local knowledge that made things work."],"idea":["Seeing Like a State","https://yalebooks.yale.edu/book/9780300078152/seeing-like-a-state/"],"use":["Notes drift from reality unless someone checks them against it.","../blog/when-the-notes-are-wrong.html"],"links":[]},
+  {"id":"giant-richard-feynman","group":"giants","folder":"Classic thinkers","label":"Richard Feynman","text":["The first rule is that you must not fool yourself, and you are the easiest person to fool."],"idea":["Cargo Cult Science","https://calteches.library.caltech.edu/51/2/CargoCult.htm"],"use":["A claim stands only when we ran the check and can say how.","notes/reproduce-bugs-end-to-end.md"],"links":[]},
+  {"id":"giant-peter-drucker","group":"giants","folder":"Classic thinkers","label":"Peter Drucker","text":["Management is about results and clear objectives, and the manager's job is to make people effective."],"idea":["Peter Drucker","https://en.wikipedia.org/wiki/Peter_Drucker"],"use":["Every task starts with a stated intent, and ends with a result we can check.","../../work-with-me/index.html"],"links":[["Drucker Institute","https://www.drucker.institute"]]},
   {
    "id": "g-area",
    "group": "area",
@@ -129,7 +129,7 @@
   {
    "id": "area-icm",
    "group": "area",
-   "label": "Context engineering (ICM)",
+   "label": "Rules files and routing",
    "text": [
     "One rules file, linked into every agent tool, plus layers and rooms. The routing table says: for this kind of task, go to this folder and read these files first."
    ],
@@ -178,7 +178,7 @@
   {
    "id": "area-learning",
    "group": "area",
-   "label": "Learning",
+   "label": "Where the ideas come from",
    "text": [
     "Where the ideas come from: ICM, Kun Chen's agent stack and Matt Pocock's skills. And two checks that found the setup wrong, and what the owner did about each."
    ],
@@ -200,7 +200,7 @@
   {
    "id": "area-content",
    "group": "area",
-   "label": "Content",
+   "label": "Reviewing work as pages",
    "text": [
     "The owner reviews every report and draft as an HTML page, not in a terminal."
    ],
@@ -223,7 +223,7 @@
    "id": "g-fm",
    "group": "fm",
    "hub": true,
-   "label": "The multi-agent service (FirstMate inside the Broman wrapper)",
+   "label": "The harness: 12 parts that run the crew",
    "text": [
     "The twelve parts of the harness, the tricks this setup uses on top, and what it borrowed from others. Each part links to its place on the Core logic page."
    ],
@@ -459,7 +459,7 @@
   {
    "id": "trick-decay",
    "group": "fm",
-   "label": "Decay tiers",
+   "label": "Memory decay tiers",
    "tags": [
     "trick"
    ],
@@ -515,7 +515,7 @@
   {
    "id": "b-grill",
    "group": "fm",
-   "label": "grill-with-docs",
+   "label": "Interview until the intent is written",
    "tags": [
     "borrowed-from"
    ],
@@ -541,7 +541,7 @@
   {
    "id": "b-arms",
    "group": "fm",
-   "label": "ARMS framework",
+   "label": "Four layers of an agent workspace (ARMS)",
    "tags": [
     "borrowed-from"
    ],
@@ -556,7 +556,7 @@
   {
    "id": "b-pi",
    "group": "fm",
-   "label": "Pi ideas",
+   "label": "Ideas from the Pi coding agent",
    "tags": [
     "borrowed-from"
    ],
@@ -580,7 +580,7 @@
    "id": "g-tier",
    "group": "tier",
    "hub": true,
-   "label": "Harness grades",
+   "label": "Harnesses scored on the 12 parts",
    "text": [
     "Eleven setups marked on the same twelve harness parts. Has it, does it differently, lacks it, or an estimate where no primary source answers it.",
     "The counts treat all twelve parts as equal. They show coverage, not quality. From a scout report dated 2026-10-27 that read public docs, repos and papers."
@@ -590,7 +590,7 @@
  "tier": [
   [
    "tier-composite",
-   "Our composite",
+   "Our combined setup",
    10,
    2,
    0,
