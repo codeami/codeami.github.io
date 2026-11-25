@@ -4,7 +4,7 @@ Run from anywhere: python3 -I broman-os/brain/build_data.py
 Reads only public files of this site:
   brain/notes.js            the approved wiki notes (built by build.py)
   brain/src/interests.json  the interest tags of those notes, empty ones too (the cloud on the Second-brain notes card)
-  brain/src/extra.json      hand-written nodes: topics, the multi-agent service's parts and tricks, the harness grades
+  brain/src/extra.json      hand-written nodes: topics, the harness parts and tricks, the harness grades
   brain/src/maps.json       the "Maps and wikis" links on the Second-brain notes card (other people's maps, link-only)
   brain/src/site.json       the centre file, this site's pages, public projects, the reading order
   blog/index.html           the Blog posts
@@ -55,7 +55,7 @@ notes_room = {"id": "notes", "label": "Second-brain notes", "color": "#b57bff",
               "summary": summary, "cloud": cloud,
               "folders": [{"name": c["name"], "count": len(by_tag[c["name"]]), "files": by_tag[c["name"]]} for c in cloud if c["name"] in by_tag]}
 
-# Rooms 2 and 3: the multi-agent service, and Broman's topics (src/extra.json)
+# Rooms 2 and 3: the harness, and Broman's topics (src/extra.json)
 X = {e["id"]: e for e in extra["extra"]}
 TAGS = {"advantage": "advantage", "gap": "gap", "borrowed-from": "borrowed from", "trick": "trick"}
 
