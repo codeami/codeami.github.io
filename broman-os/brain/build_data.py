@@ -84,7 +84,7 @@ def hub_of(gid, rid, label, color, folders):
 
 
 fm = [e for e in extra["extra"] if e["group"] == "fm" and not e.get("hub")]
-fm_room = hub_of("g-fm", "fm", "The multi-agent service (FirstMate inside the Broman wrapper)", "#ff4fd8", [
+fm_room = hub_of("g-fm", "fm", "The harness: 12 parts that run the crew", "#ff4fd8", [
     ("the 12 parts", [node(e, "harness part") for e in fm if e["id"].startswith("part-")]),
     ("tricks", [node(e, "trick") for e in fm if e["id"].startswith("trick-")]),
     ("borrowed", [node(e, "borrowed idea") for e in fm if e["id"].startswith("b-")])])

@@ -978,7 +978,7 @@
   },
   {
    "id": "fm",
-   "label": "The multi-agent service (FirstMate inside the Broman wrapper)",
+   "label": "The harness: 12 parts that run the crew",
    "color": "#ff4fd8",
    "note": "The twelve parts of the harness, the tricks this setup uses on top, and what it borrowed from others. Each part links to its place on the Core logic page.",
    "links": [
