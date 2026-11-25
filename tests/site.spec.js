@@ -653,10 +653,10 @@ test('Meta-Factory page: how it works holds how I work with agents, what the cre
   const law = page.locator('aside.law');
   await expect(law.locator('#how')).toHaveText('How I work with agents');
   await expect(law.locator('#safety')).toHaveText('What the crew may do, and what waits for me');
-  await expect(law.locator('#how ~ p strong').filter({ hasText: /^(On its own|Waits for me|Never)$/ })).toHaveText(['On its own', 'Waits for me', 'Never']);
-  await expect(law).toContainText('throwaway copy of the repo, one per task');
+  await expect(law.locator('#safety ~ p').first()).toHaveText('Helpers read, write and test on copies of the real thing.'); // the crew rules stay a 3-line summary
+  await expect(law.locator('#safety ~ p').nth(2)).toHaveText('Helpers never publish on their own.');
   await expect(law.locator('#doors ~ ul').first().locator('li')).toHaveCount(4);
-  await expect(law.locator('#credits ~ p').first().locator('a')).toHaveCount(7);
+  await expect(law.locator('#credits ~ p').first().locator('a')).toHaveCount(4);
   const text = await law.innerText();
   for (const name of ['AI-Life-OS', 'AIO OS', 'EA-bot', 'Chart Room']) expect(text, name).not.toContain(name);
   // the old Intent address still works, and a section anchor survives the redirect
@@ -664,6 +664,15 @@ test('Meta-Factory page: how it works holds how I work with agents, what the cre
   await page.waitForURL(/broman-os\/index\.html#how$/);
   await page.goto('/intent/index.html');
   await page.waitForURL(/broman-os\/index\.html$/);
+});
+
+test('home and Meta-Factory introductions: no model or vendor names, no unbuilt or pending wording', async ({ page }) => {
+  const bad = /\b(Gemini|GPT|ChatGPT|Claude|DeepSeek|Kimi|Qwen|Hermes|OpenClaw|Omarchy|Kestrel|Rosie)\b|\bPi\b|in build|not built or priced|Opening soon/;
+  for (const [url, scope] of [['/index.html', 'main article'], ['/broman-os/index.html', 'aside.law']]) {
+    await page.goto(url);
+    const text = await page.locator(scope).first().innerText();
+    expect(text.match(bad)?.[0] ?? null, `${url} names`).toBeNull();
+  }
 });
 
 test('landing: the logo and the page card never reload the page', async ({ page }) => {
@@ -1069,9 +1078,14 @@ test('the skin button names the skin that is on', async ({ page }) => {
 });
 
 // ---- early access: the waitlist replaces the public download; no price words on the broman-os pages ----
+test('Meta-Factory page: no pending sign-up form until a working one exists', async ({ page }) => {
+  await page.goto('/broman-os/index.html');
+  await expect(page.locator('section.wl, form.wl-form')).toHaveCount(0);
+});
+
 for (const url of ['/broman-os/index.html', '/broman-os/try/index.html']) {
-  test(`${url}: waitlist block renders, shows "Opening soon" while the form is a placeholder`, async ({ page }) => {
-    await page.goto(`${url}#join`); // on the map page the card starts folded; a link to #join opens it
+  if (url.includes('/try/')) test(`${url}: waitlist block renders, shows "Opening soon" while the form is a placeholder`, async ({ page }) => {
+    await page.goto(`${url}#join`);
     const block = page.locator('section.wl');
     await expect(block.locator('h2')).toHaveText('Join early access');
     await expect(block.locator('input[type="email"]')).toBeVisible();
