@@ -2986,6 +2986,7 @@
    "n": "whoami",
    "state": "home",
    "url": "../../about/index.html",
+   "also": "../../index.html",
    "kind": "page"
   },
   {
