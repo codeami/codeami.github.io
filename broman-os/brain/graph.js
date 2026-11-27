@@ -61,7 +61,7 @@ function absolute(d,from){
   function ls(list){(list||[]).forEach(function(l){if(Array.isArray(l))l[1]=a(l[1]);else if(l.href)l.href=a(l.href)})}
   ls(d.root.links);
   d.rooms.forEach(function(r){ls(r.links);r.folders.forEach(function(f){(f.files||[]).forEach(function(x){if(x.url)x.url=a(x.url);ls(x.links)})})});
-  (d.skills||[]).concat(d.apps||[],d.projects||[],d.pages||[],d.reading||[]).forEach(function(x){if(x.url)x.url=a(x.url)});
+  (d.skills||[]).concat(d.apps||[],d.projects||[],d.pages||[],d.reading||[]).forEach(function(x){if(x.url)x.url=a(x.url);if(x.also)x.also=a(x.also)});
   return d;
 }
 function boot(){
@@ -128,7 +128,7 @@ const API={
   select:function(url){
     if(!nodes.length){pending=url;return}
     const u=bare(url);let hit=null;
-    nodes.forEach(function(n){if(n.info&&n.info.url&&bare(n.info.url)===u)hit=n});
+    nodes.forEach(function(n){if(n.info&&n.info.url&&(bare(n.info.url)===u||n.info.also&&bare(n.info.also)===u))hit=n});
     S.sel=hit;S.fol=null;S.read=-1;S.page=u;S.here=!!hit;applyFocus();dirty=true;return hit;
   },
   // the tests read what is lit and where a node sits on the canvas
